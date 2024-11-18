@@ -9,4 +9,4 @@ const Template = (args) => <FilterBtn {...args} />;
 export const Default = Template.bind({});
 Default.args = {
   label: "Filter Button",
-}; 
+};
