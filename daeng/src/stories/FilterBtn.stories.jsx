@@ -1,5 +1,5 @@
 import React from "react";
-import FilterBtn from "./FilterBtn";
+import FilterBtn from "../components/FilterBtn";
 
 export default {
   title: "Components/FilterBtn",
