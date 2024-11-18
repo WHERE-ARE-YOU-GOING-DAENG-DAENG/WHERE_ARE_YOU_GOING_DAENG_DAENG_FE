@@ -18,12 +18,12 @@ const FilterButton = styled.button`
   }
 `;
 
-function FilterBtn() {
+function FilterBtn({label}) {
   return (
     <FilterButton>
-      필터
+      {label}
     </FilterButton>
   )
 }
-
+//아이콘 알맞게 추가해야함
 export default FilterBtn;
