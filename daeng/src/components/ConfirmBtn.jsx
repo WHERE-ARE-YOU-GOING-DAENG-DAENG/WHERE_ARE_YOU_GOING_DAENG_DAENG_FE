@@ -19,10 +19,6 @@ const StyledButton = styled.button`
   &:hover {
     background-color: #FF99C8;
   }
-
-  &:active {
-    background-color: #cc4f87;
-  }
 `;
 
 function ConfirmBtn({ label }) {
