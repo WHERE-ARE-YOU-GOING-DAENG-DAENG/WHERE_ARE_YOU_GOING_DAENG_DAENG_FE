@@ -8,7 +8,7 @@ const CustomPreferenceButton = styled.button`
   justify-content: center;
   width: 97px;
   height: 73px;
-  border: 2px solid #d9d9d9;
+  border: 1px solid #d9d9d9;
   border-radius: 8px;
   background-color: white;
   color: #000;

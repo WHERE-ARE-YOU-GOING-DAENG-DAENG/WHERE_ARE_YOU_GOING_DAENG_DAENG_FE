@@ -31,7 +31,15 @@ const StyledCancelButton = styled.button`
   }
 `;
 
-const AlertDialog = ({ mode = "alert", title, text, confirmText, cancelText, onConfirm, onCancel }) => {
+const AlertDialog = ({
+  mode = "alert",
+  title,
+  text,
+  confirmText,
+  cancelText,
+  onConfirm,
+  onCancel
+}) => {
   const handleOpenDialog = () => {
     const confirmButtonClass = "custom-confirm-button";
     const cancelButtonClass = "custom-cancel-button";
@@ -77,6 +85,7 @@ const AlertDialog = ({ mode = "alert", title, text, confirmText, cancelText, onC
       });
     }
 
+    // 강제로 스타일을 덮어쓰는 부분
     const styleSheet = document.createElement("style");
     styleSheet.textContent = `
       .${confirmButtonClass} {
@@ -86,24 +95,24 @@ const AlertDialog = ({ mode = "alert", title, text, confirmText, cancelText, onC
         ${StyledCancelButton.componentStyle.rules.join(" ")}
         margin-left: 10px;
       }
-      .custom-success-icon .swal2-success-ring {
-        border-color: #FFE3F2 !important;/* 외곽 링 색상 */
+      .${successIconClass} .swal2-success-ring {
+        border-color: #FFE3F2 !important;
       }
-      .custom-success-icon .swal2-success-line-tip,
-      .custom-success-icon .swal2-success-line-long {
-        background-color: #FF69A9 !important; /* 체크 표시 색상 */
+      .${successIconClass} .swal2-success-line-tip,
+      .${successIconClass} .swal2-success-line-long {
+        background-color: #FF69A9 !important;
       }
-      .custom-success-icon .swal2-success-circle {
-      stroke: #FF69A9 !important; /* 원 테두리 색상 */
+      .${successIconClass} .swal2-success-circle {
+        stroke: #FF69A9 !important;
       }
-      .custom-warning-icon .swal2-warning-circular-line {
-        stroke: #FFA500 !important; /* 외곽 원 색상 */
+      .${warningIconClass} .swal2-warning-circular-line {
+        stroke: #FF69A9 !important;
       }
-      .custom-warning-icon .swal2-warning-body {
-        background-color: #FF69A9 !important; /* 느낌표 상단 색상 */
+      .${warningIconClass} .swal2-warning-body {
+        background-color: #FF69A9 !important; 
       }
-      .custom-warning-icon .swal2-warning-dot {
-        background-color: #FF69A9 !important; /* 느낌표 하단 색상 */
+      .${warningIconClass} .swal2-warning-dot {
+        background-color: #FF69A9 !important;
       }
     `;
     document.head.appendChild(styleSheet);
