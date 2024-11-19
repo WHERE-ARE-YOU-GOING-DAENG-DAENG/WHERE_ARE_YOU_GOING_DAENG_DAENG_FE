@@ -15,6 +15,7 @@ const CustomHeader = styled.div`
         width: 24px;
         height: 24px;
         margin-left: 40px; 
+        cursor: pointer; /* 커서 스타일 변경 */
     }
 
     span {
@@ -27,9 +28,13 @@ const CustomHeader = styled.div`
 `;
 
 const Header = ({ label }) => {
+    const goBack = () => {
+        window.history.back(); // 이전 화면으로 이동
+    };
+
     return (
         <CustomHeader>
-            <img src={back} alt="뒤로가기" />
+            <img src={back} alt="뒤로가기" onClick={goBack} />
             <span>{label}</span>
         </CustomHeader>
     );

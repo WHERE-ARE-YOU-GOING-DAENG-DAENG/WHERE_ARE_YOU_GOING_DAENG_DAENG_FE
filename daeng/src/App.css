@@ -1,8 +1,26 @@
 #root {
-  max-width: 554px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 554px;   
+  width: 100%;        
+  margin: 0 auto;     
+  text-align: center; 
+}
+
+@media (min-width: 375px) {
+  #root {
+    width: 375px;  
+  }
+}
+
+@media (max-width: 500px) {
+  #root {
+    width: 100vw;  
+  }
+}
+
+@media (min-width: 554px) {
+  #root {
+    width: 554px; 
+  }
 }
 
 .logo {
