@@ -33,9 +33,28 @@ const GlobalStyle = createGlobalStyle`
     margin: 0 auto;
     box-shadow: rgba(100, 100, 111, 0.5) 0px 7px 29px 0px;
     min-height: 100vh;
+    max-width: 554px;   
+    width: 100%;        
+    text-align: center; 
+}
+
+@media (min-width: 375px) {
+  #root {
+    width: 375px;  
   }
+}
 
+@media (max-width: 500px) {
+  #root {
+    width: 100vw;  
+  }
+}
 
+@media (min-width: 554px) {
+  #root {
+    width: 554px; 
+  }
+}
 `;
 
 export default GlobalStyle;
