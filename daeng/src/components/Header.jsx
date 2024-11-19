@@ -9,16 +9,17 @@ const CustomHeader = styled.div`
     width: 554px;
     height: 91px;
     background-color: #ffffff;
-    font-size: 18px;
+    font-size: 20px;
 
     img {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         margin-left: 40px; 
     }
 
     span {
         font-weight: 600;
+        font-size: 20px;
         position: absolute;
         left: 50%;
         transform: translateX(-50%);

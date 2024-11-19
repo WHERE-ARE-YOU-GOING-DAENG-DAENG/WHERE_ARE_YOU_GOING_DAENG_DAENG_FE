@@ -5,13 +5,14 @@ const LabelContainer = styled.p`
     display: flex;
     align-items: center;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: semibold;
     color: #000;
 
     span {
+        font-size: 12px;
         margin-left: 4px; 
         color: #ff69a9; 
-        font-weight: normal; 
+        font-weight: semibold; 
     }
 `;
 
