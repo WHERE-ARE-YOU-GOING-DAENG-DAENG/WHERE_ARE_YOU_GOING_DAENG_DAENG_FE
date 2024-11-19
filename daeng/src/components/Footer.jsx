@@ -17,7 +17,10 @@ const FooterContainer = styled.div`
     align-items: center;
     width: 554px;
     height: 77px;
+    z-index: 1000;
     background-color: #ffffff;
+    position: fixed;
+    bottom: 0;
 `;
 
 const FooterItem = styled.div`
