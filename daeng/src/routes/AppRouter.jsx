@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import PetRegisterPage from '../pages/pet/PetRegisterPage';
+import AddPetPage from '../pages/pet/AddPetPage';
 
 
 const AppRouter = () => {
@@ -9,6 +10,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/pet-register" element={<PetRegisterPage />} />
+        <Route path="/pet-add" element={<AddPetPage />} />
       </Routes>
     </Router>
   );

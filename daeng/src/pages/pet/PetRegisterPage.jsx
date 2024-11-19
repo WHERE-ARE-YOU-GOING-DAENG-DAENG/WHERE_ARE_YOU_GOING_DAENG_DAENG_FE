@@ -11,7 +11,6 @@ const FirstContainer = styled.div`
   justify-content: center;
   margin-bottom: 10px;
   margin-top: 10px;
-
 `
 function PetRegisterPage() {
   return (
