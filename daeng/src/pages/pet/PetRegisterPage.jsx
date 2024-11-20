@@ -9,8 +9,8 @@ const FirstContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-bottom: 10px;
   margin-top: 10px;
+
 `
 function PetRegisterPage() {
   return (

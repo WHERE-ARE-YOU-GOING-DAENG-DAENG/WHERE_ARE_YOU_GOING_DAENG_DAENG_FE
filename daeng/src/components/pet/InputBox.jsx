@@ -5,26 +5,32 @@ import SelectLabel from "../../components/SelectLabel"
 const InputAllContainer = styled.div`
   display: flex;
   flex-direction: column;
-` 
+  width: 100%; 
+`
+
 const InputContainer = styled.input`
-  width:323px;
+  width: 90%;  
   height: 44px;
   border-radius: 5px;
   border: 0.5px solid #E4E4E4;
 
   &:focus {
-    border-color: #FF69A9;  
-    outline: none;  
+    border-color: #FF69A9;
+    outline: none;
+  }
+
+  @media (max-width: 768px) {
+    width: 90%; 
   }
 `
+
 const StyledParagraph = styled.p`
   font-size: 9px;
   color: #FF69A9;
-  font-weight:bold;
+  font-weight: bold;
   margin-top: 9px;
   display: flex;
 `;
-
 
 function InputBox() {
   return (

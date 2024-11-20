@@ -80,7 +80,7 @@ const SelectWeight = styled.button`
   background-color: white;
   border : 0.5px solid #E4E4E4;
   border-radius: 5px;
-  font-size: 10px;
+  font-size: 0.6rem;
   cursor: pointer;
   color:  #B3B3B3;
 
