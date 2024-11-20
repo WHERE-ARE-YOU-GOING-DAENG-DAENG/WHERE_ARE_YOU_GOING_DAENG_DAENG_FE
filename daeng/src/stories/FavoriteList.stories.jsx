@@ -1,5 +1,5 @@
 import React from "react";
-import FavoriteList from "../components/FavoriteList";
+import FavoriteList from "../components/commons/FavoriteList";
 
 export default {
   title: "Components/FavoriteList",

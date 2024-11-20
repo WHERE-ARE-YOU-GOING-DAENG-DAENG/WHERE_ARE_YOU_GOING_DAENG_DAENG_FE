@@ -5,7 +5,7 @@ const LabelContainer = styled.p`
     display: flex;
     align-items: center;
     font-size: 12px;
-    font-weight: semibold;
+    font-weight: 600;
     color: #000;
 
     span {
