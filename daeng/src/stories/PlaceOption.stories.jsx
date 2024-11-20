@@ -1,5 +1,5 @@
 import React from "react";
-import PlaceOption from "../components/PlaceOption";
+import PlaceOption from "../components/commons/PlaceOption";
 
 export default {
   title: "Components/PlaceOption",

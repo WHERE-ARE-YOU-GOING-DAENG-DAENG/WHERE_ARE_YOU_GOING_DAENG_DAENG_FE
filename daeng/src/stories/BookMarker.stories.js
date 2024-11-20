@@ -1,4 +1,4 @@
-import BookMarker from '../components/BookMarker';
+import BookMarker from '../components/commons/BookMarker';
 
 export default {
     title: 'Components/BookMarker',
