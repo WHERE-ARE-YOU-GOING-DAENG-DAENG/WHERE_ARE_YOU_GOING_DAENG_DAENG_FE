@@ -10,11 +10,10 @@ const ReviewContainer = styled.div`
   flex-direction: column; 
   min-height: 100vh;  
   overflow: auto; 
-  padding-bottom: auto;  
+  padding-bottom: 30%;
 `;
 
 const ContentContainer = styled.div`
-  flex: 1;  
   overflow: auto; 
 `;
 
