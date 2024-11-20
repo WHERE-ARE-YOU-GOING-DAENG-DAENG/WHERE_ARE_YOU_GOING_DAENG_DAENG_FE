@@ -6,16 +6,16 @@ const CustomHeader = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-    width: 554px;
+    width: 100%;
     height: 91px;
     background-color: #ffffff;
     font-size: 20px;
 
     img {
-        width: 24px;
-        height: 24px;
-        margin-left: 40px; 
-        cursor: pointer; /* 커서 스타일 변경 */
+    width: 5%; 
+    height: auto; 
+    margin-left: 5%;
+    cursor: pointer;
     }
 
     span {
@@ -24,18 +24,23 @@ const CustomHeader = styled.div`
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
+        cursor: pointer;
     }
 `;
 
 const Header = ({ label }) => {
     const goBack = () => {
-        window.history.back(); // 이전 화면으로 이동
+        window.history.back();
+    };
+
+    const refreshPage = () => {
+        window.location.reload(); 
     };
 
     return (
         <CustomHeader>
             <img src={back} alt="뒤로가기" onClick={goBack} />
-            <span>{label}</span>
+            <span onClick={refreshPage}>{label}</span>
         </CustomHeader>
     );
 };
