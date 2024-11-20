@@ -47,6 +47,11 @@ const Card = styled.div`
   margin: 10px 0;
   width: 487px;
   height: 151px;
+  text-align: left;
+  @media (max-width: 554px) {
+    width: 320px;
+    height: 100px;
+  }
 `;
 
 const Icon = styled.div`
@@ -57,6 +62,14 @@ const Icon = styled.div`
   align-items: center;
   justify-content: center;
   border: 1px solid #d9d9d9;
+  @media (max-width: 554px) {
+    width: 50px;
+    height: 50px;
+
+    img{
+    width: 25px;
+    }
+  }
 `;
 
 const Content = styled.div`
@@ -68,6 +81,9 @@ const Message = styled.p`
   margin: 0;
   font-size: 15px;
   font-weight: bold;
+  @media (max-width: 554px) {
+    font-size: 11px;
+  }
 `;
 
 const DateTime = styled.p`
@@ -75,6 +91,9 @@ const DateTime = styled.p`
   font-size: 13px;
   color: #FF69A9;
   font-weight: bold;
+  @media (max-width: 554px) {
+    font-size: 9px;
+  }
 `;
 
 const CloseButton = styled.button`
