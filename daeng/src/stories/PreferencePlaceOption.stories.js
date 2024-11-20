@@ -1,5 +1,5 @@
 import { fn } from '@storybook/test';
-import PreferencePlaceOption from '../components/PreferencePlaceOption';
+import PreferencePlaceOption from '../components/commons/PreferencePlaceOption';
 // import restaurantIcon from '../assets/icons/restaurant.svg'
 // import cafeIcon from '../assets/icons/cafe.svg'
 // import hotelIcon from '../assets/icons/hotel.svg'
