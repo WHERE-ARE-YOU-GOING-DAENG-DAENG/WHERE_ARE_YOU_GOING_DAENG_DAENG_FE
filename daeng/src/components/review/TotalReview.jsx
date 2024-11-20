@@ -3,11 +3,18 @@ import styled from 'styled-components'
 
 const StyledTotalReview = styled.span`
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 20px;
   display: block;
   margin-right: 58%;
   margin-top: 5%;
+
+  @media (max-width: 554px) {
+    font-size: 15px;
+    margin-right: 60%;
+
+  }
 `
+
 
 function TotalReview() {
   return (
