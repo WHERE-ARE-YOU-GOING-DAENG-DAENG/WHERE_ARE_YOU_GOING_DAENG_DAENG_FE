@@ -42,7 +42,7 @@ const GlobalStyle = createGlobalStyle`
 
   @media (max-width: 554px) {
     #root{
-      width:375px;
+      width:100%;
     }
   }
   }
