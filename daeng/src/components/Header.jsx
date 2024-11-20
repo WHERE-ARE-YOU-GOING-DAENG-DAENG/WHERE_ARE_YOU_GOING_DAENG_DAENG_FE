@@ -6,15 +6,15 @@ const CustomHeader = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-    width: 554px;
+    width: 100%;
     height: 91px;
     background-color: #ffffff;
     font-size: 20px;
 
     img {
-        width: 24px;
-        height: 24px;
-        margin-left: 40px; 
+    width: 5%; 
+    height: auto; 
+    margin-left: 5%; 
     }
 
     span {

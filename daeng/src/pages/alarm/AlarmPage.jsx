@@ -4,8 +4,6 @@ import AlarmBox from '../../components/alarm/AlarmBox';
 import AlarmButton from '../../components/alarm/AlarmButton';
 import DivisionLine from '../../components/alarm/DivisionLine';
 import Footer from '../../components/Footer';
-import styled from 'styled-components';
-
 function AlarmPage() {
   return (
     <>

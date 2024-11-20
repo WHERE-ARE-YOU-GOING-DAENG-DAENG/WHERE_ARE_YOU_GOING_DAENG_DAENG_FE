@@ -14,7 +14,7 @@ const AlarmContainer = styled.div`
 
 const TextLabel = styled.p`
   margin-top:30px;
-  font-size: 40px;
+  font-size: 2rem;
   font-weight: bold;
   color: #FFFFFF;
   line-height: 1.5;
@@ -22,8 +22,8 @@ const TextLabel = styled.p`
 `;
 
 const StyledImg = styled.img`
-  width: 300px;
-  height: 300px;
+  width: 60%;
+  height: auto;
   display: block; 
   margin-bottom: 30px; 
 `;
