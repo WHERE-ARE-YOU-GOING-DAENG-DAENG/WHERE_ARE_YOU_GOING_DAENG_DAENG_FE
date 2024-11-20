@@ -37,24 +37,6 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;        
     text-align: center; 
 }
-
-@media (min-width: 375px) {
-  #root {
-    width: 375px;  
-  }
-}
-
-@media (max-width: 500px) {
-  #root {
-    width: 100vw;  
-  }
-}
-
-@media (min-width: 554px) {
-  #root {
-    width: 554px; 
-  }
-}
 `;
 
 export default GlobalStyle;
