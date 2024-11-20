@@ -10,5 +10,5 @@ const Template = (args) => <ReviewKeywords {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  
+  label:'방문하고 싶어요'
 };
