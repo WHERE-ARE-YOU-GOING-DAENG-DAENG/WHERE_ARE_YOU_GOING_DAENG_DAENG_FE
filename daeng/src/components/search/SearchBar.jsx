@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import searchIcon from "../assets/icons/footer_search.svg";
-import footerHoverSearch from "../assets/icons/footer_hover_search.svg";
+import searchIcon from "../../assets/icons/footer_search.svg";
+import footerHoverSearch from "../../assets/icons/footer_hover_search.svg";
 
 const SearchBarContainer = styled.div`
   margin: 0 auto;

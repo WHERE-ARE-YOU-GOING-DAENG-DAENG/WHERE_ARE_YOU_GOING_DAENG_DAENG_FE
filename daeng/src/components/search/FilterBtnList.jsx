@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 // import PropTypes from 'prop-types';
-import FilterBtn from './commons/FilterBtn';
-import filterIcon from '../assets/icons/filter.svg'
-import cafeIcon from '../assets/icons/cafe.svg'
-import parkIcon from '../assets/icons/park.svg'
-import houseIcon from '../assets/icons/house.svg'
-import restaurantIcon from '../assets/icons/restaurant.svg'
+import FilterBtn from '../commons/FilterBtn';
+import filterIcon from '../../assets/icons/filter.svg'
+import cafeIcon from '../../assets/icons/cafe.svg'
+import parkIcon from '../../assets/icons/park.svg'
+import houseIcon from '../../assets/icons/house.svg'
+import restaurantIcon from '../../assets/icons/restaurant.svg'
 
 const Container = styled.div`
     display: flex;
