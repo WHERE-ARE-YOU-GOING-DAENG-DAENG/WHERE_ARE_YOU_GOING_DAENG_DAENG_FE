@@ -7,12 +7,28 @@ export default {
     layout: 'centered',
   },
   argTypes: {
-    label: { control: 'text' },  
+    mode: {
+      control: 'select',
+      options: ['area', 'keyword'],
+    },
+    label: { control: 'text' },
+    onClick: {
+      action: 'onClick',
+    },
   },
 };
 
 export const Default = {
   args: {
+    mode: 'area',
     label: '남원/임실/순창/무주/진안/장수',
+  },
+};
+
+export const keyword = {
+  args: {
+    mode: 'keyword',
+    label: '남원/임실/순창/무주/진안/장수',
+    isSelected: true,
   },
 };
