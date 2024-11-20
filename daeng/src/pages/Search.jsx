@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../components/commons/Header";
+import Footer from "../components/commons/Footer";
 import SearchBar from "../components/SearchBar";
 import Map from "../components/Map";
 import SearchPlaceList from "../components/SearchPlaceList";
-import Sorting from "../components/Sorting";
+import Sorting from "../components/commons/Sorting";
 import FilterBtnList from "../components/FilterBtnList";
 
 const Search = () => {

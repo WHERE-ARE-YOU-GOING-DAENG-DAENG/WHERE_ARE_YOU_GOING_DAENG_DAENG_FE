@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import star from "../assets/icons/star.svg"
+import star from "../../assets/icons/star.svg"
 
 const Card = styled.div`
   display: flex;

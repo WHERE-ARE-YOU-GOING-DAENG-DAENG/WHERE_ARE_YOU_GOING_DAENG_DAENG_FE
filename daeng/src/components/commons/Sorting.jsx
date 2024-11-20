@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import starIcon from '../assets/icons/star.svg'
+import starIcon from '../../assets/icons/star.svg'
 import { useState } from 'react';
 const Container = styled.div`
   display: flex;
