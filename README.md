@@ -12,7 +12,7 @@
 ```plaintext
 src/
 ├── components/      // UI 컴포넌트
-│   └── common/      // 공통 컴포넌트
+│   └── commons/      // 공통 컴포넌트
 ├── pages/           // 페이지 단위 컴포넌트
 ├── hooks/           // 커스텀 훅
 ├── stores/          // Zustand 스토어 파일
