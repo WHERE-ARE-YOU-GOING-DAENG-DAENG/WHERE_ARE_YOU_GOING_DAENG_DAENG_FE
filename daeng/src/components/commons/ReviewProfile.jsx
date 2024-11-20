@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import star from "../assets/icons/star.svg"
+import star from "../../assets/icons/star.svg"
 
 const Card = styled.div`
   display: flex;
@@ -10,6 +10,12 @@ const Card = styled.div`
   margin: 10px 0;
   width: 484px;
   height: 74px;
+  @media (max-width: 554px) {
+    width: 320px;
+    height: 60px;
+    margin: 5px 0;
+    padding: 0px 15px;
+  }
 `;
 
 const Profile = styled.div`
@@ -21,6 +27,10 @@ const ProfileImage = styled.img`
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  @media (max-width: 554px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const Content = styled.div`
@@ -36,6 +46,9 @@ const Nickname = styled.span`
   font-weight: bold;
   font-size: 20px;
   margin-right: 5px;
+  @media (max-width: 554px) {
+    font-size: 15px;
+  }
 `;
 
 const PetType = styled.span`
@@ -60,11 +73,17 @@ const Details = styled.div`
   justify-content: space-between;
   height: 40px;
   margin-bottom: 10px;
+  @media (max-width: 554px) {
+    height: 20px;
+  }
   `;
 
 const Date = styled.span`
   font-size: 13px;
   color: #818181;
+  @media (max-width: 554px) {
+    font-size: 10px;
+  }
 `;
 
 const DeleteButton = styled.button`

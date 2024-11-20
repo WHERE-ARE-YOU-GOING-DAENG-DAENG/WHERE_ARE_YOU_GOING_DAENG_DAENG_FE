@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from '../../components/Header';
+import Header from '../../components/commons/Header';
 import AlarmBox from '../../components/alarm/AlarmBox';
 import AlarmButton from '../../components/alarm/AlarmButton';
 import DivisionLine from '../../components/alarm/DivisionLine';
-import Footer from '../../components/Footer';
+import Footer from '../../components/commons/Footer';
 function AlarmPage() {
   return (
     <>

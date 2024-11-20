@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; 
 
-function SomeComponent() {
+function Home() {
   const navigate = useNavigate(); 
 
   const handleClick = () => {
@@ -35,4 +35,4 @@ function SomeComponent() {
   );
 }
 
-export default SomeComponent;
+export default Home;

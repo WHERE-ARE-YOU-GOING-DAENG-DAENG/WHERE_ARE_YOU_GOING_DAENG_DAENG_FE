@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from "styled-components";
-import SelectLabel from "../../components/SelectLabel"
+import SelectLabel from "../../components/commons/SelectLabel"
 
 const InputAllContainer = styled.div`
   display: flex;
