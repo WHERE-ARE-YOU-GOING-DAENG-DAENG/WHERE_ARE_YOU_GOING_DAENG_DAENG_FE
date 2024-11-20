@@ -33,7 +33,6 @@ const GlobalStyle = createGlobalStyle`
     margin: 0 auto;
     box-shadow: rgba(100, 100, 111, 0.5) 0px 7px 29px 0px;
     min-height: 100vh;
-    width: 100%;
     max-width: 554px;   
     width: 100%;        
     margin: 0 auto;     
