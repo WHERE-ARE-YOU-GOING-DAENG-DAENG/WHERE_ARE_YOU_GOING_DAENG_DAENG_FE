@@ -1,4 +1,4 @@
-import ConfirmBtn from "../components/ConfirmBtn";
+import ConfirmBtn from "../components/commons/ConfirmBtn";
 
 export default {
   title: "Components/ConfirmBtn", // Storybook에서 표시될 이름

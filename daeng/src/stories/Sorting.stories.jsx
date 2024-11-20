@@ -1,4 +1,4 @@
-import Sorting from "../components/Sorting";
+import Sorting from "../components/commons/Sorting";
 
 export default {
   title: 'Components/Sorting',

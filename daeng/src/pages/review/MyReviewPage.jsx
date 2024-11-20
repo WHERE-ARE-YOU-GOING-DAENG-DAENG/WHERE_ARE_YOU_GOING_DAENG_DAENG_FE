@@ -3,6 +3,7 @@ import Header from '../../components/commons/Header'
 import Footer from '../../components/commons/Footer'
 import TotalReview from '../../components/review/TotalReview'
 import ReviewForm from '../../components/review/ReviewForm'
+import FavoriteList from '../../components/commons/PushAlerts'
 function MyReviewPage() {
   return (
     <>
@@ -10,6 +11,7 @@ function MyReviewPage() {
     <TotalReview />
     <ReviewForm />
     <Footer />
+    <FavoriteList />
     </>
   )
 }

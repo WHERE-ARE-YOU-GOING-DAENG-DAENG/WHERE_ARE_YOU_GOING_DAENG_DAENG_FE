@@ -1,113 +1,92 @@
+import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
-import { useState } from "react";
-import alarm from "../assets/icons/alarm.svg";
-import x from "../assets/icons/x.svg";
+import DeleteBtn from "../commons/DeleteBtn";
 
-const PushAlerts = ({ message, dateTime }) => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  const handleClose = () => {
-    setIsVisible(false);
-  };
-
-  if (!isVisible) return null;
-
-  return (
-    <Card>
-      <Icon>
-        <img src={alarm} alt="alert" />
-      </Icon>
-      <Content>
-        <Message>{message}</Message>
-        <DateTime>{dateTime}</DateTime>
-      </Content>
-      <CloseButton onClick={handleClose}>
-        <img src={x} alt="닫기" />
-      </CloseButton>
-    </Card>
-  );
-};
-
-PushAlerts.propTypes = {
-  message: PropTypes.string.isRequired,
-  dateTime: PropTypes.string.isRequired,
-};
-
-export default PushAlerts;
-
-const Card = styled.div`
+const FavoriteListContainer = styled.div`
+  width: 466px;
+  height: 151px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 15px;
-  border-top: 1px solid #d9d9d9;
-  border-bottom: 1px solid #d9d9d9;
-  background-color: #fff;
-  margin: 10px 0;
-  width: 487px;
-  height: 151px;
-  text-align: left;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+
   @media (max-width: 554px) {
-    width: 320px;
+    width: 100%; 
+    height: auto; 
+    flex-direction: column; 
+    padding: 15px; 
+  }
+`;
+
+const FavoriteInfoContainer = styled.div`
+  margin-left: 34px;
+  margin-bottom: 42px;
+
+  @media (max-width: 554px) {
+    margin-left: 0; 
+    text-align: center; 
+  }
+`;
+
+const FavoriteListPicture = styled.div`
+  width: 110px;
+  height: 140px;
+  border-radius: 10px;
+  background-color: #e0e0e0;
+  margin-right: 15px;
+
+  @media (max-width: 554px) {
+    width: 80px; 
     height: 100px;
+    margin-bottom: 15px;
   }
 `;
 
-const Icon = styled.div`
-  width: 70px;
-  height: 70px;
-  border-radius: 20%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #d9d9d9;
-  @media (max-width: 554px) {
-    width: 50px;
-    height: 50px;
-
-    img{
-    width: 25px;
-    }
-  }
-`;
-
-const Content = styled.div`
-  flex: 1;
-  margin-left: 10px;
-`;
-
-const Message = styled.p`
-  margin: 0;
-  font-size: 15px;
+const FavoritePlaceTitle = styled.h3`
+  font-size: 20px;
   font-weight: bold;
+  color: ${(props) => props.color || "#FF69A9"};
+  margin-top: 65px;
+
+  @media (max-width: 554px) {
+    font-size: 18px;
+    margin-top: 10px; 
+  }
+`;
+
+const FavoritePlace = styled.p`
+  font-size: 15px;
+  color: #808080;
+
+  @media (max-width: 554px) {
+    font-size: 14px; 
+  }
+`;
+
+const FavoritePlaceTime = styled.p`
+  font-size: 12px;
+  color: black;
+
   @media (max-width: 554px) {
     font-size: 11px;
   }
 `;
 
-const DateTime = styled.p`
-  margin: 0;
-  font-size: 13px;
-  color: #FF69A9;
-  font-weight: bold;
-  @media (max-width: 554px) {
-    font-size: 9px;
-  }
-`;
+function FavoriteList({ title, place, time, color }) {
+  return (
+    <FavoriteListContainer>
+      <FavoriteInfoContainer>
+        <FavoritePlaceTitle color={color}>{title}</FavoritePlaceTitle>
+        <FavoritePlace>{place}</FavoritePlace>
+        <FavoritePlaceTime>{time}</FavoritePlaceTime>
+        <DeleteBtn label='삭제' />
+      </FavoriteInfoContainer>
+      <FavoriteListPicture />
+    </FavoriteListContainer>
+  );
+}
 
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-
-  img {
-    width: 16px;
-    height: 16px;
-  }
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
+export default FavoriteList;

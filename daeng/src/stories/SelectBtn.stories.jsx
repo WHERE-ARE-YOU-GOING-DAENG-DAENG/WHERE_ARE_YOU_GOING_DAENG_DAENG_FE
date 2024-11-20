@@ -1,4 +1,4 @@
-import SelectBtn from "../components/SelectBtn";
+import SelectBtn from "../components/commons/SelectBtn";
 
 export default {
     title: "Components/SelectBtn",
