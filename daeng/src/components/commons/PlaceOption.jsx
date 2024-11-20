@@ -23,7 +23,7 @@ const PlaceOptionContainer = styled.div`
 const PlaceList = styled.p`
   font-size: 13px;
   text-align: center;
-  margin-left: 54px;
+  margin-left: 45px;
   word-break: keep-all;
   margin-right: 54px;
   display: flex;
@@ -43,7 +43,6 @@ const StyledIcon = styled.img`
 function PlaceOption({ parking, space, weightLimit }) {
   return (
     <PlaceOptionContainer>
-      {/* 주차 아이콘 */}
       <PlaceList>
         <StyledIcon src={optionparking} alt="주차 가능 여부" />
         {parking}
