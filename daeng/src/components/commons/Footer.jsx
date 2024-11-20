@@ -17,7 +17,7 @@ const FooterContainer = styled.div`
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    max-width: 554px; /* 최대 너비를 554px로 제한 */
+    max-width: 554px;
     height: 77px;
     z-index: 1000;
     background-color: #ffffff;
@@ -25,8 +25,8 @@ const FooterContainer = styled.div`
     bottom: 0;
 
     @media (max-width: 554px) {
-        height: 64px; /* 높이를 줄여 화면에 맞춤 */
-        padding: 0 10px; /* 좌우 여백 추가 */
+        height: 64px;
+        padding: 0 10px;
     }
 `;
 
@@ -45,7 +45,7 @@ const FooterItem = styled.div`
 
         @media (max-width: 554px) {
             width: 20px;
-            height: 20px; /* 아이콘 크기 축소 */
+            height: 20px;
         }
     }
 
@@ -56,7 +56,13 @@ const FooterItem = styled.div`
         color: ${(props) => (props.isActive ? "#ff4b98" : "#d9d9d9")};
 
         @media (max-width: 554px) {
-            font-size: 10px; /* 텍스트 크기 축소 */
+            font-size: 10px;
+        }
+    }
+        
+    &:hover {
+        span {
+            color: #ff4b98;
         }
     }
 `;
