@@ -35,7 +35,7 @@ const PreferencePlaceOption = ({ isSelected, onClick, label, icon }) => {
       onClick={onClick}
     >
       <span className="icon">
-        <img src={icon} alt="icon"/>
+        <img src={icon} alt="아이콘"/>
       </span>
       <span>{label}</span>
     </CustomPreferenceButton>

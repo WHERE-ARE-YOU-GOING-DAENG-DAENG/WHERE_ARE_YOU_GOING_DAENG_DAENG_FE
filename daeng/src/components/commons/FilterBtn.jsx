@@ -24,21 +24,21 @@ const FilterButton = styled.button`
     width: ${({ size }) => (size === 'small' ? '16px' : '21px')};
     height: ${({ size }) => (size === 'small' ? '16px' : '21px')};
     @media (max-width: 554px) {
-    width: ${({ size }) => (size === 'small' ? '13px' : '16px')};
-    height: ${({ size }) => (size === 'small' ? '13px' : '16px')};
+      width: ${({ size }) => (size === 'small' ? '13px' : '16px')};
+      height: ${({ size }) => (size === 'small' ? '13px' : '16px')};
+    }
   }
-  }
+
   @media (max-width: 554px) {
     width: ${({ size }) => (size === 'small' ? '70px' : '110px')};
     height: ${({ size }) => (size === 'small' ? '20px' : '30px')};
     font-size: ${({ size }) => (size === 'small' ? '8px' : '12px')};
   }
-  
 `;
 
-function FilterBtn({ label, icon, size }) {
+function FilterBtn({ label, icon, size, onClick }) {
   return (
-    <FilterButton size={size}>
+    <FilterButton size={size} onClick={onClick}>
       {icon && <img src={icon} alt={`${label} icon`} />}
       {label}
     </FilterButton>
@@ -49,11 +49,13 @@ FilterBtn.propTypes = {
   label: PropTypes.string.isRequired,
   icon: PropTypes.string,
   size: PropTypes.oneOf(['default', 'small']),
+  onClick: PropTypes.func, // onClick Prop 추가
 };
 
 FilterBtn.defaultProps = {
   icon: null,
   size: 'default',
+  onClick: null, // 기본값 null
 };
 
 export default FilterBtn;
