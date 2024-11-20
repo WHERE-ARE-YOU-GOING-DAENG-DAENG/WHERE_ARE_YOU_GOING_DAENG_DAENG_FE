@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
-import SelectLabel from "../SelectLabel";
+import SelectLabel from "../../components/commons/SelectLabel";
 import { PetType } from '../../data/PetType';
 import footerSearch from "../../assets/icons/footer_search.svg"; 
-import SelectBtn from '../SelectBtn';
-import ConfirmBtn from '../ConfirmBtn';
+import SelectBtn from '../../components/commons/SelectBtn';
+import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import { useNavigate } from 'react-router-dom'; 
 
 

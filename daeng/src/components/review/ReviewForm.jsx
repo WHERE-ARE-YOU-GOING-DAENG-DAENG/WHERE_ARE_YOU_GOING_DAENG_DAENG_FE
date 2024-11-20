@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import DeleteBtn from '../../components/DeleteBtn'
+import DeleteBtn from '../../components/commons/DeleteBtn'
 import star from '../../assets/icons/star.svg'
 
 const ReviewDivision = styled.div`

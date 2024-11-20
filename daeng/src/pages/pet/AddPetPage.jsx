@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 import AddPicture from '../../components/pet/AddPicture'
-import Header from '../../components/Header'
+import Header from '../../components/commons/Header'
 import InputBox from '../../components/pet/InputBox';
 import AddInputForm from '../../components/pet/AddInputForm';
 

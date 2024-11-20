@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from 'prop-types';
-import bookmarker from '../assets/icons/bookmarker.svg'
+import bookmarker from '../../assets/icons/bookmarker.svg'
 
 const CustomMarker = styled.div`
     display: flex;

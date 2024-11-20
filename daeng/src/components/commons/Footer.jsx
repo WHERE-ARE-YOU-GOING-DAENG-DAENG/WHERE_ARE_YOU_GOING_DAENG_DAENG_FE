@@ -1,15 +1,15 @@
 import { useState } from "react";
 import styled from "styled-components";
-import footerHome from "../assets/icons/footer_home.svg";
-import footerHoverHome from "../assets/icons/footer_hover_home.svg";
-import footerSearch from "../assets/icons/footer_search.svg";
-import footerHoverSearch from "../assets/icons/footer_hover_search.svg";
-import footerBookmark from "../assets/icons/footer_bookmark.svg";
-import footerHoverBookmark from "../assets/icons/footer_hover_bookmark.svg";
-import footerVisiting from "../assets/icons/footer_visiting.svg";
-import footerHoverVisiting from "../assets/icons/footer_hover_visiting.svg";
-import footerMypage from "../assets/icons/footer_mypage.svg";
-import footerHoverMypage from "../assets/icons/footer_hover_mypage.svg";
+import footerHome from "../../assets/icons/footer_home.svg";
+import footerHoverHome from "../../assets/icons/footer_hover_home.svg";
+import footerSearch from "../../assets/icons/footer_search.svg";
+import footerHoverSearch from "../../assets/icons/footer_hover_search.svg";
+import footerBookmark from "../../assets/icons/footer_bookmark.svg";
+import footerHoverBookmark from "../../assets/icons/footer_hover_bookmark.svg";
+import footerVisiting from "../../assets/icons/footer_visiting.svg";
+import footerHoverVisiting from "../../assets/icons/footer_hover_visiting.svg";
+import footerMypage from "../../assets/icons/footer_mypage.svg";
+import footerHoverMypage from "../../assets/icons/footer_hover_mypage.svg";
 
 const FooterContainer = styled.div`
     display: flex;
@@ -17,6 +17,7 @@ const FooterContainer = styled.div`
     align-items: center;
     width: 554px;
     height: 77px;
+    z-index: 1000;
     background-color: #ffffff;
     position: fixed;
     bottom: 0;
