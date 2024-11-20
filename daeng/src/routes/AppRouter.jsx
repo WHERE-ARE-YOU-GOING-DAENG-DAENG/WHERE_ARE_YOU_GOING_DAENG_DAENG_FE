@@ -8,7 +8,6 @@ import PetEditPage from '../pages/pet/PetEditPage';
 import MyPage from '../pages/user/MyPage';
 import AlarmPage from '../pages/alarm/AlarmPage';
 import MyReviewPage from '../pages/review/MyReviewPage';
-import Home from '../pages/Home';
 import Test from '../pages/review/Test';
 
 const AppRouter = () => {
