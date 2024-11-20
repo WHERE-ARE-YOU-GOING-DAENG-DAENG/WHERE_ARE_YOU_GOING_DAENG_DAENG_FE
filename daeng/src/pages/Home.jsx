@@ -30,6 +30,10 @@ function Home() {
     navigate('/my-review');
   };
 
+  const handleTotalReview = () => {
+    navigate('/total-review');
+  }
+
   return (
     <>
     <button onClick={handleClick}>Go to Pet Register</button>
@@ -37,6 +41,7 @@ function Home() {
     <button onClick={handleClickAdd}>Go to Pet Add</button>
     <button onClick={handleClickAlarm}>Go to Alarm</button>
     <button onClick={handleMyReview}>내가 작성한 리뷰</button>
+    <button onClick={handleTotalReview}>전체리뷰</button>
     </>
   );
 }
