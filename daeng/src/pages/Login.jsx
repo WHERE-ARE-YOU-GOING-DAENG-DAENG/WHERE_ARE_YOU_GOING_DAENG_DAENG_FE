@@ -6,12 +6,14 @@ import loginPuppy from "../assets/icons/login_puppy.svg";
 
 const Container = styled.div`
     width: 100%;
+    max-width: 554px;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #ffffff;
+    margin: 0 auto;
 `;
 
 const TitleContainer = styled.div`
@@ -20,13 +22,13 @@ const TitleContainer = styled.div`
     margin-bottom: 10px;
     margin-top: 70px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 554px) {
         margin-top: 50px;
         margin-bottom: 8px;
     }
 
-    @media (max-width: 480px) {
-        margin-top: 30px;
+    @media (max-width: 375px) {
+        margin-top: 40px;
         margin-bottom: 6px;
     }
 `;
@@ -38,12 +40,12 @@ const MainTitle = styled.span`
     font-weight: normal;
     margin-right: 1px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 554px) {
         font-size: 40px;
     }
 
-    @media (max-width: 480px) {
-        font-size: 30px;
+    @media (max-width: 375px) {
+        font-size: 35px;
     }
 `;
 
@@ -53,12 +55,12 @@ const SubTitle = styled.span`
     font-weight: bold;
     color: #000000;
 
-    @media (max-width: 768px) {
+    @media (max-width: 554px) {
         font-size: 18px;
     }
 
-    @media (max-width: 480px) {
-        font-size: 15px;
+    @media (max-width: 375px) {
+        font-size: 16px;
     }
 `;
 
@@ -68,13 +70,13 @@ const Subtitle = styled.p`
     margin: 0px;
     margin-bottom: 30px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 554px) {
         font-size: 18px;
         margin-bottom: 20px;
     }
 
-    @media (max-width: 480px) {
-        font-size: 15px;
+    @media (max-width: 375px) {
+        font-size: 16px;
         margin-bottom: 15px;
     }
 `;
@@ -84,13 +86,13 @@ const Image = styled.img`
     height: 264px;
     margin-top: 19px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 554px) {
         width: 300px;
         height: auto;
     }
 
-    @media (max-width: 480px) {
-        width: 200px;
+    @media (max-width: 375px) {
+        width: 250px;
         height: auto;
     }
 `;
@@ -102,12 +104,12 @@ const DividerContainer = styled.div`
     margin-bottom: 50px;
     width: 100%;
 
-    @media (max-width: 768px) {
+    @media (max-width: 554px) {
         margin-top: 10px;
         margin-bottom: 30px;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 375px) {
         margin-top: 8px;
         margin-bottom: 20px;
     }
@@ -120,12 +122,12 @@ const Line = styled.div`
     margin-left: 25px;
     margin-right: 25px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 554px) {
         margin-left: 15px;
         margin-right: 15px;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 375px) {
         margin-left: 10px;
         margin-right: 10px;
     }
@@ -135,11 +137,11 @@ const DividerText = styled.p`
     font-size: 15px;
     color: #b3b3b3;
 
-    @media (max-width: 768px) {
+    @media (max-width: 554px) {
         font-size: 13px;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 375px) {
         font-size: 12px;
     }
 `;
@@ -156,12 +158,12 @@ const Button = styled.button`
         width: 310px;
         height: 45px;
 
-        @media (max-width: 768px) {
+        @media (max-width: 554px) {
             width: 250px;
             height: 40px;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 375px) {
             width: 200px;
             height: 35px;
         }
@@ -175,11 +177,11 @@ const FooterText = styled.p`
     margin-top: 30px;
     cursor: pointer;
 
-    @media (max-width: 768px) {
+    @media (max-width: 554px) {
         font-size: 12px;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 375px) {
         font-size: 11px;
     }
 `;
