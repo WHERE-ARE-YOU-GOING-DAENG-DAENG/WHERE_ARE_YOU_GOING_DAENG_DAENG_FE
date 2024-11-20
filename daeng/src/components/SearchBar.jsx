@@ -21,7 +21,7 @@ const SearchBarContainer = styled.div`
   }
 
   @media (max-width: 554px) {
-    width: 300px;
+    width: 80%;
   }
   
 `;
