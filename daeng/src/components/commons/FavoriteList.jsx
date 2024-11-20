@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const FavoriteListContainer = styled.div`
-  width: 466px;
+  width: 430px;
   height: 151px;
   display: flex;
   flex-direction: row;
@@ -11,11 +11,24 @@ const FavoriteListContainer = styled.div`
   padding: 10px;
   background-color: #f9f9f9;
   border-radius: 10px;
+
+  @media (max-width: 554px) {
+    width: 400px;
+    height: 151px;
+  }
 `;
 
 const FavoriteInfoContainer = styled.div`
-  margin-left: 34px;
-  margin-bottom: 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 40px;
+  text-align: left;
+  margin-top:10px;
+
+  @media (max-width: 554px) {
+    margin-bottom: 20px;
+  }
 `;
 
 const FavoriteListPicture = styled.div`
@@ -24,52 +37,44 @@ const FavoriteListPicture = styled.div`
   border-radius: 10px;
   background-color: #e0e0e0;
   margin-right: 15px;
+  background-image: url(${(props) => props.imgUrl});  // 이미지 URL을 props로 받도록 수정
+  background-size: cover;
+  background-position: center;
+
+  @media (max-width: 554px) {
+    width: 100px;
+    height: 120px;
+  }
 `;
 
 const FavoritePlaceTitle = styled.h3`
   font-size: 20px;
   font-weight: bold;
   color: ${(props) => props.color || "#FF69A9"};
-  margin-top: 65px;
+  margin: 0; 
 `;
 
 const FavoritePlace = styled.p`
   font-size: 15px;
   color: #808080;
+  margin: 5px 0;
 `;
 
 const FavoritePlaceTime = styled.p`
   font-size: 12px;
   color: black;
+  margin: 5px 0;
 `;
 
-const DeleteButton = styled.button`
-  width: 49px;
-  height: 22px;
-  background-color: #d9d9d9;
-  border-radius: 30px;
-  border: none;
-  cursor: pointer;
-  font-size: 10px;
-  text-align: center;
-  margin-left: 240px;
-
-  &:hover {
-    background-color: #c4c4c4;
-    font-weight: bold;
-  }
-`;
-
-function FavoriteList({ title, place, time, color }) {
+function FavoriteList({ title, place, time, color, imgUrl }) {
   return (
     <FavoriteListContainer>
       <FavoriteInfoContainer>
         <FavoritePlaceTitle color={color}>{title}</FavoritePlaceTitle>
         <FavoritePlace>{place}</FavoritePlace>
         <FavoritePlaceTime>{time}</FavoritePlaceTime>
-        <DeleteButton>삭제</DeleteButton>
       </FavoriteInfoContainer>
-      <FavoriteListPicture />
+      <FavoriteListPicture imgUrl={imgUrl} /> 
     </FavoriteListContainer>
   );
 }
