@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from '../pages/Home';
+import Login from '../pages/Login';
 import Search from '../pages/Search';
 import PetRegisterPage from '../pages/pet/PetRegisterPage';
 import AddPetPage from '../pages/pet/AddPetPage';
@@ -14,6 +16,7 @@ const AppRouter = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/search" element={<Search />} />
         <Route path="/pet-register" element={<PetRegisterPage />} />
         <Route path="/pet-add" element={<AddPetPage />} />
@@ -28,3 +31,4 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
+

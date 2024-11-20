@@ -14,7 +14,8 @@ const CustomHeader = styled.div`
     img {
     width: 5%; 
     height: auto; 
-    margin-left: 5%; 
+    margin-left: 5%;
+    cursor: pointer;
     }
 
     span {
@@ -23,14 +24,23 @@ const CustomHeader = styled.div`
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
+        cursor: pointer;
     }
 `;
 
 const Header = ({ label }) => {
+    const goBack = () => {
+        window.history.back();
+    };
+
+    const refreshPage = () => {
+        window.location.reload(); 
+    };
+
     return (
         <CustomHeader>
-            <img src={back} alt="뒤로가기" />
-            <span>{label}</span>
+            <img src={back} alt="뒤로가기" onClick={goBack} />
+            <span onClick={refreshPage}>{label}</span>
         </CustomHeader>
     );
 };
