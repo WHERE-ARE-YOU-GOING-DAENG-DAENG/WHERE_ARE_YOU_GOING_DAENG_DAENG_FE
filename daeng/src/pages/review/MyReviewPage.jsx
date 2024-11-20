@@ -11,7 +11,6 @@ function MyReviewPage() {
     <TotalReview />
     <ReviewForm />
     <Footer />
-    <FavoriteList />
     </>
   )
 }
