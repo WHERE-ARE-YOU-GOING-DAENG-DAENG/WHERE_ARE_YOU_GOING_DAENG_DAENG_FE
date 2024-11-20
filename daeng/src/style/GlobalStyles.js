@@ -38,13 +38,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0 auto;     
     text-align: center; 
   }
-    
-@media (max-width: 554px) {
-    #root{
-      width:100%;
-    }
-  }
-
+}
 
 `;
 
