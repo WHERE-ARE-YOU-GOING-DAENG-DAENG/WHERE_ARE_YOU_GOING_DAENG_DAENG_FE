@@ -11,6 +11,6 @@ const Template = (args) => <PlaceOption {...args} />;
 export const Default = Template.bind({});
 Default.args = {
   parking: "주차가능",
-  space: "실내 · 실외 공간",
+  space: "실외공간",
   weightLimit: "~15kg",
 };

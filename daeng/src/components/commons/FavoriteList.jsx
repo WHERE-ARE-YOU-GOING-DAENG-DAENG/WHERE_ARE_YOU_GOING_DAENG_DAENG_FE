@@ -44,7 +44,6 @@ const FavoriteListPicture = styled.div`
   @media (max-width: 554px) {
     width: 100px;
     height: 120px;
-
   }
 `;
 
