@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import alarm from "../assets/icons/alarm.svg";
-import x from "../assets/icons/x.svg";
+import alarm from '../../assets/icons/alarm.svg'
+import x from "../../assets/icons/x.svg";
 
 const PushAlerts = ({ message, dateTime }) => {
   const [isVisible, setIsVisible] = useState(true);
