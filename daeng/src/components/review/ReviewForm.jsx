@@ -3,6 +3,21 @@ import styled from 'styled-components'
 import DeleteBtn from '../../components/commons/DeleteBtn'
 import star from '../../assets/icons/star.svg'
 
+//리뷰 모아보기를 보여주는 페이지
+
+const StyledTotalReview = styled.span`
+  font-weight: bold;
+  font-size: 20px;
+  display: block;
+  margin-right: 58%;
+  margin-top: 5%;
+
+  @media (max-width: 554px) {
+    font-size: 18px;
+    margin-right: 57%;
+  }
+`
+
 const ReviewDivision = styled.div`
   height: 1px;
   width:100%;
@@ -26,11 +41,11 @@ const PlaceTitle = styled.span`
   font-size:15px;
   font-weight: bold;
   display: block;
-  margin-right: 65%;
+  margin-right: 62%;
 
   @media (max-width: 554px) {
     margin-right: 60%;
-    font-size: 0.7rem;
+    font-size: 14px;
     margin-left:1%;
   }
 `
@@ -52,7 +67,7 @@ const StyledStar = styled.img`
   margin-top:1%;
 `;
 
-const ReviewContent = styled.span`
+const ReviewContents = styled.span`
   font-size: 13px;
   display: block; 
   padding-left: 9%;
@@ -60,7 +75,10 @@ const ReviewContent = styled.span`
   text-align: justify;  
   line-height: 1.5;  
   word-break: break-word;  
-  
+
+  @media (max-width: 554px) {
+    font-size: 11px;
+  }
 `;
 
 const ReviewPictureContainer = styled.div`
@@ -91,6 +109,7 @@ const ReviewPicture = styled.div`
 function ReviewForm() {
   return (
   <>
+    <StyledTotalReview>내가 쓴 총 리뷰 개</StyledTotalReview> 
     <ReviewDivision />
     <ReviewContainer>
       <PlaceTitle>가평 트리하우스</PlaceTitle>
@@ -98,9 +117,9 @@ function ReviewForm() {
     </ReviewContainer>
     <ReviewDate>2024.10.11</ReviewDate>
     <StyledStar src={star} alt="별점" /> 
-    <ReviewContent>
-    강아지와 함께하는 첫 펜션 여행, 정말 즐거웠어요! 🐾펜션이 너무 깔끔하고, 강아지를 위한 편의시설도 잘 갖춰져 있어서 걱정 없이 머물 수 있었어요. 넓은 정원에서 강아지가 자유롭게 뛰어놀 수 있었고, 바닥도 미끄럽지 않아 안전하게 놀 수 있었습니다. 주인분도 친절하게 강아지용 식사와 편안한 침구도 준비해주셔서 정말 감사했어요. 강아지가 너무 편안해 보였고, 우리도 마음 놓고 힐링할 수 있었답니다. 강아지와 함께 여행 가기에 정말 좋은 곳이었어요. 다음에도 꼭 다시 오고 싶어요! 🐕💖
-    </ReviewContent>
+    <ReviewContents>
+    강아지와 함께하는 첫 펜션 여행, 정말 즐거웠어요! 🐾펜션이 너무 깔끔하고, 강아지를 위한 편의시설도 잘 갖춰져 있어서 걱정 없이 머물 수 있었어요. 넓은 정원에서 강아지가 자유롭게 뛰어놀 수 있었고, 바닥도 미끄럽지 않아 안전하게 놀 수 있었습니다. 주인분도 친절하게 강아지용 식사와 편안한 침구도 준비해주셔서 정말 감사했어요. 강아지가 너무 편안해 보였고, 우리도 마음 놓고 힐링할 수 있었답니다.강아지와 함께 여행 가기에 정말 좋은 곳이었어요. 다음에도 꼭 다시 오고 싶어요! 🐕💖
+    </ReviewContents>
     <ReviewPictureContainer>
       <ReviewPicture /><ReviewPicture /><ReviewPicture />
     </ReviewPictureContainer>

@@ -3,24 +3,19 @@ import styled from "styled-components";
 
 
 const ReviewButton = styled.button`
-  width: 125px;
-  height: 40px;
+  width: 95px;
+  height: 24px;
   background-color:#F9A9D4;
   border-radius: 20px;
   color:white;
   border:none;
-  font-size: 11px;
-  cursor: pointer;
-
-  &:hover {
-    background-color:#FF99C8;
-    font-weight:bold;
-  }
+  font-size: 10px;
+  margin-right:2%;
 
   @media (max-width: 554px) {
-    width: 110px;
-    height: 35px;
-    font-size: 10px;
+    width: 90px;
+    height: 20px;
+    font-size: 9px;
   }
 `
 function ReviewKeywords({label}) {
