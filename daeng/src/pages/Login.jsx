@@ -26,11 +26,6 @@ const TitleContainer = styled.div`
         margin-top: 50px;
         margin-bottom: 8px;
     }
-
-    @media (max-width: 375px) {
-        margin-top: 40px;
-        margin-bottom: 6px;
-    }
 `;
 
 const MainTitle = styled.span`
@@ -43,10 +38,6 @@ const MainTitle = styled.span`
     @media (max-width: 554px) {
         font-size: 40px;
     }
-
-    @media (max-width: 375px) {
-        font-size: 35px;
-    }
 `;
 
 const SubTitle = styled.span`
@@ -57,10 +48,6 @@ const SubTitle = styled.span`
 
     @media (max-width: 554px) {
         font-size: 18px;
-    }
-
-    @media (max-width: 375px) {
-        font-size: 16px;
     }
 `;
 
@@ -74,11 +61,6 @@ const Subtitle = styled.p`
         font-size: 18px;
         margin-bottom: 20px;
     }
-
-    @media (max-width: 375px) {
-        font-size: 16px;
-        margin-bottom: 15px;
-    }
 `;
 
 const Image = styled.img`
@@ -88,11 +70,6 @@ const Image = styled.img`
 
     @media (max-width: 554px) {
         width: 300px;
-        height: auto;
-    }
-
-    @media (max-width: 375px) {
-        width: 250px;
         height: auto;
     }
 `;
@@ -108,11 +85,6 @@ const DividerContainer = styled.div`
         margin-top: 10px;
         margin-bottom: 30px;
     }
-
-    @media (max-width: 375px) {
-        margin-top: 8px;
-        margin-bottom: 20px;
-    }
 `;
 
 const Line = styled.div`
@@ -126,11 +98,6 @@ const Line = styled.div`
         margin-left: 15px;
         margin-right: 15px;
     }
-
-    @media (max-width: 375px) {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
 `;
 
 const DividerText = styled.p`
@@ -139,10 +106,6 @@ const DividerText = styled.p`
 
     @media (max-width: 554px) {
         font-size: 13px;
-    }
-
-    @media (max-width: 375px) {
-        font-size: 12px;
     }
 `;
 
@@ -162,11 +125,6 @@ const Button = styled.button`
             width: 250px;
             height: 40px;
         }
-
-        @media (max-width: 375px) {
-            width: 200px;
-            height: 35px;
-        }
     }
 `;
 
@@ -179,10 +137,6 @@ const FooterText = styled.p`
 
     @media (max-width: 554px) {
         font-size: 12px;
-    }
-
-    @media (max-width: 375px) {
-        font-size: 11px;
     }
 `;
 
