@@ -8,11 +8,11 @@ const AlarmContainer = styled.div`
 `;
 
 const Division = styled.div`
-  width: 487px;
   height: 1px;
   background-color: #E5E5E5;
   margin-top: 45px;
   margin-left: 33px;
+  margin-right:33px;
 `;
 
 const EmptySpace = styled.div`

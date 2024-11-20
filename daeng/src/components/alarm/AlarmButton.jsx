@@ -5,6 +5,8 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-top: 43px;
+  margin-right: 10%;
+  margin-left: 10%;
   justify-content: center;
 `
 const NextButton = styled.button`
@@ -15,7 +17,7 @@ const NextButton = styled.button`
   color: #FF69A9;
   border: none;
   font-size: 20px;
-  margin-right: 68px;
+  margin-right: 14%;
   cursor: pointer;
 `
 

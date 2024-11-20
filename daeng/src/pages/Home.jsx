@@ -5,7 +5,7 @@ function SomeComponent() {
   const navigate = useNavigate(); 
 
   const handleClick = () => {
-    navigate('/pet-register');
+    navigate('/alarm');
   };
 
   return (
