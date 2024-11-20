@@ -15,7 +15,7 @@ const FirstContainer = styled.div`
 function PetRegisterPage() {
   return (
     <>
-      <Header label="댕댕이 추가" />
+      <Header label="댕댕이 등록" />
         <FirstContainer>
           <AddPicture />
           <InputBox />
