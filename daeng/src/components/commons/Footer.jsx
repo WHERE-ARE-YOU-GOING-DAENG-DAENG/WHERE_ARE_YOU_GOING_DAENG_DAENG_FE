@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import footerHome from "../../assets/icons/footer_home.svg";
 import footerHoverHome from "../../assets/icons/footer_hover_home.svg";
 import footerSearch from "../../assets/icons/footer_search.svg";
@@ -39,40 +40,57 @@ const FooterItem = styled.div`
         margin-top: 4px;
         font-size: 12px;
         font-weight: bold;
-        color: #d9d9d9; 
+        color: ${(props) => (props.isActive ? "#ff4b98" : "#d9d9d9")};
     }
 
-    &:hover span {
-        color: #ff4b98; 
+    &:hover {
+        img {
+            content: ${(props) => `url(${props.hoverIcon})`};
+        }
+
+        span {
+            color: #ff4b98;
+        }
     }
 `;
 
 const Footer = () => {
+    const navigate = useNavigate();
     const items = [
-        { icon: footerHome, hoverIcon: footerHoverHome, label: "홈" },
-        { icon: footerSearch, hoverIcon: footerHoverSearch, label: "검색" },
+        { icon: footerHome, hoverIcon: footerHoverHome, label: "홈", onClick: () => navigate("/") },
+        { icon: footerSearch, hoverIcon: footerHoverSearch, label: "검색", onClick: () => navigate("/search") },
         { icon: footerBookmark, hoverIcon: footerHoverBookmark, label: "즐겨찾기" },
         { icon: footerVisiting, hoverIcon: footerHoverVisiting, label: "방문 일정" },
-        { icon: footerMypage, hoverIcon: footerHoverMypage, label: "마이페이지" },
+        { icon: footerMypage, hoverIcon: footerHoverMypage, label: "마이페이지", onClick: () => navigate("/login") },
     ];
 
+    const [activeIndex, setActiveIndex] = useState(null);
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
     return (
         <FooterContainer>
-        {items.map((item, index) => (
-            <FooterItem
-            key={index}
-            onMouseEnter={() => setHoveredIndex(index)} 
-            onMouseLeave={() => setHoveredIndex(null)} 
-            >
-            <img
-                src={hoveredIndex === index ? item.hoverIcon : item.icon} // Hover 상태에 따라 아이콘 변경
-                alt={item.label}
-            />
-            <span>{item.label}</span>
-            </FooterItem>
-        ))}
+            {items.map((item, index) => (
+                <FooterItem
+                    key={index}
+                    isActive={activeIndex === index}
+                    onClick={() => {
+                        setActiveIndex(index);
+                        if (item.onClick) item.onClick();
+                    }}
+                    onMouseEnter={() => setHoveredIndex(index)} 
+                    onMouseLeave={() => setHoveredIndex(null)}
+                >
+                    <img
+                        src={
+                            hoveredIndex === index || activeIndex === index
+                                ? item.hoverIcon
+                                : item.icon
+                        }
+                        alt={item.label}
+                    />
+                    <span>{item.label}</span>
+                </FooterItem>
+            ))}
         </FooterContainer>
     );
 };
