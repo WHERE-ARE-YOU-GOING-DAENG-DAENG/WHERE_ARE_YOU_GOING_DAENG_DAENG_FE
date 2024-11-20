@@ -1,27 +1,27 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import xIcon from '../../assets/icons/pinkX.svg'
 
-const AreaBtn = ({ label }) => {
-  const [isSelected, setIsSelected] = useState(false);
-
-  const handleClick = () => {
-    setIsSelected(!isSelected);
-  };
-
+const AreaBtn = ({ mode, label, isSelected, onClick }) => {
   return (
     <StyledButton
       className={isSelected ? "selected" : ""}
-      onClick={handleClick}
+      onClick={() => onClick(label)}
     >
       {label}
+      {mode === 'keyword' &&
+        <img src={xIcon} alt="삭제"/>
+      }
     </StyledButton>
   );
 };
 
 AreaBtn.propTypes = {
-    label: PropTypes.string.isRequired,
-  };
+  mode: PropTypes.oneOf(['area', 'keyword']).isRequired,
+  label: PropTypes.string.isRequired,
+  isSelected: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
+};
 
 const StyledButton = styled.button`
   height: 35px;
@@ -31,20 +31,25 @@ const StyledButton = styled.button`
   font-size: 15px;
   border-radius: 5px;
   cursor: pointer;
+  white-space: nowrap;
 
   &:hover {
     background-color: #FDF2F8;
     border-color: #FF4B98;
     color: #DB2877;
-    font-weight:bold;
+    font-weight: bold;
   }
+
   &.selected {
     background-color: #FDF2F8;
     border-color: #FF4B98;
     color: #DB2877;
-    font-weight:bold;
+    font-weight: bold;
   }
-
+  img{
+    position: relative;
+    right: -15px;
+  }
 `;
 
 export default AreaBtn;
