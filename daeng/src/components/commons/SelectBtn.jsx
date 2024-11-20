@@ -8,10 +8,17 @@ const StyledButton = styled.button`
     border: 0.5px solid #e4e4e4;
     border-radius: 5px;
     font-size: 12px;
-    font-weight: nomal;
+    font-weight: normal;
     color: #B3B3B3;
     text-align: center;
+    margin-right: 18px;
     cursor: pointer;
+
+    ${(props) => props.selected && `
+        background-color: #FF69A9;
+        font-weight: bold;
+        color: #ffffff;
+    `}
 
     &:hover {
         background-color: #ff69a9;
@@ -20,12 +27,14 @@ const StyledButton = styled.button`
     }
 `;
 
-const SelectBtn = ({ label }) => {
-    return <StyledButton>{label}</StyledButton>;
+const SelectBtn = ({ label, selected, onClick }) => {
+    return <StyledButton selected={selected} onClick={onClick}>{label}</StyledButton>;
 };
 
 SelectBtn.propTypes = {
     label: PropTypes.string.isRequired,
+    selected: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired,
 };
 
 export default SelectBtn;

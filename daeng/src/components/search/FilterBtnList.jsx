@@ -15,7 +15,7 @@ const Container = styled.div`
     justify-content: space-between;
     @media (max-width: 554px) {
         padding: 28px;
-  }
+}
 `
 const FilterBtnList = () => {
     return (
