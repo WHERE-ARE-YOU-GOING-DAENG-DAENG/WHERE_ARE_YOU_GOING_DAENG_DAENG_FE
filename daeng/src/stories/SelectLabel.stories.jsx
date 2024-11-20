@@ -1,4 +1,4 @@
-import SelectLabel from "../components/SelectLabel";
+import SelectLabel from "../components/commons/SelectLabel";
 
 export default {
     title: "Components/SelectLabel",

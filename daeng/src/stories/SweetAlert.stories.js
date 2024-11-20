@@ -1,5 +1,5 @@
 import { action } from '@storybook/addon-actions';
-import SweetAlert from '../components/SweetAlert';
+import SweetAlert from '../components/commons/SweetAlert';
 
 
 export default {

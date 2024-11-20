@@ -1,5 +1,5 @@
 import React from "react";
-import ReviewKeywords from "../components/reviewKeywords";
+import ReviewKeywords from "../components/commons/reviewKeywords";
 
 export default {
   title: "Components/ReviewKeywords",
