@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import back from "../assets/icons/back.svg";
+import back from "../../assets/icons/back.svg";
 
 const CustomHeader = styled.div`
     display: flex;
