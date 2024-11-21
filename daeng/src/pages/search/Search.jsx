@@ -2,7 +2,7 @@ import { useState } from "react";
 import Header from "../../components/commons/Header";
 import Footer from "../../components/commons/Footer";
 import SearchBar from "../../components/search/SearchBar";
-import Map from "../../components/search/Map";
+import Map from "../../components/commons/Map";
 import SearchPlaceList from "../../components/search/SearchPlaceList";
 import Sorting from "../../components/commons/Sorting";
 import FilterBtnList from "../../components/search/FilterBtnList";
