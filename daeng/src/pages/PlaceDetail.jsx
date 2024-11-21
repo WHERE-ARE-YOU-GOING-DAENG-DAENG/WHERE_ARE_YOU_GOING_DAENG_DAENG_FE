@@ -4,64 +4,14 @@ import Header from "../components/commons/Header";
 import Footer from "../components/commons/Footer";
 import PlaceTitle from "../components/detail/PlaceTitle";
 import PlaceInfo from "../components/detail/PlaceInfo";
-const PageContainer = styled.div`
-  padding: 0px 44px;
-`;
+import PlaceDescription from "../components/detail/PlaceDescription";
+import PlaceAiReview from "../components/commons/PlaceAiReview";
+import PlaceReviewList from "../components/detail/PlaceReviewList";
 
 const HeaderImage = styled.img`
   width: 100%;
   height: 50%;
   object-fit: cover;
-`;
-
-const ReviewsSection = styled.div`
-  margin-top: 20px;
-
-  h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-`;
-
-const ReviewCard = styled.div`
-  background: #f9f9f9;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-
-  .review-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-
-    img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
-    .nickname {
-      font-weight: bold;
-      font-size: 14px;
-    }
-  }
-
-  .review-content {
-    font-size: 14px;
-  }
-
-  .keywords {
-    margin-top: 10px;
-
-    span {
-      background: #e0e0e0;
-      padding: 5px 10px;
-      border-radius: 15px;
-      font-size: 12px;
-      margin-right: 5px;
-    }
-  }
 `;
 
 const Division = styled.div`
@@ -71,38 +21,21 @@ const Division = styled.div`
 `;
 
 const PlaceDetail = () => {
-    const { id } = useParams();
-
+    const { id } = useParams(); //나중에 id기준으로 API 호출
+      
     return(
         <>
-            <Header label="시설 상세페이지" />
-            <HeaderImage src={data.images[0]} alt="시설이미지" />
-            <PageContainer>
-              <PlaceTitle data={data}/>
-              <PlaceInfo data={data} />
-            </PageContainer>
-            <Division />
-                <PageContainer>
-                {/* 리뷰 섹션 */}
-                <ReviewsSection>
-                <h2>보호자님의 리뷰</h2>
-                {data.reviews.map((review) => (
-                    <ReviewCard key={review.reviewId}>
-                    <div className="review-header">
-                        <img src={review.userImg || "https://via.placeholder.com/40"} alt={review.nickname} />
-                        <span className="nickname">{review.nickname}</span>
-                    </div>
-                    <div className="review-content">{review.content}</div>
-                    <div className="keywords">
-                        {review.keywords.map((keyword, i) => (
-                        <span key={i}>{keyword}</span>
-                        ))}
-                    </div>
-                    </ReviewCard>
-                ))}
-                </ReviewsSection>
-            </PageContainer>
-            <Footer />        
+          <Header label="시설 상세페이지" />
+          <HeaderImage src={data.images[0]} alt="시설이미지" />
+          <PlaceTitle data={data}/>
+          <PlaceInfo data={data} />
+          <Division />
+          <PlaceDescription/>
+          <Division />
+          <PlaceAiReview />
+          <Division />
+          <PlaceReviewList reviews={data.reviews}/>
+          <Footer />
         </>
     )
 };
