@@ -7,6 +7,7 @@ const Container = styled.div`
   flex-direction: row;
   margin-top:10px;
   justify-content: space-between;
+  margin-bottom:3%;
 `
 
 const UserInfo = styled.div`
