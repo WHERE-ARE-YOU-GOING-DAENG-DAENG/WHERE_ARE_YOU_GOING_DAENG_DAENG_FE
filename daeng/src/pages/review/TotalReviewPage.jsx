@@ -1,9 +1,9 @@
 import React from 'react'
 import Header from '../../components/commons/Header'
+import TotalReviewForm from '../../components/review/TotalReviewForm'
 import Footer from '../../components/commons/Footer'
-import ReviewForm from '../../components/review/ReviewForm'
 import styled from "styled-components";
-import CountMyReview from '../../components/review/CountMyReview';
+import ReviewDetail from '../../components/review/ReviewDetail';
 
 const ReviewContainer = styled.div`
   display: flex;
@@ -14,16 +14,17 @@ const ReviewContainer = styled.div`
 `;
 
 
-function MyReviewPage() {
+function TotalReviewPage() {
   return (
     <ReviewContainer>
-      <Header label="내가 작성한 리뷰" />
-        <CountMyReview />
-        <ReviewForm />
-        <ReviewForm />
+      <Header label="리뷰 전체보기" />
+        <ReviewDetail />
+          <TotalReviewForm />
+          <TotalReviewForm />
+          <TotalReviewForm />
       <Footer />
     </ReviewContainer>
   )
 }
 
-export default MyReviewPage;
+export default TotalReviewPage

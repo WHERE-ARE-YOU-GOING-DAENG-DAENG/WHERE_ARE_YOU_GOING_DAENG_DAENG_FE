@@ -8,6 +8,8 @@ import PetEditPage from '../pages/pet/PetEditPage';
 import MyPage from '../pages/user/MyPage';
 import AlarmPage from '../pages/alarm/AlarmPage';
 import MyReviewPage from '../pages/review/MyReviewPage';
+import TotalReviewPage from '../pages/review/TotalReviewPage';
+import WriteReviewPage from '../pages/review/WriteReviewPage';
 
 const AppRouter = () => {
   return (
@@ -22,6 +24,8 @@ const AppRouter = () => {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/alarm" element={<AlarmPage/>} />
         <Route path="/my-review" element={<MyReviewPage />} />
+        <Route path="/total-review" element={<TotalReviewPage />} />
+        <Route path="/write-review" element={<WriteReviewPage />} />
       </Routes>
     </Router>
   );
