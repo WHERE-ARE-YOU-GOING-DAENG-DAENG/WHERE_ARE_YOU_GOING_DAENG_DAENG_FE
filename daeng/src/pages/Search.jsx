@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Header from "../components/commons/Header";
 import Footer from "../components/commons/Footer";
-import SearchBar from "../components/SearchBar";
-import Map from "../components/Map";
-import SearchPlaceList from "../components/SearchPlaceList";
+import SearchBar from "../components/search/SearchBar";
+import Map from "../components/search/Map";
+import SearchPlaceList from "../components/search/SearchPlaceList";
 import Sorting from "../components/commons/Sorting";
-import FilterBtnList from "../components/FilterBtnList";
+import FilterBtnList from "../components/search/FilterBtnList";
 
 const Search = () => {
     const [query, setQuery] = useState("");

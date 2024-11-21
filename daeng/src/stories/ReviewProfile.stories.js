@@ -1,5 +1,5 @@
 import { action } from '@storybook/addon-actions';
-import ReviewProfile from '../components/ReviewProfile';
+import ReviewProfile from '../components/commons/ReviewProfile';
 import user from "../assets/icons/user.svg"
 
 export default {

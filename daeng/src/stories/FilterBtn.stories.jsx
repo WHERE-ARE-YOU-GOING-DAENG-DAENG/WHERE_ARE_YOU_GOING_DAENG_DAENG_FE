@@ -1,4 +1,4 @@
-import FilterBtn from '../components/FilterBtn';
+import FilterBtn from '../components/commons/FilterBtn';
 import filter from '../assets/icons/filter.svg'
 import park from '../assets/icons/park.svg';
 

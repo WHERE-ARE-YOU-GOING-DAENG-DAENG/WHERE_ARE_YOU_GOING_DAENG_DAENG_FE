@@ -35,11 +35,8 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     max-width: 554px;   
     width: 100%;        
-    margin: 0 auto;     
     text-align: center; 
-  }
 }
-
 `;
 
 export default GlobalStyle;

@@ -16,11 +16,17 @@ const ReviewButton = styled.button`
     background-color:#FF99C8;
     font-weight:bold;
   }
+
+  @media (max-width: 554px) {
+    width: 110px;
+    height: 35px;
+    font-size: 10px;
+  }
 `
-function ReviewKeywords() {
+function ReviewKeywords({label}) {
   return (
-    <ReviewButton>
-      방문하고 싶어요!
+    <ReviewButton >
+      {label}
     </ReviewButton>
   )
 } //아이콘 넣기
