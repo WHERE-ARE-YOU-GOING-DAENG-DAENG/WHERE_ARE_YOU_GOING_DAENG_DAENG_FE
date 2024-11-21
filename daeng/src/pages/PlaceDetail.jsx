@@ -1,19 +1,9 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import bookmarkIcon from "../assets/icons/bookmark.svg";
-import filledbookmarkIcon from "../assets/icons/filledbookmark.svg";
 import Header from "../components/commons/Header";
 import Footer from "../components/commons/Footer";
-import dogIcon from "../assets/icons/detaildog.svg"
-import joinIcon from "../assets/icons/join.svg"
-import ReviewKeywords from "../components/commons/ReviewKeywords";
-import starIcon from "../assets/icons/star.svg"
-import addressIcon from "../assets/icons/place.svg"
-import hourIcon from "../assets/icons/operatingHour.svg"
-import callnumberIcon from "../assets/icons/callnumber.svg"
-import websiteIcon from "../assets/icons/website.svg"
-import PlaceOption from "../components/commons/PlaceOption";
+import PlaceTitle from "../components/detail/PlaceTitle";
+import PlaceInfo from "../components/detail/PlaceInfo";
 const PageContainer = styled.div`
   padding: 0px 44px;
 `;
@@ -22,81 +12,6 @@ const HeaderImage = styled.img`
   width: 100%;
   height: 50%;
   object-fit: cover;
-`;
-
-const TitleSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-top: 20px;
-
-  h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 0px;
-  }
-
-`;
-
-const SubTitleSection = styled.div`
-  display: flex;
-  font-weight: bold;
-  font-size: 10px;
-
-  .detail-category{
-    color: #FF69A9;
-    margin-right: 5px;
-  }
-
-  img{
-    margin: 0 5px;
-  }
-
-  .detail-reviewcnt{
-    margin-left: 2px;
-    color: #808080;
-    font-weight: normal;
-  }
-`
-
-const InfoCard = styled.div`
-  background: #F7F7F7;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 20px;
-  position: relative;
-
-  .info-title{
-    display: flex;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 20px;
-    span{
-    color: #FF4B98;
-    }
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-
-    img {
-      width: 20px;
-      margin-right: 10px;
-    }
-
-    span {
-      font-size: 11px;
-      padding: 10px;
-    }
-  }
-    .dog-icon {
-    position: absolute;
-    top: 20px;
-    right: -10px;
-
-  }
 `;
 
 const ReviewsSection = styled.div`
@@ -149,52 +64,25 @@ const ReviewCard = styled.div`
   }
 `;
 
-const PlaceDetail = () => {
-    const {id} = useParams();
-    const [isFavorite, setIsFavorite] = useState(data.isFavorite);
+const Division = styled.div`
+    height: 8px;
+    background-color: #E5E5E5;
+    width: 100%;
+`;
 
-    const toggleFavorite = () => {
-        setIsFavorite((prev) => !prev);
-    };
+const PlaceDetail = () => {
+    const { id } = useParams();
 
     return(
         <>
             <Header label="시설 상세페이지" />
             <HeaderImage src={data.images[0]} alt="시설이미지" />
             <PageContainer>
-                <TitleSection>
-                    <h1>{data.name}</h1>
-                    <ReviewKeywords label="방문하고 싶어요" icon={joinIcon}/>
-                </TitleSection>
-                <SubTitleSection>
-                  <p className="detail-category">{data.categories[0]}</p>
-                  <p>| 평점</p>
-                  <img src={starIcon} alt="평점" />
-                  <p>{data.rating}</p>
-                  <p className="detail-reviewcnt">({data.reviews.length})</p>
-                  <img
-                      src={isFavorite ? filledbookmarkIcon : bookmarkIcon}
-                      alt="Favorite"
-                      className="favorite-button"
-                      onClick={toggleFavorite}
-                  />
-                </SubTitleSection>
-                <InfoCard>
-                  <div className="info-title"><span>댕댕어디가</span>가 설명드려요 !</div>
-                  <div className="info-item">
-                      <img src={addressIcon} alt="주소" />
-                      <span> {data.address.city} {data.address.district} {data.address.roadAddress}</span>
-                  </div>
-                  <div className="info-item">
-                      <img src={hourIcon} alt="운영시간" />
-                      <span>{data.openHours}</span>
-                  </div>
-                  <div className="info-item">
-                      <span>🚫 휴무일: {data.holiday}</span>
-                  </div>
-                  <img src={dogIcon} alt="강아지아이콘" className="dog-icon"/>
-                </InfoCard>
-        
+              <PlaceTitle data={data}/>
+              <PlaceInfo data={data} />
+            </PageContainer>
+            <Division />
+                <PageContainer>
                 {/* 리뷰 섹션 */}
                 <ReviewsSection>
                 <h2>보호자님의 리뷰</h2>
