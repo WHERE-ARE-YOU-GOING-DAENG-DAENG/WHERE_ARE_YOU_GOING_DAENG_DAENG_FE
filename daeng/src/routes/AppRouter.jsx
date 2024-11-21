@@ -10,6 +10,7 @@ import AlarmPage from '../pages/alarm/AlarmPage';
 import MyReviewPage from '../pages/review/MyReviewPage';
 import TotalReviewPage from '../pages/review/TotalReviewPage';
 import WriteReviewPage from '../pages/review/WriteReviewPage';
+import Preference from '../pages/Preference';
 
 const AppRouter = () => {
   return (
@@ -17,6 +18,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/preference" element={<Preference />} />
         <Route path="/search" element={<Search />} />
         <Route path="/pet-register" element={<PetRegisterPage />} />
         <Route path="/pet-add" element={<AddPetPage />} />
