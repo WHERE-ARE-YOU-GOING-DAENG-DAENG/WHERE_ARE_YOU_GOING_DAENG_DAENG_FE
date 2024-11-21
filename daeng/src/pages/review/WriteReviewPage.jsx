@@ -11,8 +11,12 @@ const WriteReviewContainer = styled.div`
   padding: 3px;
   overflow: auto; 
   padding-bottom: 205%;
-`
 
+  @media (max-width: 554px) {
+    font-size: 10px;
+    padding-bottom: 130%;
+  }
+`
 function WriteReviewPage() {
   return (
     <WriteReviewContainer>
