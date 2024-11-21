@@ -20,6 +20,13 @@ const CustomPreferenceButton = styled.button`
     font-size: 24px;
   }
 
+  &:hover{
+    font-weight:bold;
+    border-color: #FF4B98;
+    background-color: #FDF2F8;
+    color: #DB2877;
+  }
+    
   &.selected {
     font-weight:bold;
     border-color: #FF4B98;
