@@ -11,6 +11,7 @@ import MyReviewPage from '../pages/review/MyReviewPage';
 import PlaceDetail from '../pages/search/PlaceDetail';
 import TotalReviewPage from '../pages/review/TotalReviewPage';
 import WriteReviewPage from '../pages/review/WriteReviewPage';
+import Preference from '../pages/Preference';
 
 const AppRouter = () => {
   return (
@@ -18,6 +19,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/preference" element={<Preference />} />
         <Route path="/search" element={<Search />} />
         <Route path="/search/:id" element={<PlaceDetail />} />
         <Route path="/pet-register" element={<PetRegisterPage />} />
