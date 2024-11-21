@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import HomeDogLoveIcon from "../../assets/icons/home_doglove.svg";
 
 const DogPlacesWrapper = styled.div`
   margin-top: 20px;
@@ -9,6 +10,8 @@ const DogPlacesWrapper = styled.div`
 `;
 
 const DogTitle = styled.h2`
+  display: flex;
+  align-items: center;
   text-align: left;
   margin: 20px 30px;
   font-size: 15px;
@@ -18,6 +21,12 @@ const DogTitle = styled.h2`
   @media (max-width: 554px) {
     margin: 10px 20px;
     font-size: 13px;
+  }
+
+  img {
+    margin-left: 3px; 
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -38,6 +47,7 @@ const DogLinkBox = styled.div`
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
+  cursor: pointer;
 
   @media (max-width: 554px) {
     width: 90%;
@@ -48,7 +58,10 @@ const DogLinkBox = styled.div`
 function HomeDogPlaces() {
   return (
     <DogPlacesWrapper>
-      <DogTitle>우리 댕댕이가 좋아할 것 같아요! 💖</DogTitle>
+      <DogTitle>
+        우리 댕댕이가 좋아할 것 같아요 !
+        <img src={HomeDogLoveIcon} alt="Dog Love Icon" />
+      </DogTitle>
       <DogLinkContainer>
         <DogLinkBox />
         <DogLinkBox />
