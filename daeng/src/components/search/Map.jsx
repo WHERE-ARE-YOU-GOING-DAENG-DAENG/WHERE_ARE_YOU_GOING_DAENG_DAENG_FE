@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import markerIcon from "../assets/icons/marker.svg";
+import markerIcon from "../../assets/icons/marker.svg";
 
 // Styled-components로 스타일 정의
 const MapContainer = styled.div`

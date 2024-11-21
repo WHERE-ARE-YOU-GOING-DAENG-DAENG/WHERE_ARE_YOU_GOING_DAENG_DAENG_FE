@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import bookmarkIcon from "../assets/icons/bookmark.svg";
-import filledbookmarkIcon from "../assets/icons/filledbookmark.svg"
+import bookmarkIcon from "../../assets/icons/bookmark.svg";
+import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg"
 
 // Styled-components
 const ListContainer = styled.div`
