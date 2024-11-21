@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import HomeRecommendIcon from "../../assets/icons/home_recommend.svg";
 
 const RecommendPlacesWrapper = styled.div`
     margin-top: 20px;
@@ -9,6 +10,8 @@ const RecommendPlacesWrapper = styled.div`
 `;
 
 const RecommendTitle = styled.h3`
+    display: flex;
+    align-items: center;
     text-align: left;
     margin: 15px 30px;
     font-size: 15px;
@@ -18,6 +21,12 @@ const RecommendTitle = styled.h3`
     @media (max-width: 554px) {
         margin: 10px 20px;
         font-size: 13px;
+    }
+
+    img {
+        margin-left: 5px;
+        width: 20px;
+        height: 20px;
     }
 `;
 
@@ -38,6 +47,7 @@ const RecommendLinkBox = styled.div`
     background-color: #ffffff;
     border: 1px solid #d9d9d9;
     border-radius: 10px;
+    cursor: pointer;
 
     @media (max-width: 554px) {
         width: 90%;
@@ -48,12 +58,15 @@ const RecommendLinkBox = styled.div`
 function HomeRecommendPlaces() {
     return (
         <RecommendPlacesWrapper>
-        <RecommendTitle>댕댕어디가 추천 장소 😄</RecommendTitle>
-        <RecommendLinkContainer>
-            <RecommendLinkBox />
-            <RecommendLinkBox />
-            <RecommendLinkBox />
-        </RecommendLinkContainer>
+            <RecommendTitle>
+                댕댕어디가 추천 장소
+                <img src={HomeRecommendIcon} alt="Recommend Icon" />
+            </RecommendTitle>
+            <RecommendLinkContainer>
+                <RecommendLinkBox />
+                <RecommendLinkBox />
+                <RecommendLinkBox />
+            </RecommendLinkContainer>
         </RecommendPlacesWrapper>
     );
 }
