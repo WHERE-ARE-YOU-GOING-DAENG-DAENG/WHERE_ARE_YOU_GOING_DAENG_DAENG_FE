@@ -10,7 +10,12 @@ const WriteReviewContainer = styled.div`
   min-height: 100vh;
   padding: 3px;
   overflow: auto; 
-  padding-bottom: 20%;
+  padding-bottom: 205%;
+
+  @media (max-width: 554px) {
+    font-size: 10px;
+    padding-bottom: 125vh;
+  }
 `
 function WriteReviewPage() {
   return (
