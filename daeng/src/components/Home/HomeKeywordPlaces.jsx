@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import HomeKeywordIcon from "../../assets/icons/home_keyword.svg";
 
 const KeywordPlacesWrapper = styled.div`
   margin-top: 20px;
@@ -9,6 +10,8 @@ const KeywordPlacesWrapper = styled.div`
 `;
 
 const KeywordTitle = styled.h3`
+  display: flex;
+  align-items: center;
   text-align: left;
   margin: 15px 30px;
   font-size: 15px;
@@ -18,6 +21,12 @@ const KeywordTitle = styled.h3`
   @media (max-width: 554px) {
     margin: 10px 20px;
     font-size: 13px;
+  }
+
+  img {
+    margin-left: 5px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -77,7 +86,10 @@ function HomeKeywordPlaces() {
     <>
       <Divider />
       <KeywordPlacesWrapper>
-        <KeywordTitle>이런 키워드는 어때요? 👏</KeywordTitle>
+        <KeywordTitle>
+          이런 키워드는 어때요?
+          <img src={HomeKeywordIcon} alt="Keyword Icon" />
+        </KeywordTitle>
         <KeywordContainer>
           <KeywordRow>
             <KeywordItem>음식점</KeywordItem>

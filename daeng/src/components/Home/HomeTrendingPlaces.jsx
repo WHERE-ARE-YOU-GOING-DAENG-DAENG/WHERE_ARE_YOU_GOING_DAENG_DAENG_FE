@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import HomeHotIcon from "../../assets/icons/home_hot.svg";
 
 const TrendingPlacesWrapper = styled.div`
   margin-top: 20px;
@@ -9,6 +10,8 @@ const TrendingPlacesWrapper = styled.div`
 `;
 
 const TrendingTitle = styled.h3`
+  display: flex;
+  align-items: center;
   text-align: left;
   margin: 20px 30px;
   font-size: 15px;
@@ -18,6 +21,12 @@ const TrendingTitle = styled.h3`
   @media (max-width: 554px) {
     margin: 10px 20px;
     font-size: 13px;
+  }
+
+  img {
+    margin-left: 3px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -38,6 +47,7 @@ const TrendingLinkBox = styled.div`
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
+  cursor: pointer;
 
   @media (max-width: 554px) {
     width: 90%;
@@ -48,7 +58,10 @@ const TrendingLinkBox = styled.div`
 function HomeTrendingPlaces() {
   return (
     <TrendingPlacesWrapper>
-      <TrendingTitle>요즘 뜨는 장소 알려드려요 🔥</TrendingTitle>
+      <TrendingTitle>
+        요즘 뜨는 장소 알려드려요
+        <img src={HomeHotIcon} alt="Hot Icon" />
+      </TrendingTitle>
       <TrendingLinkContainer>
         <TrendingLinkBox />
         <TrendingLinkBox />

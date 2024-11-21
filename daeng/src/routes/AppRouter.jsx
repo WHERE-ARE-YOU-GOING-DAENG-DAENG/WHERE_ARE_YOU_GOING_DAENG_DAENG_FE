@@ -14,10 +14,12 @@ import WriteReviewPage from '../pages/review/WriteReviewPage';
 import Preference from '../pages/Preference';
 import Bookmark from '../pages/Bookmark';
 import MyVisitList from '../pages/MyVisitList';
+import ScrollTop from '../components/commons/ScrollTop';
 
 const AppRouter = () => {
   return (
     <Router>
+      <ScrollTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
