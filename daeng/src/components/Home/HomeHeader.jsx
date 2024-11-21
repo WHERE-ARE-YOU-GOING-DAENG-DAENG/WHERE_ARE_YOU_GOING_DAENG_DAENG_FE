@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import logo from "../../assets/icons/logo.svg";
-import alertIcon from "../../assets/icons/home_alert.svg";
+import alarmIcon from "../../assets/icons/home_alarm.svg";
+import { useNavigate } from "react-router-dom";
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -24,9 +25,10 @@ const Logo = styled.img`
   }
 `;
 
-const AlertIcon = styled.img`
+const AlarmIcon = styled.img`
   width: 20px;
   height: 23px;
+  cursor: pointer;
 
   @media (max-width: 554px) {
     width: 18px;
@@ -35,6 +37,12 @@ const AlertIcon = styled.img`
 `;
 
 function HomeHeader() {
+  const navigate = useNavigate();
+
+  const handleAlarm = () => {
+    navigate("/alarm")
+  };
+
   const handleLogoClick = () => {
     window.location.reload();
   };
@@ -42,7 +50,7 @@ function HomeHeader() {
   return (
     <HeaderWrapper>
       <Logo src={logo} alt="로고" onClick={handleLogoClick} />
-      <AlertIcon src={alertIcon} alt="알림" />
+      <AlarmIcon src={alarmIcon} alt="알림" onClick={handleAlarm} />
     </HeaderWrapper>
   );
 }
