@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const FullContainer = styled.div`
   display: block;
   padding:3%;
-  margin-left:4%;
+  margin-left:5%;
 `
 
 function MypageFullContainer() {
