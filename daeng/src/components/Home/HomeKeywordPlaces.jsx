@@ -91,6 +91,7 @@ function HomeKeywordPlaces() {
             <KeywordItem>여행지</KeywordItem>
             <KeywordItem>박물관</KeywordItem>
             <KeywordItem>문예회관</KeywordItem>
+            <KeywordItem />
           </KeywordRow>
         </KeywordContainer>
       </KeywordPlacesWrapper>

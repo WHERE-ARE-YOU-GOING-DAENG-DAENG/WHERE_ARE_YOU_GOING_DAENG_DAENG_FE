@@ -1,17 +1,17 @@
 import React from 'react'
 import styled from "styled-components";
-import run from "../../assets/icons/run.svg";
 
 const PreferenceButton = styled.button`
-  min-width: 130px;
   max-width: auto;
-  height: 44px;
+  height: 40px;
   background-color: white;
   border-radius: 5px;
   border: 0.5px solid #E4E4E4;
   font-size: 12px;
   color: black;
+  margin-top:3px;
   cursor: pointer;
+  margin-right: 10px;
   white-space: nowrap;
   display: flex; 
   align-items: center; 
@@ -24,9 +24,8 @@ const PreferenceButton = styled.button`
   }
 
   @media (max-width: 554px) {
-    width: 100px;
-    height: 40px;
-    font-size: 11px;
+    height:30px;
+    font-size: 10px;
   }
 `;
 
@@ -37,14 +36,14 @@ const StyledIcon = styled.img`
 
   @media (max-width: 554px) {
     width: 15px;
-    height: 40px;
+    height: 15px;
   }
 `;
 
 function PreferenceFavoriteOption({ label, icon }) {
   return (
     <PreferenceButton>
-      <StyledIcon src={run} alt="달리기 좋아요" />
+      <StyledIcon src={icon} alt={label} />
       {label}
     </PreferenceButton>
   );
