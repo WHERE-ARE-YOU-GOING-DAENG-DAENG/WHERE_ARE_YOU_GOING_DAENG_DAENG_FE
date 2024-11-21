@@ -8,6 +8,7 @@ import PetEditPage from '../pages/pet/PetEditPage';
 import MyPage from '../pages/user/MyPage';
 import AlarmPage from '../pages/alarm/AlarmPage';
 import MyReviewPage from '../pages/review/MyReviewPage';
+import PlaceDetail from '../pages/PlaceDetail';
 
 const AppRouter = () => {
   return (
@@ -16,6 +17,7 @@ const AppRouter = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/search/:id" element={<PlaceDetail />} />
         <Route path="/pet-register" element={<PetRegisterPage />} />
         <Route path="/pet-add" element={<AddPetPage />} />
         <Route path="/pet-edit" element={<PetEditPage />} />

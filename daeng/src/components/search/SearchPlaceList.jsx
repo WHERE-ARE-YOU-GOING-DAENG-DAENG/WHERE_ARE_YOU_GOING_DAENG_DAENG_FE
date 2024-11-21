@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg"
+import { useNavigate } from "react-router-dom";
 
 // Styled-components
 const ListContainer = styled.div`
@@ -22,6 +23,7 @@ const PlaceItem = styled.div`
     display: flex;
     align-items: flex-start;
     margin-bottom: 10px;
+    cursor: pointer;
 
     .place-name {
       font-size: 15px;
@@ -71,10 +73,13 @@ const PlaceItem = styled.div`
 
 const SearchPlaceList = ({ list }) => {
   const [places, setPlaces] = useState(Array.isArray(list) ? list : []);
+  const navigate = useNavigate();
+  
   useEffect(() => {
     if (!Array.isArray(list) || list.length === 0) { //임시로 넣은 더미추천리스트
       setPlaces([
-        {
+        { 
+          placeId: 1,
           name: "데일리오아시스 분당 야탑점",
           facilityType: "카페",
           isOpen: true,
@@ -82,7 +87,8 @@ const SearchPlaceList = ({ list }) => {
           images: [],
           bookmark: true,
         },
-        {
+        { 
+          placeId: 2,
           name: "유플러스 양식 어쩌고",
           facilityType: "식당",
           isOpen: false,
@@ -90,7 +96,8 @@ const SearchPlaceList = ({ list }) => {
           images: [],
           bookmark: false,
         },
-        {
+        { 
+          placeId: 3,
           name: "유플러스 공원",
           facilityType: "공원",
           isOpen: true,
@@ -112,10 +119,14 @@ const SearchPlaceList = ({ list }) => {
     );
   };
 
+  const handlePlaceClick = (placeId) => {
+    navigate(`/search/${placeId}`);
+  };
+
   return (
     <ListContainer>
-      {places.map((place, index) => (
-        <PlaceItem key={index}>
+      {places.map((place) => (
+        <PlaceItem key={place.placeId} onClick={() => handlePlaceClick(place.placeId)}>
           <div className="header">
             <div className="place-name">{place.name}</div>
             <div className="facility-type">{place.facilityType || "시설 정보 없음"}</div>
@@ -137,7 +148,7 @@ const SearchPlaceList = ({ list }) => {
             src={place.bookmark ? filledbookmarkIcon : bookmarkIcon}
             className="favorite"
             alt="즐겨찾기"
-            onClick={() => toggleBookmark(index)}
+            onClick={() => toggleBookmark(place.placeId)}
           />
         </PlaceItem>
       ))}
