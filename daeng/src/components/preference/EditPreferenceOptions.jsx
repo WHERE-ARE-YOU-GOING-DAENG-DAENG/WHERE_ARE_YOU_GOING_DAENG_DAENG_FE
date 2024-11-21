@@ -69,7 +69,7 @@ const FooterConfirmBtn = styled.div`
   }
 `;
 
-function PreferenceOptions() {
+function EditPreferenceOptions() {
   return (
     <Wrap>
       <Title>어떤 부분이 중요하신가요?</Title>
@@ -79,10 +79,10 @@ function PreferenceOptions() {
       </OptionList>
       <StyledParagraph2>보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</StyledParagraph2>
       <FooterConfirmBtn>
-        <ConfirmBtn label="완료" />
+        <ConfirmBtn label="수정완료" />
       </FooterConfirmBtn>
     </Wrap>
   );
 }
 
-export default PreferenceOptions;
+export default EditPreferenceOptions;
