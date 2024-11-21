@@ -2,41 +2,25 @@ import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import markerIcon from "../../assets/icons/marker.svg";
+import Bookmarker from "../commons/Bookmarker";
+import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
 
 // Styled-components로 스타일 정의
 const MapContainer = styled.div`
   width: 100%;
-  height: 485px;
-  margin-top: 17px;
+  height: ${({ $data }) => ($data && $data.length > 0 ? "100vh" : "485px")};
+
   @media (max-width: 554px) {
-    height: 385px;
+    height: ${({ $data }) => ($data && $data.length > 0 ? "100vh" : "385px")};
   }
 `;
 
-const Map = ({ searchQuery, onResults }) => {
+const Map = ({ searchQuery, onResults, data }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = useGoogleMapsLoader();
   const [markers, setMarkers] = useState([]); // 마커 리스트 관리
   const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 }); // 초기 위치 (서울)
-
-  useEffect(() => {
-    if (window.google && window.google.maps) {
-      setIsLoaded(true);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY}&libraries=places`;
-    script.async = true;
-    script.onload = () => setIsLoaded(true);
-    script.onerror = () => console.error("구글 맵 로드에 실패하였습니다");
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
 
   // 지도 초기화
   useEffect(() => {
@@ -72,7 +56,7 @@ const Map = ({ searchQuery, onResults }) => {
         );
       }
     }
-  }, [isLoaded, map]);
+  }, [isLoaded]);
 
   // 검색 결과 표시
   useEffect(() => {
@@ -121,8 +105,38 @@ const Map = ({ searchQuery, onResults }) => {
     }
   }, [isLoaded, map, searchQuery]);
 
+  // bookMark 데이터를 기반으로 마커 추가, 검색도 나중에 이거 쓰면될듯
+  useEffect(() => {
+    if (isLoaded && map && data && data.length > 0) {
+      // 이전 마커 제거
+      markers.forEach((marker) => marker.setMap(null));
+
+      const newMarkers = data.map((location) => {
+        const marker = new window.google.maps.Marker({
+          position: {
+            lat: location.latitude,
+            lng: location.longitude,
+          },
+          map,
+          title: location.name,
+          icon: <Bookmarker label={location.name}/>,
+        });
+
+        // 마커 클릭 이벤트
+        marker.addListener("click", () => {
+          alert(`장소 이름: ${location.name}\n주소: ${location.streetAddresses}`);
+        });
+
+        return marker;
+      });
+
+      // 북마크 마커 추가
+      setMarkers((prevMarkers) => [...prevMarkers, ...newMarkers]);
+    }
+  }, [isLoaded, map, data]);
+
   return (
-    <MapContainer ref={mapRef}>
+    <MapContainer ref={mapRef} $data={data}>
       {!isLoaded && <div>구글 맵 로딩 중...</div>}
     </MapContainer>
   );
@@ -130,8 +144,19 @@ const Map = ({ searchQuery, onResults }) => {
 
 // PropTypes 정의
 Map.propTypes = {
-  searchQuery: PropTypes.string.isRequired, // 검색 쿼리는 필수
-  onResults: PropTypes.func.isRequired,
+  searchQuery: PropTypes.string,
+  onResults: PropTypes.func,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      favoriteId: PropTypes.number.isRequired,
+      placeId: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      streetAddresses: PropTypes.string.isRequired,
+      latitude: PropTypes.number.isRequired,
+      longitude: PropTypes.number.isRequired,
+      openHours: PropTypes.string.isRequired,
+    })
+  ),
 };
 
 export default Map;
