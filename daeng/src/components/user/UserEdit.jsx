@@ -131,7 +131,7 @@ function UserRegister() {
         <SelectBtn label="괜찮아요" />
       </SelectionContainer>
       <InputAlert>*장소에 함께하는 댕댕이를 알려드려요 </InputAlert>
-      <ConfirmBtn label='다음' />
+      <ConfirmBtn label='수정 완료' />
     </UserContainer>
   );
 }

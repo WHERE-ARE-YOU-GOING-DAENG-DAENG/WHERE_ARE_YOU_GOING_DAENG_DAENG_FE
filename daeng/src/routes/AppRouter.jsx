@@ -14,6 +14,7 @@ import WriteReviewPage from '../pages/review/WriteReviewPage';
 import Preference from '../pages/Preference';
 import ScrollTop from '../components/commons/ScrollTop';
 import UserRegisterPage from '../pages/user/UserRegisterPage';
+import UserEditPage from '../pages/user/UserEditPage';
 
 const AppRouter = () => {
   return (
@@ -23,6 +24,7 @@ const AppRouter = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/user-register" element={<UserRegisterPage />} />
+        <Route path="/user-edit" element={<UserEditPage />} />
         <Route path="/preference" element={<Preference />} />
         <Route path="/search" element={<Search />} />
         <Route path="/search/:id" element={<PlaceDetail />} />
