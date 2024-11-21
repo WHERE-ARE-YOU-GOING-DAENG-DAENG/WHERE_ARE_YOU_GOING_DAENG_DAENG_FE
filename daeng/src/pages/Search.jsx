@@ -17,6 +17,7 @@ const Search = () => {
 
     const handleSearchResults = (results) => {
         const formattedResults = results.map((result) => ({
+            placeId: result.place_id,
             name: result.name,
             facilityType: result.types[0], // result.placeType
             isOpen: result.opening_hours ? result.opening_hours.open_now : null, // result.isOpen(bool)
