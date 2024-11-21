@@ -1,18 +1,35 @@
-import { useNavigate } from "react-router-dom";
+import HomeHeader from "../components/Home/HomeHeader";
+import HomeSlider from "../components/Home/HomeSlider";
+import HomeDogPlaces from "../components/Home/HomeDogPlaces";
+import HomeTrendingPlaces from "../components/Home/HomeTrendingPlaces";
+import HomeSanta from "../components/Home/HomeSanta";
+import HomeLogout from "../components/Home/HomeLogout";
+import HomeRecommendPlaces from "../components/Home/HomeRecommendPlaces";
+import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
+import Wrapper from "../components/Home/HomeWrapper";
+import Footer from "../components/commons/Footer";
+
+function checkTokenInCookies() {
+  const cookies = document.cookie.split("; ");
+  return cookies.some(cookie => cookie.startsWith("token="));
+}
 
 function Home() {
-    const navigate = useNavigate();
+  const hasToken = checkTokenInCookies();
 
-    const goToLogin = () => {
-        navigate('/login');
-    };
-
-    return (
-        <div>
-            <h1>홈화면</h1>
-            <button onClick={goToLogin}>로그인</button>
-        </div>
-    );
+  return (
+    <Wrapper>
+      <HomeHeader />
+      <HomeSlider />
+      <HomeDogPlaces />
+      {hasToken ? <HomeDogPlaces /> : <HomeLogout />}
+      <HomeTrendingPlaces />
+      <HomeSanta />
+      <HomeRecommendPlaces />
+      <HomeKeywordPlaces />
+      <Footer />
+    </Wrapper>
+  );
 }
 
 export default Home;
