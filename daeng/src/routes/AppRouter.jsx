@@ -12,6 +12,8 @@ import PlaceDetail from '../pages/search/PlaceDetail';
 import TotalReviewPage from '../pages/review/TotalReviewPage';
 import WriteReviewPage from '../pages/review/WriteReviewPage';
 import Preference from '../pages/Preference';
+import Bookmark from '../pages/Bookmark';
+import MyVisitList from '../pages/MyVisitList';
 
 const AppRouter = () => {
   return (
@@ -22,6 +24,7 @@ const AppRouter = () => {
         <Route path="/preference" element={<Preference />} />
         <Route path="/search" element={<Search />} />
         <Route path="/search/:id" element={<PlaceDetail />} />
+        <Route path="/bookmark" element={<Bookmark />} />
         <Route path="/pet-register" element={<PetRegisterPage />} />
         <Route path="/pet-add" element={<AddPetPage />} />
         <Route path="/pet-edit" element={<PetEditPage />} />
@@ -30,6 +33,7 @@ const AppRouter = () => {
         <Route path="/my-review" element={<MyReviewPage />} />
         <Route path="/total-review" element={<TotalReviewPage />} />
         <Route path="/write-review" element={<WriteReviewPage />} />
+        <Route path="/visit-list" element={<MyVisitList />} />
       </Routes>
     </Router>
   );
