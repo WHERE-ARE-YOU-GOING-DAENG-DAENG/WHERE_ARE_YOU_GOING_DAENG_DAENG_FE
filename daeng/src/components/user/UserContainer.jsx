@@ -1,11 +1,15 @@
 import React from 'react'
-import mypageImg from '../../assets/icons/mypageImg.svg';
+import styled from 'styled-components'
 
+const Container = styled.div`
+  
+
+`
 
 function UserContainer() {
   return (
     <>
-    <img src={mypageImg} alt="유저 사진" /> 
+
     </>
   )
 }//근데 유저 이미지가 들어가는게 맞을까
