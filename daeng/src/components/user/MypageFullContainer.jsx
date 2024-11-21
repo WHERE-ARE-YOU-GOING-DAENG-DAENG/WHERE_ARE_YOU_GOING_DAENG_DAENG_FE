@@ -1,6 +1,6 @@
 import React from 'react'
 import UserContainer from './UserContainer'
-import { styled } from 'styled-components'
+import styled from 'styled-components'
 
 const FullContainer = styled.div`
   display: block;
