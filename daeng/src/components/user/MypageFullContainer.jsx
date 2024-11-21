@@ -2,6 +2,7 @@ import React from 'react'
 import UserContainer from './UserContainer'
 import styled from 'styled-components'
 import DivisionLine from './DivisionLine'
+import PetContainer from './PetContainer'
 
 const FullContainer = styled.div`
   display: block;
@@ -15,6 +16,8 @@ function MypageFullContainer() {
   <FullContainer>
     <UserContainer/>
   </FullContainer>
+  <DivisionLine />
+  <PetContainer />
   <DivisionLine />
   </>
   )
