@@ -1,53 +1,34 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import HomeHeader from "../components/Home/HomeHeader";
+import HomeSlider from "../components/Home/HomeSlider";
+import HomeDogPlaces from "../components/Home/HomeDogPlaces";
+import HomeTrendingPlaces from "../components/Home/HomeTrendingPlaces";
+import HomeSanta from "../components/Home/HomeSanta";
+import HomeLogout from "../components/Home/HomeLogout";
+import HomeRecommendPlaces from "../components/Home/HomeRecommendPlaces";
+import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
+import Wrapper from "../components/Home/HomeWrapper";
+import Footer from "../components/commons/Footer";
+
+function checkTokenInCookies() {
+  const cookies = document.cookie.split("; ");
+  return cookies.some(cookie => cookie.startsWith("token="));
+}
 
 function Home() {
-  const navigate = useNavigate(); 
-
-
-  const goToLogin = () => {
-    navigate('/login');
-};
-
-
-  const handleClick = () => {
-    navigate('/pet-register');
-  };
-
-  const handleClickEdit = () => {
-    navigate('/pet-edit');
-  };
-
-  const handleClickAdd = () => {
-    navigate('/pet-add');
-  };
-
-  const handleClickAlarm = () => {
-    navigate('/alarm');
-  };
-
-  const handleMyReview = () => {
-    navigate('/my-review');
-  };
-
-  const handleTotalReview = () => {
-    navigate('/total-review');
-  }
-
-  const handleWriteReview = () => {
-    navigate('/write-review');
-  }
+  const hasToken = checkTokenInCookies();
 
   return (
-    <>
-    <button onClick={handleClick}>Go to Pet Register</button>
-    <button onClick={handleClickEdit}>Go to Pet Edit</button>
-    <button onClick={handleClickAdd}>Go to Pet Add</button>
-    <button onClick={handleClickAlarm}>Go to Alarm</button>
-    <button onClick={handleMyReview}>내가 작성한 리뷰</button>
-    <button onClick={handleTotalReview}>전체리뷰</button>
-    <button onClick={handleWriteReview}>리뷰작성</button>
-    </>
+    <Wrapper>
+      <HomeHeader />
+      <HomeSlider />
+      <HomeDogPlaces />
+      {hasToken ? <HomeDogPlaces /> : <HomeLogout />}
+      <HomeTrendingPlaces />
+      <HomeSanta />
+      <HomeRecommendPlaces />
+      <HomeKeywordPlaces />
+      <Footer />
+    </Wrapper>
   );
 }
 

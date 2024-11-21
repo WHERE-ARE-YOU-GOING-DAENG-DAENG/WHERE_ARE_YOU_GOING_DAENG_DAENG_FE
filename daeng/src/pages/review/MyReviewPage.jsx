@@ -3,6 +3,7 @@ import Header from '../../components/commons/Header'
 import Footer from '../../components/commons/Footer'
 import ReviewForm from '../../components/review/ReviewForm'
 import styled from "styled-components";
+import CountMyReview from '../../components/review/CountMyReview';
 
 const ReviewContainer = styled.div`
   display: flex;
@@ -17,6 +18,7 @@ function MyReviewPage() {
   return (
     <ReviewContainer>
       <Header label="내가 작성한 리뷰" />
+        <CountMyReview />
         <ReviewForm />
         <ReviewForm />
       <Footer />

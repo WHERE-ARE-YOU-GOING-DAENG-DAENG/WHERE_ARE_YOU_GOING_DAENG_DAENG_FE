@@ -5,19 +5,6 @@ import star from '../../assets/icons/star.svg'
 
 //리뷰 모아보기를 보여주는 페이지
 
-const StyledTotalReview = styled.span`
-  font-weight: bold;
-  font-size: 20px;
-  display: block;
-  margin-right: 58%;
-  margin-top: 5%;
-
-  @media (max-width: 554px) {
-    font-size: 18px;
-    margin-right: 57%;
-  }
-`
-
 const ReviewDivision = styled.div`
   height: 1px;
   width:100%;
@@ -44,7 +31,7 @@ const PlaceTitle = styled.span`
   margin-right: 62%;
 
   @media (max-width: 554px) {
-    margin-right: 60%;
+    margin-right: 50%;
     font-size: 14px;
     margin-left:1%;
   }
@@ -109,7 +96,6 @@ const ReviewPicture = styled.div`
 function ReviewForm() {
   return (
   <>
-    <StyledTotalReview>내가 쓴 총 리뷰 개</StyledTotalReview> 
     <ReviewDivision />
     <ReviewContainer>
       <PlaceTitle>가평 트리하우스</PlaceTitle>
