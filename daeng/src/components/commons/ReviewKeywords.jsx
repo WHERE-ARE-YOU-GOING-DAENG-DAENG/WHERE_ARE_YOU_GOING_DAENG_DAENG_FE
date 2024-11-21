@@ -12,15 +12,21 @@ const ReviewButton = styled.button`
   color:white;
   border:none;
   font-size: 10px;
-  margin-right:2%;
+  margin-right: 2%;
+  white-space: nowrap;
 
   img{
     margin-right: 5px;
   }
-  &:hover {
-    background-color:#FF99C8;
-    font-weight:bold;
-  }
+
+  ${({ hasIcon }) =>
+    hasIcon &&
+    `
+    &:hover {
+      background-color: #FF99C8;
+      font-weight: bold;
+    }
+  `}
 
   @media (max-width: 554px) {
     height: 20px;
@@ -29,7 +35,7 @@ const ReviewButton = styled.button`
 `
 function ReviewKeywords({label, icon}) {
   return (
-    <ReviewButton >
+    <ReviewButton hasIcon={!!icon}>
       {icon && <img src={icon} alt="아이콘" />}
       {label}
     </ReviewButton>
