@@ -47,6 +47,7 @@ const TrendingLinkBox = styled.div`
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
+  cursor: pointer;
 
   @media (max-width: 554px) {
     width: 90%;
