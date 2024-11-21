@@ -4,28 +4,26 @@ import weight from "../../assets/icons/weight.svg";
 import optionparking from "../../assets/icons/optionparking.svg";
 
 const PlaceOptionContainer = styled.div`
-  width: 503px;
+  width: 100%;
   height: 62px;
   display: flex;
   flex-direction: row;
   border-radius: 10px;
   border: none;
+  padding: 0px 35px;
   background-color: #F7F7F7;
   justify-content: space-between;
   align-items: center;      
 
   @media (max-width: 554px) {
-    width: 450px;
-    height: 62px;
+    padding: 0px 8%;
   }
 `;
 
 const PlaceList = styled.p`
   font-size: 13px;
   text-align: center;
-  margin-left: 45px;
   word-break: keep-all;
-  margin-right: 54px;
   display: flex;
   align-items: center;
 
@@ -40,7 +38,7 @@ const StyledIcon = styled.img`
   margin-right: 8px;
 `;
 
-function PlaceOption({ parking, space, weightLimit }) {
+function PlaceOption({ parking, space, weightLimit, icon }) {
   return (
     <PlaceOptionContainer>
       <PlaceList>
@@ -49,6 +47,7 @@ function PlaceOption({ parking, space, weightLimit }) {
       </PlaceList>
 
       <PlaceList>
+        <StyledIcon src={icon} alt="시설 타입"/>
         {space}
       </PlaceList>
 
