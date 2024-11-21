@@ -72,8 +72,8 @@ const Footer = () => {
     const items = [
         { icon: footerHome, hoverIcon: footerHoverHome, label: "홈", onClick: () => navigate("/") },
         { icon: footerSearch, hoverIcon: footerHoverSearch, label: "검색", onClick: () => navigate("/search") },
-        { icon: footerBookmark, hoverIcon: footerHoverBookmark, label: "즐겨찾기" },
-        { icon: footerVisiting, hoverIcon: footerHoverVisiting, label: "방문 일정" },
+        { icon: footerBookmark, hoverIcon: footerHoverBookmark, label: "즐겨찾기", onClick: () => navigate("/bookmark") },
+        { icon: footerVisiting, hoverIcon: footerHoverVisiting, label: "방문 일정", onClick: () => navigate("/visit-list") },
         { icon: footerMypage, hoverIcon: footerHoverMypage, label: "마이페이지", onClick: () => navigate("/login") },
     ];
 
