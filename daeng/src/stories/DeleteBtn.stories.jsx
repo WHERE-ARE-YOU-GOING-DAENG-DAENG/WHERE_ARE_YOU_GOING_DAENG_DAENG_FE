@@ -1,4 +1,4 @@
-import DeleteBtn from "../components/DeleteBtn";
+import DeleteBtn from "../components/commons/DeleteBtn";
 
 export default {
     title: "Components/DeleteBtn",

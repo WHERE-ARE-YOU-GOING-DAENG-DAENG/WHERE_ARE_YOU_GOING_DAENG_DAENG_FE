@@ -1,5 +1,5 @@
 import React from "react";
-import PreferenceFavoriteOption from "../components/preferenceFavoriteOption";
+import PreferenceFavoriteOption from "../components/commons/preferenceFavoriteOption";
 
 export default {
   title: "Components/PreferenceFavoriteOption",
