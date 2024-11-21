@@ -10,8 +10,9 @@ const WriteReviewContainer = styled.div`
   min-height: 100vh;
   padding: 3px;
   overflow: auto; 
-  padding-bottom: 20%;
+  padding-bottom: 205%;
 `
+
 function WriteReviewPage() {
   return (
     <WriteReviewContainer>

@@ -3,13 +3,13 @@ import styled from "styled-components";
 
 const PreferenceButton = styled.button`
   max-width: auto;
-  height: 40px;
+  height: 35px;
   background-color: white;
   border-radius: 5px;
   border: 0.5px solid #E4E4E4;
   font-size: 12px;
   color: black;
-  margin-top:3px;
+  margin-top:5px;
   cursor: pointer;
   margin-right: 10px;
   white-space: nowrap;
@@ -24,7 +24,7 @@ const PreferenceButton = styled.button`
   }
 
   @media (max-width: 554px) {
-    height:30px;
+    height:27px;
     font-size: 10px;
   }
 `;
