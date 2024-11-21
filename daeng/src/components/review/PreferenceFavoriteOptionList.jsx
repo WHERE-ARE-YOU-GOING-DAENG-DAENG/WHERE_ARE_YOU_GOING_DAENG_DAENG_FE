@@ -18,6 +18,12 @@ const PreferenceFavoriteOptionContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap; 
   margin-top: 10px;
+  gap : 3px;
+
+
+  @media (max-width: 554px) {
+    gap: 0px;
+  }
 `
 
 function PreferenceFavoriteOptionList() {
