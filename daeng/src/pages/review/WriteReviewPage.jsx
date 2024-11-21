@@ -14,7 +14,7 @@ const WriteReviewContainer = styled.div`
 
   @media (max-width: 554px) {
     font-size: 10px;
-    padding-bottom: 130%;
+    padding-bottom: 125vh;
   }
 `
 function WriteReviewPage() {
