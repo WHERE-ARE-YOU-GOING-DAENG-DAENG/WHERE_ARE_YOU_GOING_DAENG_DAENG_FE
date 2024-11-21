@@ -13,6 +13,7 @@ import TotalReviewPage from '../pages/review/TotalReviewPage';
 import WriteReviewPage from '../pages/review/WriteReviewPage';
 import Preference from '../pages/Preference';
 import ScrollTop from '../components/commons/ScrollTop';
+import UserRegisterPage from '../pages/user/UserRegisterPage';
 
 const AppRouter = () => {
   return (
@@ -21,6 +22,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/user-register" element={<UserRegisterPage />} />
         <Route path="/preference" element={<Preference />} />
         <Route path="/search" element={<Search />} />
         <Route path="/search/:id" element={<PlaceDetail />} />
