@@ -3,6 +3,8 @@ import UserContainer from './UserContainer'
 import DivisionLine from './DivisionLine'
 import PetContainer from './PetContainer'
 import RoutePage from './RoutePage'
+import PetService from './PetService'
+import LastContainer from './LastContainer'
 
 
 function MypageFullContainer() {
@@ -14,6 +16,9 @@ function MypageFullContainer() {
     <DivisionLine />
     <RoutePage />
     <DivisionLine />
+    <PetService />
+    <DivisionLine />
+    <LastContainer />
   </>
   )
 }
