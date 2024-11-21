@@ -218,22 +218,28 @@ function WriteReview() {
         </PlaceTitle>
         <WriteReviewDate>2024-06-20</WriteReviewDate>
       </WriteReviewContainer>
+
       <SelectPlaceOptionContainer>
+
         <WhatPointLike>어떤 점이 좋았나요 ?</WhatPointLike><br />
         <SelectWarning>*이 장소에 맞는 키워드를 골라주세요 (1개~3개)</SelectWarning>
         <PreferenceFavoriteOptionList />
+
         <UserInfoContainer>
           <UserImg/>
           <UserNickname>내가 진짜</UserNickname>
         </UserInfoContainer>
+
         <UserQuestionContainer>
           <Question>함께한 댕댕이를 선택해주세요</Question>
           <PetSelection />
         </UserQuestionContainer>
+
         <UserQuestionContainer>
           <Question>방문한 날짜를 선택해주세요</Question>
           <DateSelection type="date" max={getCurrentDate()}/>
         </UserQuestionContainer>
+
         <UserQuestionContainer>
           <Question>별점을 눌러 만족도를 공유해주세요</Question>
           <StarContainer>
@@ -247,9 +253,11 @@ function WriteReview() {
             ))}
           </StarContainer>
         </UserQuestionContainer>
+
         <UserQuestionContainer>
           <Question>사진 / 동영상 업로드 <p>(선택)</p></Question>
         </UserQuestionContainer>
+        
         <AddImg>
           <input 
             type="file" 
@@ -260,8 +268,11 @@ function WriteReview() {
           <br />
           사진 / 동영상<br/> 업로드
         </AddImg>
+
         <TextContainer />
+        
       </SelectPlaceOptionContainer>
+
     </WriteReviewAllContainer>
   )
 }

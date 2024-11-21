@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import PreferenceFavoriteOptionList from "../review/PreferenceFavoriteOptionList";
 import ConfirmBtn from "../commons/ConfirmBtn";
+import { useNavigate } from "react-router-dom";
 
 const Wrap = styled.div`
   margin-left: 5px;
@@ -70,6 +71,12 @@ const FooterConfirmBtn = styled.div`
 `;
 
 function PreferenceOptions() {
+  const navigate = useNavigate();
+
+  const handleConfirm = () => {
+    navigate("/");
+  };
+  
   return (
     <Wrap>
       <Title>어떤 부분이 중요하신가요?</Title>
@@ -79,7 +86,7 @@ function PreferenceOptions() {
       </OptionList>
       <StyledParagraph2>보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</StyledParagraph2>
       <FooterConfirmBtn>
-        <ConfirmBtn label="완료" />
+        <ConfirmBtn label="완료" onClick={handleConfirm} />
       </FooterConfirmBtn>
     </Wrap>
   );
