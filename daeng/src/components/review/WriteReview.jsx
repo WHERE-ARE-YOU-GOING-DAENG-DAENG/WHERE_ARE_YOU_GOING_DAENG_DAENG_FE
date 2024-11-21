@@ -77,12 +77,20 @@ const UserImg = styled.img`
   margin-right: 10px;
   border:none;
   background-color: #FF69A9;
+
+  @media (max-width: 554px) {
+    margin-top: 4%;
+  }
 `
 
 const UserNickname = styled.span`
   font-size: 18px;
   color: #333;
   font-weight: bold;
+  
+  @media (max-width: 554px) {
+    margin-top: 4%;
+  }
 `
 
 const UserQuestionContainer = styled.div`
