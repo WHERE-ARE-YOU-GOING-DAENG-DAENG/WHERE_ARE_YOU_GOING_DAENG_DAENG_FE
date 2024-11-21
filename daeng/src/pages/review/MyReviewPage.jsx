@@ -15,14 +15,12 @@ const ReviewContainer = styled.div`
 
 function MyReviewPage() {
   return (
-    <>
-      <ReviewContainer>
-        <Header label="내가 작성한 리뷰" />
-          <ReviewForm />
-          <ReviewForm />
-        <Footer />
-      </ReviewContainer>
-    </>
+    <ReviewContainer>
+      <Header label="내가 작성한 리뷰" />
+        <ReviewForm />
+        <ReviewForm />
+      <Footer />
+    </ReviewContainer>
   )
 }
 

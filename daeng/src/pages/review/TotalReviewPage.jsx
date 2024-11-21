@@ -16,16 +16,14 @@ const ReviewContainer = styled.div`
 
 function TotalReviewPage() {
   return (
-    <>
     <ReviewContainer>
       <Header label="리뷰 전체보기" />
-      <ReviewDetail />
-        <TotalReviewForm />
-        <TotalReviewForm />
-        <TotalReviewForm />
+        <ReviewDetail />
+          <TotalReviewForm />
+          <TotalReviewForm />
+          <TotalReviewForm />
       <Footer />
     </ReviewContainer>
-    </>
   )
 }
 
