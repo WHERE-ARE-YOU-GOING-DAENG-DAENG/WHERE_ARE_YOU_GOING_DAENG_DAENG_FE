@@ -1,11 +1,25 @@
 import React from 'react'
+import Header from '../../components/commons/Header'
+import Footer from '../../components/commons/Footer'
+import styled from "styled-components";
+import WriteReview from '../../components/review/WriteReview';
 
-function WriteReview() {
+const WriteReviewContainer = styled.div`
+  display: flex;
+  flex-direction: column; 
+  min-height: 100vh;
+  padding: 3px;
+  overflow: auto; 
+  padding-bottom: 20%;
+`
+function WriteReviewPage() {
   return (
-    <div>
-      
-    </div>
+    <WriteReviewContainer>
+      <Header label="리뷰 작성" />
+      <WriteReview />
+      <Footer />
+    </WriteReviewContainer>
   )
 }
 
-export default WriteReview
+export default WriteReviewPage
