@@ -7,7 +7,7 @@ const CustomHeader = styled.div`
     align-items: center;
     position: relative;
     width: 100%;
-    height: 91px;
+    height: 80px;
     background-color: #ffffff;
     font-size: 20px;
 
