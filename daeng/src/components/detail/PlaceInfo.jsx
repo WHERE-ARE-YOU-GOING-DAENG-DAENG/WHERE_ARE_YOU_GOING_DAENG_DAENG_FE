@@ -15,6 +15,10 @@ const InfoCard = styled.div`
   margin-top: 20px;
   position: relative;
 
+  @media (max-width: 554px){
+    padding: 20px 5%;
+  }
+
   .info-title{
     display: flex;
     font-weight: bold;
@@ -54,13 +58,16 @@ const InfoCard = styled.div`
 `;
 
 const OptionCard = styled.div`
-  margin-top: 20px;
+  margin: 20px 0px;
   position: relative;
+`
+const Container = styled.div`
+  padding: 0px 44px;
 `
 
 const PlaceInfo = ({data}) => {
     return(
-        <>
+        <Container>
         <InfoCard>
                   <div className="info-title"><span>댕댕어디가</span>가 설명드려요 !</div>
                   <div className="info-item">
@@ -84,7 +91,7 @@ const PlaceInfo = ({data}) => {
                 <OptionCard>
                   <PlaceOption parking= "주차가능" space="실내 · 실외공간" weightLimit="~15kg" icon={inandout}/>
                 </OptionCard>
-        </>
+        </Container>
     )
 };
 

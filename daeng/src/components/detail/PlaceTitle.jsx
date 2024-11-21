@@ -7,6 +7,10 @@ import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg";
 import starIcon from "../../assets/icons/star.svg"
 import PropTypes from "prop-types";
 
+const Container = styled.div`
+  padding: 0px 44px;
+`
+
 const TitleSection = styled.div`
   display: flex;
   justify-content: space-between;
@@ -50,7 +54,7 @@ const PlaceTitle = ({ data }) => {
     };
 
     return(
-        <>
+        <Container>
             <TitleSection>
                 <h1>{data.name}</h1>
                 <ReviewKeywords label="방문하고 싶어요" icon={joinIcon}/>
@@ -68,7 +72,7 @@ const PlaceTitle = ({ data }) => {
                     onClick={toggleFavorite}
                 />
             </SubTitleSection>
-        </>
+        </Container>
     )
 }
 
