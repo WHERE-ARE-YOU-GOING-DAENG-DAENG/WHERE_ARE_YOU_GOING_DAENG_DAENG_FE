@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import styled from "styled-components";
 
 const PreferenceButton = styled.button`
@@ -16,6 +17,13 @@ const PreferenceButton = styled.button`
   display: flex; 
   align-items: center; 
   justify-content: center; 
+
+  &.selected {
+    font-weight: bold;
+    border-color: #FF4B98;
+    background-color: #FDF2F8;
+    color: #DB2877;
+  }
 
   &:hover {
     background-color: #FDF2F8;
@@ -40,13 +48,23 @@ const StyledIcon = styled.img`
   }
 `;
 
-function PreferenceFavoriteOption({ label, icon }) {
+function PreferenceFavoriteOption({ label, icon, isSelected, onClick }) {
   return (
-    <PreferenceButton>
+    <PreferenceButton 
+      className={isSelected ? "selected" : ""} 
+      onClick={onClick}
+    >
       <StyledIcon src={icon} alt={label} />
       {label}
     </PreferenceButton>
   );
 }
+
+PreferenceFavoriteOption.propTypes = {
+  isSelected: PropTypes.bool.isRequired, 
+  onClick: PropTypes.func.isRequired,    
+  label: PropTypes.string.isRequired,    
+  icon: PropTypes.string.isRequired,
+};
 
 export default PreferenceFavoriteOption;
