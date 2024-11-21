@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import addressarrow from "../../assets/icons/addressarrow.svg";
 
 const StyledButton = styled.button`
     width: 100%;    
@@ -14,6 +15,7 @@ const StyledButton = styled.button`
     text-align: center;
     margin-right: 18px;
     cursor: pointer;
+    margin-bottom: 10px;
 
     ${(props) => props.selected && `
         background-color: #FF69A9;
@@ -34,14 +36,31 @@ const StyledButton = styled.button`
     }
 `;
 
-const SelectBtn = ({ label, selected, onClick }) => {
-    return <StyledButton selected={selected} onClick={onClick}>{label}</StyledButton>;
+const Icon = styled.img`
+    width: 16px;
+    height: 16px;
+    margin-top:1px;
+`;
+
+const SelectBtn = ({ label, selected, onClick, isAddress }) => {
+    return (
+        <StyledButton selected={selected} onClick={onClick}>
+            {label}
+            {isAddress && <Icon src={addressarrow} alt="주소 리스트 화살표" />}
+        </StyledButton>
+    );
 };
 
 SelectBtn.propTypes = {
     label: PropTypes.string.isRequired,
     selected: PropTypes.bool.isRequired,
     onClick: PropTypes.func.isRequired,
+    isAddress: PropTypes.bool, 
 };
+
+SelectBtn.defaultProps = {
+    isAddress: false,
+};
+
 
 export default SelectBtn;
