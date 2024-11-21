@@ -54,7 +54,6 @@ const RouteText = styled.span`
   &:hover {
     color:  #ff69a9;
     cursor: pointer; 
-    font-weight: bold;
   }
 `
 const StyledLink = styled(Link)`
