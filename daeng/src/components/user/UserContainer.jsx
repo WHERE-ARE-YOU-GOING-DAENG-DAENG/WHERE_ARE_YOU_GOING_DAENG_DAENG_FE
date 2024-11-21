@@ -8,6 +8,8 @@ const Container = styled.div`
   margin-top:10px;
   justify-content: space-between;
   margin-bottom:3%;
+  padding:3%;
+  margin-left: 4%;
 `
 
 const UserInfo = styled.div`

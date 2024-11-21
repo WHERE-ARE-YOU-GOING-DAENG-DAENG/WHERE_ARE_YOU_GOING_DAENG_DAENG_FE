@@ -1,24 +1,19 @@
 import React from 'react'
 import UserContainer from './UserContainer'
-import styled from 'styled-components'
 import DivisionLine from './DivisionLine'
 import PetContainer from './PetContainer'
+import RoutePage from './RoutePage'
 
-const FullContainer = styled.div`
-  display: block;
-  padding:3%;
-  margin-left:5%;
-`
 
 function MypageFullContainer() {
   return (
   <>
-  <FullContainer>
     <UserContainer/>
-  </FullContainer>
-  <DivisionLine />
-  <PetContainer />
-  <DivisionLine />
+    <DivisionLine />
+    <PetContainer />
+    <DivisionLine />
+    <RoutePage />
+    <DivisionLine />
   </>
   )
 }
