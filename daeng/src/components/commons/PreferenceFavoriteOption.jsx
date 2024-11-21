@@ -17,6 +17,7 @@ const PreferenceButton = styled.button`
   display: flex; 
   align-items: center; 
   justify-content: center; 
+  transition: all 0.3s ease;
 
   &.selected {
     font-weight: bold;
@@ -29,6 +30,7 @@ const PreferenceButton = styled.button`
     background-color: #FDF2F8;
     color: #DB2877;
     font-weight: bold;
+    border-color: #FF4B98;
   }
 
   @media (max-width: 554px) {
