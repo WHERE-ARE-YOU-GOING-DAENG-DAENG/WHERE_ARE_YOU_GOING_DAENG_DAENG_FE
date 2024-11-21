@@ -79,6 +79,9 @@ const FilterModal = ({ isOpen, onClose }) => {
                         onClick={()=>handleRegionSelect(region)}
                     />
                     ))}
+                    <DummyBtn/>
+                    <DummyBtn/>
+                    <DummyBtn/>
                 </City>
                 <Area>
                 {selectedRegion &&
@@ -161,6 +164,7 @@ const Modal = styled.div`
     -webkit-overflow-scrolling: touch; /* 모바일 스크롤 부드럽게 */
     @media (max-width: 554px) {
         width: 100%;
+        bottom: 64px;
     }
 `;
 
@@ -215,10 +219,7 @@ const City = styled.div`
     flex-wrap: wrap;
     gap: 17px;
     align-items: center;
-    justify-content: flex-start;
-    @media (max-width: 554px) {
-        justify-content: space-between;
-    }
+    justify-content: space-between;
 `
 const Area = styled.div`
     border-radius: 10px;
@@ -273,6 +274,12 @@ const Footer = styled.div`
         width: 80%;
         margin-left: 10%;
     }
+`
+
+const DummyBtn = styled.div`
+    width: 81.54px;
+    height: 0px;
+    margin: 0px;
 `
 
 export default FilterModal;
