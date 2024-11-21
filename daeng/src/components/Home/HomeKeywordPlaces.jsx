@@ -33,6 +33,9 @@ const KeywordRow = styled.div`
   display: flex;
   justify-content: center;
   gap: 20px;
+  width: 100%;
+  padding-right: 30px;
+  padding-left: 30px;
 
   @media (max-width: 554px) {
     gap: 10px;
@@ -45,11 +48,15 @@ const KeywordItem = styled.div`
   color: #ff69b4;
   text-align: center;
   padding: 10px;
+  width: 100px;
+  height: 40px;
   margin-bottom: 10px;
   cursor: pointer;
 
   @media (max-width: 554px) {
-    font-size: 12px;
+    font-size: 10px;
+    width: 80px;
+    height: 35px;
   }
 `;
 
