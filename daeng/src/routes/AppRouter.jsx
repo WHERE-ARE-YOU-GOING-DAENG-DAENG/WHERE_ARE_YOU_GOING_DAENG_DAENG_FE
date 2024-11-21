@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
-import Search from '../pages/Search';
+import Search from '../pages/search/Search';
 import PetRegisterPage from '../pages/pet/PetRegisterPage';
 import AddPetPage from '../pages/pet/AddPetPage';
 import PetEditPage from '../pages/pet/PetEditPage';
 import MyPage from '../pages/user/MyPage';
 import AlarmPage from '../pages/alarm/AlarmPage';
 import MyReviewPage from '../pages/review/MyReviewPage';
-import PlaceDetail from '../pages/PlaceDetail';
+import PlaceDetail from '../pages/search/PlaceDetail';
 import TotalReviewPage from '../pages/review/TotalReviewPage';
 import WriteReviewPage from '../pages/review/WriteReviewPage';
 
