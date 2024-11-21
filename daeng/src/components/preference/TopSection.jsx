@@ -5,7 +5,6 @@ const TopContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0;
   padding: 0 30px;
 
   @media (max-width: 554px) {
@@ -20,7 +19,7 @@ const TextContainer = styled.div`
   margin-bottom: 20px;
 
   h1 {
-    font-size: 40px;
+    font-size: 35px;
     font-weight: bold;
     line-height: 1.4;
     color: #000000;
@@ -62,10 +61,9 @@ const Image = styled.img`
 
 const Description = styled.div`
   text-align: center;
-  margin-top: 10px;
 
   p {
-    font-size: 23px;
+    font-size: 21px;
     color: #818181;
     font-weight: bold;
 
@@ -84,7 +82,7 @@ const Division = styled.div`
   height: 8px;
   background-color: #E5E5E5;
   width: 100%;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 
   @media (max-width: 554px) {
     margin-bottom: 30px;

@@ -37,7 +37,7 @@ const Place = styled.div`
   flex-wrap: wrap;
   gap: 3px;
   margin-bottom: 30px;
-  margin-left: 25px;
+  margin-left: 21px;
   padding-right: 1px;
 
   @media (max-width: 554px) {

@@ -48,11 +48,12 @@ const StyledParagraph2 = styled.p`
   font-size: 8px;
   color: red;
   font-weight: bold;
-  margin-top: 9px;
+  margin-top: 90px;
   margin-left: 30px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
+
 
   @media (max-width: 554px) {
     font-size: 7px;
@@ -76,7 +77,7 @@ function PreferenceOptions() {
   const handleConfirm = () => {
     navigate("/");
   };
-  
+
   return (
     <Wrap>
       <Title>어떤 부분이 중요하신가요?</Title>
