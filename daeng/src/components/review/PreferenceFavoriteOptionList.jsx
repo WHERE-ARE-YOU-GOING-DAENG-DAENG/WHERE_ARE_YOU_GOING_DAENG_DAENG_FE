@@ -32,8 +32,8 @@ function PreferenceFavoriteOptionList() {
   
     setSelectedOptions((prev) =>
       prev.includes(label)
-        ? prev.filter((option) => option !== label) // 선택 해제
-        : [...prev, label] // 새로운 선택 추가
+        ? prev.filter((option) => option !== label) 
+        : [...prev, label] 
     );
   };
 
