@@ -19,6 +19,7 @@ const DivisionLine = styled.div`
   height: 1px;
   background-color: #E5E5E5;
   margin-top:-2px;
+  margin-right:40px;
 `;
 
 const TotalUserInfoContainer = styled.div`
