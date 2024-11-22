@@ -3,6 +3,28 @@ import PreferenceFavoriteOptionList from "../review/PreferenceFavoriteOptionList
 import ConfirmBtn from "../commons/ConfirmBtn";
 import { useNavigate } from "react-router-dom";
 
+function PreferenceOptions() {
+  const navigate = useNavigate();
+
+  const handleConfirm = () => {
+    navigate("/");
+  };
+
+  return (
+    <Wrap>
+      <Title>어떤 부분이 중요하신가요?</Title>
+      <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
+      <OptionList>
+        <PreferenceFavoriteOptionList />
+      </OptionList>
+      <StyledParagraph2>보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</StyledParagraph2>
+      <FooterConfirmBtn>
+        <ConfirmBtn label="완료" onClick={handleConfirm} />
+      </FooterConfirmBtn>
+    </Wrap>
+  );
+}
+
 const Wrap = styled.div`
   margin-left: 5px;
   margin-right: 18px;
@@ -70,27 +92,5 @@ const FooterConfirmBtn = styled.div`
     margin-left: 20px;
   }
 `;
-
-function PreferenceOptions() {
-  const navigate = useNavigate();
-
-  const handleConfirm = () => {
-    navigate("/");
-  };
-
-  return (
-    <Wrap>
-      <Title>어떤 부분이 중요하신가요?</Title>
-      <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
-      <OptionList>
-        <PreferenceFavoriteOptionList />
-      </OptionList>
-      <StyledParagraph2>보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</StyledParagraph2>
-      <FooterConfirmBtn>
-        <ConfirmBtn label="완료" onClick={handleConfirm} />
-      </FooterConfirmBtn>
-    </Wrap>
-  );
-}
 
 export default PreferenceOptions;

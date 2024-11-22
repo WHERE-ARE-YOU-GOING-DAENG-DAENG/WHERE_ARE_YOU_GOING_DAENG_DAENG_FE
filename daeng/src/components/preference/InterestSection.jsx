@@ -1,6 +1,18 @@
 import styled from "styled-components";
 import PreferencePlaceOptionList from "./PreferencePlaceOptionList";
 
+function InterestSection() {
+  return (
+    <Wrap>
+      <Title>어떤 시설에 관심이 많으신가요?</Title>
+      <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
+      <Place>
+        <PreferencePlaceOptionList />
+      </Place>
+    </Wrap>
+  );
+}
+
 const Wrap = styled.div`
   margin-left: 5px;
   margin-right: 18px;
@@ -46,17 +58,5 @@ const Place = styled.div`
     margin-right: 40px;
   }
 `;
-
-function InterestSection() {
-  return (
-    <Wrap>
-      <Title>어떤 시설에 관심이 많으신가요?</Title>
-      <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
-      <Place>
-        <PreferencePlaceOptionList />
-      </Place>
-    </Wrap>
-  );
-}
 
 export default InterestSection;
