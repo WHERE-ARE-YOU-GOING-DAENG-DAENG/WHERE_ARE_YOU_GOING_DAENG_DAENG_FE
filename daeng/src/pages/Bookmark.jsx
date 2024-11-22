@@ -42,21 +42,26 @@ const OpenModalButton = styled.button`
 `;
 const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
+	const [center, setCenter] = useState(false);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
     };
 
+	const handlePlaceClick = (latitude, longitude) => {
+		setCenter({ lat: latitude, lng: longitude });
+	  };
+
     return(
         <>  
             <Header label="즐겨찾기"/>
-            <Map data={data} removeUi={true}/>
+            <Map data={data} removeUi={true} externalCenter={center}/>
             <Footer></Footer>
 			<OpenModalButton onClick={toggleModal}>
 				<img src={pinIcon} alt="즐겨찾기" />
 				<p>즐겨찾기한 장소</p>
             </OpenModalButton>
-			<BookMarkList isOpen={isModalOpen} onClose={toggleModal} data={data} />
+			<BookMarkList isOpen={isModalOpen} onClose={toggleModal} data={data} onPlaceClick={handlePlaceClick}/>
         </>
     )
 };

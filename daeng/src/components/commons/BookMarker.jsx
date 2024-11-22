@@ -23,9 +23,9 @@ const CustomMarker = styled.div`
   }
 `
 
-const BookMarker = ({ label, icon }) => {
+const BookMarker = ({ label, icon, onClick }) => {
     return (
-        <CustomMarker>
+        <CustomMarker onClick={onClick}>
             <img src={icon} alt="마커"/>
             <span>{label}</span>
         </CustomMarker>
@@ -35,6 +35,7 @@ const BookMarker = ({ label, icon }) => {
 BookMarker.propTypes = {
     label: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
+    onClick: PropTypes.func,
 }
 
 export default BookMarker;
