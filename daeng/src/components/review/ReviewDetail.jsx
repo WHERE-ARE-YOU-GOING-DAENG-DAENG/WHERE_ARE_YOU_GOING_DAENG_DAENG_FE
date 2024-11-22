@@ -4,6 +4,7 @@ import star from '../../assets/icons/star.svg';
 import badcomment from '../../assets/icons/badcomment.svg';
 import goodcomment from '../../assets/icons/goodcomment.svg';
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
+import Sorting from '../../components/commons/Sorting';
 
 const TotalReviewContainer = styled.div`
   display: block;
@@ -47,7 +48,7 @@ const ReviewSummaryContainer = styled.div`
   flex-direction: row;
   align-items: center; 
   margin-top: 37px;
-  margin-bottom: -10px;
+  margin-bottom: -30px;
 `;
 
 const TotalStarPoint = styled.span`
@@ -62,28 +63,13 @@ const TotalReviewCount = styled.span`
   color: #B3B3B3;
   font-size:11px;
   display: block;
-  margin-right: 208px;
+  margin-right: 165px;
 
   @media (max-width: 554px) {
     font-size: 10px;
     margin-right: 90px;
   }
 `
-const SortOption = styled.div`
-  font-size: 11px;
-  cursor: pointer;
-  margin-right: 16px;
-
-  &:hover {
-    color: #FF69A9;
-    font-weight: bold;
-  }
-
-  @media (max-width: 554px) {
-    font-size: 10px;
-    margin-right:8px;
-  }
-`;
 
 const StyleImg = styled.img`
   width: 20px; 
@@ -110,11 +96,10 @@ const DivisionLine = styled.div`
   height: 1px;
   background-color: #E5E5E5;
   margin-top:20px;
+  margin-right:20px;
 `;
 
 function ReviewDetail() {
-
-  const options = ["최신순", "평점 높은순", "평점 낮은순"];
 
   return (
     <TotalReviewContainer>
@@ -131,14 +116,15 @@ function ReviewDetail() {
     </AiCommentContainer>
     <AiCommentContainer><StyleImg src={badcomment} alt="AI가 남겨주는 장소의 안 좋은점"/>싫어요 !</AiCommentContainer>
     <ReviewSummaryContainer>
-      <StarImg src={star} alt="별점"/>
+    <StarImg src={star} alt="별점" />
       <TotalStarPoint>4.8/5</TotalStarPoint>
       <TotalReviewCount>총 12개</TotalReviewCount>
-      {options.map((option, index) => (
-      <SortOption key={index}>
-        {option}
-      </SortOption>
-    ))}
+      <Sorting
+        mode="list"
+        sortingOptions={["최신순", "평점 높은순", "평점 낮은순"]}
+        activeIndex={0}
+        onSortChange={(index) => console.log(`선택한 옵션 인덱스: ${index}`)} 
+      />
     </ReviewSummaryContainer>
     </TotalReviewContainer>
   )
