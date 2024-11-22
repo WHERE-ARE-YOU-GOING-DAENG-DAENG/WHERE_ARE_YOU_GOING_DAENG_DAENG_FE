@@ -9,10 +9,10 @@ import CustomOverlay from "./CustomOverlay";
 
 const MapContainer = styled.div`
   width: 100%;
-  height: ${({ $data }) => ($data && $data.length > 0 ? "100vh" : "485px")};
+  height: ${({ $data }) => ($data && $data.length > 0 ? "calc(100vh - 172px)" : "485px")};
 
   @media (max-width: 554px) {
-    height: ${({ $data }) => ($data && $data.length > 0 ? "100vh" : "385px")};
+    height: ${({ $data }) => ($data && $data.length > 0 ? "calc(100vh - 173px)" : "385px")};
   }
 `;
 
