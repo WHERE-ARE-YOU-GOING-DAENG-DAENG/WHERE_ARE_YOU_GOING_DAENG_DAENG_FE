@@ -26,7 +26,6 @@ const AppRouter = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/user-register" element={<UserRegisterPage />} />
         <Route path="/user-edit" element={<UserEditPage />} />
-        <Route path="/preference" element={<Preference />} />
         <Route path="/preference-register" element={<Preference />} />
         <Route path="/preference-edit" element={<EditPreference />} />
         <Route path="/search" element={<Search />} />
