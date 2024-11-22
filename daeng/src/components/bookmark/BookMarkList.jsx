@@ -3,6 +3,8 @@ import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
 import pinIcon from "../../assets/icons/pin.svg";
 import FavoriteList from "../commons/FavoriteList";
+import houseIcon from "../../assets/icons/house.svg"
+import { useNavigate } from "react-router-dom";
 
 const slideUp = keyframes`
     from {
@@ -72,8 +74,18 @@ const ModalContent = styled.div`
     -webkit-overflow-scrolling: touch;
     height: calc(100% - 120px);
 `
-const BookMarkList = ({ isOpen, onClose , data }) => {
+const BookMarkList = ({ isOpen, onClose , data, onPlaceClick}) => {
     const [isClosing, setIsClosing] = useState(false);
+    const navigate = useNavigate();
+
+    const handleDelete = (id) => {
+        alert("삭제하기",id);
+    };
+
+    const handlePlace = (location)=> {
+        onPlaceClick(location.latitude, location.longitude)
+        handleClose();
+    }
 
     const handleClose = () => {
         setIsClosing(true);
@@ -107,9 +119,13 @@ const BookMarkList = ({ isOpen, onClose , data }) => {
                     {data.map((location)=>(
                         <FavoriteList
                             key={location.favoriteId}
+                            icon={houseIcon}
                             title={location.name}
                             place={location.streetAddresses}
                             time={`영업시간 | ${location.startTime} - ${location.endTime}`}
+                            onTitleClick={()=> navigate(`/search/${location.placeId}`)}
+                            onPlaceClick={() => handlePlace(location)}
+                            onDelete={()=>handleDelete(location.placeId)}
                         />
                     ))}
                 </ModalContent>
@@ -133,6 +149,7 @@ BookMarkList.propTypes = {
           endTime: PropTypes.string.isRequired,
         })
     ),
+    onPlaceClick: PropTypes.func.isRequired,
 };
 
 export default BookMarkList;
