@@ -16,6 +16,7 @@ import ScrollTop from '../components/commons/ScrollTop';
 import UserRegisterPage from '../pages/user/UserRegisterPage';
 import UserEditPage from '../pages/user/UserEditPage';
 import EditPreference from '../pages/user/EditPreference';
+import MyVisitList from '../pages/visit/MyVisitList';
 
 const AppRouter = () => {
   return (
@@ -38,6 +39,7 @@ const AppRouter = () => {
         <Route path="/my-review" element={<MyReviewPage />} />
         <Route path="/total-review" element={<TotalReviewPage />} />
         <Route path="/write-review" element={<WriteReviewPage />} />
+        <Route path="/visit-list" element={<MyVisitList />} />
       </Routes>
     </Router>
   );

@@ -71,7 +71,7 @@ const items = [
     { icon: footerHome, hoverIcon: footerHoverHome, label: "홈", path: "/" },
     { icon: footerSearch, hoverIcon: footerHoverSearch, label: "검색", path: "/search" },
     { icon: footerBookmark, hoverIcon: footerHoverBookmark, label: "즐겨찾기" },
-    { icon: footerVisiting, hoverIcon: footerHoverVisiting, label: "방문 일정" },
+    { icon: footerVisiting, hoverIcon: footerHoverVisiting, label: "방문 일정", path: "/visit-list" },
     { icon: footerMypage, hoverIcon: footerHoverMypage, label: "마이페이지", path: "/my-page" },
 ];
 
