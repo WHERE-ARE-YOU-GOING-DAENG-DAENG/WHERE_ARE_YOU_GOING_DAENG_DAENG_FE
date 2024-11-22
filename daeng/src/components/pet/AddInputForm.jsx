@@ -1,29 +1,84 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
-import { PetType } from '../../data/PetType';
+import { PetType } from "../../data/PetType";
+import SelectBtn from "../commons/SelectBtn";
+import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
-import SelectBtn from '../../components/commons/SelectBtn';
-import ConfirmBtn from '../../components/commons/ConfirmBtn';
-import { useNavigate } from 'react-router-dom'; 
 
-
-const SelectContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: auto;
-  padding: 30px;
+  padding: 3%;
+  margin-left: 4%;
 `;
 
-const SelectBox = styled.select`
-  width: 100%;
+const FirstInputContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const PetImg = styled.div`
+  width: 135px;
+  height: 135px;
+  margin-right: 20px;
+  border-radius: 100px;
+  background-color: #fbc9e4;
+  background-image: url(${(props) => props.src || "none"});
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+`;
+
+const HiddenInput = styled.input`
+  display: none;
+`;
+
+const PetNameInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+`;
+
+const PetNameInput = styled.input`
+  width: 194%;
   height: 44px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 0.5px solid #e4e4e4;
+  margin-bottom: 10px;
+  padding: 10px;
+
+  &:focus {
+    outline: none;
+    border-color: #ff69a9; 
+  }
+
+
+  @media (max-width: 554px) {
+    max-width: 150%;
+    font-size: 14px;
+    height: 48px;
+  }
+`;
+
+const InputAlert = styled.p`
+  color: #ff69a9;
+  font-size: 10px;
+  margin-top: -1px;
+  margin-right: 23%;
+  margin-bottom: 4%;
+`;
+
+const PetTypeOption = styled.select`
+  width: 96%;
+  height: 44px;
+  border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
-  cursor: pointer;
-  border: 0.5px solid #E4E4E4;
-  font-size: 12px;
-  margin-bottom: 35px;
+  font-size: 13px;
+  color: ${(props) => (props.value === "" ? "#b3b3b3" : "#000")};
+  box-sizing: border-box; 
   appearance: none; 
   -webkit-appearance: none; 
   -moz-appearance: none; 
@@ -35,43 +90,50 @@ const SelectBox = styled.select`
     border-color: #FF69A9;  
     outline: none;  
   }
-`;
 
-const DateContainer = styled.input`
-  width: 100%;
-  height: 44px;
-  border-radius: 5px;
-  padding: 10px;
-  border: 0.5px solid #E4E4E4;
-  font-size: 12px;
-  margin-bottom: 35px;
-  cursor: pointer;
 
   &:focus {
-    border-color: #FF69A9;  
-    outline: none;  
+    outline: none;
+    border-color: #ff69a9; 
   }
 `;
 
-const SelectBtnContainer = styled.div`
-  display: flex;
-  margin-bottom: 35px;
-`;
-
-const SkipButton = styled.span`
-  color: #B3B3B3;
-  border: none;
-  font-size: 14px;
-  margin-top: 10px; 
-  margin-bottom: 32px; 
-  background: transparent; 
+const BirthInput = styled.input`
+  width: 96%;
+  height: 44px;
+  margin-right:10%;
+  border: 0.5px solid #e4e4e4;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 13px;
+  color: #000; 
   cursor: pointer;
 
-  &:hover {
-      font-weight: bold;
-      color: #FF69A9;
+  &::placeholder {
+    color: #b3b3b3; 
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #ff69a9; 
   }
 `;
+
+const PetTypeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-bottom: 20px;
+`;
+
+const BirthContainer = styled.div`
+  margin-bottom: 20px;
+`    
+const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+`
 
 const SelectWeight = styled.button`
   width: 90px;
@@ -91,90 +153,123 @@ const SelectWeight = styled.button`
   }
 
   ${(props) => props.selected && `
-    background-color: #FF69A9;
-    font-weight: bold;
-    color: white;
-  `}
+        background-color: #FF69A9;
+        font-weight: bold;
+        color: #ffffff;
+    `}
 `;
 
-const getCurrentDate = () => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
 
-function InputForm() {
-  const navigate = useNavigate(); 
-
-  const [birthdate, setBirthdate] = useState("");
-  const [gender, setGender] = useState(""); 
-  const [neutering, setNeutering] = useState("");
+function RegisterInputForm() {
+  const [preview, setPreview] = useState(null);
+  const [selectedPetType, setSelectedPetType] = useState("");
   const [selectedWeight, setSelectedWeight] = useState("");
+  const [selectedGender, setSelectedGender] = useState(""); 
+  const [selectedNeutering, setSelectedNeutering] = useState(""); 
 
-  const handleBirthdateChange = (e) => setBirthdate(e.target.value);
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-  const handleGenderClick = (selectedGender) => {
-    setGender(selectedGender);  
+  const handlePetTypeChange = (e) => {
+    setSelectedPetType(e.target.value);
+  };
+
+  const handleGenderClick = (gender) => {
+    setSelectedGender(gender); 
   };
 
   const handleNeuteringClick = (status) => {
-    setNeutering(status);  
+    setSelectedNeutering(status); 
   };
 
   const handleWeightClick = (weight) => {
     setSelectedWeight(weight); 
   };
 
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); 
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
 
   return (
-    <SelectContainer>
-      <SelectLabel label="견종" />
-      <SelectBox>
-        <option value="" disabled selected>
-          견종을 선택해주세요
-        </option>
-        {PetType.map((dog, index) => (
-          <option key={index} value={dog.value}>
-            {dog.label}
+    <Container>
+      <FirstInputContainer>
+        <label htmlFor="file-input">
+          <PetImg src={preview} />
+        </label>
+        <HiddenInput
+          id="file-input"
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+        />
+        <PetNameInfoContainer>
+          <SelectLabel label="댕댕이 이름" />
+          <PetNameInput />
+          <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
+        </PetNameInfoContainer>
+      </FirstInputContainer>
+      <PetTypeContainer>
+        <SelectLabel label="견종" />
+        <PetTypeOption value={selectedPetType} onChange={handlePetTypeChange}>
+          <option value="" disabled>
+            견종을 선택하세요
           </option>
-        ))}
-      </SelectBox>
-
-      <SelectLabel label="생년월일" />
-      <DateContainer type="date" max={getCurrentDate()} onChange={handleBirthdateChange} />
-
+          {PetType.map((breed, index) => (
+            <option key={index} value={breed.value}>
+              {breed.label}
+            </option>
+          ))}
+        </PetTypeOption>
+      </PetTypeContainer>
+      <BirthContainer>
+        <SelectLabel label="생년월일" />
+        <BirthInput
+          type="date"
+          max={getTodayDate()} 
+          placeholder="우리 댕댕일 생일을 알려주세요!"
+        />
+      </BirthContainer>
       <SelectLabel label="성별" />
-      <SelectBtnContainer>
+      <SelectContainer>
         <SelectBtn
           label="남아"
-          selected={gender === "남아"}
+          selected={selectedGender === "남아"}
           onClick={() => handleGenderClick("남아")}
         />
         <SelectBtn
           label="여아"
-          selected={gender === "여아"}
+          selected={selectedGender === "여아"}
           onClick={() => handleGenderClick("여아")}
         />
-      </SelectBtnContainer>
-
+      </SelectContainer>
       <SelectLabel label="중성화 여부" />
-      <SelectBtnContainer>
+      <SelectContainer>
         <SelectBtn
           label="했어요"
-          selected={neutering === "했어요"}
+          selected={selectedNeutering === "했어요"}
           onClick={() => handleNeuteringClick("했어요")}
         />
         <SelectBtn
           label="안 했어요"
-          selected={neutering === "안 했어요"}
+          selected={selectedNeutering === "안 했어요"}
           onClick={() => handleNeuteringClick("안 했어요")}
         />
-      </SelectBtnContainer>
-
+      </SelectContainer>
       <SelectLabel label="크기" />
-      <SelectBtnContainer>
+      <SelectContainer>
         <SelectWeight
           selected={selectedWeight === "초소형견(3kg 미만)"}
           onClick={() => handleWeightClick("초소형견(3kg 미만)")}
@@ -205,11 +300,10 @@ function InputForm() {
         >
           대형견<br />(20kg 이상)
         </SelectWeight>
-      </SelectBtnContainer>
-
+      </SelectContainer>
       <ConfirmBtn label="완료" />
-    </SelectContainer>
+    </Container>
   );
 }
 
-export default InputForm;
+export default RegisterInputForm;
