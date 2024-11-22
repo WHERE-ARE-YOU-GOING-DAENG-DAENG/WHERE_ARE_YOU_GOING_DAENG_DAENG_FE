@@ -121,8 +121,8 @@ function UserRegister() {
       </SelectionContainer>
       <SelectLabel label="주소" />
       <SelectionContainer>
-      <SelectBtn label="시" selected={false}  isAddress={true} />
-      <SelectBtn label="군" selected={false}  isAddress={true} />
+      <SelectBtn label="시"  />
+      <SelectBtn label="군" />
       </SelectionContainer>
       <InputAlert>*보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</InputAlert>
       <SelectLabel label="알림 동의" />
