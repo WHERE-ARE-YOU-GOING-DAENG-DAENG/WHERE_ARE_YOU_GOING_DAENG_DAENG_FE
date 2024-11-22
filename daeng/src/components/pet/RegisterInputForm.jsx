@@ -43,6 +43,7 @@ const PetNameInfoContainer = styled.div`
 const PetNameInput = styled.input`
   width: 194%;
   height: 44px;
+  font-size: 13px;
   border-radius: 5px;
   border: 0.5px solid #e4e4e4;
   margin-bottom: 10px;
@@ -75,7 +76,7 @@ const PetTypeOption = styled.select`
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
-  font-size: 11px;
+  font-size: 13px;
   color: ${(props) => (props.value === "" ? "#b3b3b3" : "#000")};
   box-sizing: border-box; 
   appearance: none; 
@@ -104,7 +105,7 @@ const BirthInput = styled.input`
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
-  font-size: 11px;
+  font-size: 13px;
   color: #000; 
   cursor: pointer;
 
