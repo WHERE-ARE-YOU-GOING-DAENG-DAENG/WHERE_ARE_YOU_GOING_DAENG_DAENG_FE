@@ -1,4 +1,3 @@
-import React from 'react'
 import Header from '../../components/commons/Header'
 import styled from "styled-components";
 import preferenceDog from "../../assets/icons/preferenceDog.svg";

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from "styled-components";
 import PreferenceFavoriteOption from '../commons/PreferenceFavoriteOption';
 import dogfood from '../../assets/icons/dogFood.svg';
@@ -13,24 +13,12 @@ import clean from '../../assets/icons/clean.svg';
 import gongwon from '../../assets/icons/gongwon.svg';
 import parkingLot from '../../assets/icons/parkingLot.svg';
 
-const PreferenceFavoriteOptionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  gap: 3px;
-
-  @media (max-width: 554px) {
-    gap: 0px;
-  }
-`;
-
 function PreferenceFavoriteOptionList() {
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]); 
 
   const handleOptionClick = (label) => {
     if (selectedOptions.length >= 3 && !selectedOptions.includes(label)) {
-      alert("최대 3개만 선택 가능합니다."); //sweetalert으로 처리 ..
+      alert("최대 3개만 선택 가능합니다."); 
       return;
     }
 
@@ -114,5 +102,17 @@ function PreferenceFavoriteOptionList() {
     </PreferenceFavoriteOptionContainer>
   );
 }
+
+const PreferenceFavoriteOptionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  gap: 3px;
+
+  @media (max-width: 554px) {
+    gap: 0px;
+  }
+`;
 
 export default PreferenceFavoriteOptionList;
