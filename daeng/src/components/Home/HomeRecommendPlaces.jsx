@@ -1,6 +1,22 @@
 import styled from "styled-components";
 import HomeRecommendIcon from "../../assets/icons/home_recommend.svg";
 
+function HomeRecommendPlaces() {
+    return (
+        <RecommendPlacesWrapper>
+            <RecommendTitle>
+                댕댕어디가 추천 장소
+                <img src={HomeRecommendIcon} alt="Recommend Icon" />
+            </RecommendTitle>
+            <RecommendLinkContainer>
+                <RecommendLinkBox />
+                <RecommendLinkBox />
+                <RecommendLinkBox />
+            </RecommendLinkContainer>
+        </RecommendPlacesWrapper>
+    );
+}
+
 const RecommendPlacesWrapper = styled.div`
     margin-top: 20px;
 
@@ -54,21 +70,5 @@ const RecommendLinkBox = styled.div`
         height: 140px;
     }
 `;
-
-function HomeRecommendPlaces() {
-    return (
-        <RecommendPlacesWrapper>
-            <RecommendTitle>
-                댕댕어디가 추천 장소
-                <img src={HomeRecommendIcon} alt="Recommend Icon" />
-            </RecommendTitle>
-            <RecommendLinkContainer>
-                <RecommendLinkBox />
-                <RecommendLinkBox />
-                <RecommendLinkBox />
-            </RecommendLinkContainer>
-        </RecommendPlacesWrapper>
-    );
-}
 
 export default HomeRecommendPlaces;

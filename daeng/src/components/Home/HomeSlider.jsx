@@ -4,6 +4,41 @@ import slide1 from "../../assets/icons/home_slide1.svg";
 import slide2 from "../../assets/icons/home_slide2.svg";
 import slide3 from "../../assets/icons/home_slide3.svg";
 
+function HomeSlider() {
+  const slides = [slide1, slide2, slide3];
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  const handleDotClick = (index) => {
+    setCurrentSlide(index);
+  };
+
+  return (
+    <SliderWrapper>
+      <SlidesContainer currentSlide={currentSlide}>
+        {slides.map((slide, index) => (
+          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} />
+        ))}
+      </SlidesContainer>
+      <DotsWrapper>
+        {slides.map((_, index) => (
+          <Dot
+            key={index}
+            isActive={currentSlide === index}
+            onClick={() => handleDotClick(index)}
+          />
+        ))}
+      </DotsWrapper>
+    </SliderWrapper>
+  );
+}
+
 const SliderWrapper = styled.div`
   width: 100%;
   height: 189px;
@@ -59,40 +94,5 @@ const Dot = styled.div`
     height: 6px;
   }
 `;
-
-function HomeSlider() {
-  const slides = [slide1, slide2, slide3];
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [slides.length]);
-
-  const handleDotClick = (index) => {
-    setCurrentSlide(index);
-  };
-
-  return (
-    <SliderWrapper>
-      <SlidesContainer currentSlide={currentSlide}>
-        {slides.map((slide, index) => (
-          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} />
-        ))}
-      </SlidesContainer>
-      <DotsWrapper>
-        {slides.map((_, index) => (
-          <Dot
-            key={index}
-            isActive={currentSlide === index}
-            onClick={() => handleDotClick(index)}
-          />
-        ))}
-      </DotsWrapper>
-    </SliderWrapper>
-  );
-}
 
 export default HomeSlider;
