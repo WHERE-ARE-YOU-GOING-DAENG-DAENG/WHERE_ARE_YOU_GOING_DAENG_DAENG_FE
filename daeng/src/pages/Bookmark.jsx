@@ -50,7 +50,7 @@ const Bookmark = () => {
     return(
         <>  
             <Header label="즐겨찾기"/>
-            <Map data={data}/>
+            <Map data={data} removeUi={true}/>
             <Footer></Footer>
 			<OpenModalButton onClick={toggleModal}>
 				<img src={pinIcon} alt="즐겨찾기" />

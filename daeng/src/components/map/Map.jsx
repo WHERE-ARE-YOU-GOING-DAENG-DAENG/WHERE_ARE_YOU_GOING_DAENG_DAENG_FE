@@ -16,7 +16,7 @@ const MapContainer = styled.div`
   }
 `;
 
-const Map = ({ searchQuery, onResults, data }) => {
+const Map = ({ searchQuery, onResults, data, removeUi }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const isLoaded = useGoogleMapsLoader();
@@ -29,6 +29,11 @@ const Map = ({ searchQuery, onResults, data }) => {
       const googleMap = new window.google.maps.Map(mapRef.current, {
         center,
         zoom: 15,
+
+        disableDefaultUI: removeUi,
+        mapTypeControl: !removeUi, // "지도/위성" 버튼
+        fullscreenControl: !removeUi, // 전체화면 버튼
+        zoomControl: true,
       });
       setMap(googleMap);
 
@@ -62,7 +67,7 @@ const Map = ({ searchQuery, onResults, data }) => {
         );
       }
     }
-  }, [isLoaded]);
+  }, [isLoaded, removeUi]);
 
   // 검색 결과 표시 -> API 연결시 어차피 바꿔야해서 주석처리 해놓겠습니다
   useEffect(() => {
@@ -162,6 +167,7 @@ Map.propTypes = {
       openHours: PropTypes.string.isRequired,
     })
   ),
+  removeUi: PropTypes.bool,
 };
 
 export default Map;
