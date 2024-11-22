@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import preferenceDog from "../../assets/icons/preference_dog.svg";
+import preferenceDog from "../../assets/icons/preferenceDog.svg";
 
 const TopContainer = styled.div`
   display: flex;
