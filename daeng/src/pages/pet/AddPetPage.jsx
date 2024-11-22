@@ -1,10 +1,13 @@
 import React from 'react'
+import Header from '../../components/commons/Header'
+import AddInputForm from '../../components/pet/AddInputForm';
 
 function AddPetPage() {
   return (
-    <div>
-      
-    </div>
+    <>
+      <Header label="댕댕이 추가" />
+        <AddInputForm/>
+    </>
   )
 }
 
