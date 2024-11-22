@@ -9,10 +9,11 @@ const InputAllContainer = styled.div`
 `
 
 const InputContainer = styled.input`
-  width: 90%;  
+  width: 90%; 
   height: 44px;
   border-radius: 5px;
   border: 0.5px solid #E4E4E4;
+  padding: 10px;
 
   &:focus {
     border-color: #FF69A9;
