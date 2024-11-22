@@ -5,6 +5,7 @@ import { PetType } from "../../data/PetType";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
+import { useNavigate } from "react-router-dom"; 
 
 const Container = styled.div`
   display: flex;
@@ -160,11 +161,21 @@ const SelectWeight = styled.button`
 `;
 
 const NextRegisterBtn = styled.button`
-  background-color: none;
+  background-color: white;
   color:#B3B3B3;
   font-size:14px;
+  border:none;
+  cursor: pointer;
+  text-align: center;
+  margin-right:23px;
+  margin-bottom: 20px;
+
+  &:hover{
+    font-weight: bold;
+  }
 `
 function RegisterInputForm() {
+  const navigate = useNavigate(); 
   const [preview, setPreview] = useState(null);
   const [selectedPetType, setSelectedPetType] = useState("");
   const [selectedWeight, setSelectedWeight] = useState("");
@@ -204,6 +215,11 @@ function RegisterInputForm() {
     const month = String(today.getMonth() + 1).padStart(2, "0"); 
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
+  };
+
+
+  const handleNextRegisterClick = () => {
+    navigate("/"); 
   };
 
   return (
@@ -305,7 +321,7 @@ function RegisterInputForm() {
         </SelectWeight>
       </SelectContainer>
       <ConfirmBtn label="완료" />
-      <NextRegisterBtn>나중에 등록할게요</NextRegisterBtn>
+      <NextRegisterBtn onClick={handleNextRegisterClick}>나중에 등록할게요</NextRegisterBtn>
     </Container>
   );
 }
