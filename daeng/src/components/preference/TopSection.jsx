@@ -104,7 +104,6 @@ const Division = styled.div`
   height: 8px;
   background-color: #E5E5E5;
   width: 100%;
-  margin-bottom: 40px;
 
   @media (max-width: 554px) {
     margin-bottom: 30px;
