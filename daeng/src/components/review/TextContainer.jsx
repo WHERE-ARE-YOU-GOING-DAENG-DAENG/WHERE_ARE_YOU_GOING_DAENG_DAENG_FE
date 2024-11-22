@@ -63,7 +63,12 @@ function TextContainer() {
 
   const handleChange = (e) => {
     if (e.target.value.length > maxLength) {
-      alert("최대 500자까지 입력 가능합니다"); //스위트alert로 
+      AlertDialog({
+        mode: "alert",
+        title: "선택 제한",
+        text: `최대 ${maxLength}자까지만 작성 가능합니다.`,
+        confirmText: "닫기" 
+      });
     } else {
       setText(e.target.value);  
     }
