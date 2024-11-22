@@ -8,6 +8,11 @@ const TotalReviewContainer = styled.div`
   display: block;
   padding:3%;
   margin-left:4%;
+
+  @media (max-width: 554px) {
+    padding:4%;
+    margin-left:1%;
+  }
 `
 
 const DivisionLine = styled.div`

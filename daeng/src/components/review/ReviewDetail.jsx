@@ -36,7 +36,7 @@ const AiCommentContainer = styled.div`
   padding: 5px 0; 
 
   @media (max-width: 554px) {
-    width: 95%;
+    width: 91%;
     height: 40px;
     font-size: 9px;
   }
