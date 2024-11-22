@@ -2,6 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import arrow from '../../assets/icons/arrow.svg';
 
+function UserContainer() {
+  return (
+    <Container>
+      <UserInfo>
+        <Username>내가 진짜임</Username>
+        <UserEmail>이메일</UserEmail>
+      </UserInfo>
+      <ArrowImg src={arrow} alt="유저 정보 자세히 보기 화살표" />
+    </Container>
+  )
+}
+
 const Container = styled.div`
   display: flex;
   flex-direction: row;
@@ -32,16 +44,5 @@ const ArrowImg = styled.img`
   margin-right: 2%;
   cursor: pointer;
 `
-function UserContainer() {
-  return (
-    <Container>
-      <UserInfo>
-        <Username>내가 진짜임</Username>
-        <UserEmail>이메일</UserEmail>
-      </UserInfo>
-      <ArrowImg src={arrow} alt="유저 정보 자세히 보기 화살표" />
-    </Container>
-  )
-}
 
 export default UserContainer
