@@ -15,10 +15,10 @@ const slideUp = keyframes`
 
 const slideDown = keyframes`
     from {
-        transform: translateY(0%);
+        transform: translateY(0);
     }
     to {
-        transform: translateY(80%);
+        transform: translateY(78%);
     }
 `;
 const Overlay = styled.div`

@@ -84,20 +84,20 @@ const data = [
 	  },
 	  {
 		"favoriteId": 35,
-		"placeId": 2,
+		"placeId": 3,
         "name": "댕댕이동산",
   	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
-		"latitude": 35.136080,
+		"latitude": 35.456080,
 		"longitude": 129.104060,
 	    "startTime": "09:00",
 	    "endTime": "21:00"
 	  },
 	  {
 		"favoriteId": 36,
-		"placeId": 2,
+		"placeId": 4,
         "name": "댕댕이동산",
   	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
-		"latitude": 35.136080,
+		"latitude": 35.123080,
 		"longitude": 129.104060,
 	    "startTime": "09:00",
 	    "endTime": "21:00"
