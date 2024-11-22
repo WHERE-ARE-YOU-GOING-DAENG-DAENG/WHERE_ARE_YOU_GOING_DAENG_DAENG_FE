@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import markerIcon from "../../assets/icons/marker.svg";
-import Bookmarker from "../commons/Bookmarker";
+import BookMarker from "../commons/BookMarker";
 import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
+import CustomOverlay from "./CustomOverlay";
 
-// Styled-components로 스타일 정의
 const MapContainer = styled.div`
   width: 100%;
   height: ${({ $data }) => ($data && $data.length > 0 ? "100vh" : "485px")};
@@ -108,36 +108,32 @@ const Map = ({ searchQuery, onResults, data }) => {
   // bookMark 데이터를 기반으로 마커 추가, 검색도 나중에 이거 쓰면될듯
   useEffect(() => {
     if (isLoaded && map && data && data.length > 0) {
-      // 이전 마커 제거
+
       markers.forEach((marker) => marker.setMap(null));
+      setMarkers([]);
 
-      const newMarkers = data.map((location) => {
-        const marker = new window.google.maps.Marker({
-          position: {
-            lat: location.latitude,
-            lng: location.longitude,
-          },
-          map,
-          title: location.name,
-          icon: <Bookmarker label={location.name}/>,
-        });
-
-        // 마커 클릭 이벤트
-        marker.addListener("click", () => {
-          alert(`장소 이름: ${location.name}\n주소: ${location.streetAddresses}`);
-        });
-
-        return marker;
-      });
-
-      // 북마크 마커 추가
-      setMarkers((prevMarkers) => [...prevMarkers, ...newMarkers]);
+      const newMarkers = data.map((location) => (
+        
+        <CustomOverlay
+          key={location.placeId}
+          position={{ lat: location.latitude, lng: location.longitude }}
+          map={map}
+        >
+          <BookMarker label={location.name} />
+        </CustomOverlay>
+      ));
+      console.log(newMarkers)
+      setMarkers(newMarkers);
+    }else {
+      // 데이터가 없으면 마커 비우기
+      setMarkers([]);
     }
-  }, [isLoaded, map, data]);
+  }, [isLoaded, map, data])
 
   return (
     <MapContainer ref={mapRef} $data={data}>
       {!isLoaded && <div>구글 맵 로딩 중...</div>}
+      {markers}
     </MapContainer>
   );
 };

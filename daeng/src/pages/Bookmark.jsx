@@ -1,6 +1,6 @@
 import Footer from "../components/commons/Footer";
 import Header from "../components/commons/Header";
-import Map from "../components/commons/Map"
+import Map from "../components/map/Map"
 import styled from "styled-components";
 
 const Bookmark = () => {
@@ -30,7 +30,7 @@ const data = [
         "name": "댕댕이동산",
   	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
 		"latitude": 35.136080,
-		 "longitude": 129.104060,
+		"longitude": 129.104060,
 	    "openHours": "09:00 - 21:00"
 	  },
 	]
