@@ -5,50 +5,70 @@ import kakaoBtn from '../../assets/icons/kakaoBtn.svg';
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AreaField from '../../data/AreaField'; 
+import AreaField from '../../data/AreaField';
 
-function UserRegister() {
+function UserEdit() {
   const navigate = useNavigate();
-  const navigateToPreferencePage = () => {
-    navigate('/preference-register');
-  };
+  
+  const [userData, setUserData] = useState({
+    email: 'qweqwe@gmail.com', 
+    nickname: '',
+    gender: '',
+    city: '',
+    district: '',
+    alarmAgreement: '',
+  });
 
-  const [gender, setGender] = useState("");
-  const [alarm, setAlarm] = useState("");
-  const [city, setCity] = useState(""); 
-  const [districts, setDistricts] = useState([]); 
-  const [district, setDistrict] = useState(""); 
-
-  const handleGenderClick = (selectedGender) => {
-    setGender(selectedGender);
-  };
-
-  const handleAlarmClick = (selectedAlarm) => {
-    setAlarm(selectedAlarm);
+  const handleInputChange = (field, value) => {
+    setUserData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   const handleCityChange = (e) => {
     const selectedCity = e.target.value;
-    setCity(selectedCity);
-    setDistricts(AreaField[selectedCity] || []); 
-    setDistrict(""); 
+    setUserData((prev) => ({
+      ...prev,
+      city: selectedCity,
+      district: '', 
+    }));
   };
 
-  const handleDistrictChange = (e) => {
-    setDistrict(e.target.value);
+  const handleConfirm = () => {
+      const payload = {
+      nickname: userData.nickname,
+      PushAgreement: userData.alarmAgreement === '받을래요',
+      RegionAgreement: true,
+      email: userData.email,
+      gender: userData.gender,
+      region: {
+        city: userData.city,
+        district: userData.district,
+      },
+    };
+
+    console.log('회원가입 데이터:', JSON.stringify(payload, null, 2));
+    alert('입력된 데이터가 콘솔에 출력되었습니다!');
+    navigate('/my-page');
   };
 
   return (
     <UserContainer>
       <SelectLabel label="이메일" />
       <InputEmailContainer>
-        <Input type="email" placeholder="이메일 받아오기" disabled />
+        <Input type="email" value={userData.email} disabled />
         <Icon src={kakaoBtn} alt="카카오 로그인" />
       </InputEmailContainer>
 
       <SelectLabel label="닉네임" />
       <InputBox>
-        <Input type="text" placeholder="사용하실 닉네임을 입력해 주세요." />
+        <Input
+          type="text"
+          placeholder="사용하실 닉네임을 입력해 주세요."
+          value={userData.nickname}
+          onChange={(e) => handleInputChange('nickname', e.target.value)}
+        />
         <DuplicateBtn>중복확인</DuplicateBtn>
       </InputBox>
       <InputAlert>*닉네임은 최소 1자 이상 작성해 주세요. 특수문자는 사용할 수 없습니다.</InputAlert>
@@ -57,19 +77,19 @@ function UserRegister() {
       <SelectionContainer>
         <SelectBtn
           label="남자"
-          selected={gender === "남자"}
-          onClick={() => handleGenderClick("남자")}
+          selected={userData.gender === '남자'}
+          onClick={() => handleInputChange('gender', '남자')}
         />
         <SelectBtn
           label="여자"
-          selected={gender === "여자"}
-          onClick={() => handleGenderClick("여자")}
+          selected={userData.gender === '여자'}
+          onClick={() => handleInputChange('gender', '여자')}
         />
       </SelectionContainer>
 
       <SelectLabel label="주소" />
       <SelectionContainer>
-        <SelectBox onChange={handleCityChange} value={city}>
+        <SelectBox onChange={handleCityChange} value={userData.city}>
           <option value="" disabled>
             시 선택
           </option>
@@ -79,11 +99,15 @@ function UserRegister() {
             </option>
           ))}
         </SelectBox>
-        <SelectBox onChange={handleDistrictChange} value={district} disabled={!districts.length}>
+        <SelectBox
+          onChange={(e) => handleInputChange('district', e.target.value)}
+          value={userData.district}
+          disabled={!AreaField[userData.city]?.length}
+        >
           <option value="" disabled>
             군 선택
           </option>
-          {districts.map((districtName, index) => (
+          {(AreaField[userData.city] || []).map((districtName, index) => (
             <option key={index} value={districtName}>
               {districtName}
             </option>
@@ -96,18 +120,19 @@ function UserRegister() {
       <SelectionContainer>
         <SelectBtn
           label="받을래요"
-          selected={alarm === "받을래요"}
-          onClick={() => handleAlarmClick("받을래요")}
+          selected={userData.alarmAgreement === '받을래요'}
+          onClick={() => handleInputChange('alarmAgreement', '받을래요')}
         />
         <SelectBtn
           label="괜찮아요"
-          selected={alarm === "괜찮아요"}
-          onClick={() => handleAlarmClick("괜찮아요")}
+          selected={userData.alarmAgreement === '괜찮아요'}
+          onClick={() => handleInputChange('alarmAgreement', '괜찮아요')}
         />
       </SelectionContainer>
-      <InputAlert>*장소에 함께하는 댕댕이를 알려드려요 </InputAlert>
-
-      <ConfirmBtn label="다음" onClick={navigateToPreferencePage} />
+      <InputAlert>*장소에 함께하는 댕댕이를 알려드려요</InputAlert>
+      <ConfirmContainer>
+        <ConfirmBtn label="수정 완료" onClick={handleConfirm} />
+      </ConfirmContainer>
     </UserContainer>
   );
 }
@@ -217,4 +242,9 @@ const SelectBox = styled.select`
   }
 `;
 
-export default UserRegister;
+const ConfirmContainer = styled.div`
+  display: flex;
+  margin-top: 40px;
+`;
+
+export default UserEdit;
