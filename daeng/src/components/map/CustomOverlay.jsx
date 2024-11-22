@@ -12,28 +12,37 @@ const CustomOverlay = ({ position, map, children }) => {
 
     overlayView.onAdd = () => {
       const panes = overlayView.getPanes();
-      panes.overlayLayer.appendChild(containerRef.current);
+      if (panes) {
+        panes.overlayLayer.appendChild(containerRef.current);
+      }
     };
 
     overlayView.draw = () => {
       const projection = overlayView.getProjection();
       if (!projection) return;
+
       const point = projection.fromLatLngToDivPixel(
         new window.google.maps.LatLng(position.lat, position.lng)
       );
+
       const container = containerRef.current;
 
-      if (point && container) {
+      if (point && container) {   
         container.style.position = "absolute";
         container.style.left = `${point.x}px`;
         container.style.top = `${point.y}px`;
+        container.style.transform = "translate(-50%, -50%)";
         container.style.display = "block";
       }
     };
 
     overlayView.onRemove = () => {
-      if (containerRef.current.parentNode) {
-        containerRef.current.parentNode.removeChild(containerRef.current);
+      if (containerRef.current) {
+        const parentNode = containerRef.current.parentNode;
+        if (parentNode && parentNode.contains(containerRef.current)) {
+          parentNode.removeChild(containerRef.current);
+        }
+        containerRef.current = null;
       }
     };
 
@@ -52,7 +61,7 @@ const CustomOverlay = ({ position, map, children }) => {
   }, [position]);
 
   return map ? (
-    <div ref={containerRef} style={{ transform: "translate(-50%, -50%)" }}>
+    <div ref={containerRef} style={{ display: "none" }}>
       {children}
     </div>
   ) : null;
