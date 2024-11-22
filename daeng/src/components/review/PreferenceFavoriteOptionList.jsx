@@ -14,18 +14,6 @@ import gongwon from "../../assets/icons/gongwon.svg";
 import parkingLot from "../../assets/icons/parkingLot.svg";
 import AlertDialog from "../../components/commons/SweetAlert";
 
-const PreferenceFavoriteOptionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  gap: 3px;
-
-  @media (max-width: 554px) {
-    gap: 0px;
-  }
-`;
-
 function PreferenceFavoriteOptionList() {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const maxOptions = 3;
@@ -33,14 +21,15 @@ function PreferenceFavoriteOptionList() {
   const handleOptionClick = (label) => {
     if (selectedOptions.length >= maxOptions && !selectedOptions.includes(label)) {
       AlertDialog({
-        mode: "alert",
-        title: "선택 제한",
-        text: `최대 ${maxOptions}개까지만 선택할 수 있습니다.`,
-        confirmText: "닫기"
+        mode: "alert", 
+        title: "선택 초과",
+        text: "최대 3개만 선택 가능합니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("확인 버튼 클릭됨"),
       });
       return;
     }
-
+  
     setSelectedOptions((prev) =>
       prev.includes(label)
         ? prev.filter((option) => option !== label) // 선택 해제
@@ -76,5 +65,17 @@ function PreferenceFavoriteOptionList() {
     </PreferenceFavoriteOptionContainer>
   );
 }
+
+const PreferenceFavoriteOptionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  gap: 3px;
+
+  @media (max-width: 554px) {
+    gap: 0px;
+  }
+`;
 
 export default PreferenceFavoriteOptionList;

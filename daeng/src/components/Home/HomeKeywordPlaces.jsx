@@ -1,6 +1,36 @@
 import styled from "styled-components";
 import HomeKeywordIcon from "../../assets/icons/home_keyword.svg";
 
+function HomeKeywordPlaces() {
+  return (
+    <>
+      <Divider />
+      <KeywordPlacesWrapper>
+        <KeywordTitle>
+          이런 키워드는 어때요?
+          <img src={HomeKeywordIcon} alt="Keyword Icon" />
+        </KeywordTitle>
+        <KeywordContainer>
+          <KeywordRow>
+            <KeywordItem>음식점</KeywordItem>
+            <KeywordItem>카페</KeywordItem>
+            <KeywordItem>공원</KeywordItem>
+            <KeywordItem>숙소</KeywordItem>
+            <KeywordItem>미술관</KeywordItem>
+          </KeywordRow>
+          <KeywordRow>
+            <KeywordItem>놀이터</KeywordItem>
+            <KeywordItem>여행지</KeywordItem>
+            <KeywordItem>박물관</KeywordItem>
+            <KeywordItem>문예회관</KeywordItem>
+            <KeywordItem />
+          </KeywordRow>
+        </KeywordContainer>
+      </KeywordPlacesWrapper>
+    </>
+  );
+}
+
 const KeywordPlacesWrapper = styled.div`
   margin-top: 20px;
 
@@ -80,35 +110,5 @@ const Divider = styled.hr`
     margin: 15px auto;
   }
 `;
-
-function HomeKeywordPlaces() {
-  return (
-    <>
-      <Divider />
-      <KeywordPlacesWrapper>
-        <KeywordTitle>
-          이런 키워드는 어때요?
-          <img src={HomeKeywordIcon} alt="Keyword Icon" />
-        </KeywordTitle>
-        <KeywordContainer>
-          <KeywordRow>
-            <KeywordItem>음식점</KeywordItem>
-            <KeywordItem>카페</KeywordItem>
-            <KeywordItem>공원</KeywordItem>
-            <KeywordItem>숙소</KeywordItem>
-            <KeywordItem>미술관</KeywordItem>
-          </KeywordRow>
-          <KeywordRow>
-            <KeywordItem>놀이터</KeywordItem>
-            <KeywordItem>여행지</KeywordItem>
-            <KeywordItem>박물관</KeywordItem>
-            <KeywordItem>문예회관</KeywordItem>
-            <KeywordItem />
-          </KeywordRow>
-        </KeywordContainer>
-      </KeywordPlacesWrapper>
-    </>
-  );
-}
 
 export default HomeKeywordPlaces;
