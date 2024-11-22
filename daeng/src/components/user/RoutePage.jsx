@@ -27,8 +27,8 @@ const RouteContainer = styled.div`
   margin-top: 14px;
   background-color: #FDF2F8;
   border-radius: 10px;
-  width: 96%;
-  height: 365px;
+  width: 90%;
+  height: 340px;
   margin-right: 100px;
   padding: 12%;
 `
@@ -43,7 +43,6 @@ const Icon = styled.img`
   width: 20px;
   margin-right: 13px;
   margin-bottom: 40px;
-  
 `
 
 const RouteText = styled.span`

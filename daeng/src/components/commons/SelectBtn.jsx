@@ -14,6 +14,7 @@ const StyledButton = styled.button`
     text-align: center;
     margin-right: 18px;
     cursor: pointer;
+    margin-bottom: 10px;
 
     ${(props) => props.selected && `
         background-color: #FF69A9;
@@ -34,14 +35,23 @@ const StyledButton = styled.button`
     }
 `;
 
-const SelectBtn = ({ label, selected, onClick }) => {
-    return <StyledButton selected={selected} onClick={onClick}>{label}</StyledButton>;
+const SelectBtn = ({ label, selected, onClick}) => {
+    return (
+        <StyledButton selected={selected} onClick={onClick}>
+            {label}
+        </StyledButton>
+    );
 };
 
 SelectBtn.propTypes = {
     label: PropTypes.string.isRequired,
     selected: PropTypes.bool.isRequired,
-    onClick: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired, 
 };
+
+SelectBtn.defaultProps = {
+    isAddress: false,
+};
+
 
 export default SelectBtn;
