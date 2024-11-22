@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
 import mypageFavorite from '../../assets/icons/mypageFavorite.svg';
@@ -66,7 +65,7 @@ const StyledLink = styled(Link)`
 function RoutePage() {
   const list = ['즐겨찾기', '내가 작성한 리뷰', '키워드 수정', '방문 등록 리스트'];
   const icons = [mypageFavorite, mypageKeyword, mypageReview, visitList];
-  const routes = ['/', '/my-review', '/', '/'];
+  const routes = ['/', '/my-review', '/preference-edit', '/'];
 
   return (
     <RoutePageContainer>
