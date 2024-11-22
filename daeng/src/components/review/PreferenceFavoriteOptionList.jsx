@@ -12,6 +12,7 @@ import paperbag from '../../assets/icons/paperbag.svg';
 import clean from '../../assets/icons/clean.svg';
 import gongwon from '../../assets/icons/gongwon.svg';
 import parkingLot from '../../assets/icons/parkingLot.svg';
+import AlertDialog from '../../components/commons/SweetAlert';
 
 const PreferenceFavoriteOptionContainer = styled.div`
   display: flex;
@@ -30,7 +31,12 @@ function PreferenceFavoriteOptionList() {
 
   const handleOptionClick = (label) => {
     if (selectedOptions.length >= 3 && !selectedOptions.includes(label)) {
-      alert("최대 3개만 선택 가능합니다."); //sweetalert으로 처리 ..
+      AlertDialog({
+        mode: "alert",
+        title: "선택 제한",
+        text: "최대 3개만 선택 가능합니다.",
+        confirmText: "확인",
+      });
       return;
     }
 

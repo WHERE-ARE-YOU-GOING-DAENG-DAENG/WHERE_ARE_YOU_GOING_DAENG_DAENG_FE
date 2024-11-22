@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from "styled-components";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
+import AlertDialog from '../../components/commons/SweetAlert';
 
 const Question = styled.span`
   font-size: 15px;

@@ -16,7 +16,7 @@ const SelectContainer = styled.div`
 `;
 
 const SelectBox = styled.select`
-  width: 100%;
+  width: 99%;
   height: 44px;
   border-radius: 5px;
   padding: 10px;
@@ -38,7 +38,7 @@ const SelectBox = styled.select`
 `;
 
 const DateContainer = styled.input`
-  width: 100%;
+  width: 99%;
   height: 44px;
   border-radius: 5px;
   padding: 10px;

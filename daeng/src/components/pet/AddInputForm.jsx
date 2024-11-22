@@ -109,9 +109,9 @@ function InputForm() {
   const navigate = useNavigate(); 
 
   const [birthdate, setBirthdate] = useState("");
-  const [gender, setGender] = useState(""); // 성별
-  const [neutering, setNeutering] = useState(""); // 중성화 여부
-  const [selectedWeight, setSelectedWeight] = useState(""); //몸무게 
+  const [gender, setGender] = useState(""); 
+  const [neutering, setNeutering] = useState("");
+  const [selectedWeight, setSelectedWeight] = useState("");
 
   const handleBirthdateChange = (e) => setBirthdate(e.target.value);
 
