@@ -1,6 +1,22 @@
 import styled from "styled-components";
 import HomeDogLoveIcon from "../../assets/icons/home_doglove.svg";
 
+function HomeDogPlaces() {
+  return (
+    <DogPlacesWrapper>
+      <DogTitle>
+        우리 댕댕이가 좋아할 것 같아요 !
+        <img src={HomeDogLoveIcon} alt="Dog Love Icon" />
+      </DogTitle>
+      <DogLinkContainer>
+        <DogLinkBox />
+        <DogLinkBox />
+        <DogLinkBox />
+      </DogLinkContainer>
+    </DogPlacesWrapper>
+  );
+}
+
 const DogPlacesWrapper = styled.div`
   margin-top: 20px;
 
@@ -54,21 +70,5 @@ const DogLinkBox = styled.div`
     height: 140px;
   }
 `;
-
-function HomeDogPlaces() {
-  return (
-    <DogPlacesWrapper>
-      <DogTitle>
-        우리 댕댕이가 좋아할 것 같아요 !
-        <img src={HomeDogLoveIcon} alt="Dog Love Icon" />
-      </DogTitle>
-      <DogLinkContainer>
-        <DogLinkBox />
-        <DogLinkBox />
-        <DogLinkBox />
-      </DogLinkContainer>
-    </DogPlacesWrapper>
-  );
-}
 
 export default HomeDogPlaces;
