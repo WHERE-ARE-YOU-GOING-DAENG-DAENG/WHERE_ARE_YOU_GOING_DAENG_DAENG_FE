@@ -46,12 +46,11 @@ const Input = styled.input`
   color: black;
 
   ::placeholder {
-    color: #B3B3B3;
+    color:  #B3B3B3;
   }
 
   &:disabled {
     color: #B3B3B3;
-    background-color: #f5f5f5;
   }
 `;
 
@@ -60,7 +59,7 @@ const Icon = styled.img`
   width: 20px;
   cursor: pointer;
   margin-right:10px;
-`;
+`; 
 
 const DuplicateBtn = styled.button`
   width: 15%;
@@ -121,8 +120,8 @@ function UserRegister() {
       </SelectionContainer>
       <SelectLabel label="주소" />
       <SelectionContainer>
-      <SelectBtn label="시" selected={false}  isAddress={true} />
-      <SelectBtn label="군" selected={false}  isAddress={true} />
+      <SelectBtn label="시" />
+      <SelectBtn label="군" />
       </SelectionContainer>
       <InputAlert>*보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</InputAlert>
       <SelectLabel label="알림 동의" />
@@ -134,6 +133,6 @@ function UserRegister() {
       <ConfirmBtn label='다음' />
     </UserContainer>
   );
-}
+} //알림 기본값은 받을래요로!
 
 export default UserRegister;
