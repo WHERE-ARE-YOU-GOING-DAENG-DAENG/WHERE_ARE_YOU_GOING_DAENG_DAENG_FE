@@ -1,6 +1,22 @@
 import styled from "styled-components";
 import HomeHotIcon from "../../assets/icons/home_hot.svg";
 
+function HomeTrendingPlaces() {
+  return (
+    <TrendingPlacesWrapper>
+      <TrendingTitle>
+        요즘 뜨는 장소 알려드려요
+        <img src={HomeHotIcon} alt="Hot Icon" />
+      </TrendingTitle>
+      <TrendingLinkContainer>
+        <TrendingLinkBox />
+        <TrendingLinkBox />
+        <TrendingLinkBox />
+      </TrendingLinkContainer>
+    </TrendingPlacesWrapper>
+  );
+}
+
 const TrendingPlacesWrapper = styled.div`
   margin-top: 20px;
 
@@ -54,21 +70,5 @@ const TrendingLinkBox = styled.div`
     height: 140px;
   }
 `;
-
-function HomeTrendingPlaces() {
-  return (
-    <TrendingPlacesWrapper>
-      <TrendingTitle>
-        요즘 뜨는 장소 알려드려요
-        <img src={HomeHotIcon} alt="Hot Icon" />
-      </TrendingTitle>
-      <TrendingLinkContainer>
-        <TrendingLinkBox />
-        <TrendingLinkBox />
-        <TrendingLinkBox />
-      </TrendingLinkContainer>
-    </TrendingPlacesWrapper>
-  );
-}
 
 export default HomeTrendingPlaces;

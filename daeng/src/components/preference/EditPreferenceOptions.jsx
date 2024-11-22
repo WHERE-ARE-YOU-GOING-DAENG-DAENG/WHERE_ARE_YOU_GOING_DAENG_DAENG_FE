@@ -1,13 +1,13 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import PreferenceFavoriteOptionList from "../review/PreferenceFavoriteOptionList";
 import ConfirmBtn from "../commons/ConfirmBtn";
-import { useNavigate } from "react-router-dom";
 
-function PreferenceOptions() {
+function EditPreferenceOptions() {
   const navigate = useNavigate();
 
   const handleConfirm = () => {
-    navigate("/");
+    navigate("/my-page"); 
   };
 
   return (
@@ -17,9 +17,11 @@ function PreferenceOptions() {
       <OptionList>
         <PreferenceFavoriteOptionList />
       </OptionList>
-      <StyledParagraph2>보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</StyledParagraph2>
+      <StyledParagraph2>
+        보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.
+      </StyledParagraph2>
       <FooterConfirmBtn>
-        <ConfirmBtn label="완료" onClick={handleConfirm} />
+        <ConfirmBtn label="수정완료" onClick={handleConfirm} />
       </FooterConfirmBtn>
     </Wrap>
   );
@@ -70,12 +72,11 @@ const StyledParagraph2 = styled.p`
   font-size: 8px;
   color: red;
   font-weight: bold;
-  margin-top: 90px;
+  margin-top: 9px;
   margin-left: 30px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
-
 
   @media (max-width: 554px) {
     font-size: 7px;
@@ -93,4 +94,5 @@ const FooterConfirmBtn = styled.div`
   }
 `;
 
-export default PreferenceOptions;
+
+export default EditPreferenceOptions;
