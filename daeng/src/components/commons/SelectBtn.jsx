@@ -35,12 +35,6 @@ const StyledButton = styled.button`
     }
 `;
 
-const Icon = styled.img`
-    width: 16px;
-    height: 16px;
-    margin-top:1px;
-`;
-
 const SelectBtn = ({ label, selected, onClick}) => {
     return (
         <StyledButton selected={selected} onClick={onClick}>
