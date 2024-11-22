@@ -46,15 +46,13 @@ const Input = styled.input`
   color: black;
 
   ::placeholder {
-    color: #B3B3B3;
+    color:  #B3B3B3;
   }
 
   &:disabled {
     color: #B3B3B3;
-    background-color: #f5f5f5;
   }
 `;
-
 
 const Icon = styled.img`
   width: 20px;
