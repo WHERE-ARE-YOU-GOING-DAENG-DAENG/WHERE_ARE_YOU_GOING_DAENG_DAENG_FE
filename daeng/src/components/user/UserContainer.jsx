@@ -8,7 +8,7 @@ const Container = styled.div`
   margin-top:10px;
   justify-content: space-between;
   margin-bottom:3%;
-  padding:3%;
+  padding:4%;
   margin-left: 4%;
 `
 
