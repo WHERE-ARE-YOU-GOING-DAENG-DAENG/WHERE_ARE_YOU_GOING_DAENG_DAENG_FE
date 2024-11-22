@@ -38,6 +38,7 @@ const OpenModalButton = styled.button`
         width: 100%;
         bottom: 64px;
     }
+
 `;
 const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
@@ -55,7 +56,7 @@ const Bookmark = () => {
 				<img src={pinIcon} alt="즐겨찾기" />
 				<p>즐겨찾기한 장소</p>
             </OpenModalButton>
-			<BookMarkList isOpen={isModalOpen} onClose={toggleModal} />
+			<BookMarkList isOpen={isModalOpen} onClose={toggleModal} data={data} />
         </>
     )
 };
@@ -68,16 +69,38 @@ const data = [
 	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
 		"latitude": 35.13710340299098,
 		"longitude": 129.10329727721913,
-	    "openHours": "09:00 - 21:00"
+	    "startTime": "09:00",
+	    "endTime": "21:00"
 	  },
 	  {
-		"favoriteId": 4,
+		"favoriteId": 34,
 		"placeId": 2,
         "name": "댕댕이동산",
   	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
 		"latitude": 35.136080,
 		"longitude": 129.104060,
-	    "openHours": "09:00 - 21:00"
+	    "startTime": "09:00",
+	    "endTime": "21:00"
+	  },
+	  {
+		"favoriteId": 35,
+		"placeId": 2,
+        "name": "댕댕이동산",
+  	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
+		"latitude": 35.136080,
+		"longitude": 129.104060,
+	    "startTime": "09:00",
+	    "endTime": "21:00"
+	  },
+	  {
+		"favoriteId": 36,
+		"placeId": 2,
+        "name": "댕댕이동산",
+  	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
+		"latitude": 35.136080,
+		"longitude": 129.104060,
+	    "startTime": "09:00",
+	    "endTime": "21:00"
 	  },
 	]
 export default Bookmark;

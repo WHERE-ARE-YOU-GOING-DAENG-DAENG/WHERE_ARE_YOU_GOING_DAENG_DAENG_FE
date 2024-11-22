@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
-import pinIcon from "../../assets/icons/pin.svg"
+import pinIcon from "../../assets/icons/pin.svg";
+import FavoriteList from "../commons/FavoriteList";
 
 const slideUp = keyframes`
     from {
@@ -33,7 +34,7 @@ const Overlay = styled.div`
 const Modal = styled.div`
     position: fixed;
     bottom: 76px;
-    width: 555px;
+    width: 554px;
     height: 60%;
     background-color: white;
     border-top-left-radius: 30px;
@@ -43,26 +44,35 @@ const Modal = styled.div`
     overflow: visible;
     -webkit-overflow-scrolling: touch;
 
-    .pin{
-        position: absolute;
-        top: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    p{	
-		font-weight: bold;
-		font-size: 20px;
-		margin: 39px 0 0; 
-	}
-
     @media (max-width: 554px) {
         width: 100%;
         bottom: 64px;
     }
 `;
+const ModalTitle = styled.div`
+	font-weight: bold;
+	font-size: 20px;
+	margin: 39px 0 0; 
+`
 
-const BookMarkList = ({ isOpen, onClose }) => {
+const ModalIcon = styled.img`
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+`
+
+const ModalContent = styled.div`
+    margin: 30px 0px;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    overflow-y: auto; /* 스크롤 활성화 */
+    -webkit-overflow-scrolling: touch;
+    height: calc(100% - 120px);
+`
+const BookMarkList = ({ isOpen, onClose , data }) => {
     const [isClosing, setIsClosing] = useState(false);
 
     const handleClose = () => {
@@ -91,8 +101,18 @@ const BookMarkList = ({ isOpen, onClose }) => {
         <>
             <Overlay onClick={handleClose} />
             <Modal isClosing={isClosing}>
-                <img className="pin" src={pinIcon} alt="즐겨찾기" />
-                <p>즐겨찾기한 장소</p>
+                <ModalIcon className="pin" src={pinIcon} alt="즐겨찾기" />
+                <ModalTitle>즐겨찾기한 장소</ModalTitle>
+                <ModalContent>
+                    {data.map((location)=>(
+                        <FavoriteList
+                            key={location.favoriteId}
+                            title={location.name}
+                            place={location.streetAddresses}
+                            time={`영업시간 | ${location.startTime} - ${location.endTime}`}
+                        />
+                    ))}
+                </ModalContent>
             </Modal>
         </>
     )
@@ -101,6 +121,18 @@ const BookMarkList = ({ isOpen, onClose }) => {
 BookMarkList.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
+    data: PropTypes.arrayOf(
+        PropTypes.shape({
+          favoriteId: PropTypes.number.isRequired,
+          placeId: PropTypes.number.isRequired,
+          name: PropTypes.string.isRequired,
+          streetAddresses: PropTypes.string.isRequired,
+          latitude: PropTypes.number.isRequired,
+          longitude: PropTypes.number.isRequired,
+          startTime: PropTypes.string.isRequired,
+          endTime: PropTypes.string.isRequired,
+        })
+    ),
 };
 
 export default BookMarkList;
