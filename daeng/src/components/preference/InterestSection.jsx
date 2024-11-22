@@ -1,6 +1,17 @@
 import styled from "styled-components";
-import PreferencePlaceOption from "../commons/PreferencePlaceOption";
-import PlaceType from "../../data/PlaceType";
+import PreferencePlaceOptionList from "./PreferencePlaceOptionList";
+
+function InterestSection() {
+  return (
+    <Wrap>
+      <Title>어떤 시설에 관심이 많으신가요?</Title>
+      <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
+      <Place>
+        <PreferencePlaceOptionList />
+      </Place>
+    </Wrap>
+  );
+}
 
 const Wrap = styled.div`
   margin-left: 5px;
@@ -38,7 +49,7 @@ const Place = styled.div`
   flex-wrap: wrap;
   gap: 3px;
   margin-bottom: 30px;
-  margin-left: 25px;
+  margin-left: 21px;
   padding-right: 1px;
 
   @media (max-width: 554px) {
@@ -47,19 +58,5 @@ const Place = styled.div`
     margin-right: 40px;
   }
 `;
-
-function InterestSection() {
-  return (
-    <Wrap>
-      <Title>어떤 시설에 관심이 많으신가요?</Title>
-      <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
-      <Place>
-        {PlaceType.map((place, index) => (
-          <PreferencePlaceOption key={index} icon={place.icon} label={place.label} />
-        ))}
-      </Place>
-    </Wrap>
-  );
-}
 
 export default InterestSection;

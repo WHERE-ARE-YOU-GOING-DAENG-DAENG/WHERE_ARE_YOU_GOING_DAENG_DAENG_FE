@@ -4,142 +4,6 @@ import kakaoLoginBtn from "../assets/icons/kakaoLoginBtn.svg";
 import loginGoogle from "../assets/icons/login_google.svg";
 import loginPuppy from "../assets/icons/login_puppy.svg";
 
-const Container = styled.div`
-    width: 100%;
-    max-width: 554px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    margin: 0 auto;
-`;
-
-const TitleContainer = styled.div`
-    display: flex;
-    align-items: baseline;
-    margin-bottom: 10px;
-    margin-top: 70px;
-
-    @media (max-width: 554px) {
-        margin-top: 50px;
-        margin-bottom: 8px;
-    }
-`;
-
-const MainTitle = styled.span`
-    font-family: "RixInooAriDuri", sans-serif;
-    font-size: 50px;
-    color: #ff4b98;
-    font-weight: normal;
-    margin-right: 1px;
-
-    @media (max-width: 554px) {
-        font-size: 40px;
-    }
-`;
-
-const SubTitle = styled.span`
-    font-family: "Pretendard", sans-serif;
-    font-size: 23px;
-    font-weight: bold;
-    color: #000000;
-
-    @media (max-width: 554px) {
-        font-size: 18px;
-    }
-`;
-
-const Subtitle = styled.p`
-    font-size: 23px;
-    font-weight: bold;
-    margin: 0px;
-    margin-bottom: 30px;
-
-    @media (max-width: 554px) {
-        font-size: 18px;
-        margin-bottom: 20px;
-    }
-`;
-
-const Image = styled.img`
-    width: 380px;
-    height: 264px;
-    margin-top: 19px;
-
-    @media (max-width: 554px) {
-        width: 300px;
-        height: auto;
-    }
-`;
-
-const DividerContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 13px;
-    margin-bottom: 50px;
-    width: 100%;
-
-    @media (max-width: 554px) {
-        margin-top: 10px;
-        margin-bottom: 30px;
-    }
-`;
-
-const Line = styled.div`
-    flex: 1;
-    height: 1px;
-    background-color: #b3b3b3;
-    margin-left: 25px;
-    margin-right: 25px;
-
-    @media (max-width: 554px) {
-        margin-left: 15px;
-        margin-right: 15px;
-    }
-`;
-
-const DividerText = styled.p`
-    font-size: 15px;
-    color: #b3b3b3;
-
-    @media (max-width: 554px) {
-        font-size: 13px;
-    }
-`;
-
-const Button = styled.button`
-    background-color: ${({ bgColor }) => bgColor || "transparent"};
-    border: none;
-    cursor: pointer;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-
-    img {
-        width: 310px;
-        height: 45px;
-
-        @media (max-width: 554px) {
-            width: 250px;
-            height: 40px;
-        }
-    }
-`;
-
-const FooterText = styled.p`
-    font-size: 13px;
-    font-weight: bold;
-    color: #b3b3b3;
-    margin-top: 30px;
-    cursor: pointer;
-
-    @media (max-width: 554px) {
-        font-size: 12px;
-    }
-`;
-
 const Login = () => {
     const navigate = useNavigate();
 
@@ -170,5 +34,158 @@ const Login = () => {
         </Container>
     );
 };
+
+const Container = styled.div`
+    width: 90%;
+    max-width: 554px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #ffffff;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100vh;
+    padding: 30px 20px 20px 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+
+    @media (max-width: 554px) {
+        width: 80%;
+        height: 75vh;
+        padding: 10px;
+    }
+`;
+
+const TitleContainer = styled.div`
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 10px;
+    margin-top: 70px;
+
+    @media (max-width: 554px) {
+        margin-top: 50px;
+        margin-bottom: 8px;
+    }
+`;
+
+const MainTitle = styled.span`
+    font-family: "RixInooAriDuri", sans-serif;
+    font-size: 50px;
+    color: #ff4b98;
+    font-weight: normal;
+    margin-right: 1px;
+
+    @media (max-width: 554px) {
+        font-size: 8vw;
+    }
+`;
+
+const SubTitle = styled.span`
+    font-family: "Pretendard", sans-serif;
+    font-size: 23px;
+    font-weight: bold;
+    color: #000000;
+
+    @media (max-width: 554px) {
+        font-size: 5vw;
+    }
+`;
+
+const Subtitle = styled.p`
+    font-size: 23px;
+    font-weight: bold;
+    margin: 0px;
+    margin-bottom: 30px;
+
+    @media (max-width: 554px) {
+        font-size: 5vw;
+        margin-bottom: 20px;
+    }
+`;
+
+const Image = styled.img`
+    width: 380px;
+    height: 264px;
+    margin-top: 19px;
+
+    @media (max-width: 554px) {
+        width: 80%;
+        height: auto;
+    }
+`;
+
+const DividerContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 13px;
+    margin-bottom: 50px;
+    width: 100%;
+
+    @media (max-width: 554px) {
+        margin-top: 10px;
+        margin-bottom: 30px;
+    }
+`;
+
+const Line = styled.div`
+    flex: 1;
+    height: 1px;
+    background-color: #b3b3b3;
+    margin-left: 25px;
+    margin-right: 25px;
+
+    @media (max-width: 554px) {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+`;
+
+const DividerText = styled.p`
+    font-size: 15px;
+    color: #b3b3b3;
+
+    @media (max-width: 554px) {
+        font-size: 3.5vw;
+    }
+`;
+
+const Button = styled.button`
+    background-color: ${({ bgColor }) => bgColor || "transparent"};
+    border: none;
+    cursor: pointer;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    max-width: 320px;
+    height: 50px;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    @media (max-width: 554px) {
+        width: 90%;
+        max-width: 300px;
+        height: 45px;
+    }
+`;
+
+const FooterText = styled.p`
+    font-size: 13px;
+    font-weight: bold;
+    color: #b3b3b3;
+    margin-top: 30px;
+    cursor: pointer;
+
+    @media (max-width: 554px) {
+        font-size: 3vw;
+    }
+`;
 
 export default Login;
