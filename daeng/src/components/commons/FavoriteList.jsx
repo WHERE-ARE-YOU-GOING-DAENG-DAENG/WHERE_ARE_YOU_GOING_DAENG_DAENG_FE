@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const FavoriteListContainer = styled.div`
-  width: 430px;
+  width: 80%;
   height: 151px;
   display: flex;
   flex-direction: row;
@@ -12,65 +12,62 @@ const FavoriteListContainer = styled.div`
   background-color: #f9f9f9;
   border-radius: 10px;
 
-  @media (max-width: 554px) {
-    width: 400px;
-    height: 151px;
-  }
 `;
 
 const FavoriteInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 40px;
+  margin-left: 15px;
   text-align: left;
   margin-top:10px;
-
-  @media (max-width: 554px) {
-    margin-bottom: 20px;
-  }
+  margin-bottom: 10px;
 `;
 
 const FavoriteListPicture = styled.div`
-  width: 110px;
-  height: 140px;
+  width: 100px;
+  height: 120px;
   border-radius: 10px;
   background-color: #e0e0e0;
-  margin-right: 15px;
+  margin: 0px 15px;
   background-image: url(${(props) => props.imgUrl});  // 이미지 URL을 props로 받도록 수정
   background-size: cover;
   background-position: center;
-
-  @media (max-width: 554px) {
-    width: 100px;
-    height: 120px;
-  }
 `;
 
 const FavoritePlaceTitle = styled.h3`
   font-size: 20px;
   font-weight: bold;
-  color: ${(props) => props.color || "#FF69A9"};
-  margin: 0; 
+  color: #FF69A9;
+  margin: 0;
+  @media (max-width: 554px) {
+    font-size: 18px;
+  }
 `;
 
 const FavoritePlace = styled.p`
   font-size: 15px;
   color: #808080;
   margin: 5px 0;
+  @media (max-width: 554px) {
+    font-size: 13px;
+  }
 `;
 
 const FavoritePlaceTime = styled.p`
   font-size: 12px;
   color: black;
-  margin: 5px 0;
+  margin: 0;
+  @media (max-width: 554px) {
+    font-size: 10px;
+  }
 `;
 
-function FavoriteList({ title, place, time, color, imgUrl }) {
+function FavoriteList({ title, place, time, imgUrl }) {
   return (
     <FavoriteListContainer>
       <FavoriteInfoContainer>
-        <FavoritePlaceTitle color={color}>{title}</FavoritePlaceTitle>
+        <FavoritePlaceTitle>{title}</FavoritePlaceTitle>
         <FavoritePlace>{place}</FavoritePlace>
         <FavoritePlaceTime>{time}</FavoritePlaceTime>
       </FavoriteInfoContainer>
