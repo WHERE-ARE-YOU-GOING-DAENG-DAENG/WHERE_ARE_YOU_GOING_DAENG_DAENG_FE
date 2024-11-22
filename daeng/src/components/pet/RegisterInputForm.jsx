@@ -43,7 +43,7 @@ const PetNameInfoContainer = styled.div`
 const PetNameInput = styled.input`
   width: 194%;
   height: 44px;
-  font-size: 13px;
+  font-size: 14px;
   border-radius: 5px;
   border: 0.5px solid #e4e4e4;
   margin-bottom: 10px;
@@ -159,7 +159,11 @@ const SelectWeight = styled.button`
     `}
 `;
 
-
+const NextRegisterBtn = styled.button`
+  background-color: none;
+  color:#B3B3B3;
+  font-size:14px;
+`
 function RegisterInputForm() {
   const [preview, setPreview] = useState(null);
   const [selectedPetType, setSelectedPetType] = useState("");
@@ -301,6 +305,7 @@ function RegisterInputForm() {
         </SelectWeight>
       </SelectContainer>
       <ConfirmBtn label="완료" />
+      <NextRegisterBtn>나중에 등록할게요</NextRegisterBtn>
     </Container>
   );
 }
