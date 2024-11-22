@@ -11,18 +11,6 @@ import travelIcon from "../../assets/icons/travel.svg";
 import museumIcon from "../../assets/icons/museum.svg";
 import filmIcon from "../../assets/icons/film.svg";
 
-const PreferencePlaceOptionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  gap: 5px;
-
-  @media (max-width: 554px) {
-    gap: 3px;
-  }
-`;
-
 function PreferencePlaceOptionList() {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
@@ -100,5 +88,17 @@ function PreferencePlaceOptionList() {
     </PreferencePlaceOptionContainer>
   );
 }
+
+const PreferencePlaceOptionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  gap: 5px;
+
+  @media (max-width: 554px) {
+    gap: 3px;
+  }
+`;
 
 export default PreferencePlaceOptionList;

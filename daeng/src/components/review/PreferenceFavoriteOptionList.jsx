@@ -14,11 +14,11 @@ import gongwon from '../../assets/icons/gongwon.svg';
 import parkingLot from '../../assets/icons/parkingLot.svg';
 
 function PreferenceFavoriteOptionList() {
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]); 
 
   const handleOptionClick = (label) => {
     if (selectedOptions.length >= 3 && !selectedOptions.includes(label)) {
-      alert("최대 3개만 선택 가능합니다."); //sweetalert으로 처리 ..
+      alert("최대 3개만 선택 가능합니다."); 
       return;
     }
 
