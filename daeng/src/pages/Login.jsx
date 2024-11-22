@@ -5,15 +5,26 @@ import loginGoogle from "../assets/icons/login_google.svg";
 import loginPuppy from "../assets/icons/login_puppy.svg";
 
 const Container = styled.div`
-    width: 100%;
+    width: 90%;
     max-width: 554px;
-    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     background-color: #ffffff;
-    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+
+    @media (max-width: 554px) {
+        width: 95%;
+        padding: 10px;
+    }
 `;
 
 const TitleContainer = styled.div`
@@ -36,7 +47,7 @@ const MainTitle = styled.span`
     margin-right: 1px;
 
     @media (max-width: 554px) {
-        font-size: 40px;
+        font-size: 8vw;
     }
 `;
 
@@ -47,7 +58,7 @@ const SubTitle = styled.span`
     color: #000000;
 
     @media (max-width: 554px) {
-        font-size: 18px;
+        font-size: 5vw;
     }
 `;
 
@@ -58,7 +69,7 @@ const Subtitle = styled.p`
     margin-bottom: 30px;
 
     @media (max-width: 554px) {
-        font-size: 18px;
+        font-size: 5vw;
         margin-bottom: 20px;
     }
 `;
@@ -69,7 +80,7 @@ const Image = styled.img`
     margin-top: 19px;
 
     @media (max-width: 554px) {
-        width: 300px;
+        width: 80%;
         height: auto;
     }
 `;
@@ -95,8 +106,8 @@ const Line = styled.div`
     margin-right: 25px;
 
     @media (max-width: 554px) {
-        margin-left: 15px;
-        margin-right: 15px;
+        margin-left: 10px;
+        margin-right: 10px;
     }
 `;
 
@@ -105,7 +116,7 @@ const DividerText = styled.p`
     color: #b3b3b3;
 
     @media (max-width: 554px) {
-        font-size: 13px;
+        font-size: 3.5vw;
     }
 `;
 
@@ -115,16 +126,21 @@ const Button = styled.button`
     cursor: pointer;
     margin-bottom: 15px;
     display: flex;
+    justify-content: center;
     align-items: center;
+    width: 80%;
+    max-width: 320px;
+    height: 50px;
 
     img {
-        width: 310px;
-        height: 45px;
+        width: 100%;
+        height: auto;
+    }
 
-        @media (max-width: 554px) {
-            width: 250px;
-            height: 40px;
-        }
+    @media (max-width: 554px) {
+        width: 90%;
+        max-width: 300px;
+        height: 45px;
     }
 `;
 
@@ -136,7 +152,7 @@ const FooterText = styled.p`
     cursor: pointer;
 
     @media (max-width: 554px) {
-        font-size: 12px;
+        font-size: 3vw;
     }
 `;
 
