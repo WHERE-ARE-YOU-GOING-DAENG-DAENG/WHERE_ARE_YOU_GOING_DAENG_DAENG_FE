@@ -23,12 +23,13 @@ const StyledButton = styled.button`
 
 `;
 
-function DeleteBtn({ label }) {
-    return <StyledButton>{label}</StyledButton>;
+function DeleteBtn({ label, onDelete }) {
+    return <StyledButton onClick={onDelete}>{label}</StyledButton>;
 }
 
 DeleteBtn.propTypes = {
     label: PropTypes.string.isRequired,
+    onDelete: PropTypes.func.isRequired,
 };
 
 export default DeleteBtn;
