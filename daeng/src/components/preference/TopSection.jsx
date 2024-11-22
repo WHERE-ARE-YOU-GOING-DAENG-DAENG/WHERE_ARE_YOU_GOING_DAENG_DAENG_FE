@@ -1,6 +1,28 @@
 import styled from "styled-components";
 import preferenceDog from "../../assets/icons/preferenceDog.svg";
 
+function TopSection() {
+  return (
+    <>
+      <TopContainer>
+        <TextContainer>
+          <h1>
+            <span>어떤 장소를</span>
+            <span>선호하세요?</span>
+          </h1>
+        </TextContainer>
+        <Image src={preferenceDog} alt="preference dog" />
+      </TopContainer>
+      <Description>
+        <p>
+          <span>댕댕어디가</span>가 키워드에 맞는 장소를 추천해드릴게요.
+        </p>
+      </Description>
+      <Division />
+    </>
+  );
+}
+
 const TopContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -88,27 +110,5 @@ const Division = styled.div`
     margin-bottom: 30px;
   }
 `;
-
-function TopSection() {
-  return (
-    <>
-      <TopContainer>
-        <TextContainer>
-          <h1>
-            <span>어떤 장소를</span>
-            <span>선호하세요?</span>
-          </h1>
-        </TextContainer>
-        <Image src={preferenceDog} alt="preference dog" />
-      </TopContainer>
-      <Description>
-        <p>
-          <span>댕댕어디가</span>가 키워드에 맞는 장소를 추천해드릴게요.
-        </p>
-      </Description>
-      <Division />
-    </>
-  );
-}
 
 export default TopSection;
