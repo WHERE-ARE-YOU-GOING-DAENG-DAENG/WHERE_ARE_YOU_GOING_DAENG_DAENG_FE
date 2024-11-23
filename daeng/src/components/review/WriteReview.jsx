@@ -102,6 +102,20 @@ const UserQuestionContainer = styled.div`
   justify-content: space-between;
 `;
 
+const RemoveButton = styled.button`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  cursor: pointer;
+`;
+
+
 const Question = styled.span`
   font-size: 15px;
 
@@ -163,6 +177,7 @@ const AddImgContainer = styled.div`
 `;
 
 const AddImg = styled.div`
+  position: relative;
   width: 130px;
   height: 130px;
   border: 0.5px solid #d9d9d9;
@@ -174,19 +189,20 @@ const AddImg = styled.div`
   flex-direction: column;
   font-size: 10px;
   color: #d9d9d9;
-  cursor: pointer;
   background-image: url(${(props) => props.src || "none"});
   background-size: cover;
   background-position: center;
 
   input {
     display: none;
+    cursor: pointer;
   }
 `;
 
 const AddImgButton = styled.img`
   width: 12px;
   margin-bottom: 0px;
+  cursor: pointer;
 `;
 
 const getCurrentDate = () => {
@@ -203,7 +219,7 @@ function WriteReview() {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-
+  
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -211,6 +227,9 @@ function WriteReview() {
       };
       reader.readAsDataURL(file);
     });
+  
+    // 파일을 업로드한 후 input을 리셋
+    e.target.value = null;
   };
 
   const handleStarClick = (index) => {
@@ -219,6 +238,10 @@ function WriteReview() {
       newRatings[index] = !newRatings[index];
       return newRatings;
     });
+  };
+
+  const handleRemoveImage = (index) => {
+    setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
   return (
@@ -262,7 +285,9 @@ function WriteReview() {
         </UserQuestionContainer>
         <AddImgContainer>
           {previews.map((preview, index) => (
-            <AddImg key={index} src={preview} />
+            <AddImg key={index} src={preview}>
+              <RemoveButton onClick={() => handleRemoveImage(index)}>X</RemoveButton>
+            </AddImg>
           ))}
           <AddImg>
             <label htmlFor="file-upload">
