@@ -34,7 +34,18 @@ const Td = styled.td`
   border: 1px solid #ddd;
 `;
 
+const Strikethrough = styled.span`
+  text-decoration: line-through;
+  color: #4c4c4c;
+`;
+
 const ScheduleTable = ({ schedules }) => {
+  const isPastSchedule = (visitTime) => {
+    const currentDate = new Date();
+    const scheduleDate = new Date(visitTime);
+    return scheduleDate < currentDate; // 지난 일정인지 확인
+  };
+  
   return (
     <TableWrapper>
       <Table>
@@ -50,14 +61,41 @@ const ScheduleTable = ({ schedules }) => {
           {schedules.length > 0 ? (
             schedules.map((schedule, index) => (
               <tr key={index}>
-                <Td>{schedule.visitTime.split("T")[0]}</Td>
-                <Td>{schedule.visitTime.split("T")[1].slice(0, 5)}</Td>
-                <Td>{schedule.placeId}</Td>
                 <Td>
-                {schedule.pets.map((pet, idx) => (
+                  {isPastSchedule(schedule.visitTime) ? (
+                    <Strikethrough>{schedule.visitTime.split("T")[0]}</Strikethrough>
+                  ) : (
+                    schedule.visitTime.split("T")[0]
+                  )}
+                </Td>
+                <Td>
+                  {isPastSchedule(schedule.visitTime) ? (
+                    <Strikethrough>{schedule.visitTime.split("T")[1].slice(0, 5)}</Strikethrough>
+                  ) : (
+                    schedule.visitTime.split("T")[1].slice(0, 5)
+                  )}
+                </Td>
+                <Td>
+                  {isPastSchedule(schedule.visitTime) ? (
+                    <Strikethrough>{schedule.placeId}</Strikethrough>
+                  ) : (
+                    schedule.placeId
+                  )}
+                </Td>
+                <Td>
+                  {schedule.pets.map((pet, idx) => (
                     <span key={pet.petId}>
-                      {pet.name}
-                      {idx < schedule.pets.length - 1 ? ", " : ""}
+                      {isPastSchedule(schedule.visitTime) ? (
+                        <Strikethrough>
+                          {pet.name}
+                          {idx < schedule.pets.length - 1 ? ", " : ""}
+                        </Strikethrough>
+                      ) : (
+                        <>
+                          {pet.name}
+                          {idx < schedule.pets.length - 1 ? ", " : ""}
+                        </>
+                      )}
                     </span>
                   ))}
                 </Td>
