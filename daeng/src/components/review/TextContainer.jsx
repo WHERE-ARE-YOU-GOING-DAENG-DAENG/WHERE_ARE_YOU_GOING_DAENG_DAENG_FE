@@ -20,11 +20,13 @@ const CountText = styled.span`
   font-size: 11px;
   color: #FF0000;
   margin-top:3px;
+  margin-right:10px;
 `
 
 const TextDescriptionContainer = styled.div`
   margin-top: 20px;
   display: flex;
+  margin-bottom: -12px;
   justify-content: space-between;  
   align-items: center;  
 `
@@ -32,6 +34,7 @@ const DivisionLine = styled.div`
   height: 1px;
   background-color: #E5E5E5;
   margin-top:20px;
+  margin-right:10px;
   margin-bottom:29px;
 `;
 
