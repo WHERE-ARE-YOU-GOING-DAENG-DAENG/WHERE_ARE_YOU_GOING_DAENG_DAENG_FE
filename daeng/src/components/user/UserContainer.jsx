@@ -1,15 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
 import arrow from '../../assets/icons/arrow.svg';
+import { useNavigate } from 'react-router-dom';
 
 function UserContainer() {
+  const navigate = useNavigate();
+
+  const handleToEditUser  = () => {
+    navigate("/user-edit");
+};
   return (
     <Container>
       <UserInfo>
         <Username>내가 진짜임</Username>
         <UserEmail>이메일</UserEmail>
       </UserInfo>
-      <ArrowImg src={arrow} alt="유저 정보 자세히 보기 화살표" />
+      <ArrowImg src={arrow} alt="유저 정보 자세히 보기 화살표" onClick={handleToEditUser}/>
     </Container>
   )
 }
