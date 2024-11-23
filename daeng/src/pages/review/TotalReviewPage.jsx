@@ -9,6 +9,7 @@ const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column; 
   min-height: 100vh;  
+  max-height: auto;
   overflow: auto; 
   padding-bottom: 20%;
 `;

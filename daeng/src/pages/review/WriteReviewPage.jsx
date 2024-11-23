@@ -7,10 +7,9 @@ import WriteReview from '../../components/review/WriteReview';
 const WriteReviewContainer = styled.div`
   display: flex;
   flex-direction: column; 
-  min-height: 100vh;
   padding: 3px;
   overflow: auto; 
-  padding-bottom: 205%;
+  padding-bottom: 230%;
 
   @media (max-width: 554px) {
     font-size: 10px;
