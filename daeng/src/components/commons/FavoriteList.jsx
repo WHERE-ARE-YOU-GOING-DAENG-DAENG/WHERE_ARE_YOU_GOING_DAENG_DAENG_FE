@@ -89,7 +89,7 @@ function FavoriteList({ title, icon, place, time, imgUrl, onTitleClick, onPlaceC
       </FavoriteInfoContainer>
       <FavoriteListPicture imgUrl={imgUrl} />
       <DeleteButtonWrapper>
-        <DeleteBtn label="삭제" onDelete={onDelete} /> {/* 삭제 버튼 배치 */}
+        <DeleteBtn label="삭제" onClick={onDelete} /> {/* 삭제 버튼 배치 */}
       </DeleteButtonWrapper>
     </FavoriteListContainer>
   );

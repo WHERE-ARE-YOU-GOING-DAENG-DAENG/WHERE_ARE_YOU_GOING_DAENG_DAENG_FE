@@ -11,5 +11,5 @@ const Template = (args) => <DeleteBtn {...args} />;
 export const Default = Template.bind({});
 Default.args = {
     label: "삭제",
-    onDelete: action("삭제되었습니다.")
+    onClick: action("삭제되었습니다.")
 };
