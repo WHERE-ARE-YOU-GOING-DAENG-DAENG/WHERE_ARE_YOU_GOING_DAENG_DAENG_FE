@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import dogIcon from "../../assets/icons/detaildog.svg"
+import dogIcon from "../../assets/icons/detailDog.svg"
 import addressIcon from "../../assets/icons/place.svg"
 import hourIcon from "../../assets/icons/operatingHour.svg"
 import callnumberIcon from "../../assets/icons/callnumber.svg"

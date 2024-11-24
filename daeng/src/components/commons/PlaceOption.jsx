@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import weight from "../../assets/icons/weight.svg";
-import optionparking from "../../assets/icons/optionparking.svg";
+import optionparking from "../../assets/icons/Optionparking.svg";
 
 const PlaceOptionContainer = styled.div`
   width: 100%;

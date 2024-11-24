@@ -15,7 +15,7 @@ const StyledButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom:30px;
+  margin-bottom: 30px;
 
   &:hover {
     background-color: #FF99C8;
@@ -28,12 +28,17 @@ const StyledButton = styled.button`
   }
 `;
 
-function ConfirmBtn({ label }) {
-  return <StyledButton>{label}</StyledButton>;
+function ConfirmBtn({ label, onClick }) {
+  return <StyledButton onClick={onClick}>{label}</StyledButton>;
 }
 
 ConfirmBtn.propTypes = {
-  label: PropTypes.string.isRequired, 
+  label: PropTypes.string.isRequired,
+  onClick: PropTypes.func, 
+};
+
+ConfirmBtn.defaultProps = {
+  onClick: () => {}, 
 };
 
 export default ConfirmBtn;
