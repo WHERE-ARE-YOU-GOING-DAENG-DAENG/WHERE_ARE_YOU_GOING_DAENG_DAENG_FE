@@ -181,11 +181,18 @@ function RegisterInputForm() {
   const [imageFile, setImageFile] = useState(null); //이미지 
   const [petName, setPetName] = useState(null); //반려동물 이름
   const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
-  const [selectedWeight, setSelectedWeight] = useState(""); // 몸무게
+  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
   const [selectedGender, setSelectedGender] = useState(""); //성별
   const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
-  const [selectedPetSize, setSelectedPetSize] = useState(""); //반려동물 사이즈
 
+  //공통코드
+  const petSizeOptions = [
+    { code: "PET_SIZ_01", group: "PET_SIZ", name: "초소형견", size: "3kg 미만" },
+    { code: "PET_SIZ_02", group: "PET_SIZ", name: "소형견", size: "3kg~7kg 이하" },
+    { code: "PET_SIZ_03", group: "PET_SIZ", name: "중형견", size: "7kg~12kg 이하" },
+    { code: "PET_SIZ_04", group: "PET_SIZ", name: "중대형견", size: "12kg~20kg 이하" },
+    { code: "PET_SIZ_05", group: "PET_SIZ", name: "대형견", size: "20kg 이상" },
+  ];
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -214,13 +221,10 @@ function RegisterInputForm() {
     setSelectedNeutering(status); 
   };
 
-  const handleWeightClick = (weight) => {
-    setSelectedWeight(weight); 
+  const handleWeightClick = (weightCode) => {
+    setSelectedWeight(weightCode); 
   };
 
-  const handlePetSizeClick = (petSize) => {
-    setSelectedPetSize(petSize);
-  }
 
   const getTodayDate = () => {
     const today = new Date();
@@ -242,11 +246,10 @@ function RegisterInputForm() {
 
     const petData = {
       petName: petName,
-      petType: selectedPetType === "고양이" ? selectCatList : selectDogList,
-      neutering: isNeutered === "네",
-      petAllergy: isAllergic === "네",
+      petType: selectedPetType,
+      neutering: selectedNeutering === "했어요",
       gender: selectedGender === "남아",
-      petAge: calculateAge(birthdate),
+      weight: selectedWeight,
     };
 
     for (const key in petData) {
@@ -377,37 +380,16 @@ function RegisterInputForm() {
       </SelectContainer>
       <SelectLabel label="크기" />
       <SelectContainer>
+      {petSizeOptions.map((option) => (
         <SelectWeight
-          selected={selectedWeight === "초소형견(3kg 미만)"}
-          onClick={() => handleWeightClick("초소형견(3kg 미만)")}
+          key={option.code}
+          selected={selectedWeight === option.code}
+          onClick={() => handleWeightClick(option.code)}
         >
-          초소형견<br />(3kg 미만)
+          {option.name}<br />({option.size})
         </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "소형견(3kg ~ 7kg)"}
-          onClick={() => handleWeightClick("소형견(3kg ~ 7kg)")}
-        >
-          소형견<br />(3kg ~ 7kg)
-        </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "중형견(7kg ~ 12kg)"}
-          onClick={() => handleWeightClick("중형견(7kg ~ 12kg)")}
-        >
-          중형견<br />(7kg ~ 12kg)
-        </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "중대형견(12kg ~ 20kg)"}
-          onClick={() => handleWeightClick("중대형견(12kg ~ 20kg)")}
-        >
-          중대형견<br />(12kg ~ 20kg)
-        </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "대형견(20kg 이상)"}
-          onClick={() => handleWeightClick("대형견(20kg 이상)")}
-        >
-          대형견<br />(20kg 이상)
-        </SelectWeight>
-      </SelectContainer>
+      ))}
+    </SelectContainer>
       <ConfirmBtn onClick={handleSubmit} label="완료" />
       <NextRegisterBtn onClick={handleNextRegisterClick}>나중에 등록할게요</NextRegisterBtn>
     </Container>
