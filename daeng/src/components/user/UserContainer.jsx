@@ -47,7 +47,7 @@ const UserEmail = styled.div`
 `
 
 const ArrowImg = styled.img`
-  margin-right: 2%;
+  margin-right: 5%;
   cursor: pointer;
 `
 

@@ -12,6 +12,11 @@ const PetTotalContainer = styled.div`
   margin-left: 4%;
 `;
 
+const TitleInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  `;
+  
 const Title = styled.h1`
   font-size: 20px;
   font-weight: 500;
@@ -20,18 +25,32 @@ const Title = styled.h1`
   justify-content:flex-start;
 `;
 
+const PetAdd = styled.span`
+  font-size: 11px;
+  display: flex;
+  margin-top: 19px;
+  margin-left:5px;
+  color: #B3B3B3;
+  cursor: pointer;
+`
+const AddPetImg = styled.img`
+  width: 15px;
+  display: block;
+  margin-left:2%;
+  cursor: pointer;
+`
+
 const PetInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-bottom:30px;
+  margin-bottom: 20px;
 `
 
 const PetImage = styled.img`
-  width: 60px;
-  height: 60px;
-  margin-top:3%;
+  width: 70px;
+  height: 70px;
+  margin-top: 6%;
   border-radius:100%;
-  margin-right: 10px;
   background-color: #FBC9E4;
 `;
 
@@ -40,6 +59,12 @@ const PetDetailInfoContainer = styled.div`
   flex-direction: column;
   margin-left: 20px;  
   margin-top:5%;
+  background-color: #FDF2F8;
+  width:139px;
+  padding:3%;
+  padding-right:2%;
+  height: 77px;
+  border-radius: 10px;
 `;
 
 const PetName = styled.span`
@@ -58,14 +83,14 @@ const PetTypeContainer = styled.div`
 `;
 
 const PetWeight = styled.span`
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   margin-top: 5px;
   font-weight: 300;
 `
 
 const PetType = styled.span`
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   margin-top: 5px;
   font-weight: 300;
@@ -83,26 +108,6 @@ const StyleArrow = styled.img`
   cursor: pointer;
 `
 
-const AddPetContainer = styled.div`
-  display: flex;
-  flex-direction:column;
-  margin-left:50%;
-  margin-top: 20px;
-
-  span{
-    font-size:10px;
-    display: flex;
-    margin-top:5px;
-    color:#B3B3B3;
-  }
-`
-
-const AddPet = styled.img`
-  width: 20px;
-  display: block;
-  margin-left:30%;
-  cursor: pointer;
-`
 function PetContainer() {
 
   const navigate = useNavigate();
@@ -116,7 +121,11 @@ function PetContainer() {
 };
   return (
     <PetTotalContainer>
-      <Title>우리집 댕댕이</Title>
+      <TitleInfo>
+        <Title>우리집 댕댕이</Title>
+        <AddPetImg src={addImg} alt="반려동물 추가" onClick={handleToPetAdd} />
+        <PetAdd onClick={handleToPetAdd} > 추가</PetAdd>
+      </TitleInfo>
       <PetInfoContainer>
         <PetImage />
         <PetDetailInfoContainer>
@@ -129,10 +138,6 @@ function PetContainer() {
             <PetType> 말티즈</PetType>
           </PetTypeContainer>
         </PetDetailInfoContainer>
-        <AddPetContainer>
-          <AddPet src={addImg} alt="반려동물 추가" onClick={handleToPetAdd}/>
-          <span>반려동물 추가</span>
-        </AddPetContainer>
       </PetInfoContainer>
     </PetTotalContainer>
   );
