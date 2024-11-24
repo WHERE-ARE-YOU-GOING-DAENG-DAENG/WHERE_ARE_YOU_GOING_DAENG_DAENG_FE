@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from "styled-components";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
+import AlertDialog from '../../components/commons/SweetAlert';
 
 const Question = styled.span`
   font-size: 15px;
@@ -19,11 +20,13 @@ const CountText = styled.span`
   font-size: 11px;
   color: #FF0000;
   margin-top:3px;
+  margin-right:10px;
 `
 
 const TextDescriptionContainer = styled.div`
   margin-top: 20px;
   display: flex;
+  margin-bottom: -12px;
   justify-content: space-between;  
   align-items: center;  
 `
@@ -31,6 +34,7 @@ const DivisionLine = styled.div`
   height: 1px;
   background-color: #E5E5E5;
   margin-top:20px;
+  margin-right:10px;
   margin-bottom:29px;
 `;
 
@@ -62,7 +66,12 @@ function TextContainer() {
 
   const handleChange = (e) => {
     if (e.target.value.length > maxLength) {
-      alert("최대 500자까지 입력 가능합니다"); //스위트alert로 
+      AlertDialog({
+        mode: "alert",
+        title: "선택 제한",
+        text: `최대 ${maxLength}자까지만 작성 가능합니다.`,
+        confirmText: "닫기" 
+      });
     } else {
       setText(e.target.value);  
     }

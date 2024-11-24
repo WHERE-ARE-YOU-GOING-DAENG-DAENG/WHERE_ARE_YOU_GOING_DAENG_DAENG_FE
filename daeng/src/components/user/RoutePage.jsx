@@ -26,10 +26,10 @@ const RouteContainer = styled.div`
   margin-top: 14px;
   background-color: #FDF2F8;
   border-radius: 10px;
-  width: 90%;
-  height: 340px;
-  margin-right: 100px;
-  padding: 12%;
+  width: 95%;
+  height: 300px;
+  margin-right: 50px;
+  padding: 8%;
 `
 
 const RouteItem = styled.div`
@@ -46,12 +46,14 @@ const Icon = styled.img`
 
 const RouteText = styled.span`
   font-size: 13px;
-  display : flex;
   margin-bottom: 40px;
+  margin-left:10px;
+  display : flex;
 
   &:hover {
     color:  #ff69a9;
     cursor: pointer; 
+    font-weight: bold;
   }
 `
 const StyledLink = styled(Link)`
