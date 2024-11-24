@@ -23,6 +23,7 @@ import paperbag from "../../assets/icons/paperbag.svg";
 import clean from "../../assets/icons/clean.svg";
 import gongwon from "../../assets/icons/gongwon.svg";
 import parkingLot from "../../assets/icons/parkingLot.svg";
+import AlertDialog from "../commons/SweetAlert";
 
 function PreferenceRegister() {
   const [selectedPlaceOptions, setSelectedPlaceOptions] = useState([]);
@@ -30,7 +31,13 @@ function PreferenceRegister() {
 
   const handlePlaceOptionClick = (label) => {
     if (selectedPlaceOptions.length >= 3 && !selectedPlaceOptions.includes(label)) {
-      alert("최대 3개만 선택 가능합니다.");
+      AlertDialog({
+        mode: "alert", 
+        title: "선택 초과",
+        text: "최대 3개만 선택 가능합니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("확인 버튼 클릭됨"),
+      });
       return;
     }
 
@@ -43,7 +50,13 @@ function PreferenceRegister() {
 
   const handleFavoriteOptionClick = (label) => {
     if (selectedFavoriteOptions.length >= 3 && !selectedFavoriteOptions.includes(label)) {
-      alert("최대 3개만 선택 가능합니다.");
+      AlertDialog({
+        mode: "alert", 
+        title: "선택 초과",
+        text: "최대 3개만 선택 가능합니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("확인 버튼 클릭됨"),
+      });
       return;
     }
 
