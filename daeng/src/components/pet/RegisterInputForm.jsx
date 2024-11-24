@@ -6,6 +6,7 @@ import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
 import { useNavigate } from "react-router-dom"; 
+import axios from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -176,11 +177,14 @@ const NextRegisterBtn = styled.button`
 `
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-  const [preview, setPreview] = useState(null);
-  const [selectedPetType, setSelectedPetType] = useState("");
-  const [selectedWeight, setSelectedWeight] = useState("");
-  const [selectedGender, setSelectedGender] = useState(""); 
-  const [selectedNeutering, setSelectedNeutering] = useState(""); 
+  const [preview, setPreview] = useState(null); // 이미지
+  const [petName, setPetName] = useState(null); //반려동물 이름
+  const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
+  const [selectedWeight, setSelectedWeight] = useState(""); // 몸무게
+  const [selectedGender, setSelectedGender] = useState(""); //성별
+  const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
+  const [petSize, setPetSize] = useState(""); //반려동물 사이즈
+
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -192,6 +196,7 @@ function RegisterInputForm() {
       reader.readAsDataURL(file);
     }
   };
+  
 
   const handlePetTypeChange = (e) => {
     setSelectedPetType(e.target.value);
@@ -221,6 +226,30 @@ function RegisterInputForm() {
   const handleNextRegisterClick = () => {
     navigate("/"); 
   };
+
+  const validateForm = () => {
+    if (!petName) {
+      alert("이름을 입력해주세요.");
+      return false;
+    }
+    if (!selectedPetType) {
+      alert("견종을 선택해주세요.");
+      return false;
+    }
+    if (!selectedGender) {
+      alert("성별을 선택해주세요.");
+      return false;
+    }
+    if (!selectedNeutering) {
+      alert("중성화 여부를 선택해주세요.");
+      return false;
+    }
+    if (!selectedWeight) {
+      alert("반려견의 크기를 선택해주세요.");
+      return false;
+    }
+    return true;
+  }; //폼 유효성 검사
 
   return (
     <Container>
