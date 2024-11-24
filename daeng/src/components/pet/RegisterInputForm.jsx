@@ -8,6 +8,7 @@ import footerSearch from "../../assets/icons/footer_search.svg";
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
+import { genderOptions, petSizeOptions } from "../../data/CommonCode";
 
 const Container = styled.div`
   display: flex;
@@ -179,14 +180,6 @@ const NextRegisterBtn = styled.button`
 function RegisterInputForm() {
   const navigate = useNavigate(); 
 
-  //공통코드
-  const petSizeOptions = [
-    { code: "PET_SIZ_01", group: "PET_SIZ", name: "초소형견", size: "3kg 미만" },
-    { code: "PET_SIZ_02", group: "PET_SIZ", name: "소형견", size: "3kg~7kg 이하" },
-    { code: "PET_SIZ_03", group: "PET_SIZ", name: "중형견", size: "7kg~12kg 이하" },
-    { code: "PET_SIZ_04", group: "PET_SIZ", name: "중대형견", size: "12kg~20kg 이하" },
-    { code: "PET_SIZ_05", group: "PET_SIZ", name: "대형견", size: "20kg 이상" },
-  ];
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -320,8 +313,8 @@ function RegisterInputForm() {
       petType: selectedPetType,
       petBirth: selectedPetBirth,
       neutering: selectedNeutering === "했어요",
-      gender: selectedGender === "남아",
-      weight: selectedWeight,
+      gender: selectedGender,
+      weight: selectedWeight, 
     };
 
     for (const key in petData) {
@@ -399,16 +392,14 @@ function RegisterInputForm() {
       </BirthContainer>
       <SelectLabel label="성별" />
       <SelectContainer>
-        <SelectBtn
-          label="남아"
-          selected={selectedGender === "남아"}
-          onClick={() => handleGenderClick("남아")}
-        />
-        <SelectBtn
-          label="여아"
-          selected={selectedGender === "여아"}
-          onClick={() => handleGenderClick("여아")}
-        />
+        {genderOptions.map((option) => (
+          <SelectBtn
+            key={option.code}
+            label={option.name}
+            selected={selectedGender === option.code}
+            onClick={() => setSelectedGender(option.code)}
+          />
+        ))}
       </SelectContainer>
       <SelectLabel label="중성화 여부" />
       <SelectContainer>
