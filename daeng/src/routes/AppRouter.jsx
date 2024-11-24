@@ -11,11 +11,11 @@ import MyReviewPage from '../pages/review/MyReviewPage';
 import PlaceDetail from '../pages/PlaceDetail';
 import TotalReviewPage from '../pages/review/TotalReviewPage';
 import WriteReviewPage from '../pages/review/WriteReviewPage';
-import Preference from '../pages/user/Preference';
+import Preference from '../pages/user/PreferenceRegisterPage';
 import ScrollTop from '../components/commons/ScrollTop';
 import UserRegisterPage from '../pages/user/UserRegisterPage';
 import UserEditPage from '../pages/user/UserEditPage';
-import EditPreference from '../pages/user/EditPreference';
+import EditPreference from '../pages/user/PreferenceEditPage';
 
 const AppRouter = () => {
   return (
