@@ -167,7 +167,7 @@ const NextRegisterBtn = styled.button`
   border:none;
   cursor: pointer;
   text-align: center;
-  margin-right:23px;
+  margin-right:20px;
   margin-bottom: 20px;
 
   &:hover{
