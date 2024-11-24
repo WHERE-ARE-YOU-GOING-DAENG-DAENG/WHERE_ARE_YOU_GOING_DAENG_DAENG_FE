@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import Header from "../components/commons/Header";
-import Footer from "../components/commons/Footer";
-import PlaceTitle from "../components/detail/PlaceTitle";
-import PlaceInfo from "../components/detail/PlaceInfo";
-import PlaceDescription from "../components/detail/PlaceDescription";
-import PlaceAiReview from "../components/commons/PlaceAiReview";
-import PlaceReviewList from "../components/detail/PlaceReviewList";
+import Header from "../../components/commons/Header";
+import Footer from "../../components/commons/Footer";
+import PlaceTitle from "../../components/detail/PlaceTitle";
+import PlaceInfo from "../../components/detail/PlaceInfo";
+import PlaceDescription from "../../components/detail/PlaceDescription";
+import PlaceAiReview from "../../components/commons/PlaceAiReview";
+import PlaceReviewList from "../../components/detail/PlaceReviewList";
 
 const HeaderImage = styled.img`
   width: 100%;
