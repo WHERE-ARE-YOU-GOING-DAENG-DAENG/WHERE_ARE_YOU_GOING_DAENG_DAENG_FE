@@ -6,6 +6,7 @@ import footerHoverSearch from "../../assets/icons/footer_hover_search.svg";
 
 const SearchBarContainer = styled.div`
   margin: 0 auto;
+  margin-bottom: 17px;
   display: flex;
   align-items: center;
   width: 100%;
