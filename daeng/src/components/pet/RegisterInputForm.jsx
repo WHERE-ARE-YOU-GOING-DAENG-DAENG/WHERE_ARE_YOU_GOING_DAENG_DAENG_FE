@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
-import { PetType } from "../../data/PetType";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
@@ -56,6 +55,10 @@ const PetNameInput = styled.input`
   &:focus {
     outline: none;
     border-color: #ff69a9; 
+    
+  &::placeholder {
+    color: #b3b3b3; 
+  }
   }
 
 

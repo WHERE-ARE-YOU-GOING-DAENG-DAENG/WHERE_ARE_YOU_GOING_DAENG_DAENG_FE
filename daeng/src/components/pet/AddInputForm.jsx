@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
-import { PetType } from "../../data/PetType";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
 import { useNavigate } from "react-router-dom"; 
+import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
+import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 
 const Container = styled.div`
   display: flex;
@@ -54,6 +55,10 @@ const PetNameInput = styled.input`
   &:focus {
     outline: none;
     border-color: #ff69a9; 
+    
+  &::placeholder {
+    color: #b3b3b3; 
+  }
   }
 
 
@@ -175,17 +180,9 @@ const NextRegisterBtn = styled.button`
     font-weight: bold;
   }
 `
-function AddInputForm() {
+function RegisterInputForm() {
   const navigate = useNavigate(); 
 
-  //공통코드
-  const petSizeOptions = [
-    { code: "PET_SIZ_01", group: "PET_SIZ", name: "초소형견", size: "3kg 미만" },
-    { code: "PET_SIZ_02", group: "PET_SIZ", name: "소형견", size: "3kg~7kg 이하" },
-    { code: "PET_SIZ_03", group: "PET_SIZ", name: "중형견", size: "7kg~12kg 이하" },
-    { code: "PET_SIZ_04", group: "PET_SIZ", name: "중대형견", size: "12kg~20kg 이하" },
-    { code: "PET_SIZ_05", group: "PET_SIZ", name: "대형견", size: "20kg 이상" },
-  ];
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -219,10 +216,6 @@ function AddInputForm() {
 
   const handlePetTypeChange = (e) => {
     setSelectedPetType(e.target.value);
-  };
-
-  const handleGenderClick = (gender) => {
-    setSelectedGender(gender); 
   };
 
   const handleNeuteringClick = (status) => {
@@ -319,8 +312,8 @@ function AddInputForm() {
       petType: selectedPetType,
       petBirth: selectedPetBirth,
       neutering: selectedNeutering === "했어요",
-      gender: selectedGender === "남아",
-      weight: selectedWeight,
+      gender: selectedGender,
+      weight: selectedWeight, 
     };
 
     for (const key in petData) {
@@ -344,6 +337,12 @@ function AddInputForm() {
       alert("서버와 통신 중 오류가 발생했습니다.");
     }
   };
+
+
+  const handleNextRegisterClick = () => {
+    navigate("/"); 
+  };
+
 
   return (
     <Container>
@@ -373,9 +372,9 @@ function AddInputForm() {
           <option value="" disabled>
             견종을 선택하세요
           </option>
-          {PetType.map((breed, index) => (
-            <option key={index} value={breed.value}>
-              {breed.label}
+          {petTypeOptions.map((option) => (
+            <option key={option.code} value={option.code}>
+              {option.name}
             </option>
           ))}
         </PetTypeOption>
@@ -392,16 +391,14 @@ function AddInputForm() {
       </BirthContainer>
       <SelectLabel label="성별" />
       <SelectContainer>
-        <SelectBtn
-          label="남아"
-          selected={selectedGender === "남아"}
-          onClick={() => handleGenderClick("남아")}
-        />
-        <SelectBtn
-          label="여아"
-          selected={selectedGender === "여아"}
-          onClick={() => handleGenderClick("여아")}
-        />
+        {genderOptions.map((option) => (
+          <SelectBtn
+            key={option.code}
+            label={option.name}
+            selected={selectedGender === option.code}
+            onClick={() => setSelectedGender(option.code)}
+          />
+        ))}
       </SelectContainer>
       <SelectLabel label="중성화 여부" />
       <SelectContainer>
@@ -429,8 +426,9 @@ function AddInputForm() {
       ))}
     </SelectContainer>
       <ConfirmBtn onClick={handleSubmit} label="완료" />
+      <NextRegisterBtn onClick={handleNextRegisterClick}>나중에 등록할게요</NextRegisterBtn>
     </Container>
   );
 }
 
-export default AddInputForm;
+export default RegisterInputForm;
