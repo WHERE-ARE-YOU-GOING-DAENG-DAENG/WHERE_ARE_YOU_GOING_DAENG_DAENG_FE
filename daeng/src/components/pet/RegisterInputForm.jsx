@@ -8,7 +8,7 @@ import footerSearch from "../../assets/icons/footer_search.svg";
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
-import { genderOptions, petSizeOptions } from "../../data/CommonCode";
+import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 
 const Container = styled.div`
   display: flex;
@@ -373,9 +373,9 @@ function RegisterInputForm() {
           <option value="" disabled>
             견종을 선택하세요
           </option>
-          {PetType.map((breed, index) => (
-            <option key={index} value={breed.value}>
-              {breed.label}
+          {petTypeOptions.map((option) => (
+            <option key={option.code} value={option.code}>
+              {option.name}
             </option>
           ))}
         </PetTypeOption>
