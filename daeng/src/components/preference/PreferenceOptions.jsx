@@ -67,7 +67,7 @@ const OptionList = styled.div`
 `;
 
 const StyledParagraph2 = styled.p`
-  font-size: 8px;
+  font-size: 10px;
   color: red;
   font-weight: bold;
   margin-top: 90px;

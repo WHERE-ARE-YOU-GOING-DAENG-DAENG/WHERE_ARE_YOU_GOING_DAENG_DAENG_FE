@@ -9,7 +9,7 @@ const ReviewContainer = styled.div`
   flex-direction: column; 
   min-height: 100vh;  
   overflow: auto; 
-  padding-bottom: 20%;
+  padding-bottom: 15%;
 `;
 
 function MyPage() {
