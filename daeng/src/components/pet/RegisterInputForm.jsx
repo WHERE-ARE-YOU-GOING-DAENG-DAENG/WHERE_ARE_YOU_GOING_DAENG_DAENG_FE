@@ -177,13 +177,6 @@ const NextRegisterBtn = styled.button`
 `
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-  const [preview, setPreview] = useState(null); // 이미지 미리보기 
-  const [imageFile, setImageFile] = useState(null); //이미지 
-  const [petName, setPetName] = useState(null); //반려동물 이름
-  const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
-  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
-  const [selectedGender, setSelectedGender] = useState(""); //성별
-  const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
 
   //공통코드
   const petSizeOptions = [
@@ -197,16 +190,31 @@ function RegisterInputForm() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageFile(file); 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result);
+        setPreview(reader.result); 
       };
       reader.readAsDataURL(file);
     }
   };
+
+  const [preview, setPreview] = useState(null); // 이미지 미리보기 
+  const [imageFile, setImageFile] = useState(null); //이미지 
+  const [petName, setPetName] = useState(""); //반려동물 이름
+  const [selectedPetBirth, setSelectedPetBirth] = useState(""); //반려동물 생일
+  const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
+  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
+  const [selectedGender, setSelectedGender] = useState(""); //성별
+  const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
+
   
   const handlePetNameChange = (e) => {
     setPetName(e.target.value);
+  };
+
+  const handlePetBirthChange = (e) => {
+    setSelectedPetBirth(e.target.value);
   };
 
   const handlePetTypeChange = (e) => {
@@ -232,21 +240,54 @@ function RegisterInputForm() {
     const month = String(today.getMonth() + 1).padStart(2, "0"); 
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-  };
+  }; 
 
-  const handleRegister = async (event) => {
+  const validateForm = () => {
+    const nameRegex = /^[가-힣a-zA-Z\s]+$/;
+  
+    if (!petName || !nameRegex.test(petName)) {
+      alert("댕댕이 이름은 한글 또는 영문만 입력 가능합니다.");
+      return false;
+    }
+    if (!selectedPetType) {
+      alert("견종을 선택해주세요.");
+      return false;
+    }
+
+    if(!selectedPetBirth) {
+      alert("생일을 선택해주세요");
+      return false;
+    }
+
+    if (!selectedGender) {
+      alert("성별을 선택해주세요.");
+      return false;
+    }
+    if (!selectedNeutering) {
+      alert("중성화 여부를 선택해주세요.");
+      return false;
+    }
+    if (!selectedWeight || !petSizeOptions.some(option => option.code === selectedWeight)) {
+      alert("반려견의 크기를 선택해주세요.");
+      return false;
+    }
+    return true;
+  }; //유효성 검사
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm()) return;
   
 
     const formData = new FormData();
-    if (imgPath) {
-      formData.append("image", imgPath);
+    if (imageFile) {
+      formData.append("image", imageFile);
     }
 
     const petData = {
       petName: petName,
       petType: selectedPetType,
+      petBirth: selectedPetBirth,
       neutering: selectedNeutering === "했어요",
       gender: selectedGender === "남아",
       weight: selectedWeight,
@@ -280,35 +321,7 @@ function RegisterInputForm() {
     navigate("/"); 
   };
 
-  const handleSubmit = () => {
 
-  }
-  const validateForm = () => {
-    const nameRegex = /^[가-힣a-zA-Z\s]+$/;
-  
-    if (!petName || !nameRegex.test(petName)) {
-      alert("댕댕이 이름은 한글 또는 영문만 입력 가능합니다.");
-      return false;
-    }
-    if (!selectedPetType) {
-      alert("견종을 선택해주세요.");
-      return false;
-    }
-    if (!selectedGender) {
-      alert("성별을 선택해주세요.");
-      return false;
-    }
-    if (!selectedNeutering) {
-      alert("중성화 여부를 선택해주세요.");
-      return false;
-    }
-    if (!selectedWeight) {
-      alert("반려견의 크기를 선택해주세요.");
-      return false;
-    }
-    return true;
-  };
-  
   return (
     <Container>
       <FirstInputContainer>
@@ -348,7 +361,9 @@ function RegisterInputForm() {
         <SelectLabel label="생년월일" />
         <BirthInput
           type="date"
+          value={selectedPetBirth}
           max={getTodayDate()} 
+          onChange={handlePetBirthChange}
           placeholder="우리 댕댕일 생일을 알려주세요!"
         />
       </BirthContainer>
