@@ -111,10 +111,11 @@ const SearchPlaceList = ({ list }) => {
     }
   }, [list]);
 
-  const toggleBookmark = (index) => {
+  //즐겨찾기 토글
+  const toggleBookmark = (id) => {
     setPlaces((prevPlaces) =>
-      prevPlaces.map((place, i) =>
-        i === index ? { ...place, bookmark: !place.bookmark } : place
+      prevPlaces.map((place) =>
+        place.placeId === id ? { ...place, bookmark: !place.bookmark } : place
       )
     );
   };
@@ -126,23 +127,25 @@ const SearchPlaceList = ({ list }) => {
   return (
     <ListContainer>
       {places.map((place) => (
-        <PlaceItem key={place.placeId} onClick={() => handlePlaceClick(place.placeId)}>
-          <div className="header">
-            <div className="place-name">{place.name}</div>
-            <div className="facility-type">{place.facilityType || "시설 정보 없음"}</div>
-          </div>
-          <div className="details">
-            <div className="status">{place.isOpen ? "영업중 |" : "영업 종료 |"}</div>
-            <div className="address">{place.address || "주소 정보 없음"}</div>
-          </div>
-          <div className="images">
-            {place.images.length > 0 ? (
-              place.images.map((image, i) => (
-                <img key={i} src={image} alt={`${place.name} 이미지`} />
-              ))
-            ) : (
-              <div style={{ width: "108px", height:"130px", borderRadius:"10px", backgroundColor:"#b3b3b3"}}></div>
-            )}
+        <PlaceItem key={place.placeId}>
+          <div onClick={() => handlePlaceClick(place.placeId)}>
+            <div className="header">
+              <div className="place-name">{place.name}</div>
+              <div className="facility-type">{place.facilityType || "시설 정보 없음"}</div>
+            </div>
+            <div className="details">
+              <div className="status">{place.isOpen ? "영업중 |" : "영업 종료 |"}</div>
+              <div className="address">{place.address || "주소 정보 없음"}</div>
+            </div>
+            <div className="images">
+              {place.images.length > 0 ? (
+                place.images.map((image, i) => (
+                  <img key={i} src={image} alt={`${place.name} 이미지`} />
+                ))
+              ) : (
+                <div style={{ width: "108px", height:"130px", borderRadius:"10px", backgroundColor:"#b3b3b3"}}></div>
+              )}
+            </div>
           </div>
           <img
             src={place.bookmark ? filledbookmarkIcon : bookmarkIcon}
