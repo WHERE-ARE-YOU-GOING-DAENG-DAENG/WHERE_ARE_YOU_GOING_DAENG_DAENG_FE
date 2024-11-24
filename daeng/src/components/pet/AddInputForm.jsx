@@ -328,10 +328,9 @@ function AddInputForm() {
         formData.append(key, petData[key]);
       }
     }
-    const localUserId = localStorage.getItem("userId");
 
     try {
-      const response = await axios.post("/pets", formData, {
+      const response = await axios.post("/api/v1/pets", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
