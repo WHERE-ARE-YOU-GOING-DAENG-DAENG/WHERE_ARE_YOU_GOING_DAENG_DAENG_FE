@@ -1,6 +1,6 @@
-import Header from "../components/commons/Header";
-import TopSection from "../components/preference/TopSection";
-import PreferenceRegister from "../components/preference/PreferenceRegister";
+import Header from "../../components/commons/Header";
+import TopSection from "../../components/preference/TopSection";
+import PreferenceRegister from "../../components/preference/PreferenceRegister";
 
 function PreferenceRegisterPage() {
   return (
