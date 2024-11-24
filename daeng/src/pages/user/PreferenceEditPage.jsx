@@ -1,6 +1,6 @@
-import Header from "../components/commons/Header";
-import TopSection from "../components/preference/TopSection";
-import PreferenceEdit from "../components/preference/PreferenceEdit";
+import Header from "../../components/commons/Header";
+import TopSection from "../../components/preference/TopSection";
+import PreferenceEdit from "../../components/preference/PreferenceEdit";
 
 function PreferenceEditPage() {
   return (
