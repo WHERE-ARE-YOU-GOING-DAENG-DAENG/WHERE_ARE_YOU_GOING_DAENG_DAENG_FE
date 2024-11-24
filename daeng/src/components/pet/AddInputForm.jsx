@@ -316,12 +316,6 @@ function AddInputForm() {
     }
   };
 
-
-  const handleNextRegisterClick = () => {
-    navigate("/"); 
-  };
-
-
   return (
     <Container>
       <FirstInputContainer>
@@ -406,7 +400,6 @@ function AddInputForm() {
       ))}
     </SelectContainer>
       <ConfirmBtn onClick={handleSubmit} label="완료" />
-      <NextRegisterBtn onClick={handleNextRegisterClick}>나중에 등록할게요</NextRegisterBtn>
     </Container>
   );
 }

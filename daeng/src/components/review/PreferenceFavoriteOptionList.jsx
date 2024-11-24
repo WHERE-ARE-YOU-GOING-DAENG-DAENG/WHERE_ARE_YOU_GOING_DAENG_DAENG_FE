@@ -24,8 +24,7 @@ function PreferenceFavoriteOptionList() {
         mode: "alert", 
         title: "선택 초과",
         text: "최대 3개만 선택 가능합니다.",
-        confirmText: "확인",
-        onConfirm: () => console.log("확인 버튼 클릭됨"),
+        confirmText: "확인"
       });
       return;
     }
