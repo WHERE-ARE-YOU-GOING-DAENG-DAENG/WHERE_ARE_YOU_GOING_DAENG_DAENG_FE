@@ -5,6 +5,8 @@ import { PetType } from "../../data/PetType";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
+import { useNavigate } from "react-router-dom"; 
+import axios from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -159,23 +161,60 @@ const SelectWeight = styled.button`
     `}
 `;
 
+const NextRegisterBtn = styled.button`
+  background-color: white;
+  color:#B3B3B3;
+  font-size:14px;
+  border:none;
+  cursor: pointer;
+  text-align: center;
+  margin-right:20px;
+  margin-bottom: 20px;
 
-function RegisterInputForm() {
-  const [preview, setPreview] = useState(null);
-  const [selectedPetType, setSelectedPetType] = useState("");
-  const [selectedWeight, setSelectedWeight] = useState("");
-  const [selectedGender, setSelectedGender] = useState(""); 
-  const [selectedNeutering, setSelectedNeutering] = useState(""); 
+  &:hover{
+    font-weight: bold;
+  }
+`
+function AddInputForm() {
+  const navigate = useNavigate(); 
+
+  //공통코드
+  const petSizeOptions = [
+    { code: "PET_SIZ_01", group: "PET_SIZ", name: "초소형견", size: "3kg 미만" },
+    { code: "PET_SIZ_02", group: "PET_SIZ", name: "소형견", size: "3kg~7kg 이하" },
+    { code: "PET_SIZ_03", group: "PET_SIZ", name: "중형견", size: "7kg~12kg 이하" },
+    { code: "PET_SIZ_04", group: "PET_SIZ", name: "중대형견", size: "12kg~20kg 이하" },
+    { code: "PET_SIZ_05", group: "PET_SIZ", name: "대형견", size: "20kg 이상" },
+  ];
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageFile(file); 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result);
+        setPreview(reader.result); 
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const [preview, setPreview] = useState(null); // 이미지 미리보기 
+  const [imageFile, setImageFile] = useState(null); //이미지 
+  const [petName, setPetName] = useState(""); //반려동물 이름
+  const [selectedPetBirth, setSelectedPetBirth] = useState(""); //반려동물 생일
+  const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
+  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
+  const [selectedGender, setSelectedGender] = useState(""); //성별
+  const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
+
+  
+  const handlePetNameChange = (e) => {
+    setPetName(e.target.value);
+  };
+
+  const handlePetBirthChange = (e) => {
+    setSelectedPetBirth(e.target.value);
   };
 
   const handlePetTypeChange = (e) => {
@@ -190,9 +229,10 @@ function RegisterInputForm() {
     setSelectedNeutering(status); 
   };
 
-  const handleWeightClick = (weight) => {
-    setSelectedWeight(weight); 
+  const handleWeightClick = (weightCode) => {
+    setSelectedWeight(weightCode); 
   };
+
 
   const getTodayDate = () => {
     const today = new Date();
@@ -200,6 +240,85 @@ function RegisterInputForm() {
     const month = String(today.getMonth() + 1).padStart(2, "0"); 
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
+  }; 
+
+  const validateForm = () => {
+    const nameRegex = /^[가-힣a-zA-Z\s]+$/;
+  
+    if (!petName || !nameRegex.test(petName)) {
+      alert("댕댕이 이름은 한글 또는 영문만 입력 가능합니다.");
+      return false;
+    }
+    if (!selectedPetType) {
+      alert("견종을 선택해주세요.");
+      return false;
+    }
+
+    if(!selectedPetBirth) {
+      alert("생일을 선택해주세요");
+      return false;
+    }
+
+    if (!selectedGender) {
+      alert("성별을 선택해주세요.");
+      return false;
+    }
+    if (!selectedNeutering) {
+      alert("중성화 여부를 선택해주세요.");
+      return false;
+    }
+    if (!selectedWeight || !petSizeOptions.some(option => option.code === selectedWeight)) {
+      alert("반려견의 크기를 선택해주세요.");
+      return false;
+    }
+    return true;
+  }; //유효성 검사
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) return;
+  
+
+    const formData = new FormData();
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    const petData = {
+      petName: petName,
+      petType: selectedPetType,
+      petBirth: selectedPetBirth,
+      neutering: selectedNeutering === "했어요",
+      gender: selectedGender === "남아",
+      weight: selectedWeight,
+    };
+
+    for (const key in petData) {
+      if (petData.hasOwnProperty(key)) {
+        formData.append(key, petData[key]);
+      }
+    }
+    const localUserId = localStorage.getItem("userId");
+
+    try {
+      const response = await axios.post("/pets", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 201) {
+        navigate(`/mypage/${localUserId}`);
+      } else {
+        alert("등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      alert("서버와 통신 중 오류가 발생했습니다.");
+    }
+  };
+
+
+  const handleNextRegisterClick = () => {
+    navigate("/"); 
   };
 
 
@@ -217,7 +336,11 @@ function RegisterInputForm() {
         />
         <PetNameInfoContainer>
           <SelectLabel label="댕댕이 이름" />
-          <PetNameInput />
+          <PetNameInput
+            value={petName}
+            onChange={handlePetNameChange}
+            placeholder="반려동물 이름을 입력해주세요"
+            required />
           <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
         </PetNameInfoContainer>
       </FirstInputContainer>
@@ -238,7 +361,9 @@ function RegisterInputForm() {
         <SelectLabel label="생년월일" />
         <BirthInput
           type="date"
+          value={selectedPetBirth}
           max={getTodayDate()} 
+          onChange={handlePetBirthChange}
           placeholder="우리 댕댕일 생일을 알려주세요!"
         />
       </BirthContainer>
@@ -270,40 +395,20 @@ function RegisterInputForm() {
       </SelectContainer>
       <SelectLabel label="크기" />
       <SelectContainer>
+      {petSizeOptions.map((option) => (
         <SelectWeight
-          selected={selectedWeight === "초소형견(3kg 미만)"}
-          onClick={() => handleWeightClick("초소형견(3kg 미만)")}
+          key={option.code}
+          selected={selectedWeight === option.code}
+          onClick={() => handleWeightClick(option.code)}
         >
-          초소형견<br />(3kg 미만)
+          {option.name}<br />({option.size})
         </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "소형견(3kg ~ 7kg)"}
-          onClick={() => handleWeightClick("소형견(3kg ~ 7kg)")}
-        >
-          소형견<br />(3kg ~ 7kg)
-        </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "중형견(7kg ~ 12kg)"}
-          onClick={() => handleWeightClick("중형견(7kg ~ 12kg)")}
-        >
-          중형견<br />(7kg ~ 12kg)
-        </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "중대형견(12kg ~ 20kg)"}
-          onClick={() => handleWeightClick("중대형견(12kg ~ 20kg)")}
-        >
-          중대형견<br />(12kg ~ 20kg)
-        </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "대형견(20kg 이상)"}
-          onClick={() => handleWeightClick("대형견(20kg 이상)")}
-        >
-          대형견<br />(20kg 이상)
-        </SelectWeight>
-      </SelectContainer>
-      <ConfirmBtn label="완료" />
+      ))}
+    </SelectContainer>
+      <ConfirmBtn onClick={handleSubmit} label="완료" />
+      <NextRegisterBtn onClick={handleNextRegisterClick}>나중에 등록할게요</NextRegisterBtn>
     </Container>
   );
 }
 
-export default RegisterInputForm;
+export default AddInputForm;
