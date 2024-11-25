@@ -12,12 +12,13 @@ import PlaceDetail from '../pages/search/PlaceDetail';
 import TotalReviewPage from '../pages/review/TotalReviewPage';
 import WriteReviewPage from '../pages/review/WriteReviewPage';
 import Bookmark from '../pages/Bookmark';
-import MyVisitList from '../pages/MyVisitList';
 import Preference from '../pages/user/PreferenceRegisterPage';
 import ScrollTop from '../components/commons/ScrollTop';
 import UserRegisterPage from '../pages/user/UserRegisterPage';
 import UserEditPage from '../pages/user/UserEditPage';
+import MyVisitList from '../pages/visit/MyVisitList';
 import EditPreference from '../pages/user/PreferenceEditPage';
+import PlaceVisitList from '../pages/visit/PlaceVisitList';
 
 const AppRouter = () => {
   return (
@@ -42,6 +43,7 @@ const AppRouter = () => {
         <Route path="/total-review" element={<TotalReviewPage />} />
         <Route path="/write-review" element={<WriteReviewPage />} />
         <Route path="/visit-list" element={<MyVisitList />} />
+        <Route path="/visit-list/:id" element={<PlaceVisitList />} />
       </Routes>
     </Router>
   );
