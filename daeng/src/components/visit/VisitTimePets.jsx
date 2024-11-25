@@ -4,6 +4,7 @@ import leftArrow from "../../assets/icons/reversearrow.svg";
 import rightArrow from "../../assets/icons/arrow.svg";
 import joinIcon from "../../assets/icons/join.svg";
 import ReviewKeywords from "../../components/commons/ReviewKeywords";
+
 const TimeContainer = styled.div`
   margin-bottom: 16px;
   text-align: left;
