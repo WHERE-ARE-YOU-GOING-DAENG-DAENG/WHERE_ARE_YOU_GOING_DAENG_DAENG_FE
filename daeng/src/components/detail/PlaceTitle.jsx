@@ -6,6 +6,7 @@ import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg";
 import starIcon from "../../assets/icons/star.svg"
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   padding: 0px 44px;
@@ -48,6 +49,7 @@ const SubTitleSection = styled.div`
 
 const PlaceTitle = ({ data }) => {
     const [isFavorite, setIsFavorite] = useState(data.isFavorite);
+    const navigate = useNavigate();
     
     const toggleFavorite = () => {
         setIsFavorite((prev) => !prev);
@@ -57,7 +59,7 @@ const PlaceTitle = ({ data }) => {
         <Container>
             <TitleSection>
                 <h1>{data.name}</h1>
-                <ReviewKeywords label="방문하고 싶어요" icon={joinIcon}/>
+                <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={()=> navigate(`/visit-list/${data.placeId}`)}/>
             </TitleSection>
             <SubTitleSection>
                 <p className="detail-category">{data.categories[0]}</p>
@@ -78,6 +80,7 @@ const PlaceTitle = ({ data }) => {
 
 PlaceTitle.propTypes = {
     data: PropTypes.shape({
+      placeId: PropTypes.number.isRequired, 
       name: PropTypes.string.isRequired,         
       isFavorite: PropTypes.bool.isRequired,    
       categories: PropTypes.arrayOf(              
