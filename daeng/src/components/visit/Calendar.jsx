@@ -87,10 +87,14 @@ const Day = styled.div`
   aspect-ratio: 1;
   text-align: center;
   border-radius: 10px;
-  background: ${({ isWeekly }) => (isWeekly ? "#FDF2F8" : "none")};
+  background: ${({ isWeekly, isToday }) => isWeekly && isToday
+  ? "#FFCEE1"
+  : isWeekly 
+  ? "#FDF2F8"
+  : "none"};
   color: ${({ isPast }) => (isPast ? "#aaa" : "black")};
   font-weight: ${({ isToday }) => (isToday ? "bold" : "normal")};
-  border: ${({ isToday }) => (isToday ? "2px solid #FF4B98" : "none")};
+  border: ${({ isSelected }) => (isSelected ? "2px solid #FF4B98" : "none")};
   cursor: pointer;
   position: relative;
 
@@ -118,6 +122,7 @@ const Day = styled.div`
 
 const Calendar = ({ onDateClick, allSchedules }) => {
   const [currentDate, setCurrentDate] = useState(dayjs());
+  const [selectedDate, setSelectedDate] = useState(null);
   const startOfMonth = currentDate.startOf("month");
   const endOfMonth = currentDate.endOf("month");
   const today = dayjs().format("YYYY-MM-DD");
@@ -164,7 +169,7 @@ const Calendar = ({ onDateClick, allSchedules }) => {
         (schedule) => dayjs(schedule.visitTime).format("YYYY-MM-DD") === date
       );
 
-      console.log(hasEvent)
+      const isSelected = date === selectedDate;
 
       return (
         <Day
@@ -173,7 +178,11 @@ const Calendar = ({ onDateClick, allSchedules }) => {
           isPast={isPast}
           isToday={isToday}
           hasEvent={hasEvent}
-          onClick={() => onDateClick(date)}
+          isSelected={isSelected}
+          onClick={() => {
+            setSelectedDate(date);
+            onDateClick(date);
+          }}
         >
           {i + 1}
         </Day>
