@@ -44,7 +44,7 @@ const PetNameInfoContainer = styled.div`
 `;
 
 const PetNameInput = styled.input`
-  width: 194%;
+  width: 191%;
   height: 44px;
   font-size: 14px;
   border-radius: 5px;
