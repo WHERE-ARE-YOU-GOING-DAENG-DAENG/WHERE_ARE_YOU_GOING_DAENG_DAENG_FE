@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
 import { PetType } from "../../data/PetType";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
+import AlertDialog from "../../components/commons/SweetAlert";
+
 
 const Container = styled.div`
   display: flex;
@@ -173,8 +175,9 @@ const DeletePet = styled.button`
     font-weight: bold;
   }
 `
+ //css 완료
 
-function EditInputForm() {
+function EditInputForm({petId}) {
   const [preview, setPreview] = useState(null);
   const [selectedPetType, setSelectedPetType] = useState("");
   const [selectedWeight, setSelectedWeight] = useState("");
@@ -216,6 +219,101 @@ function EditInputForm() {
     return `${year}-${month}-${day}`;
   };
 
+  useEffect(() => {
+    const fetchPetData = async () => {
+      try {
+        const response = await axiosInstance.get(`/pets/${petId}`);
+        const petData = response.data;
+
+        if (petData) {
+          setImgPath(petData.petPicture);
+          setPetName(petData.petName);
+          setBirthdate(petData.petBirth);
+          setSelectedPetType(petData.dogOrCat);
+          setSelectedGender(petData.gender ? "남아" : "여아");
+          setSelectedNeutering(petData.neutering ? "했어요" : "안 했어요");
+          setSelectedWeight(petData.petWeight);
+        }
+      } catch (error) {
+        console.error("펫 데이터 불러오기 실패:", error);
+      }
+    };
+
+    if (petId) {
+      fetchPetData();
+    }
+  }, [petId]);
+
+  
+  const handleUpdate = async () => {
+    if (!petName || !selectedPetType) {
+      AlertDialog({
+        mode: "alert",
+        title: "입력 오류",
+        text: "모든 필드를 입력해주세요.",
+        confirmText: "확인",
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.put(`/api/v1/pets/${petId}`, {
+        petName,
+        petType: selectedPetType,
+      });
+      if (response.status === 200) {
+        AlertDialog({
+          mode: "success",
+          title: "수정 완료",
+          text: "펫 정보가 성공적으로 수정되었습니다!",
+          confirmText: "확인",
+        });
+        navigate("/my-page"); 
+      }
+    } catch (error) {
+      console.error("수정 실패:", error);
+      AlertDialog({
+        mode: "alert",
+        title: "수정 실패",
+        text: "수정 중 문제가 발생했습니다. 다시 시도해주세요.",
+        confirmText: "확인",
+      });
+    }
+  };
+
+  //삭제요청
+  const handleDelete = async () => {
+    AlertDialog({
+      mode: "confirm",
+      title: "삭제 확인",
+      text: "정말로 삭제하시겠습니까?",
+      confirmText: "삭제",
+      cancelText: "취소",
+
+      onConfirm: async () => {
+        try {
+          const response = await axios.delete(`/api/v1/pets/${petId}`);
+          if (response.status === 204) {
+            AlertDialog({
+              mode: "success",
+              title: "삭제 완료",
+              text: "펫 정보가 성공적으로 삭제되었습니다!",
+              confirmText: "확인",
+            });
+            navigate("/my-page");
+          }
+        } catch (error) {
+          console.error("삭제 실패:", error);
+          AlertDialog({
+            mode: "alert",
+            title: "삭제 실패",
+            text: "삭제 중 문제가 발생했습니다. 다시 시도해주세요.",
+            confirmText: "확인",
+          });
+        }
+      },
+    });
+  };
 
   return (
     <Container>
@@ -315,8 +413,8 @@ function EditInputForm() {
           대형견<br />(20kg 이상)
         </SelectWeight>
       </SelectContainer>
-      <ConfirmBtn label="완료" />
-      <DeletePet>삭제하기</DeletePet>
+      <ConfirmBtn onClick={handleUpdate} label="완료" />
+      <DeletePet onClick={handleDelete}>삭제하기</DeletePet>
     </Container>
   );
 }

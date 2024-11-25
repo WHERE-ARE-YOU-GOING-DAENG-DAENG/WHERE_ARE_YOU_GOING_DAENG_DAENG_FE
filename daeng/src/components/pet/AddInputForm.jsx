@@ -180,6 +180,8 @@ const NextRegisterBtn = styled.button`
     font-weight: bold;
   }
 `
+//퍼블리싱 
+
 function RegisterInputForm() {
   const navigate = useNavigate(); 
 
@@ -218,6 +220,7 @@ function RegisterInputForm() {
     setSelectedPetType(e.target.value);
   };
 
+
   const handleNeuteringClick = (status) => {
     setSelectedNeutering(status); 
   };
@@ -226,7 +229,7 @@ function RegisterInputForm() {
     setSelectedWeight(weightCode); 
   };
 
-
+  //오늘 이후로는 날짜 선택 못하게
   const getTodayDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -235,6 +238,7 @@ function RegisterInputForm() {
     return `${year}-${month}-${day}`;
   }; 
 
+  //유효성 검사
   const validateForm = () => {
     const nameRegex = /^[가-힣a-zA-Z\s]+$/;
   
@@ -295,7 +299,7 @@ function RegisterInputForm() {
       return false;
     }
     return true;
-  }; //유효성 검사
+  }; 
 
   const handleSubmit = async (event) => {
     event.preventDefault();

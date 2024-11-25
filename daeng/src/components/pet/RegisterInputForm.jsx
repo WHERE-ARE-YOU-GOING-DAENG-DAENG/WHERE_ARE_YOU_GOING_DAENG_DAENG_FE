@@ -183,27 +183,15 @@ const NextRegisterBtn = styled.button`
 function RegisterInputForm() {
   const navigate = useNavigate(); 
 
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file); 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result); 
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const [preview, setPreview] = useState(null); // 이미지 미리보기 
-  const [imageFile, setImageFile] = useState(null); //이미지 
-  const [petName, setPetName] = useState(""); //반려동물 이름
-  const [selectedPetBirth, setSelectedPetBirth] = useState(""); //반려동물 생일
-  const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
-  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
-  const [selectedGender, setSelectedGender] = useState(""); //성별
-  const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
+  const [imageUrl, setImgUrl] = useState(""); // S3 업로드 후 URL
+  const [imageFile, setImageFile] = useState(null); // 이미지 파일
+  const [petName, setPetName] = useState(""); // 반려동물 이름
+  const [selectedPetBirth, setSelectedPetBirth] = useState(""); // 반려동물 생일
+  const [selectedPetType, setSelectedPetType] = useState(""); // 반려동물 종
+  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 크기
+  const [selectedGender, setSelectedGender] = useState(""); // 성별
+  const [selectedNeutering, setSelectedNeutering] = useState(""); // 중성화 여부
 
   
   const handlePetNameChange = (e) => {
@@ -216,10 +204,6 @@ function RegisterInputForm() {
 
   const handlePetTypeChange = (e) => {
     setSelectedPetType(e.target.value);
-  };
-
-  const handleGenderClick = (gender) => {
-    setSelectedGender(gender); 
   };
 
   const handleNeuteringClick = (status) => {
@@ -301,52 +285,98 @@ function RegisterInputForm() {
     return true;
   }; //유효성 검사
 
+
+  
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setPreview(URL.createObjectURL(file));
+    setImageFile(file);
+
+    try {
+      const presignedResponse = await axios.get("/api/v1/s3-presigned-url", {
+        params: { filename: file.name, filetype: file.type },
+      });
+
+      const { url: presignedUrl, publicUrl } = presignedResponse.data;
+
+      await axios.put(presignedUrl, file, {
+        headers: { "Content-Type": file.type },
+      });
+
+      setImgUrl(publicUrl);
+
+      AlertDialog({
+        mode: "success",
+        title: "업로드 성공",
+        text: "이미지가 성공적으로 업로드되었습니다.",
+        confirmText: "확인",
+      });
+    } catch (error) {
+      console.error("S3 업로드 실패:", error);
+      AlertDialog({
+        mode: "alert",
+        title: "업로드 실패",
+        text: "이미지 업로드 중 문제가 발생했습니다.",
+        confirmText: "확인",
+      });
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm()) return;
-  
-
-    const formData = new FormData();
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
 
     const petData = {
       petName: petName,
+      imageUrl: imageUrl,
       petType: selectedPetType,
       petBirth: selectedPetBirth,
       neutering: selectedNeutering === "했어요",
       gender: selectedGender,
-      weight: selectedWeight, 
+      weight: selectedWeight,
     };
 
-    for (const key in petData) {
-      if (petData.hasOwnProperty(key)) {
-        formData.append(key, petData[key]);
-      }
-    }
-
     try {
-      const response = await axios.post("/api/v1/pets", formData, {
+      const response = await axios.post("/api/v1/pets", petData, {
+        withCredentials: true,
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
+
       if (response.status === 201) {
-        navigate(`/mypage/${localUserId}`);
+        AlertDialog({
+          mode: "success",
+          title: "등록 성공",
+          text: "댕댕이 정보가 성공적으로 등록되었습니다.",
+          confirmText: "확인",
+        });
+
+        navigate("/my-page");
       } else {
-        alert("등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+        AlertDialog({
+          mode: "alert",
+          title: "등록 실패",
+          text: "등록 중 문제가 발생했습니다. 다시 시도해주세요.",
+          confirmText: "확인",
+        });
       }
     } catch (error) {
-      alert("서버와 통신 중 오류가 발생했습니다.");
+      console.error("등록 실패:", error);
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "서버와 통신 중 문제가 발생했습니다.",
+        confirmText: "확인",
+      });
     }
   };
-
 
   const handleNextRegisterClick = () => {
     navigate("/"); 
   };
-
 
   return (
     <Container>
@@ -360,22 +390,26 @@ function RegisterInputForm() {
           accept="image/*"
           onChange={handleImageUpload}
         />
-        <PetNameInfoContainer>
-          <SelectLabel label="댕댕이 이름" />
-          <PetNameInput
-            value={petName}
-            onChange={handlePetNameChange}
-            placeholder="반려동물 이름을 입력해주세요"
-            required />
-          <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
-        </PetNameInfoContainer>
       </FirstInputContainer>
+
+      <PetNameInfoContainer>
+        <SelectLabel label="댕댕이 이름" />
+        <PetNameInput
+          value={petName}
+          onChange={(e) => setPetName(e.target.value)}
+          placeholder="반려동물 이름을 입력해주세요"
+          required
+        />
+        <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
+      </PetNameInfoContainer>
+
       <PetTypeContainer>
         <SelectLabel label="견종" />
-        <PetTypeOption value={selectedPetType} onChange={handlePetTypeChange}>
-          <option value="" disabled>
-            견종을 선택하세요
-          </option>
+        <PetTypeOption
+          value={selectedPetType}
+          onChange={(e) => setSelectedPetType(e.target.value)}
+        >
+          <option value="" disabled>견종을 선택하세요</option>
           {petTypeOptions.map((option) => (
             <option key={option.code} value={option.code}>
               {option.name}
@@ -383,16 +417,17 @@ function RegisterInputForm() {
           ))}
         </PetTypeOption>
       </PetTypeContainer>
+
       <BirthContainer>
         <SelectLabel label="생년월일" />
         <BirthInput
           type="date"
           value={selectedPetBirth}
-          max={getTodayDate()} 
-          onChange={handlePetBirthChange}
-          placeholder="우리 댕댕일 생일을 알려주세요!"
+          max={getTodayDate()}
+          onChange={(e) => setSelectedPetBirth(e.target.value)}
         />
       </BirthContainer>
+
       <SelectLabel label="성별" />
       <SelectContainer>
         {genderOptions.map((option) => (
@@ -404,31 +439,34 @@ function RegisterInputForm() {
           />
         ))}
       </SelectContainer>
+
       <SelectLabel label="중성화 여부" />
       <SelectContainer>
         <SelectBtn
           label="했어요"
           selected={selectedNeutering === "했어요"}
-          onClick={() => handleNeuteringClick("했어요")}
+          onClick={() => setSelectedNeutering("했어요")}
         />
         <SelectBtn
           label="안 했어요"
           selected={selectedNeutering === "안 했어요"}
-          onClick={() => handleNeuteringClick("안 했어요")}
+          onClick={() => setSelectedNeutering("안 했어요")}
         />
       </SelectContainer>
+
       <SelectLabel label="크기" />
       <SelectContainer>
-      {petSizeOptions.map((option) => (
-        <SelectWeight
-          key={option.code}
-          selected={selectedWeight === option.code}
-          onClick={() => handleWeightClick(option.code)}
-        >
-          {option.name}<br />({option.size})
-        </SelectWeight>
-      ))}
-    </SelectContainer>
+        {petSizeOptions.map((option) => (
+          <SelectWeight
+            key={option.code}
+            selected={selectedWeight === option.code}
+            onClick={() => setSelectedWeight(option.code)}
+          >
+            {option.name}<br />({option.size})
+          </SelectWeight>
+        ))}
+      </SelectContainer>
+
       <ConfirmBtn onClick={handleSubmit} label="완료" />
       <NextRegisterBtn onClick={handleNextRegisterClick}>나중에 등록할게요</NextRegisterBtn>
     </Container>
