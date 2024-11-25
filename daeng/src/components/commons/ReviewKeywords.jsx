@@ -33,9 +33,9 @@ const ReviewButton = styled.button`
     font-size: 9px;
   }
 `
-function ReviewKeywords({label, icon}) {
+function ReviewKeywords({label, icon, onClick}) {
   return (
-    <ReviewButton hasIcon={!!icon}>
+    <ReviewButton hasIcon={!!icon} onClick={onClick}>
       {icon && <img src={icon} alt="아이콘" />}
       {label}
     </ReviewButton>
@@ -45,6 +45,7 @@ function ReviewKeywords({label, icon}) {
 ReviewKeywords.propTypes = {
   label: PropTypes.string.isRequired,
   icon: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 export default ReviewKeywords;

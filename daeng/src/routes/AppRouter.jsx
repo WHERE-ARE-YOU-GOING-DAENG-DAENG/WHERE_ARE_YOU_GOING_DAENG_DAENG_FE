@@ -18,6 +18,7 @@ import UserRegisterPage from '../pages/user/UserRegisterPage';
 import UserEditPage from '../pages/user/UserEditPage';
 import MyVisitList from '../pages/visit/MyVisitList';
 import EditPreference from '../pages/user/PreferenceEditPage';
+import PlaceVisitList from '../pages/visit/PlaceVisitList';
 
 const AppRouter = () => {
   return (
@@ -42,6 +43,7 @@ const AppRouter = () => {
         <Route path="/total-review" element={<TotalReviewPage />} />
         <Route path="/write-review" element={<WriteReviewPage />} />
         <Route path="/visit-list" element={<MyVisitList />} />
+        <Route path="/visit-list/:id" element={<PlaceVisitList />} />
       </Routes>
     </Router>
   );
