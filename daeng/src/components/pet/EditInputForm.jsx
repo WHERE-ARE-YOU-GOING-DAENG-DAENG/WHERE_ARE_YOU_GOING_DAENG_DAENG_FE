@@ -6,7 +6,7 @@ import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
 import AlertDialog from "../../components/commons/SweetAlert";
-
+import DeletePetData from "./DeletePetData";
 
 const Container = styled.div`
   display: flex;
@@ -161,20 +161,6 @@ const SelectWeight = styled.button`
     `}
 `;
 
-const DeletePet = styled.button`
-  background-color: white;
-  color:#B3B3B3;
-  font-size:14px;
-  border:none;
-  cursor: pointer;
-  text-align: center;
-  margin-right:23px;
-  margin-bottom: 20px;
-
-  &:hover{
-    font-weight: bold;
-  }
-`
  //css 완료
 
 function EditInputForm({petId}) {
@@ -281,40 +267,6 @@ function EditInputForm({petId}) {
     }
   };
 
-  //삭제요청
-  const handleDelete = async () => {
-    AlertDialog({
-      mode: "confirm",
-      title: "삭제 확인",
-      text: "정말로 삭제하시겠습니까?",
-      confirmText: "삭제",
-      cancelText: "취소",
-
-      onConfirm: async () => {
-        try {
-          const response = await axios.delete(`/api/v1/pets/${petId}`);
-          if (response.status === 204) {
-            AlertDialog({
-              mode: "success",
-              title: "삭제 완료",
-              text: "펫 정보가 성공적으로 삭제되었습니다!",
-              confirmText: "확인",
-            });
-            navigate("/my-page");
-          }
-        } catch (error) {
-          console.error("삭제 실패:", error);
-          AlertDialog({
-            mode: "alert",
-            title: "삭제 실패",
-            text: "삭제 중 문제가 발생했습니다. 다시 시도해주세요.",
-            confirmText: "확인",
-          });
-        }
-      },
-    });
-  };
-
   return (
     <Container>
       <FirstInputContainer>
@@ -414,7 +366,7 @@ function EditInputForm({petId}) {
         </SelectWeight>
       </SelectContainer>
       <ConfirmBtn onClick={handleUpdate} label="완료" />
-      <DeletePet onClick={handleDelete}>삭제하기</DeletePet>
+      <DeletePetData />
     </Container>
   );
 }

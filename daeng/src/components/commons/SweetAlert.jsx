@@ -11,16 +11,38 @@ const StyledConfirmButton = css`
   cursor: pointer;
 
   &:hover {
-    background-color: #FF99C8;
+    background-color: #FF4796;
   }
 `;
 
+const StyledCancelButton = css`
+  border: 1px solid #FF69A9;
+  background-color: white;
+  margin-right: 20px;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color:#FF69A9;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    color: #FF4796;
+    border: 1px solid #FF4796;
+  }
+`
 const injectStyles = () => {
   const styleSheet = document.createElement("style");
   styleSheet.type = "text/css";
   styleSheet.textContent = `
     .custom-confirm-button {
       ${StyledConfirmButton}
+    }
+    .custom-cancel-button {
+      ${StyledCancelButton}
+    }
+    .swal2-actions {
+      display: flex;
+      flex-direction: row-reverse;  
     }
   `;
   document.head.appendChild(styleSheet);
@@ -34,8 +56,19 @@ const AlertDialog = ({
   cancelText ,
   onConfirm,
   onCancel,
+  icon = "warning" 
 }) => {
   injectStyles(); // SweetAlert 스타일 동적 추가 부분
+
+  const iconOptions = {
+    success: "success",
+    error: "error",
+    warning: "warning",
+    info: "info",
+    question: "question"
+  };
+
+  const selectedIcon = iconOptions[icon] || "warning"; 
 
   if (mode === "alert") {
     Swal.fire({
@@ -62,6 +95,7 @@ const AlertDialog = ({
       cancelButtonText: cancelText,
       customClass: {
         confirmButton: "custom-confirm-button",
+        cancelButton: "custom-cancel-button",
       },
       buttonsStyling: false,
     }).then((result) => {
