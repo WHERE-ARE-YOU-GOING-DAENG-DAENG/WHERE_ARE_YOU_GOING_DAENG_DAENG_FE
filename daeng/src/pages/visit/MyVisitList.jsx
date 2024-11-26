@@ -52,7 +52,7 @@ const MyVisitList = () => {
             "placeName": "Gyeongbokgung"
         },
         {
-            "visitAt": "2024-11-27T11:00:00",
+            "visitAt": "2024-11-25T11:00:00",
             "pets": [
                 {
                     "petId": 2,
@@ -88,7 +88,7 @@ const MyVisitList = () => {
             "placeName": "Gyeongbokgung"
         },
         {
-            "visitAt": "2024-11-26T12:00:00",
+            "visitAt": "2024-11-26T19:00:00",
             "pets": [
                 {
                     "petId": 2,
@@ -106,7 +106,7 @@ const MyVisitList = () => {
             "placeName": "Gyeongbokgung"
         },
         {
-            "visitAt": "2024-11-26T12:00:00",
+            "visitAt": "2024-11-27T14:00:00",
             "pets": [
                 {
                     "petId": 2,
@@ -124,7 +124,7 @@ const MyVisitList = () => {
             "placeName": "Gyeongbokgung"
         },
         {
-            "visitAt": "2024-11-26T12:00:00",
+            "visitAt": "2024-11-28T15:00:00",
             "pets": [
                 {
                     "petId": 2,
@@ -142,7 +142,7 @@ const MyVisitList = () => {
             "placeName": "Gyeongbokgung"
         },
         {
-            "visitAt": "2024-11-26T12:00:00",
+            "visitAt": "2024-11-29T16:00:00",
             "pets": [
                 {
                     "petId": 2,
