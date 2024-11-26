@@ -166,7 +166,7 @@ const Calendar = ({ onDateClick, allSchedules }) => {
       const isToday = date === today;
 
       const hasEvent = allSchedules?.some(
-        (schedule) => dayjs(schedule.visitTime).format("YYYY-MM-DD") === date
+        (schedule) => dayjs(schedule.visitAt).format("YYYY-MM-DD") === date
       );
 
       const isSelected = date === selectedDate;
