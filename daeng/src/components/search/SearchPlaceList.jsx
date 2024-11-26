@@ -5,7 +5,6 @@ import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg"
 import { useNavigate } from "react-router-dom";
 
-// Styled-components
 const ListContainer = styled.div`
   padding-bottom: 81px;
   padding-left: 33px;
@@ -81,29 +80,32 @@ const SearchPlaceList = ({ list }) => {
         { 
           placeId: 1,
           name: "데일리오아시스 분당 야탑점",
-          facilityType: "카페",
-          isOpen: true,
-          address: "서울 강남구 강남대로 162길 18",
-          images: [],
-          bookmark: true,
+          placeType: "카페",
+          start_time : "09:00",
+          end_time : "20:00",
+          streetAddresses: "서울 강남구 강남대로 162길 18",
+          img_path: [],
+          isFavorite: true,
         },
         { 
           placeId: 2,
           name: "유플러스 양식 어쩌고",
-          facilityType: "식당",
-          isOpen: false,
-          address: "서울 강남구 강남대로 162길 18",
-          images: [],
-          bookmark: false,
+          placeType: "식당",
+          start_time : "09:00",
+          end_time : "20:00",
+          streetAddresses: "서울 강남구 강남대로 162길 18",
+          img_path: [],
+          isFavorite: false,
         },
         { 
           placeId: 3,
           name: "유플러스 공원",
-          facilityType: "공원",
-          isOpen: true,
-          address: "서울 강남구 강남대로 162길 18",
-          images: [],
-          bookmark: false,
+          placeType: "공원",
+          start_time : "09:00",
+          end_time : "20:00",
+          streetAddresses: "서울 강남구 강남대로 162길 18",
+          img_path:[],
+          isFavorite: false,
         },
       ]);
     } else {
@@ -115,7 +117,7 @@ const SearchPlaceList = ({ list }) => {
   const toggleBookmark = (id) => {
     setPlaces((prevPlaces) =>
       prevPlaces.map((place) =>
-        place.placeId === id ? { ...place, bookmark: !place.bookmark } : place
+        place.placeId === id ? { ...place, isFavorite: !place.isFavorite } : place
       )
     );
   };
@@ -131,14 +133,14 @@ const SearchPlaceList = ({ list }) => {
           <div onClick={() => handlePlaceClick(place.placeId)}>
             <div className="header">
               <div className="place-name">{place.name}</div>
-              <div className="facility-type">{place.facilityType || "시설 정보 없음"}</div>
+              <div className="facility-type">{place.placeType || "시설 정보 없음"}</div>
             </div>
             <div className="details">
-              <div className="status">{place.isOpen ? "영업중 |" : "영업 종료 |"}</div>
-              <div className="address">{place.address || "주소 정보 없음"}</div>
+              <div className="status">{place.start_time} - {place.end_time} |</div>
+              <div className="address">{place.streetAddresses || "주소 정보 없음"}</div>
             </div>
             <div className="images">
-              {place.images.length > 0 ? (
+              {place.img_path.length > 0 ? (
                 place.images.map((image, i) => (
                   <img key={i} src={image} alt={`${place.name} 이미지`} />
                 ))
@@ -148,7 +150,7 @@ const SearchPlaceList = ({ list }) => {
             </div>
           </div>
           <img
-            src={place.bookmark ? filledbookmarkIcon : bookmarkIcon}
+            src={place.isFavorite ? filledbookmarkIcon : bookmarkIcon}
             className="favorite"
             alt="즐겨찾기"
             onClick={() => toggleBookmark(place.placeId)}

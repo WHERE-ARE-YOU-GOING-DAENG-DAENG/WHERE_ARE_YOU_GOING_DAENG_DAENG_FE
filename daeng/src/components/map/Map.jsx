@@ -16,7 +16,7 @@ const MapContainer = styled.div`
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter }) => {
+const Map = ({ data, removeUi, externalCenter, userLocation }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const isLoaded = useGoogleMapsLoader();
@@ -51,17 +51,18 @@ const Map = ({ data, removeUi, externalCenter }) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const userLocation = {
+            const location = {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             };
-            setCenter(userLocation);
-            map.setCenter(userLocation);
+            setCenter(location);
+            map.setCenter(location);
+            userLocation && userLocation(location);
 
             const currentLocationMarker = (
               <CustomOverlay
                 key="current-location"
-                position={userLocation}
+                position={location}
                 map={map}
               >
                 <BookMarker label="현재 위치" icon={markerIcon} />
