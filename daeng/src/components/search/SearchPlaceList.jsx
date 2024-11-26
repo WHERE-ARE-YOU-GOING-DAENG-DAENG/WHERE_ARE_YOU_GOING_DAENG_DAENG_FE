@@ -4,6 +4,7 @@ import styled from "styled-components";
 import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg"
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const ListContainer = styled.div`
   padding-bottom: 81px;
@@ -76,6 +77,22 @@ const SearchPlaceList = ({ list }) => {
   
   useEffect(() => {
     if (!Array.isArray(list) || list.length === 0) { //임시로 넣은 더미추천리스트
+      
+      // const fetchNearestPlaces = async () => {
+      //   try{
+      //     const response = await axios.post("http://54.180.234.13:8080/api/v1/places/nearest",{
+      //       latitude: userLocation.lat,
+      //       longitude: userLocation.lng,
+      //       userId: 1,
+      //     },{
+      //       withCredentials: true,
+      //     });
+      //     setPlaces(response.data);
+      //   }catch (error){
+      //     console.error("Error fetching nearest places:", error);
+      //   }
+      // }
+      
       setPlaces([
         { 
           placeId: 1,
