@@ -6,6 +6,8 @@ import hourIcon from "../../assets/icons/operatingHour.svg"
 import callnumberIcon from "../../assets/icons/callnumber.svg"
 import websiteIcon from "../../assets/icons/website.svg"
 import inandout from "../../assets/icons/indoorandoutdoor.svg"
+import inIcon from "../../assets/icons/indoor.svg"
+import outIcon from "../../assets/icons/outdoor.svg"
 import PlaceOption from "../../components/commons/PlaceOption";
 
 const InfoCard = styled.div`
@@ -42,6 +44,16 @@ const InfoCard = styled.div`
     span {
       font-size: 11px;
       padding: 10px;
+      width: 60%;
+      text-align:left;
+      word-wrap: break-word;
+    }
+    a {
+      font-size: 11px;
+      padding: 10px;
+      width: 60%;
+      text-align: left;
+      word-wrap: break-word;
     }
   }
     .dog-icon {
@@ -66,43 +78,52 @@ const Container = styled.div`
 `
 
 const PlaceInfo = ({data}) => {
+    const parkingStatus = data.parking ? "주차가능" : "주차불가";
+
+    const spaceStatus = () => {
+      if (data.indoor && data.outdoor) return "실내 · 실외공간";
+      if (data.indoor) return "실내공간";
+      if (data.outdoor) return "실외공간";
+      return "공간정보 없음";
+    };
+
+    const iconStatus = () => {
+      if (data.indoor && data.outdoor) return inandout;
+      if (data.indoor) return inIcon;
+      if (data.outdoor) return outIcon;
+      return null;
+    };
+
+    const weightLimit = "제한없음"; //일단 제한없음
+
     return(
         <Container>
         <InfoCard>
                   <div className="info-title"><span>댕댕어디가</span>가 설명드려요 !</div>
                   <div className="info-item">
                     <img src={addressIcon} alt="주소" />
-                    <span> {data.address.city} {data.address.district} {data.address.roadAddress}</span>
+                    <span> {data.streetAddresses}</span>
                   </div>
                   <div className="info-item">
                     <img src={hourIcon} alt="운영시간" />
-                    <span>{data.openHours}</span>
+                    <span>{data.start_time} - {data.end_time}</span>
                   </div>
                   <div className="info-item">
                     <img src={callnumberIcon} alt="전화번호" />
-                    <span>0507-1340-2573</span>
+                    <span>{data.telNumber}</span>
                   </div>
                   <div className="info-item">
                     <img src={websiteIcon} alt="웹사이트" />
-                    <span>https://treehousegp.imweb.me</span>
+                    <a href={data.url} target="_blank" rel="noopener noreferrer">{data.url}</a>
                   </div>
                   <img src={dogIcon} alt="강아지아이콘" className="dog-icon"/>
                 </InfoCard>
                 <OptionCard>
-                  <PlaceOption parking= "주차가능" space="실내 · 실외공간" weightLimit="~15kg" icon={inandout}/>
+                  <PlaceOption parking={parkingStatus} space={spaceStatus()} weightLimit={weightLimit} icon={iconStatus()}/>
                 </OptionCard>
         </Container>
     )
 };
 
-PlaceInfo.propTypes = {
-    data: PropTypes.shape({
-      address: PropTypes.shape({
-        city: PropTypes.string.isRequired,
-        district: PropTypes.string.isRequired,
-        roadAddress: PropTypes.string.isRequired,
-      }).isRequired,
-      openHours: PropTypes.string.isRequired,
-    }).isRequired,
-  };
+
 export default PlaceInfo;

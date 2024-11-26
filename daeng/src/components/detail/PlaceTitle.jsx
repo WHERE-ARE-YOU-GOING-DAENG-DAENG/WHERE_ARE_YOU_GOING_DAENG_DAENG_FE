@@ -54,7 +54,7 @@ const PlaceTitle = ({ data }) => {
     const toggleFavorite = () => {
         setIsFavorite((prev) => !prev);
     };
-
+    
     return(
         <Container>
             <TitleSection>
@@ -62,11 +62,11 @@ const PlaceTitle = ({ data }) => {
                 <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={()=> navigate(`/visit-list/${data.placeId}`)}/>
             </TitleSection>
             <SubTitleSection>
-                <p className="detail-category">{data.categories[0]}</p>
+                <p className="detail-category">{data.placeType}</p>
                 <p>| 평점</p>
                 <img src={starIcon} alt="평점" />
-                <p>{data.rating}</p>
-                <p className="detail-reviewcnt">({data.reviews.length})</p>
+                <p>{data.reviewStats.score}</p>
+                <p className="detail-reviewcnt">({data.reviewStats.total})</p>
                 <img
                     src={isFavorite ? filledbookmarkIcon : bookmarkIcon}
                     alt="Favorite"
@@ -77,23 +77,5 @@ const PlaceTitle = ({ data }) => {
         </Container>
     )
 }
-
-PlaceTitle.propTypes = {
-    data: PropTypes.shape({
-      placeId: PropTypes.number.isRequired, 
-      name: PropTypes.string.isRequired,         
-      isFavorite: PropTypes.bool.isRequired,    
-      categories: PropTypes.arrayOf(              
-        PropTypes.string.isRequired
-      ).isRequired,
-      rating: PropTypes.number.isRequired,    
-      reviews: PropTypes.arrayOf(               
-        PropTypes.shape({
-          userId: PropTypes.number.isRequired, 
-          content: PropTypes.string.isRequired,  
-        })
-      ).isRequired,
-    }).isRequired,
-  };
 
 export default PlaceTitle;
