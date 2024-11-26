@@ -32,25 +32,133 @@ const MyVisitList = () => {
   const [allSchedules, setAllSchedules] = useState([]);
 
   const mockData = {
-    visitHops: [
-      {
-        visitTime: "2024-11-22T10:40:00",
-        placeId: 3,
-        pets: [
-          { petId: 2, name: "푸", petImg: "/path" },
-          { petId: 3, name: "꼬", petImg: "/path" },
-        ],
-      },
-      {
-        visitTime: "2024-11-27T10:50:00",
-        placeId: 3,
-        pets: [{ petId: 4, name: "루루", petImg: "/path" }],
-      },
-      {
-        visitTime: "2024-11-29T15:30:00",
-        placeId: 5,
-        pets: [{ petId: 5, name: "미미", petImg: "/path" }],
-      },
+    "data": [
+          {
+            "visitAt": "2024-11-21T11:00:00",
+            "pets": [
+                {
+                    "petId": 2,
+                    "petName": "Mittens",
+                    "petImg": "https://example.com/image2.jpg"
+                },
+                {
+                    "petId": 3,
+                    "petName": "Max",
+                    "petImg": "https://example.com/image3.jpg"
+                }
+            ],
+            "placeId": 1,
+            "visitId": 7,
+            "placeName": "Gyeongbokgung"
+        },
+        {
+            "visitAt": "2024-11-25T11:00:00",
+            "pets": [
+                {
+                    "petId": 2,
+                    "petName": "Mittens",
+                    "petImg": "https://example.com/image2.jpg"
+                },
+                {
+                    "petId": 3,
+                    "petName": "Max",
+                    "petImg": "https://example.com/image3.jpg"
+                }
+            ],
+            "placeId": 1,
+            "visitId": 7,
+            "placeName": "Gyeongbokgung"
+        },
+        {
+            "visitAt": "2024-11-26T12:00:00",
+            "pets": [
+                {
+                    "petId": 1,
+                    "petName": "Buddy",
+                    "petImg": "https://example.com/image1.jpg"
+                },
+                {
+                    "petId": 2,
+                    "petName": "Mittens",
+                    "petImg": "https://example.com/image2.jpg"
+                }
+            ],
+            "placeId": 1,
+            "visitId": 1,
+            "placeName": "Gyeongbokgung"
+        },
+        {
+            "visitAt": "2024-11-26T19:00:00",
+            "pets": [
+                {
+                    "petId": 2,
+                    "petName": "Mittens",
+                    "petImg": "https://example.com/image2.jpg"
+                },
+                {
+                    "petId": 3,
+                    "petName": "Max",
+                    "petImg": "https://example.com/image3.jpg"
+                }
+            ],
+            "placeId": 1,
+            "visitId": 3,
+            "placeName": "Gyeongbokgung"
+        },
+        {
+            "visitAt": "2024-11-27T14:00:00",
+            "pets": [
+                {
+                    "petId": 2,
+                    "petName": "Mittens",
+                    "petImg": "https://example.com/image2.jpg"
+                },
+                {
+                    "petId": 3,
+                    "petName": "Max",
+                    "petImg": "https://example.com/image3.jpg"
+                }
+            ],
+            "placeId": 1,
+            "visitId": 4,
+            "placeName": "Gyeongbokgung"
+        },
+        {
+            "visitAt": "2024-11-28T15:00:00",
+            "pets": [
+                {
+                    "petId": 2,
+                    "petName": "Mittens",
+                    "petImg": "https://example.com/image2.jpg"
+                },
+                {
+                    "petId": 3,
+                    "petName": "Max",
+                    "petImg": "https://example.com/image3.jpg"
+                }
+            ],
+            "placeId": 1,
+            "visitId": 5,
+            "placeName": "Gyeongbokgung"
+        },
+        {
+            "visitAt": "2024-11-29T16:00:00",
+            "pets": [
+                {
+                    "petId": 2,
+                    "petName": "Mittens",
+                    "petImg": "https://example.com/image2.jpg"
+                },
+                {
+                    "petId": 3,
+                    "petName": "Max",
+                    "petImg": "https://example.com/image3.jpg"
+                }
+            ],
+            "placeId": 1,
+            "visitId": 6,
+            "placeName": "Gyeongbokgung"
+        }
     ],
   };
 
@@ -58,8 +166,8 @@ const MyVisitList = () => {
     const startDate = dayjs().format("YYYY-MM-DD");
     const endDate = dayjs().add(6, "day").format("YYYY-MM-DD");
 
-    const weeklySchedules = mockData.visitHops.filter((schedule) => {
-      const visitDate = dayjs(schedule.visitTime).format("YYYY-MM-DD");
+    const weeklySchedules = mockData.data.filter((schedule) => {
+      const visitDate = dayjs(schedule.visitAt).format("YYYY-MM-DD");
       return visitDate >= startDate && visitDate <= endDate;
     });
 
@@ -69,8 +177,8 @@ const MyVisitList = () => {
   const filterPastSchedules = () => {
     const today = dayjs().format("YYYY-MM-DD");
 
-    const pastSchedules = mockData.visitHops.filter((schedule) => {
-      const visitDate = dayjs(schedule.visitTime).format("YYYY-MM-DD");
+    const pastSchedules = mockData.data.filter((schedule) => {
+      const visitDate = dayjs(schedule.visitAt).format("YYYY-MM-DD");
       return visitDate < today;
     });
 
@@ -95,7 +203,7 @@ const MyVisitList = () => {
   };
 
   useEffect(() => {
-    setAllSchedules(mockData.visitHops);
+    setAllSchedules(mockData.data);
     filterWeeklySchedules(); // 초기화 시 당일 기준 일주일 일정
   }, []);
 
