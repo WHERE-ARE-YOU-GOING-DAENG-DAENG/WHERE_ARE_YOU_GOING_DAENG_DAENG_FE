@@ -1,0 +1,32 @@
+name: Synchronize to forked repo
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  sync:
+    name: Sync forked repo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout test
+        uses: actions/checkout@v4
+        with: 
+          token: ${{ secrets.CICD }}
+          fetch-depth: 0
+          ref: test
+
+      - name: Add remote-url
+        run: |
+          git remote add forked-repo https://wldusdn:${{ secrets.CICD }}@github.com/wldusdn/WHERE_ARE_YOU_GOING_DAENG_DAENG_FE
+          git config user.name wldusdn
+          git config user.email ${{ secrets.EMAIL }}
+      
+      - name: Push changes to forked-repo 
+        run: |
+          git push -f forked-repo test
+      
+      - name: Clean up
+        run: |
+          git remote remove forked-repo
