@@ -7,6 +7,8 @@ import PlaceInfo from "../../components/detail/PlaceInfo";
 import PlaceDescription from "../../components/detail/PlaceDescription";
 import PlaceAiReview from "../../components/commons/PlaceAiReview";
 import PlaceReviewList from "../../components/detail/PlaceReviewList";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const HeaderImage = styled.img`
   width: 100%;
@@ -22,69 +24,128 @@ const Division = styled.div`
 
 const PlaceDetail = () => {
     const { id } = useParams(); //나중에 id기준으로 API 호출
-      
+    // const [data, setData] = useState("");
+      useEffect(()=>{
+        const fetchPlaceDetail = async () => {
+          try{
+            const placeResponse = await axios.get(`http://54.180.234.13:8080/api/v1/places/${id}`,{
+              withCredentials: true,
+            });
+            const reviewResponse = await axios.get(`http://54.180.234.13:8080/api/v1/reviews/${id}/LATEST?page=1&size=3`)
+            
+            const placeData = placeResponse.data;
+            const reviewData = reviewResponse.data;
+
+            const combinedData = {
+              ...placeData,
+              reviews: reviewData.reviews,
+              reviewStats: { //필요없는 건 삭제하기
+                total: reviewData.total,
+                page: reviewData.page,
+                size: reviewData.size,
+                isFirst: reviewData.isFirst,
+                isLast: reviewData.isLast,
+                score: reviewData.score,
+                bestKeywords: reviewData.bestKeywords,
+              }
+            }
+            setData(combinedData);
+          }catch(error){
+            console.error("Error fetching place detail:", error)
+          }
+        }
+        // fetchPlaceDetail();
+      },[id]);
     return(
         <>
           <Header label="시설 상세페이지" />
-          <HeaderImage src={data.images[0]} alt="시설이미지" />
+          <HeaderImage src={data.img_path} alt="시설이미지" />
           <PlaceTitle data={data}/>
           <PlaceInfo data={data} />
           <Division />
-          <PlaceDescription/>
+          <PlaceDescription data={data}/>
           <Division />
           <PlaceAiReview />
           <Division />
-          <PlaceReviewList reviews={data.reviews}/>
+          <PlaceReviewList reviews={data}/>
           <Footer />
         </>
     )
 };
 
 const data = {
-    placeId: 1,
-    images: ["https://via.placeholder.com/552x375"],//시설 이미지 임의로 추가
-    name: "행복한 애견카페",
-    address: {
-      city: "서울특별시",
-      district: "강남구",
-      roadAddress: "테헤란로 123",
+  placeId: 1929,
+  name: "양재천근린공원",
+  city: "서울특별시",
+  cityDetail: "서초구",
+  township: "양재동",
+  latitude: 37.47662396,
+  longitude: 127.041508,
+  streetAddresses: "서울특별시 서초구 양재동",
+  telNumber: "02-2155-6896",
+  url: "https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=09d42fc7-cfd1-4af5-91ca-7d45e7bf9c36&big_category=A02&mid_category=A0202&big_area=1",
+  placeType: "공원",
+  description: "목줄, 배변봉투 공원",
+  parking: true,
+  indoor: false,
+  outdoor: true,
+  distance: 2.668402600535259,
+  isFavorite: false,
+  start_time: "09:00",
+  end_time: "20:00",
+  img_path: "https://via.placeholder.com/552x375",
+  reviews: [
+    {
+      userId: 1,
+      placeId: 1,
+      nickname: "UserOne",
+      petImg: "https://example.com/image1.jpg",
+      reviewId: 1,
+      pets: ["Max", "Mittens", "Buddy"],
+      content: "마당이 넓어요",
+      score: 5,
+      media: ["path1"],
+      keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
+      visitedAt: "2024-04-10",
+      createdAt: "2024-11-22T10:29:14.54327"
     },
-    openHours: "09:00 - 21:00",
-    isPetFriendly: true,
-    allowedPetSize: "10kg 이하",
-    categories: ["애견카페", "반려동물 동반 가능 음식점"],
-    amenities: { parkingAvailable: true },
-    holiday: "일요일",
-    rating: 4.8,
-    reviewSummary: "깨끗하고 넓은 마당이 있어요.",
-    reviews: [
-      {
-        userId: 1351,
-        nickname: "티모",
-        userImg: "https://via.placeholder.com/40",
-        reviewId: 342355,
-        createdAt: "2024-03-24",
-        content: "마당이 넓어서 좋고 깨끗해요 ~ ",
-        score: 4,
-        images : ["adfoughgoh2394fdsdf-"] ,
-        videos : ["dfsdfjlskfjsd"],
-        keywords: ["마당이 넓어요", "배변봉투가 있어요"],
-        visitedCount: 1,
-      },
-      {
-        userId: 1351,
-        nickname: "티모",
-        userImg: "https://via.placeholder.com/40",
-        reviewId: 342355,
-        createdAt: "2024-03-24",
-        content: "마당이 넓어서 좋고 깨끗해요 ~ ",
-        score: 4,
-        images : ["adfoughgoh2394fdsdf-"] ,
-        videos : ["dfsdfjlskfjsd"],
-        keywords: ["마당이 넓어요", "배변봉투가 있어요"],
-        visitedCount: 1,
-      },
-    ],
-    isFavorite: true,
-  };
+    {
+      userId: 1,
+      placeId: 1,
+      nickname: "UserOne",
+      petImg: "https://example.com/image1.jpg",
+      reviewId: 1,
+      pets: ["Max", "Mittens", "Buddy"],
+      content: "마당이 넓어요",
+      score: 5,
+      media: ["path1"],
+      keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
+      visitedAt: "2024-04-10",
+      createdAt: "2024-11-22T10:29:14.54327"
+    },
+    {
+      userId: 1,
+      placeId: 1,
+      nickname: "UserOne",
+      petImg: "https://example.com/image1.jpg",
+      reviewId: 1,
+      pets: ["Max", "Mittens", "Buddy"],
+      content: "마당이 넓어요",
+      score: 5,
+      media: ["path1"],
+      keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
+      visitedAt: "2024-04-10",
+      createdAt: "2024-11-22T10:29:14.54327"
+    },
+  ],
+  reviewStats: {
+    total: 5,
+    page: 0,
+    size: 15,
+    isFirst: true,
+    isLast: true,
+    score: 3,
+    bestKeywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"]
+  }
+}
 export default PlaceDetail;

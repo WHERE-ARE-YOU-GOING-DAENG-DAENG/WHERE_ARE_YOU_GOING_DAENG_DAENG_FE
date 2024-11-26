@@ -14,16 +14,17 @@ const Container = styled.div`
   .description{
     background-color: #F9F9F9;
     width: 100%;
-    height: 437px;
+    padding: 20px;
+    text-align: left;
     border-radius:10px;
     margin-bottom: 20px;
   }
 `
-const PlaceDescription = () => {
+const PlaceDescription = ({data}) => {
     return(
         <Container>
             <p>시설 소개</p>
-            <div className="description"></div>
+            <div className="description">{data.description}</div>
         </Container>
     )
 };
