@@ -61,7 +61,6 @@ const SearchBar = ({ placeholder, onSearch }) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && onSearch) {
       onSearch(value);
-      
     }
   };
 
