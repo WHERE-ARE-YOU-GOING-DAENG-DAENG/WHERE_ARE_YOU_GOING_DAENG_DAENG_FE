@@ -57,7 +57,7 @@ const Map = ({ data, removeUi, externalCenter, userLocation }) => {
             };
             setCenter(location);
             map.setCenter(location);
-            userLocation(location);
+            userLocation && userLocation(location);
 
             const currentLocationMarker = (
               <CustomOverlay
