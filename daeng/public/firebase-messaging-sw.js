@@ -1,26 +1,29 @@
-importScripts("https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/9.24.0/firebase-messaging.js");
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
 
+// Firebase 설정
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+   apiKey: "AIzaSyC2msjHQWn7iopQAoOIx9Vy86X7QMK-8HQ",
+   projectId: "daengdaeng-98c99",
+   messagingSenderId: "495128991810",
+   appId: "1:495128991810:web:9f1b33ff219866069935db"
 };
 
+// Firebase 초기화
 firebase.initializeApp(firebaseConfig);
+
 const messaging = firebase.messaging();
 
 // 백그라운드 알림 처리
-messaging.onBackgroundMessage((payload) => {
-  console.log("[firebase-messaging-sw.js] 백그라운드 메시지: ", payload);
-  const notificationTitle = payload.notification.title;
+messaging.onBackgroundMessage(function(payload) {
+  console.log('서비스 워커에서 푸시 알림 수신:', payload);
+
+   // payload에서 실제 알림 정보 추출
+  const notificationTitle = payload.notification?.title || '새로운 알림!';
   const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.icon,
+    body: payload.notification?.body || '새로운 알림이 도착했습니다.',
   };
 
+   // 알림 표시
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
