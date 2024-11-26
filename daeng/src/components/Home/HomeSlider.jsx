@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import slide1 from "../../assets/icons/home_slide1.svg";
-import slide2 from "../../assets/icons/home_slide2.svg";
-import slide3 from "../../assets/icons/home_slide3.svg";
+import festival_banner1 from "../../assets/icons/festival_banner1.svg";
 
 function HomeSlider() {
-  const slides = [slide1, slide2, slide3];
+  const slides = [festival_banner1]; // 단일 배너
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
