@@ -16,10 +16,10 @@ const PlaceVisitList = () => {
 
     const mockData = [
         {
-            "visitDate": "2024-11-24",
+            "visitDate": "2024-11-29",
             "petsAtVisitTimes": [
                 {
-                    "visitAt": "2024-11-24T11:00:00",
+                    "visitAt": "2024-11-29T11:00:00",
                     "pets": [
                         {
                             "petId": 1,
@@ -76,10 +76,10 @@ const PlaceVisitList = () => {
             ]
         },
         {
-            "visitDate": "2024-11-25",
+            "visitDate": "2024-11-30",
             "petsAtVisitTimes": [
                 {
-                    "visitAt": "2024-11-25T10:00:00",
+                    "visitAt": "2024-11-30T10:00:00",
                     "pets": [
                         {
                             "petId": 2,
@@ -144,7 +144,7 @@ const PlaceVisitList = () => {
                     ]
                 },
                 {
-                    "visitAt": "2024-11-25T11:00:00",
+                    "visitAt": "2024-11-30T11:00:00",
                     "pets": [
                         {
                             "petId": 2,
