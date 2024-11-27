@@ -7,6 +7,7 @@ import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import DeletePetData from "./DeletePetData";
+import axios from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -43,7 +44,7 @@ const PetNameInfoContainer = styled.div`
 `;
 
 const PetNameInput = styled.input`
-  width: 194%;
+  width: 189%;
   height: 44px;
   font-size: 14px;
   border-radius: 5px;
@@ -56,9 +57,8 @@ const PetNameInput = styled.input`
     border-color: #ff69a9; 
   }
 
-
   @media (max-width: 554px) {
-    max-width: 150%;
+    max-width: 187%;
     font-size: 14px;
     height: 48px;
   }
@@ -164,11 +164,14 @@ const SelectWeight = styled.button`
  //css 완료
 
 function EditInputForm({petId}) {
-  const [preview, setPreview] = useState(null);
-  const [selectedPetType, setSelectedPetType] = useState("");
-  const [selectedWeight, setSelectedWeight] = useState("");
-  const [selectedGender, setSelectedGender] = useState(""); 
-  const [selectedNeutering, setSelectedNeutering] = useState(""); 
+  const [preview, setPreview] = useState(null); // 이미지 미리보기 
+  const [imageFile, setImageFile] = useState(null); //이미지 
+  const [petName, setPetName] = useState(""); //반려동물 이름
+  const [selectedPetBirth, setSelectedPetBirth] = useState(""); //반려동물 생일
+  const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
+  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
+  const [selectedGender, setSelectedGender] = useState(""); //성별
+  const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -365,7 +368,7 @@ function EditInputForm({petId}) {
           대형견<br />(20kg 이상)
         </SelectWeight>
       </SelectContainer>
-      <ConfirmBtn onClick={handleUpdate} label="완료" />
+      <ConfirmBtn onClick={handleUpdate} label="수정 완료" />
       <DeletePetData />
     </Container>
   );
