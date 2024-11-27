@@ -11,7 +11,11 @@ const DeletePet = styled.button`
   cursor: pointer;
   text-align: center;
   margin-right:23px;
-  margin-bottom: 20px;
+
+  @media (max-width: 554px) {
+    margin-top:1%;
+    margin-right:5%;
+  }
 
   &:hover{
     font-weight: bold;

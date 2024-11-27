@@ -13,12 +13,20 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 3%;
-  margin-left: 4%;
+  margin-left: 4%;  
+  
+  @media (max-width: 554px) {
+    margin-top:3%;
+  }
 `;
 
 const FirstInputContainer = styled.div`
   display: flex;
   flex-direction: row;
+
+  @media (max-width: 554px) {
+    margin-bottom:5%;
+  }
 `;
 
 const PetImg = styled.div`
@@ -52,26 +60,18 @@ const PetNameInput = styled.input`
   margin-bottom: 10px;
   padding: 10px;
 
-  &:focus {
-    outline: none;
-    border-color: #ff69a9; 
-    
-  &::placeholder {
-    color: #b3b3b3; 
-  }
-  
   @media (max-width: 554px) {
-    max-width: 187%;
+    width: 170%;
     font-size: 14px;
     height: 48px;
   }
-  }
-
-
-  @media (max-width: 554px) {
-    max-width: 150%;
-    font-size: 14px;
-    height: 48px;
+    &:focus {
+      outline: none;
+      border-color: #ff69a9; 
+      
+    &::placeholder {
+      color: #b3b3b3; 
+    }
   }
 `;
 
@@ -159,6 +159,10 @@ const SelectWeight = styled.button`
   cursor: pointer;
   color:  #B3B3B3;
 
+  @media (max-width: 554px) {
+    margin-bottom:3%;
+  }
+  
   &:hover {
     background-color: #ff69a9;
     font-weight: bold;
@@ -181,6 +185,11 @@ const NextRegisterBtn = styled.button`
   text-align: center;
   margin-right:20px;
   margin-bottom: 20px;
+  
+  @media (max-width: 554px) {
+    margin-top:1%;
+    margin-right:5%;
+  }
 
   &:hover{
     font-weight: bold;
