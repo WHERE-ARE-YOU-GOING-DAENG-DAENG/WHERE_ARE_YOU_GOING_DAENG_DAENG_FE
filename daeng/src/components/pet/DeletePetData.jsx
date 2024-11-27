@@ -24,6 +24,7 @@ const handleDelete = async () => {
     title: "삭제 확인",
     text: "정말로 이 펫 정보를 삭제하시겠습니까?" + "\n" + "삭제된 정보는 복구할 수 없습니다.",
     cancelText: "취소",
+    icon: "warning",  //아이콘 색상 수정이 안되고 있음.. + text 줄바꿈 수정해야함
     confirmText: "삭제",
 
     onConfirm: async () => {
@@ -31,10 +32,11 @@ const handleDelete = async () => {
         const response = await axios.delete(`http://54.180.234.13:8080/api/v1/pets/${petId}`);
         if (response.status === 204) {
           AlertDialog({
-            mode: "success",
-            title: "삭제 완료",
-            text: "펫 정보가 성공적으로 삭제되었습니다!",
+            mode: "alert",
+            title: "성공",
+            text: "작업이 성공적으로 완료되었습니다.",
             confirmText: "확인",
+            onConfirm: () => { console.log("확인 클릭"); }
           });
           navigate("/my-page");
         }

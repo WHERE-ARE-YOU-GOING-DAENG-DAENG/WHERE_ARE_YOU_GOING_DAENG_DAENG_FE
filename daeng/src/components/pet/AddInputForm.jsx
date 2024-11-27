@@ -59,6 +59,12 @@ const PetNameInput = styled.input`
   &::placeholder {
     color: #b3b3b3; 
   }
+
+  @media (max-width: 554px) {
+    max-width: 187%;
+    font-size: 14px;
+    height: 48px;
+  }
   }
 
 
