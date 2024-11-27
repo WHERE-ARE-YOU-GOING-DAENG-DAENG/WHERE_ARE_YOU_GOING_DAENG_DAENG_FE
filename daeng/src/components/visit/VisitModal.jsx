@@ -4,10 +4,12 @@ import xIcon from "../../assets/icons/x.svg";
 import Calendar from "./Calendar";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import ConfirmBtn from "../../components/commons/ConfirmBtn";
+import ReactSelect from "react-select"
 
 dayjs.extend(isBetween);
-
+dayjs.extend(customParseFormat);
 const slideUp = keyframes`
     from {
         transform: translateY(100%);
@@ -85,7 +87,7 @@ const SelectBox = styled.div`
   display:flex;
   flex-direction: column;
   text-align: left;
-  gap: 20px;
+  gap: 10px;
 `;
 
 const Label = styled.label`
@@ -107,17 +109,85 @@ const Select = styled.select`
 `;
 
 const InputAlert = styled.p`
-  padding: 0px 41px;
   color: #ff69a9;
   font-size: 11px;
   text-align: left;
+  gap: 1px;
 `;
 
-const VisitModal = ({ isOpen, onClose }) => {
-    const [isClosing, setIsClosing] = useState(false);
-    const [selectedTime, setSelectedTime] = useState("");
-    const [selectedPet, setSelectedPet] = useState("");
+const selectStyles = {
+    control: (provided, state) => ({
+        ...provided,
+        border: state.isFocused ? "0.5px solid #ff69a9" : "0.5px solid #d9d9d9",
+        borderRadius: "5px",
+        padding: "2px",
+        cursor: "pointer",
+        fontSize: "15px",
+        boxShadow: state.isFocused ? "none" : "none",
+        "&:hover": {
+          borderColor: "#ff69a9",
+        },
+      }),
+      multiValue: (provided) => ({
+        ...provided,
+        backgroundColor: "#ffcee1",
+        borderRadius: "3px",
+        padding: "2px",
+      }),
+      multiValueRemove: (provided) => ({
+        ...provided,
+        cursor: "pointer",
+        "&:hover": {
+          backgroundColor: "#ff4b98",
+          color: "white", 
+        },
+      }),
+      menu: (provided) => ({
+        ...provided,
+        borderRadius: "5px",
+        borderColor: "#ff69a9",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      }),
+      option: (provided, state) => ({
+        ...provided,
+        backgroundColor: state.isFocused ? "#f4f4f4" : "white",
+        color: "#333",
+        cursor: "pointer",
+      }),
+}
 
+const VisitModal = ({ isOpen, onClose, initDate = null, initTime = null, userPets = []  }) => {
+    const [isClosing, setIsClosing] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(initDate);
+    const [selectedTime, setSelectedTime] = useState(initTime || "");
+    const [selectedPets, setSelectedPets] = useState([]);
+
+    const generateTimeOptions = (startTime, endTime) => {
+        const options = [];
+        let currentTime = dayjs(startTime, "HH:mm"); // 시작 시간 파싱
+        const end = dayjs(endTime, "HH:mm"); // 끝 시간 파싱
+        while (currentTime.isBefore(end) || currentTime.isSame(end)) {
+            options.push({
+                value: currentTime.format("HH:mm"),
+                label: currentTime.format("HH:mm"),
+            });
+            currentTime = currentTime.add(30, "minute"); // 30분 증가
+        }
+    
+        return options;
+    };
+
+    const startTime = "09:00"; // 시작 시간
+    const endTime = "18:00"; // 끝 시간
+    const timeOptions = generateTimeOptions(startTime, endTime);
+
+    useEffect(() => {
+        if (isOpen) {
+            setSelectedDate(initDate || "");
+            setSelectedTime(initTime || "");
+        }
+    }, [isOpen, initDate, initTime]);
+    
     const handleClose = () => {
         setIsClosing(true);
         setTimeout(() => {
@@ -135,24 +205,39 @@ const VisitModal = ({ isOpen, onClose }) => {
         if (dayjs(date).isBefore(today, "day")) {
           alert("등록불가")
         } else if (dayjs(date).isBetween(startDate, endDate, "day", "[]")) {
-          alert("시간을 선택하세요")
+          if(initDate){
+            return;
+          }else {
+            setSelectedDate(date);
+          }
         } else (
             alert("등록불가")
         )
       };
 
-      const handleTimeChange = (e) => {
-        setSelectedTime(e.target.value);
+      const handleTimeChange = (selectedOption) => {
+        if(initTime){
+            return;
+        }
+        setSelectedTime(selectedOption.value);
       };
     
-      const handlePetChange = (e) => {
-        setSelectedPet(e.target.value);
+      const handlePetChange = (selectedOptions) => {
+        const petIds = selectedOptions.map((option) => option.value);
+        setSelectedPets(petIds);
       };
 
       const handleSubmit = (e) => {
         e.preventDefault();
-        alert(`시간: ${selectedTime}, 댕댕이: ${selectedPet}`);
-        // 등록 처리 로직 추가
+        if (!selectedDate || !selectedTime || selectedPets.length === 0) {
+            alert("모두 선택해주세요");
+            return;
+        }
+        alert(`날짜: ${selectedDate}, 시간: ${selectedTime}, 펫: ${selectedPets.join(", ")}`);
+        setSelectedDate("");
+        setSelectedTime("");
+        setSelectedPets([]);
+        handleClose();
       };
 
     useEffect(() => {
@@ -166,7 +251,11 @@ const VisitModal = ({ isOpen, onClose }) => {
             document.body.style.overflow = 'auto'; // 컴포넌트 언마운트 시 복원
         };
     }, [isOpen]);
-    
+
+    const petOptions = userPets.map((pet) => ({
+        value: pet.petId,
+        label: pet.petName,
+    }));
 
     if (!isOpen) return null;
     return(
@@ -177,28 +266,27 @@ const VisitModal = ({ isOpen, onClose }) => {
                     <h2>방문등록하기</h2>
                     <img src={xIcon} alt="닫기" onClick={handleClose}/>
                 </Header>
-                <Calendar onDateClick={handleDateClick}/>
-                <InputAlert>*최대 일주일까지 선택이 가능합니다.</InputAlert>
                 <Form onSubmit={handleSubmit}>
                     <SelectBox>
+                    <Label>원하는 날짜를 선택해주세요</Label>
+                    <Calendar onDateClick={handleDateClick} selectedDate={selectedDate}/>
+                    {initDate ? <InputAlert>*방문참여시 날짜 변경이 불가합니다.</InputAlert> : <InputAlert>*최대 일주일까지 선택이 가능합니다.</InputAlert>}
+                    </SelectBox>
+                    <SelectBox>
                     <Label htmlFor="time-select">원하는 시간을 선택해주세요</Label>
-                    <Select id="time-select" value={selectedTime} onChange={handleTimeChange}>
-                        <option value="" disabled>
-                        시간을 선택하세요
-                        </option>
-                        <option value="10:00">10:00</option>
-                        <option value="11:00">11:00</option>
-                        <option value="12:00">12:00</option>
-                    </Select>
+                    <ReactSelect
+                            options={timeOptions}
+                            onChange={handleTimeChange}
+                            placeholder="시간을 선택하세요"
+                            value={timeOptions.find((option) => option.value === selectedTime)}
+                            styles={selectStyles}
+                        />
+                    {initTime && <InputAlert>*방문참여시 시간 변경이 불가합니다.</InputAlert>}
                     </SelectBox>
                     <SelectBox>
                     <Label htmlFor="pet-select">참여하는 댕댕이를 선택해주세요</Label>
-                    <Select id="pet-select" value={selectedPet} onChange={handlePetChange}>
-                        <option value="" disabled>
-                        댕댕이를 선택하세요
-                        </option>
-                        <option value="Buddy">펫 정보 가져오기</option>
-                    </Select>
+                        <ReactSelect id="pet-select" options={petOptions} onChange={handlePetChange} placeholder="댕댕이를 선택하세요" isMulti styles={selectStyles}/>
+                    <InputAlert>*여러 마리 선택이 가능합니다.</InputAlert>
                     </SelectBox>
                     <ConfirmBtn label="등록"/>
                 </Form>

@@ -13,7 +13,7 @@ const DateTitle = styled.h2`
   color: #333;
 `;
 
-const VisitDateSection = ({ visitDate, petsAtVisitTimes }) => {
+const VisitDateSection = ({ visitDate, petsAtVisitTimes, onVisitClick }) => {
   return (
     <DateSection>
       <DateTitle>
@@ -28,6 +28,7 @@ const VisitDateSection = ({ visitDate, petsAtVisitTimes }) => {
           key={timeSlot.visitAt}
           visitAt={timeSlot.visitAt}
           pets={timeSlot.pets}
+          onVisitClick={onVisitClick}
         />
       ))}
     </DateSection>

@@ -120,9 +120,9 @@ const Day = styled.div`
   }
 `;
 
-const Calendar = ({ onDateClick, allSchedules }) => {
+const Calendar = ({ onDateClick, allSchedules, selectedDate }) => {
   const [currentDate, setCurrentDate] = useState(dayjs());
-  const [selectedDate, setSelectedDate] = useState(null);
+  // const [selectedDate, setSelectedDate] = useState(null);
   const startOfMonth = currentDate.startOf("month");
   const endOfMonth = currentDate.endOf("month");
   const today = dayjs().format("YYYY-MM-DD");
@@ -180,7 +180,7 @@ const Calendar = ({ onDateClick, allSchedules }) => {
           hasEvent={hasEvent}
           isSelected={isSelected}
           onClick={() => {
-            setSelectedDate(date);
+            // setSelectedDate(date);
             onDateClick(date);
           }}
         >

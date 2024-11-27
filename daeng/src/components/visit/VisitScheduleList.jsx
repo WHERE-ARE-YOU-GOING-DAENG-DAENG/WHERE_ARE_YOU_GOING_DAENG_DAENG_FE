@@ -11,10 +11,26 @@ const Container = styled.div`
 
 const VisitScheduleList = ({ data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalProps, setModalProps] = useState({});
 
   const toggleModal = () => {
       setIsModalOpen(!isModalOpen);
   };
+
+  const openModal = (initDate = null , initTime = null) => {
+    const userPets = [
+      {petId:1, petName: "Buddy"},
+      {petId:2, petName: "Mittens"},
+    ]
+
+    setModalProps({
+      initDate,
+      initTime,
+      userPets
+    })
+    alert(initDate+initTime)
+    setIsModalOpen(true);
+  }
 
   return (
     <>
@@ -24,12 +40,13 @@ const VisitScheduleList = ({ data }) => {
             key={visit.visitDate}
             visitDate={visit.visitDate}
             petsAtVisitTimes={visit.petsAtVisitTimes}
+            onVisitClick={openModal}
           />
         ))}
-        <ConfirmBtn label="등록" onClick={toggleModal}/>
+        <ConfirmBtn label="등록" onClick={()=> openModal()}/>
       </Container>
   
-      <VisitModal isOpen={isModalOpen} onClose={toggleModal} />
+      <VisitModal isOpen={isModalOpen} onClose={toggleModal} {...modalProps} />
     </>
   );
 };
