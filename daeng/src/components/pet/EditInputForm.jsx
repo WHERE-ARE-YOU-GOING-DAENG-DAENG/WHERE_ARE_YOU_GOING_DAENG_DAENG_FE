@@ -209,58 +209,46 @@ function EditInputForm({petId}) {
   };
 
   useEffect(() => {
-    const fetchPetData = async () => {
+    const fetchPetData = async (petId) => {
       try {
-        const response = await axiosInstance.get(`/pets/${petId}`);
-        const petData = response.data;
-
-        if (petData) {
-          setImgPath(petData.petPicture);
-          setPetName(petData.petName);
-          setBirthdate(petData.petBirth);
-          setSelectedPetType(petData.dogOrCat);
-          setSelectedGender(petData.gender ? "남아" : "여아");
-          setSelectedNeutering(petData.neutering ? "했어요" : "안 했어요");
-          setSelectedWeight(petData.petWeight);
-        }
+        const response = await axios.get(`api/v1/pets/${petId}`);
+        console.log(response.data); //댕댕이 정보 잘 가지고 왔나 확인쓰
+        return response.data; 
       } catch (error) {
         console.error("펫 데이터 불러오기 실패:", error);
       }
     };
-
     if (petId) {
-      fetchPetData();
+      fetchPetData(petId); 
     }
   }, [petId]);
 
   
-  const handleUpdate = async () => {
-    if (!petName || !selectedPetType) {
-      AlertDialog({
-        mode: "alert",
-        title: "입력 오류",
-        text: "모든 필드를 입력해주세요.",
-        confirmText: "확인",
-      });
-      return;
-    }
-
+  const handlePetDataUpdate = async () => {
     try {
       const response = await axios.put(`/api/v1/pets/${petId}`, {
         petName,
         petType: selectedPetType,
+        petBirth: selectedPetBirth,
+        neutering: selectedNeutering === "했어요",
+        gender: selectedGender,
+        weight: selectedWeight, 
       });
+
       if (response.status === 200) {
         AlertDialog({
           mode: "success",
           title: "수정 완료",
           text: "펫 정보가 성공적으로 수정되었습니다!",
           confirmText: "확인",
+          onConfirm: () => {
+            navigate("/my-page");
+          }
         });
-        navigate("/my-page"); 
       }
     } catch (error) {
       console.error("수정 실패:", error);
+
       AlertDialog({
         mode: "alert",
         title: "수정 실패",
@@ -368,7 +356,7 @@ function EditInputForm({petId}) {
           대형견<br />(20kg 이상)
         </SelectWeight>
       </SelectContainer>
-      <ConfirmBtn onClick={handleUpdate} label="수정 완료" />
+      <ConfirmBtn onClick={handlePetDataUpdate} label="수정 완료" />
       <DeletePetData />
     </Container>
   );
