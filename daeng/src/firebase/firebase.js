@@ -10,7 +10,10 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
-const messaging = getMessaging(firebaseApp);
+const app = initializeApp(firebaseConfig);
 
-export { firebaseApp, messaging };
+// Firebase Messaging 초기화
+const messaging = getMessaging(app);
+
+
+export { messaging };
