@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../components/commons/Footer";
 import Header from "../components/commons/Header";
 import Map from "../components/map/Map"
 import BookMarkList from "../components/bookmark/BookMarkList";
 import styled from "styled-components";
-import pinIcon from "../assets/icons/pin.svg"
+import pinIcon from "../assets/icons/pin.svg";
+import useFavoriteStore from "../stores/useFavoriteStore";
 
 const OpenModalButton = styled.button`
     position: fixed;
@@ -43,6 +44,11 @@ const OpenModalButton = styled.button`
 const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
 	const [center, setCenter] = useState(false);
+	const { favorites, fetchFavorites } = useFavoriteStore(); //data->favorites로 바꾸기
+
+	// useEffect(()=>{
+	// 	fetchFavorites();
+	// },[fetchFavorites]);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);

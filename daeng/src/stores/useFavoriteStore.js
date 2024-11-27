@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import axios from "axios";
 
 const useFavoriteStore = create((set, get) => ({
@@ -15,8 +15,10 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 추가
   addFavorite: async (placeId) => {
     try {
-      await axios.post("http://54.180.234.13:8080/api/v1/favorites", { placeId });
-      await get().fetchFavorites();
+      const response = await axios.post("http://54.180.234.13:8080/api/v1/favorites", { placeId });
+      // await get().fetchFavorites();
+      const newFavorite = response.data;
+        set((state) => ({ favorites: [...state.favorites, newFavorite] }));
     } catch (error) {
       console.error("Error adding favorite:", error);
     }
@@ -25,7 +27,10 @@ const useFavoriteStore = create((set, get) => ({
   removeFavorite: async (favoriteId) => {
     try {
       await axios.delete(`http://54.180.234.13:8080/api/v1/favorites/${favoriteId}`);
-      await get().fetchFavorites();
+      // await get().fetchFavorites();
+      set((state) => ({
+        favorites: state.favorites.filter((fav) => fav.favoriteId !== favoriteId),
+      }));
     } catch (error) {
       console.error("Error removing favorite:", error);
     }

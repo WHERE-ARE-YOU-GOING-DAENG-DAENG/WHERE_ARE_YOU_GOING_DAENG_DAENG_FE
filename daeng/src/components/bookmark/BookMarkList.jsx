@@ -5,7 +5,8 @@ import pinIcon from "../../assets/icons/pin.svg";
 import FavoriteList from "../commons/FavoriteList";
 import houseIcon from "../../assets/icons/house.svg"
 import { useNavigate } from "react-router-dom";
-
+import useFavoriteStore from "../../stores/useFavoriteStore";
+import AlertDialog from "../commons/SweetAlert";
 const slideUp = keyframes`
     from {
         transform: translateY(80%);
@@ -77,9 +78,24 @@ const ModalContent = styled.div`
 const BookMarkList = ({ isOpen, onClose , data, onPlaceClick}) => {
     const [isClosing, setIsClosing] = useState(false);
     const navigate = useNavigate();
+    const { removeFavorite } = useFavoriteStore();
 
-    const handleDelete = (id) => {
-        alert("삭제하기",id);
+    const handleDelete = async (id) => {
+        AlertDialog({
+            mode: "confirm",
+            title: "즐겨찾기 삭제",
+            text: "즐겨찾기를 삭제하시겠습니까?",
+            confirmText: "삭제",
+            cancelText: "취소",
+            onConfirm: async () => {
+                try{
+                    // await removeFavorite(id);
+                    alert("삭제됨",id);
+                }catch (error) {
+                    console.error("Error deleting favorite:", error);
+                }
+            }
+        })
     };
 
     const handlePlace = (location)=> {
