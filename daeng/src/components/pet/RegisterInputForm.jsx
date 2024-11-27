@@ -185,7 +185,7 @@ const NextRegisterBtn = styled.button`
   text-align: center;
   margin-right:20px;
   margin-bottom: 20px;
-  
+
   @media (max-width: 554px) {
     margin-top:1%;
     margin-right:5%;
@@ -199,8 +199,7 @@ const NextRegisterBtn = styled.button`
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-
-
+  
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
