@@ -5,8 +5,8 @@ import ReviewKeywords from "../../components/commons/ReviewKeywords";
 import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg";
 import starIcon from "../../assets/icons/star.svg"
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+// import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const Container = styled.div`
   padding: 0px 44px;
@@ -49,6 +49,8 @@ const SubTitleSection = styled.div`
 
 const PlaceTitle = ({ data }) => {
     const [isFavorite, setIsFavorite] = useState(data.isFavorite);
+    // const { getFavoriteId } = useFavoriteStore();
+    // const favoriteId = getFavoriteId(data.placeId);
     const navigate = useNavigate();
     
     const toggleFavorite = () => {

@@ -7,11 +7,18 @@ import Map from "../../components/map/Map";
 import SearchPlaceList from "../../components/search/SearchPlaceList";
 import Sorting from "../../components/commons/Sorting";
 import FilterBtnList from "../../components/search/FilterBtnList";
+// import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const Search = () => {
     const [query, setQuery] = useState("");
     const [places, setPlaces] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
+    // const { fetchFavorites } = useFavoriteStore();
+
+    // useEffect(() => {
+    //   fetchFavorites();
+    // }, []);
+
 
     const handleSearch = (keyword) => {
         setQuery(keyword); // 검색 키워드 전달
