@@ -73,7 +73,8 @@ const PreferenceFavoriteOptionContainer = styled.div`
   gap: 3px;
 
   @media (max-width: 554px) {
-    gap: 0px;
+    gap: 6px;
+    margin-top: 20px;
   }
 `;
 
