@@ -37,7 +37,10 @@ const PlaceTitle = styled.span`
 const WriteReviewDate = styled.span`
   color: #b3b3b3;
   font-size: 13px;
-  margin-left:20px;
+  
+  @media (max-width: 554px) {
+    margin-left: 20%;
+  }
 `;
 
 const SelectPlaceOptionContainer = styled.div`
@@ -49,8 +52,7 @@ const SelectPlaceOptionContainer = styled.div`
   margin-right: 10px;
 
   @media (max-width: 554px) {
-    width: auto;
-    height: 230px;
+    padding:5%;
   }
 `;
 
@@ -58,15 +60,19 @@ const WhatPointLike = styled.span`
   font-size: 14px;
   color: #333;
   font-weight: 600;
+
   @media (max-width: 554px) {
+    display: flex;
     margin-left: 10px;
+    font-size: 18px;
+    margin-bottom: -1px;
   }
 `;
 
 const SelectWarning = styled.span`
   font-size: 14px;
   color: #ff69a9;
-  font-size: 10px;
+  font-size: 12px;
 
   @media (max-width: 554px) {
     width: 95%;
