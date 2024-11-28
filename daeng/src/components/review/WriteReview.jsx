@@ -285,7 +285,7 @@ function WriteReview() {
   const [previews, setPreviews] = useState([]); // 첨부하는 이미지 미리보기
   const [selectPet, setSelectPet] = useState(""); // 펫 선택
   const [userNickname, setUserNickname] = useState('내가 진짜'); //나중에 zustand로 받아야 와하는 유저 닉네임
-  const [userImage, setUserImage] = useState(''); // 예시 이미지 URL, 나중에 zustand로 받아야 와하는 유저 이미지
+  const [userImage, setUserImage] = useState(''); // 예시 이미지 URL, 나중에 zustand로 받아야 와하는 유저 이미지 > 같이간 펫 이미지를 불러와야함
   const [selectKeywords, setSelectKeywords] = useState([]); // 키워드 선택
   const [content, setContent] = useState(""); // 리뷰 내용
   const [visitedAt, setVisitedAt] = useState(getCurrentDate()); // 방문한 날짜
@@ -340,6 +340,38 @@ function WriteReview() {
     const keywords = selectKeywords; // 선택한 키워드들 > 공통 코드로 설정해야함
     const pets = [1, 2, 3]; // 예시로 넣음
 
+    // Step 1: 이미지 / 동영상 업로드 처리
+  const uploadMedia = async (file) => {
+    try {
+      const presignResponse = await axios.get(
+        `https://your-server-url.com/api/v1/S3?prefix=review-media&fileName=${file.name}`
+      );
+
+      const presignedUrl = presignResponse.data.presignUrl;
+
+      // PUT 요청으로 파일을 S3에 업로드
+      const fileUploadResponse = await axios.put(presignedUrl, file, {
+        headers: {
+          'Content-Type': file.type, // 이미지 또는 동영상의 MIME 타입 설정
+        },
+      });
+
+      if (fileUploadResponse.status === 200) {
+        console.log(`${file.name} 업로드 성공!`);
+        return presignedUrl.split('?')[0]; // S3 URL 추출 (쿼리 파라미터 제외)
+      }
+    } catch (error) {
+      console.error(`${file.name} 업로드 실패:`, error);
+      return null;
+    }
+  };
+
+  // 모든 미디어 파일을 업로드하고, 업로드된 URL을 media 배열에 저장
+  for (const file of previews) {
+    const uploadedUrl = await uploadMedia(file);
+    if (uploadedUrl) media.push(uploadedUrl); // 업로드된 URL을 media 배열에 추가
+  }
+
     const reviewData = {
       placeId,
       content,
@@ -352,10 +384,10 @@ function WriteReview() {
 
     try {
       const response = await axios.post("http://localhost:8080/api/v1/review", reviewData, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${authToken}`,
-        },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
       });
       console.log("리뷰 등록 성공:", response.data);
     } catch (error) {

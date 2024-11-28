@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import kakaoLoginBtn from "../assets/icons/kakaoLoginBtn.svg";
 import loginGoogle from "../assets/icons/login_google.svg";
 import loginPuppy from "../assets/icons/login_puppy.svg";
@@ -9,6 +10,31 @@ const Login = () => {
 
     const handleGoHome = () => {
         navigate("/");
+    };
+
+    const handleKakaoLogin = async () => {
+        try {
+            const response = await axios.get("https://www.daengdaeng-where.link/oauth2/authorization/kakao", {
+                withCredentials: true, 
+            });
+
+            const { email, result } = response.data;
+            console.log("이메일:", email);
+            console.log("결과:", result);
+
+            if (result === "NEED_SIGNUP") {
+                navigate("/user-register");
+            }
+        } catch (error) {
+            console.error("카카오 로그인 상태 확인 중 에러:", error);
+        }
+    };
+
+    const handleGoogleLogin = () => {
+        location.href = 'https://www.daengdaeng-where.link/oauth2/authorization/google?data=' + encodeURIComponent(JSON.stringify({ key: 'value' })); // 새로운 페이지에서 쿼리 파라미터 읽기 
+        const queryString = new URLSearchParams(window.location.search); 
+        const jsonData = JSON.parse(queryString.get('data')); 
+        console.log(jsonData); // { key: 'value' }
     };
 
     return (
@@ -24,10 +50,10 @@ const Login = () => {
                 <DividerText>소셜 로그인으로 간편 가입</DividerText>
                 <Line />
             </DividerContainer>
-            <Button>
+            <Button onClick={handleKakaoLogin}>
                 <img src={kakaoLoginBtn} alt="카카오 로그인" />
             </Button>
-            <Button>
+            <Button onClick={handleGoogleLogin}>
                 <img src={loginGoogle} alt="구글 로그인" />
             </Button>
             <FooterText onClick={handleGoHome}>나중에 가입할게요</FooterText>
