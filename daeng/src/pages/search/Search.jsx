@@ -31,7 +31,7 @@ const Search = () => {
             try {
               // document.cookie = 'RefreshToken=eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImRhZW5nZGFlbmdAbmF2ZXIuY29tIiwiaWF0IjoxNzMyNTk0NjEzLCJleHAiOjE3MzI2ODEwMTN9.lGfjguThgKs3YNu5aZkShfM3BRTQ7MfLCkSJasf76nAVDfk4nqZiDqfA5TPQjoVEWacqTWboSvyo_4qDEqOpbA; Path=/; Domain=54.180.234.13; SameSite=None; Expires=Thu, 27 Nov 2025 10:46:25 GMT;'
               // document.cookie = 'Authorization=eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImRhZW5nZGFlbmdAbmF2ZXIuY29tIiwiaWF0IjoxNzMyNjA3NTM1LCJleHAiOjE3MzI2MDc3NTF9.aoQj5Myxt0tnaD9a1spPf7zQDXd4xFZ4V41KHeqGMU6LQ_oXg-O3Myy9wsbwkYnQhYZ4meaVFgsQwXUVArEtrw; Path=/; Domain=54.180.234.13; SameSite=None; Expires=Thu, 28 Nov 2024 19:52:15 GMT;'/
-              // const response = await axios.post("http://54.180.234.13:8080/api/v1/places/search/keyword", {
+              // const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/search/keyword", {
               //   keyword: query,
               //   latitude: userLocation.lat,
               //   longitude: userLocation.lng,
