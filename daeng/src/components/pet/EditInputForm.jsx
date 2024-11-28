@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
 import { PetType } from "../../data/PetType";
@@ -6,8 +6,8 @@ import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
 import AlertDialog from "../../components/commons/SweetAlert";
-import DeletePetData from "./DeletePetData";
 import axios from 'axios';
+import DeletePetData from "./DeletePetData";
 
 const Container = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ const Container = styled.div`
   margin-left: 4%;  
   
   @media (max-width: 554px) {
-    margin-top:3%;
+    margin-top: 3%;
   }
 `;
 
@@ -25,7 +25,7 @@ const FirstInputContainer = styled.div`
   flex-direction: row;
 
   @media (max-width: 554px) {
-    margin-bottom:5%;
+    margin-bottom: 5%;
   }
 `;
 
@@ -65,13 +65,9 @@ const PetNameInput = styled.input`
     font-size: 14px;
     height: 48px;
   }
-    &:focus {
-      outline: none;
-      border-color: #ff69a9; 
-      
-    &::placeholder {
-      color: #b3b3b3; 
-    }
+  &:focus {
+    outline: none;
+    border-color: #ff69a9; 
   }
 `;
 
@@ -103,18 +99,12 @@ const PetTypeOption = styled.select`
     border-color: #FF69A9;  
     outline: none;  
   }
-
-
-  &:focus {
-    outline: none;
-    border-color: #ff69a9; 
-  }
 `;
 
 const BirthInput = styled.input`
   width: 96%;
   height: 44px;
-  margin-right:10%;
+  margin-right: 10%;
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
@@ -141,26 +131,27 @@ const PetTypeContainer = styled.div`
 
 const BirthContainer = styled.div`
   margin-bottom: 20px;
-`    
+`;
+
 const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
-`
+`;
 
 const SelectWeight = styled.button`
   width: 90px;
-  height : 44px;
+  height: 44px;
   margin-right: 12px;
   background-color: white;
-  border : 0.5px solid #E4E4E4;
+  border: 0.5px solid #E4E4E4;
   border-radius: 5px;
   font-size: 10px;
   cursor: pointer;
-  color:  #B3B3B3;
-
+  color: #B3B3B3;
+  
   @media (max-width: 554px) {
-    margin-bottom:3%;
+    margin-bottom: 3%;
   }
   
   &:hover {
@@ -170,23 +161,21 @@ const SelectWeight = styled.button`
   }
 
   ${(props) => props.selected && `
-        background-color: #FF69A9;
-        font-weight: bold;
-        color: #ffffff;
-    `}
+    background-color: #FF69A9;
+    font-weight: bold;
+    color: #ffffff;
+  `}
 `;
 
- //css 완료
-
-function EditInputForm({petId}) {
-  const [preview, setPreview] = useState(null); // 이미지 미리보기 
-  const [imageFile, setImageFile] = useState(null); //이미지 
-  const [petName, setPetName] = useState(""); //반려동물 이름
-  const [selectedPetBirth, setSelectedPetBirth] = useState(""); //반려동물 생일
-  const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
-  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
-  const [selectedGender, setSelectedGender] = useState(""); //성별
-  const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
+function EditInputForm({ petId }) {
+  const [preview, setPreview] = useState(null);
+  const [selectedPetType, setSelectedPetType] = useState("");
+  const [selectedWeight, setSelectedWeight] = useState("");
+  const [selectedGender, setSelectedGender] = useState(""); 
+  const [selectedNeutering, setSelectedNeutering] = useState(""); 
+  const [petName, setPetName] = useState(""); 
+  const [petPicture, setPetPicture] = useState(""); 
+  const [petBirth, setPetBirth] = useState(""); 
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -223,28 +212,40 @@ function EditInputForm({petId}) {
     return `${year}-${month}-${day}`;
   };
 
+  const axiosInstance = axios.create({
+    baseURL: '/api',
+  });
+
   useEffect(() => {
     const fetchPetData = async (petId) => {
       try {
-        const response = await axios.get(`api/v1/pets/${petId}`);
-        console.log(response.data); //댕댕이 정보 잘 가지고 왔나 확인쓰
-        return response.data; 
+        const response = await axiosInstance.get(`/pets/${petId}`);
+        const petData = response.data;
+
+        if (petData) {
+          setPetPicture(petData.petPicture);
+          setPetName(petData.petName);
+          setPetBirth(petData.petBirth);
+          setSelectedGender(petData.gender ? "남아" : "여아");
+          setSelectedNeutering(petData.neutering ? "했어요" : "안 했어요");
+          setSelectedWeight(petData.petWeight);
+        }
       } catch (error) {
         console.error("펫 데이터 불러오기 실패:", error);
       }
     };
+
     if (petId) {
       fetchPetData(petId); 
     }
   }, [petId]);
 
-  
   const handlePetDataUpdate = async () => {
     try {
       const response = await axios.put(`/api/v1/pets/${petId}`, {
         petName,
         petType: selectedPetType,
-        petBirth: selectedPetBirth,
+        petBirth,
         neutering: selectedNeutering === "했어요",
         gender: selectedGender,
         weight: selectedWeight, 
@@ -277,7 +278,7 @@ function EditInputForm({petId}) {
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-          <PetImg src={preview} />
+          <PetImg src={preview || petPicture} />
         </label>
         <HiddenInput
           id="file-input"
@@ -287,7 +288,10 @@ function EditInputForm({petId}) {
         />
         <PetNameInfoContainer>
           <SelectLabel label="댕댕이 이름" />
-          <PetNameInput />
+          <PetNameInput 
+            value={petName} 
+            onChange={(e) => setPetName(e.target.value)} 
+          />
           <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
         </PetNameInfoContainer>
       </FirstInputContainer>
@@ -310,6 +314,8 @@ function EditInputForm({petId}) {
           type="date"
           max={getTodayDate()} 
           placeholder="우리 댕댕일 생일을 알려주세요!"
+          value={petBirth} 
+          onChange={(e) => setPetBirth(e.target.value)} 
         />
       </BirthContainer>
       <SelectLabel label="성별" />
