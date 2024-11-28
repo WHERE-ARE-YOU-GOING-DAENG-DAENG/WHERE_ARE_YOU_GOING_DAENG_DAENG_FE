@@ -11,6 +11,15 @@ const Login = () => {
         navigate("/");
     };
 
+    const handleKakaoLogin = () => {
+        window.location.href = "https://www.daengdaeng-where.link/oauth2/authorization/kakao";
+    };
+
+    const handleGoogleLogin = () => {
+        location.href = "https://www.daengdaeng-where.link/oauth2/authorization/google";
+    };
+    
+
     return (
         <Container>
             <TitleContainer>
@@ -24,10 +33,10 @@ const Login = () => {
                 <DividerText>소셜 로그인으로 간편 가입</DividerText>
                 <Line />
             </DividerContainer>
-            <Button>
+            <Button onClick={handleKakaoLogin}>
                 <img src={kakaoLoginBtn} alt="카카오 로그인" />
             </Button>
-            <Button>
+            <Button onClick={handleGoogleLogin}>
                 <img src={loginGoogle} alt="구글 로그인" />
             </Button>
             <FooterText onClick={handleGoHome}>나중에 가입할게요</FooterText>
