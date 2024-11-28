@@ -105,7 +105,7 @@ function UserEdit() {
           disabled={!AreaField[userData.city]?.length}
         >
           <option value="" disabled>
-            군 선택
+            구 선택
           </option>
           {(AreaField[userData.city] || []).map((districtName, index) => (
             <option key={index} value={districtName}>

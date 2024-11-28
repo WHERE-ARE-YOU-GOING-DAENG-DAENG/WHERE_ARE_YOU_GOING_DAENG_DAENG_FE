@@ -9,20 +9,17 @@ import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
 import Wrapper from "../components/Home/HomeWrapper";
 import Footer from "../components/commons/Footer";
 
-function checkTokenInCookies() {
-  const cookies = document.cookie.split("; ");
-  return cookies.some(cookie => cookie.startsWith("token="));
-}
+
 
 function Home() {
-  const hasToken = checkTokenInCookies();
+  
 
   return (
     <Wrapper>
       <HomeHeader />
       <HomeSlider />
       <HomeDogPlaces />
-      {hasToken ? <HomeDogPlaces /> : <HomeLogout />}
+      <HomeLogout />
       <HomeTrendingPlaces />
       <HomeSanta />
       <HomeRecommendPlaces />
