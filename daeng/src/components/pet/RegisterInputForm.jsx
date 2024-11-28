@@ -362,13 +362,14 @@ function RegisterInputForm() {
   
     // Step 3: 나머지 데이터 준비
     const petData = {
-      petName: petName,
-      petType: selectedPetType,
-      petBirth: selectedPetBirth,
-      neutering: selectedNeutering === "했어요",
-      gender: selectedGender,
-      weight: selectedWeight,
-      imageUrl: imageUrl,  // 업로드한 이미지 URL 포함
+      name: petName, // 반려동물 이름
+      image: imageUrl,  // 업로드한 이미지 URL
+      gender: selectedGender, // 성별
+      birthday: selectedPetBirth, // 생년월일
+      species: selectedPetType, // 품종
+      size: selectedWeight, // 크기
+      neutering: selectedNeutering === "했어요", // 중성화 여부
+      userId: 1, 
     };
   
     // Step 4: 서버로 데이터 전송

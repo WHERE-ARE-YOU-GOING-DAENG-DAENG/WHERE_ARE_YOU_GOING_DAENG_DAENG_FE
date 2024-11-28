@@ -48,5 +48,4 @@ export const setupOnMessageHandler = () => {
   });
 };
 
-// 사용 예시: setupOnMessageHandler() 호출로 포그라운드 알림 수신 설정
 setupOnMessageHandler();
