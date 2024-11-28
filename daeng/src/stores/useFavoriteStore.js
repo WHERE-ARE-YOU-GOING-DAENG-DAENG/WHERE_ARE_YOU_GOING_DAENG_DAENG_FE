@@ -6,7 +6,7 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 목록조회
   fetchFavorites: async () => {
     try {
-      const response = await axios.get("http://54.180.234.13:8080/api/v1/favorites");
+      const response = await axios.get("https://www.daengdaeng-where.link/api/v1/favorites");
       set({ favorites: response.data });
     } catch (error) {
       console.error("Error fetching favorites:", error);
@@ -15,7 +15,7 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 추가
   addFavorite: async (placeId) => {
     try {
-      const response = await axios.post("http://54.180.234.13:8080/api/v1/favorites", { placeId });
+      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/favorites", { placeId });
       // await get().fetchFavorites();
       const newFavorite = response.data;
         set((state) => ({ favorites: [...state.favorites, newFavorite] }));
@@ -26,7 +26,7 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 삭제
   removeFavorite: async (favoriteId) => {
     try {
-      await axios.delete(`http://54.180.234.13:8080/api/v1/favorites/${favoriteId}`);
+      await axios.delete(`https://www.daengdaeng-where.link/api/v1/favorites/${favoriteId}`);
       // await get().fetchFavorites();
       set((state) => ({
         favorites: state.favorites.filter((fav) => fav.favoriteId !== favoriteId),
