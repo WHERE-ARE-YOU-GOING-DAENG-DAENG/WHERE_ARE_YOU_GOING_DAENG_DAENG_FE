@@ -9,10 +9,9 @@ import PlaceType from '../../data/PlaceType';
 import PreferencePlaceOption from "../commons/PreferencePlaceOption";
 import ConfirmBtn from '../commons/ConfirmBtn';
 
-const FilterModal = ({ isOpen, onClose }) => {
+const FilterModal = ({ isOpen, onClose, keywords, setKeywords, setFilter }) => {
     const [isClosing, setIsClosing] = useState(false);
-    const [selectedRegion, setSelectedRegion] = useState("서울");
-    const [keyword, setKeyword] = useState([]); //선택된 키워드
+    const [selectedRegion, setSelectedRegion] = useState(keywords.city);
 
     const handleClose = () => {
         setIsClosing(true);
@@ -24,28 +23,37 @@ const FilterModal = ({ isOpen, onClose }) => {
 
     const handleRegionSelect = (region) => {
         setSelectedRegion(region);
+        setKeywords((prev) => ({
+            ...prev,
+            city: region,
+            cityDetail: "",
+        }));
     };
 
-    const handleKeywordClick = (label) => {
-        const allSubRegions = AreaField[selectedRegion];
+    const handleSubRegionSelect = (subRegion) => {
+        setKeywords((prev) => ({
+            ...prev,
+            cityDetail: subRegion, // 세부 지역 업데이트
+        }));
+    };
 
-        setKeyword((prev)=>{
-            if (label === allSubRegions[0]) {
-                const allIncluded = allSubRegions.every((region) => prev.includes(region));
-                if(allIncluded) {
-                    return prev.filter((item) => !allSubRegions.includes(item));
-                }
-                return [...prev, ...allSubRegions.filter((region) => !prev.includes(region))];
-            }else{
-                if(prev.includes(label)){
-                    return prev.filter((item) => item !== label);
-                }
-                return [...prev, label];
-            }
+    const handlePlaceTypeSelect = (placeType) => {
+        setKeywords((prev) => ({
+            ...prev,
+            placeType, // 장소 유형 업데이트
+        }));
+    };
+
+    const resetKeywords = () => {
+        setKeywords({
+            city: "",
+            cityDetail: "",
+            placeType: "",
         });
     };
 
     useEffect(() => {
+
         if (isOpen) {
             document.body.style.overflow = 'hidden'; // Body 스크롤 잠금
         } else {
@@ -55,6 +63,7 @@ const FilterModal = ({ isOpen, onClose }) => {
         return () => {
             document.body.style.overflow = 'auto'; // 컴포넌트 언마운트 시 복원
         };
+
     }, [isOpen]);
 
     if (!isOpen) return null;
@@ -79,9 +88,6 @@ const FilterModal = ({ isOpen, onClose }) => {
                         onClick={()=>handleRegionSelect(region)}
                     />
                     ))}
-                    <DummyBtn/>
-                    <DummyBtn/>
-                    <DummyBtn/>
                 </City>
                 <Area>
                 {selectedRegion &&
@@ -90,8 +96,8 @@ const FilterModal = ({ isOpen, onClose }) => {
                             mode="area" 
                             key={index}
                             label={subRegion}
-                            isSelected={keyword.includes(subRegion)}
-                            onClick={() => handleKeywordClick(subRegion)}
+                            isSelected={keywords.cityDetail === subRegion}
+                            onClick={() => handleSubRegionSelect(subRegion)}
                         />
                     ))}
                 </Area>
@@ -103,23 +109,36 @@ const FilterModal = ({ isOpen, onClose }) => {
                             key={index}
                             icon={place.icon}
                             label={place.label}
-                            isSelected={keyword.includes(place.label)}
-                            onClick={() => handleKeywordClick(place.label)}
+                            isSelected={keywords.placeType === place.label}
+                            onClick={() => handlePlaceTypeSelect(place.label)}
                         />
                     ))}
                 </Place>
                 <Division />
                 <Keyword>
-                <Reset onClick={() => setKeyword([])}>
+                <Reset onClick={resetKeywords}>
                     <img src={trashcan} alt="초기화" />
                 </Reset>
-                {keyword.map((keyword, index) => 
-                    <AreaBtn key={index} mode="keyword" isSelected={true} label={keyword} onClick={()=>handleKeywordClick(keyword)} />
-                )}
+                <div>
+                    {Object.entries(keywords).map(([key, value]) => (
+                        value && ( 
+                            <AreaBtn
+                                key={key} 
+                                mode="keyword"
+                                isSelected={true}
+                                label={`${value}`}
+                                onClick={() => setKeywords((prev) => ({
+                                    ...prev,
+                                    [key]: "",
+                                }))}
+                            />
+                        )
+                    ))}
+                </div>
                 </Keyword>
                 <Thindivision />
                 <Footer>
-                    <ConfirmBtn label="적용"/>
+                    <ConfirmBtn onClick={()=> {setFilter(true); handleClose();}} label="적용"/>
                 </Footer>
             </Modal>
             
@@ -130,6 +149,9 @@ const FilterModal = ({ isOpen, onClose }) => {
 FilterModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
+    keywords: PropTypes.array.isRequired,
+    setKeywords: PropTypes.func.isRequired,
+    setFilter: PropTypes.bool.isRequired,
 };
 
 const slideUp = keyframes`
@@ -219,7 +241,6 @@ const City = styled.div`
     flex-wrap: wrap;
     gap: 17px;
     align-items: center;
-    justify-content: space-between;
 `
 const Area = styled.div`
     border-radius: 10px;
@@ -274,12 +295,6 @@ const Footer = styled.div`
         width: 80%;
         margin-left: 10%;
     }
-`
-
-const DummyBtn = styled.div`
-    width: 81.54px;
-    height: 0px;
-    margin: 0px;
 `
 
 export default FilterModal;

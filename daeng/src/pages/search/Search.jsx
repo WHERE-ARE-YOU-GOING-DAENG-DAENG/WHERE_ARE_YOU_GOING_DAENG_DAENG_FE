@@ -13,12 +13,13 @@ const Search = () => {
     const [query, setQuery] = useState("");
     const [places, setPlaces] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
+    const [keywords, setKeywords] = useState({
+      city: "서울",
+      cityDetail: "",
+      placeType: "",
+  });
+    const [filter, setFilter] = useState(false);
     // const { fetchFavorites } = useFavoriteStore();
-
-    // useEffect(() => {
-    //   fetchFavorites();
-    // }, []);
-
 
     const handleSearch = (keyword) => {
         setQuery(keyword); // 검색 키워드 전달
@@ -28,22 +29,20 @@ const Search = () => {
         if (query && userLocation) {
           const fetchPlaces = async () => {
             console.log(userLocation)
+
+            const payload = {
+                keyword: query,
+                latitude: userLocation.lat,
+                longitude: userLocation.lng,
+            }
             try {
-              // document.cookie = 'RefreshToken=eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImRhZW5nZGFlbmdAbmF2ZXIuY29tIiwiaWF0IjoxNzMyNTk0NjEzLCJleHAiOjE3MzI2ODEwMTN9.lGfjguThgKs3YNu5aZkShfM3BRTQ7MfLCkSJasf76nAVDfk4nqZiDqfA5TPQjoVEWacqTWboSvyo_4qDEqOpbA; Path=/; Domain=54.180.234.13; SameSite=None; Expires=Thu, 27 Nov 2025 10:46:25 GMT;'
-              // document.cookie = 'Authorization=eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImRhZW5nZGFlbmdAbmF2ZXIuY29tIiwiaWF0IjoxNzMyNjA3NTM1LCJleHAiOjE3MzI2MDc3NTF9.aoQj5Myxt0tnaD9a1spPf7zQDXd4xFZ4V41KHeqGMU6LQ_oXg-O3Myy9wsbwkYnQhYZ4meaVFgsQwXUVArEtrw; Path=/; Domain=54.180.234.13; SameSite=None; Expires=Thu, 28 Nov 2024 19:52:15 GMT;'/
-              // const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/search/keyword", {
-              //   keyword: query,
-              //   latitude: userLocation.lat,
-              //   longitude: userLocation.lng,
-              //   userId: 1,
-              // },
+              // const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/search/keyword", payload,
               // {
               //   withCredentials: true, // 옵션 추가
               // }
               // );
             //   setPlaces(response.data);
               
-
               setPlaces([{
                 placeId: 1929,
                 name: "양재천근린공원",
@@ -73,18 +72,42 @@ const Search = () => {
           };
     
           fetchPlaces();
+        }else if(userLocation && filter){
+          const fetchPlaces = async () => {
+            const payload = {
+              city: keywords.city || "",
+              cityDetail: keywords.cityDetail || "",
+              placeType: keywords.placeType || "",
+              latitude: userLocation?.lat,
+              longitude: userLocation?.lng
+            }
+            console.log(payload);
+            try {
+              // const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/search/filter", payload,
+              // {
+              //   withCredentials: true, // 옵션 추가
+              // }
+              // );
+              // setPlaces(response.data);
+          } catch (error) {
+            console.error("Error fetching places:", error);
+            
+          }
+          setFilter(false);
         }
-      }, [query, userLocation]);
+          fetchPlaces();
+        };
+      }, [query, filter, userLocation]);
 
     return (
         <>
-            <Header label="장소검색"/>
-            <SearchBar onSearch={handleSearch} />
-            <Map userLocation={setUserLocation}/>
-            <FilterBtnList />
-            <Sorting mode="list" label={places ? "검색결과" : "보호자님께 추천하는 장소!"} sortingOptions={['가까운순', '별점 높은순']} activeIndex={0}/>
-            <SearchPlaceList list={places}/>
-            <Footer />
+          <Header label="장소검색"/>
+          <SearchBar onSearch={handleSearch} />
+          <Map userLocation={setUserLocation}/>
+          <FilterBtnList keywords={keywords} setKeywords={setKeywords} setFilter={setFilter}/>
+          <Sorting mode="list" label={places ? "검색결과" : "보호자님께 추천하는 장소!"} sortingOptions={['가까운순', '별점 높은순']} activeIndex={0}/>
+          <SearchPlaceList list={places}/>
+          <Footer />
         </>
     );
 }
