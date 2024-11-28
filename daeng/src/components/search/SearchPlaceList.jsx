@@ -80,7 +80,7 @@ const SearchPlaceList = ({ list }) => {
       
       // const fetchNearestPlaces = async () => {
       //   try{
-      //     const response = await axios.post("http://54.180.234.13:8080/api/v1/places/nearest",{
+      //     const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/nearest",{
       //       latitude: userLocation.lat,
       //       longitude: userLocation.lng,
       //       userId: 1,

@@ -28,10 +28,10 @@ const PlaceDetail = () => {
       useEffect(()=>{
         const fetchPlaceDetail = async () => {
           try{
-            const placeResponse = await axios.get(`http://54.180.234.13:8080/api/v1/places/${id}`,{
+            const placeResponse = await axios.get(`https://www.daengdaeng-where.link/api/v1/places/${id}`,{
               withCredentials: true,
             });
-            const reviewResponse = await axios.get(`http://54.180.234.13:8080/api/v1/reviews/${id}/LATEST?page=1&size=3`)
+            const reviewResponse = await axios.get(`https://www.daengdaeng-where.link/api/v1/reviews/${id}/LATEST?page=1&size=3`)
             
             const placeData = placeResponse.data;
             const reviewData = reviewResponse.data;
