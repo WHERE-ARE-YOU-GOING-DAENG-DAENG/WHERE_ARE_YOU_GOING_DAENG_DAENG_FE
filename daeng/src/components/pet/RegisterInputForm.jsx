@@ -13,12 +13,20 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 3%;
-  margin-left: 4%;
+  margin-left: 4%;  
+  
+  @media (max-width: 554px) {
+    margin-top:3%;
+  }
 `;
 
 const FirstInputContainer = styled.div`
   display: flex;
   flex-direction: row;
+
+  @media (max-width: 554px) {
+    margin-bottom:5%;
+  }
 `;
 
 const PetImg = styled.div`
@@ -52,20 +60,18 @@ const PetNameInput = styled.input`
   margin-bottom: 10px;
   padding: 10px;
 
-  &:focus {
-    outline: none;
-    border-color: #ff69a9; 
-    
-  &::placeholder {
-    color: #b3b3b3; 
-  }
-  }
-
-
   @media (max-width: 554px) {
-    max-width: 150%;
+    width: 170%;
     font-size: 14px;
     height: 48px;
+  }
+    &:focus {
+      outline: none;
+      border-color: #ff69a9; 
+      
+    &::placeholder {
+      color: #b3b3b3; 
+    }
   }
 `;
 
@@ -153,6 +159,10 @@ const SelectWeight = styled.button`
   cursor: pointer;
   color:  #B3B3B3;
 
+  @media (max-width: 554px) {
+    margin-bottom:3%;
+  }
+  
   &:hover {
     background-color: #ff69a9;
     font-weight: bold;
@@ -176,6 +186,11 @@ const NextRegisterBtn = styled.button`
   margin-right:20px;
   margin-bottom: 20px;
 
+  @media (max-width: 554px) {
+    margin-top:1%;
+    margin-right:5%;
+  }
+
   &:hover{
     font-weight: bold;
   }
@@ -184,8 +199,7 @@ const NextRegisterBtn = styled.button`
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-
-
+  
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -326,21 +340,53 @@ function RegisterInputForm() {
       }
     }
 
+    document.cookie = `Authorization=eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImRhZW5nZGFlbmdAbmF2ZXIuY29tIiwiaWF0IjoxNzMyNjA3NTM1LCJleHAiOjE3MzI2MDc3NTF9.aoQj5Myxt0tnaD9a1spPf7zQDXd4xFZ4V41KHeqGMU6LQ_oXg-O3Myy9wsbwkYnQhYZ4meaVFgsQwXUVArEtrw; Domain=localhost;  path=/; `;
+    document.cookie = `RefreshToken=eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImRhZW5nZGFlbmdAbmF2ZXIuY29tIiwiaWF0IjoxNzMyNTk0NjEzLCJleHAiOjE3MzI2ODEwMTN9.lGfjguThgKs3YNu5aZkShfM3BRTQ7MfLCkSJasf76nAVDfk4nqZiDqfA5TPQjoVEWacqTWboSvyo_4qDEqOpbA; Domain=localhost;  path=/; `;
+    
     try {
-      const response = await axios.post("/api/v1/pets", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response.status === 201) {
-        navigate(`/mypage/${localUserId}`);
+      console.log('보내는 FormData:', formData);
+      console.log('현재 쿠키:', document.cookie);
+    
+      const userId = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('userId='))
+        ?.split('=')[1];
+    
+      const authToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('Authorization='))
+        ?.split('=')[1];
+      
+      const response = await axios.post(
+        "http://54.180.234.13:8080/api/v1/pets", 
+        formData, 
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${authToken}`
+          },
+          withCredentials: true
+        }
+      );
+    
+      if (response.status === 200) {
+        console.log('성공');
+        console.log('응답 데이터:', response.data);
+        alert("성공");
       } else {
+        console.log('응답 상태:', response.status);
+        console.log('응답 데이터:', response.data);
         alert("등록 중 오류가 발생했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
+      console.log('에러 전체 정보:', error);
+      console.log('에러 메시지:', error.message);
+      console.log('에러 응답:', error.response?.data);
+      console.log('에러 상태 코드:', error.response?.status);
+      console.log('에러 헤더:', error.response?.headers);
       alert("서버와 통신 중 오류가 발생했습니다.");
     }
-  };
+  }
 
 
   const handleNextRegisterClick = () => {
