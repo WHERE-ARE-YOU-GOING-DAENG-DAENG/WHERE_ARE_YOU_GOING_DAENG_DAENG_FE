@@ -27,3 +27,7 @@ dist-ssr
 
 # dotenv environment variable files
 .env
+
+# https pem
+localhost+2-key.pem
+localhost+2.pem
