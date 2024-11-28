@@ -3,17 +3,30 @@ import SelectLabel from '../../components/commons/SelectLabel';
 import SelectBtn from '../../components/commons/SelectBtn';
 import kakaoBtn from '../../assets/icons/kakaoBtn.svg';
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
+import axios from 'axios';
 
 function UserRegister() {
   const navigate = useNavigate();
-  
+
+  useEffect(() => {
+    const queryString = new URLSearchParams(window.location.search);
+    let email = queryString.get('email');
+    if (email) {
+      email = email.trim();
+      setUserData((prev) => ({
+        ...prev,
+        email: decodeURIComponent(email),
+      }));
+    }
+  }, []);
+
   const [userData, setUserData] = useState({
-    email: 'qweqwe@gmail.com', 
+    email: '',
     nickname: '',
-    gender: '',
+    gender: '', 
     city: '',
     district: '',
     alarmAgreement: '',
@@ -26,31 +39,70 @@ function UserRegister() {
     }));
   };
 
+  const handleGenderChange = (genderCode) => {
+    setUserData((prev) => ({
+      ...prev,
+      gender: genderCode, 
+    }));
+  };
+
   const handleCityChange = (e) => {
     const selectedCity = e.target.value;
     setUserData((prev) => ({
       ...prev,
       city: selectedCity,
-      district: '', 
+      district: '',
     }));
   };
 
-  const handleConfirm = () => {
-      const payload = {
+  const handleConfirm = async () => {
+    const payload = {
       nickname: userData.nickname,
       PushAgreement: userData.alarmAgreement === '받을래요',
       RegionAgreement: true,
       email: userData.email,
-      gender: userData.gender,
+      gender: userData.gender, 
       region: {
         city: userData.city,
         district: userData.district,
       },
     };
 
-    console.log('회원가입 데이터:', JSON.stringify(payload, null, 2));
-    alert('입력된 데이터가 콘솔에 출력되었습니다!');
-    navigate('/preference-register');
+    console.log('회원가입 데이터:', payload);
+
+    try {
+      const { data, status } = await axios.post(
+        'https://www.daengdaeng-where.link/api/v1/signup',
+        payload,
+        {
+          withCredentials: true
+        }
+      );
+
+      if (status === 200 || status === 201) {
+        console.log('응답 데이터:', data);
+        alert('회원가입 성공!');
+        navigate('/');
+      } else {
+        console.error(`Unexpected status code: ${status}`);
+        alert('회원가입 중 문제가 발생했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error('회원가입 실패 - 서버 응답:', error.response.data);
+        alert(
+          `회원가입 실패: ${
+            error.response.data.message || '알 수 없는 오류가 발생했습니다.'
+          }`
+        );
+      } else if (error.request) {
+        console.error('회원가입 실패 - 응답 없음:', error.request);
+        alert('회원가입 중 네트워크 문제가 발생했습니다. 다시 시도해주세요.');
+      } else {
+        console.error('회원가입 실패 - 요청 설정 오류:', error.message);
+        alert('회원가입 중 알 수 없는 오류가 발생했습니다.');
+      }
+    }
   };
 
   return (
@@ -77,13 +129,13 @@ function UserRegister() {
       <SelectionContainer>
         <SelectBtn
           label="남자"
-          selected={userData.gender === '남자'}
-          onClick={() => handleInputChange('gender', '남자')}
+          selected={userData.gender === 'GND_01'}
+          onClick={() => handleGenderChange('GND_01')}
         />
         <SelectBtn
           label="여자"
-          selected={userData.gender === '여자'}
-          onClick={() => handleInputChange('gender', '여자')}
+          selected={userData.gender === 'GND_02'}
+          onClick={() => handleGenderChange('GND_02')}
         />
       </SelectionContainer>
 
@@ -105,7 +157,7 @@ function UserRegister() {
           disabled={!AreaField[userData.city]?.length}
         >
           <option value="" disabled>
-            구 선택
+            군 선택
           </option>
           {(AreaField[userData.city] || []).map((districtName, index) => (
             <option key={index} value={districtName}>
