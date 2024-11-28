@@ -6,6 +6,7 @@ import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
 import AlertDialog from "../../components/commons/SweetAlert";
+import axios from 'axios';
 
 
 const Container = styled.div`
@@ -183,6 +184,9 @@ function EditInputForm({petId}) {
   const [selectedWeight, setSelectedWeight] = useState("");
   const [selectedGender, setSelectedGender] = useState(""); 
   const [selectedNeutering, setSelectedNeutering] = useState(""); 
+  const [petName, setPetName] = useState(""); 
+  const [petPicture, setPetPicture] = useState(""); 
+  const [petBirth, setPetBirth] = useState(""); 
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -229,7 +233,6 @@ function EditInputForm({petId}) {
           setImgPath(petData.petPicture);
           setPetName(petData.petName);
           setBirthdate(petData.petBirth);
-          setSelectedPetType(petData.dogOrCat);
           setSelectedGender(petData.gender ? "남아" : "여아");
           setSelectedNeutering(petData.neutering ? "했어요" : "안 했어요");
           setSelectedWeight(petData.petWeight);
