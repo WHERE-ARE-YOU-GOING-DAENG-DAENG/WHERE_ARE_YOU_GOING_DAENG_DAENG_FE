@@ -12,12 +12,12 @@ import PlaceDetail from '../pages/search/PlaceDetail';
 import TotalReviewPage from '../pages/review/TotalReviewPage';
 import WriteReviewPage from '../pages/review/WriteReviewPage';
 import Bookmark from '../pages/Bookmark';
-import Preference from '../pages/user/PreferenceRegisterPage';
+import PreferenceRegister from '../pages/user/PreferenceRegisterPage';
+import EditPreference from '../pages/user/PreferenceEditPage';
 import ScrollTop from '../components/commons/ScrollTop';
 import UserRegisterPage from '../pages/user/UserRegisterPage';
 import UserEditPage from '../pages/user/UserEditPage';
 import MyVisitList from '../pages/visit/MyVisitList';
-import EditPreference from '../pages/user/PreferenceEditPage';
 import PlaceVisitList from '../pages/visit/PlaceVisitList';
 
 const AppRouter = () => {
@@ -29,7 +29,7 @@ const AppRouter = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/user-register" element={<UserRegisterPage />} />
         <Route path="/user-edit" element={<UserEditPage />} />
-        <Route path="/preference-register" element={<Preference />} />
+        <Route path="/preference-register" element={<PreferenceRegister />} />
         <Route path="/preference-edit" element={<EditPreference />} />
         <Route path="/search" element={<Search />} />
         <Route path="/search/:id" element={<PlaceDetail />} />
