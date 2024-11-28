@@ -11,6 +11,20 @@ export const petSizeOptions = [
   { code: "PET_SIZ_05", group: "PET_SIZ", name: "대형견", size: "20kg 이상" },
 ];
 
+export const placeFeatures = [
+  { codeId: 'PLACE_FTE_01', name: '뛰어놀기 좋아요' },
+  { codeId: 'PLACE_FTE_02', name: '사방이 철창/벽으로 막혀있어요' },
+  { codeId: 'PLACE_FTE_03', name: '급수대가 있어요' },
+  { codeId: 'PLACE_FTE_04', name: '배변봉투가 구비되어 있어요' },
+  { codeId: 'PLACE_FTE_05', name: '벌레가 별로 없어요' },
+  { codeId: 'PLACE_FTE_06', name: '화장실이 있어요' },
+  { codeId: 'PLACE_FTE_07', name: '강아지 전용 음식이 있어요' },
+  { codeId: 'PLACE_FTE_08', name: '산책로가 있어요' },
+  { codeId: 'PLACE_FTE_09', name: '강아지 친구들이 많아요' },
+  { codeId: 'PLACE_FTE_10', name: '시설이 청결해요' },
+  { codeId: 'PLACE_FTE_11', name: '주차하기 편해요' }
+];
+
 export const petTypeOptions = [
   { code: "PET_TYP_01", group: "PET_TYP", name: "믹스견" },
   { code: "PET_TYP_02", group: "PET_TYP", name: "스피츠" },
