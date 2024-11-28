@@ -28,7 +28,7 @@ function UserRegister() {
     nickname: '',
     gender: '', 
     city: '',
-    district: '',
+    cityDetail: '',
     alarmAgreement: '',
   });
 
@@ -51,7 +51,7 @@ function UserRegister() {
     setUserData((prev) => ({
       ...prev,
       city: selectedCity,
-      district: '',
+      cityDetail: '',
     }));
   };
 
@@ -62,10 +62,8 @@ function UserRegister() {
       RegionAgreement: true,
       email: userData.email,
       gender: userData.gender, 
-      region: {
-        city: userData.city,
-        district: userData.district,
-      },
+      city: userData.city, 
+      cityDetail: userData.cityDetail,
     };
 
     console.log('회원가입 데이터:', payload);
@@ -152,8 +150,8 @@ function UserRegister() {
           ))}
         </SelectBox>
         <SelectBox
-          onChange={(e) => handleInputChange('district', e.target.value)}
-          value={userData.district}
+          onChange={(e) => handleInputChange('cityDetail', e.target.value)}
+          value={userData.cityDetail}
           disabled={!AreaField[userData.city]?.length}
         >
           <option value="" disabled>
