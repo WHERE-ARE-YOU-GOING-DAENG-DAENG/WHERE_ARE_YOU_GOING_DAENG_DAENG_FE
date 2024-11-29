@@ -67,7 +67,7 @@ const TotalReviewCount = styled.span`
 
   @media (max-width: 554px) {
     font-size: 10px;
-    margin-right: 90px;
+    margin-right:180px;
   }
 `
 

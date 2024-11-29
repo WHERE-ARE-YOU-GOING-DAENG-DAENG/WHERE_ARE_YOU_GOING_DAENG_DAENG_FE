@@ -34,17 +34,15 @@ const UserStarImg = styled.img`
   display: flex;
   margin-top: 5px;
   margin-right: 84%;
-
-  @media (max-width: 554px) {
-  display: flex;
-  margin-top: 5px;
-  margin-right: 76%;
-  }
 `
 
 const ReviewUserContainer = styled.div`
   display: flex;
   flex-direction: row;
+
+  @media (max-width: 554px) {
+  margin-top: 5px;
+  }
 `
 
 const UserPhoto = styled.div`
@@ -52,22 +50,26 @@ const UserPhoto = styled.div`
   height: 60px;
   background-color: #FF69A9;
   border-radius: 50%;
-  margin-left: 3%;
+  margin-left: 2%;
   margin-top: 20px;
-  margin-right: 3%;
+  margin-right: 2%;
 
   @media (max-width: 554px) {
   width: 53px;
   height: 53px;
-  margin-left: 1px;
-  margin-right: 5%;
+  margin-left: 5px;
+  margin-right: 3%;
   }
 `
 
 const CommentContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 10px;
+  margin-top: 5px;
+
+  @media (max-width: 554px) {
+    margin-top: -10px;
+  }
 `
 
 const UserId = styled.span`
@@ -77,8 +79,8 @@ const UserId = styled.span`
   margin-top: 5px;
 
   @media (max-width: 554px) {
-    font-size: 10px;
-    margin-top:5px;
+    font-size: 13px;
+    margin-top: 10px;
   }
 `
 const PetType = styled.span`
@@ -89,7 +91,8 @@ const PetType = styled.span`
 
   @media (max-width: 554px) {
     font-size: 9px;
-    margin-top:5px;
+    margin-top:13px;
+    margin-right:120px;
   }
 `
 
@@ -102,8 +105,7 @@ const PostDate = styled.span`
 
   @media (max-width: 554px) {
     font-size: 11px;
-    margin-top:5px;
-    margin-bottom:5px;
+    margin-bottom:10px;
     margin-left:130px;
   }
 `
