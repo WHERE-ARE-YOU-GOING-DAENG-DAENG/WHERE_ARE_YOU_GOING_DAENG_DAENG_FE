@@ -8,11 +8,42 @@ import HomeRecommendPlaces from "../components/Home/HomeRecommendPlaces";
 import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
 import Wrapper from "../components/Home/HomeWrapper";
 import Footer from "../components/commons/Footer";
+import useLocationStore from "../stores/LocationStore";
+import { useEffect } from "react";
 
 
 
 function Home() {
+  const userLocation = useLocationStore((state) => state.userLocation);
+  const setUserLocation = useLocationStore((state) => state.setUserLocation);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
   
+          // 위치가 변경된 경우에만 상태 업데이트
+          if (
+            userLocation.lat !== newLocation.lat ||
+            userLocation.lng !== newLocation.lng
+          ) {
+            setUserLocation(newLocation);
+            console.log("Location updated:", newLocation);
+          }
+        },
+        (error) => {
+          // console.error("Geolocation error:", error);
+          if (!userLocation.lat && !userLocation.lng) {
+            console.log("위치정보 비동의, 기본값:", userLocation);
+          }
+        }
+      );
+    }
+  }, [setUserLocation, userLocation]);
 
   return (
     <Wrapper>

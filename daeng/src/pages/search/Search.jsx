@@ -7,12 +7,14 @@ import Map from "../../components/map/Map";
 import SearchPlaceList from "../../components/search/SearchPlaceList";
 import Sorting from "../../components/commons/Sorting";
 import FilterBtnList from "../../components/search/FilterBtnList";
+import useLocationStore from "../../stores/LocationStore";
 // import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const Search = () => {
     const [query, setQuery] = useState("");
     const [places, setPlaces] = useState([]);
-    const [userLocation, setUserLocation] = useState(null);
+    // const [userLocation, setUserLocation] = useState(null);
+    const userLocation = useLocationStore((state) => state.userLocation);
     const [keywords, setKeywords] = useState({
       city: "서울",
       cityDetail: "",
@@ -28,13 +30,12 @@ const Search = () => {
     useEffect(() => {
         if (query && userLocation) {
           const fetchPlaces = async () => {
-            console.log(userLocation)
-
             const payload = {
                 keyword: query,
                 latitude: userLocation.lat,
                 longitude: userLocation.lng,
             }
+            console.log(payload)
             try {
               // const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/search/keyword", payload,
               // {
@@ -72,7 +73,7 @@ const Search = () => {
           };
     
           fetchPlaces();
-        }else if(userLocation && filter){
+        }else if(filter && userLocation){
           const fetchPlaces = async () => {
             const payload = {
               city: keywords.city || "",
@@ -103,7 +104,7 @@ const Search = () => {
         <>
           <Header label="장소검색"/>
           <SearchBar onSearch={handleSearch} />
-          <Map userLocation={setUserLocation}/>
+          <Map/>
           <FilterBtnList keywords={keywords} setKeywords={setKeywords} setFilter={setFilter}/>
           <Sorting mode="list" label={places ? "검색결과" : "보호자님께 추천하는 장소!"} sortingOptions={['가까운순', '별점 높은순']} activeIndex={0}/>
           <SearchPlaceList list={places}/>
