@@ -19,20 +19,11 @@ const Container = styled.div`
   @media (max-width: 554px) {
     margin-top:3%;
   }
-  margin-left: 4%;  
-  
-  @media (max-width: 554px) {
-    margin-top:3%;
-  }
 `;
 
 const FirstInputContainer = styled.div`
   display: flex;
   flex-direction: row;
-
-  @media (max-width: 554px) {
-    margin-bottom:5%;
-  }
 
   @media (max-width: 554px) {
     margin-bottom:5%;
@@ -70,18 +61,6 @@ const PetNameInput = styled.input`
   margin-bottom: 10px;
   padding: 10px;
 
-  @media (max-width: 554px) {
-    width: 170%;
-    font-size: 14px;
-    height: 48px;
-  }
-    &:focus {
-      outline: none;
-      border-color: #ff69a9; 
-      
-    &::placeholder {
-      color: #b3b3b3; 
-    }
   @media (max-width: 554px) {
     width: 170%;
     font-size: 14px;
@@ -180,10 +159,7 @@ const SelectWeight = styled.button`
   font-size: 10px;
   cursor: pointer;
   color:  #B3B3B3;
-  @media (max-width: 554px) {
-    margin-bottom:3%;
-  }
-  
+
   @media (max-width: 554px) {
     margin-bottom:3%;
   }
@@ -216,11 +192,6 @@ const NextRegisterBtn = styled.button`
     margin-right:5%;
   }
 
-  @media (max-width: 554px) {
-    margin-top:1%;
-    margin-right:5%;
-  }
-
   &:hover{
     font-weight: bold;
   }
@@ -229,7 +200,6 @@ const NextRegisterBtn = styled.button`
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-  
   
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -350,7 +320,7 @@ function RegisterInputForm() {
 
   //axios 처리 시작 ~ 
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event) => { // 여기에서 async 추가
     event.preventDefault();
   
     if (!validateForm()) return;
@@ -362,7 +332,7 @@ function RegisterInputForm() {
       try {
         // 서버에서 Presigned URL을 요청합니다.
         const presignResponse = await axios.get(
-          `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${imageFile.name}`
+          `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
         );
   
         // Presigned URL을 가져옵니다.
@@ -424,8 +394,6 @@ function RegisterInputForm() {
       } else {
         console.log('응답 상태:', response.status);
         console.log('응답 데이터:', response.data);
-        console.log('응답 상태:', response.status);
-        console.log('응답 데이터:', response.data);
         alert("등록 중 오류가 발생했습니다. 다시 시도해주세요.");
       }
     } catch (error) {
@@ -434,15 +402,10 @@ function RegisterInputForm() {
       console.log('에러 응답:', error.response?.data);
       console.log('에러 상태 코드:', error.response?.status);
       console.log('에러 헤더:', error.response?.headers);
-      console.log('에러 전체 정보:', error);
-      console.log('에러 메시지:', error.message);
-      console.log('에러 응답:', error.response?.data);
-      console.log('에러 상태 코드:', error.response?.status);
-      console.log('에러 헤더:', error.response?.headers);
       alert("서버와 통신 중 오류가 발생했습니다.");
     }
   };
-      
+
   const handleNextRegisterClick = () => {
     navigate("/"); 
   };
