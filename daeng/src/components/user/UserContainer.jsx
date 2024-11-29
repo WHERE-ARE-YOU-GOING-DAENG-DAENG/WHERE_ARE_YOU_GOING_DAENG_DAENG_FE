@@ -13,12 +13,12 @@ function UserContainer() {
     <Container>
       <UserInfo>
         <Username>내가 진짜임</Username>
-        <UserEmail>이메일</UserEmail>
+        <UserEmail>ㅋㅋ</UserEmail> 
       </UserInfo>
       <ArrowImg src={arrow} alt="유저 정보 자세히 보기 화살표" onClick={handleToEditUser}/>
     </Container>
   )
-}
+}  //Username은 zustand store에서 가지고 오기
 
 const Container = styled.div`
   display: flex;
