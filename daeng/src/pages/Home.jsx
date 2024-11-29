@@ -53,7 +53,7 @@ function Home() {
         }
       );
     }
-  }, [setUserLocation, userLocation]);
+  }, [userLocation.lat, userLocation.lng]);
 
   return (
     <Wrapper>

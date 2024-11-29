@@ -9,7 +9,7 @@ const Container = styled.div`
   padding-bottom: 77px;
 `;
 
-const VisitScheduleList = ({ data, placeId }) => {
+const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState({});
 
@@ -19,8 +19,9 @@ const VisitScheduleList = ({ data, placeId }) => {
 
   const openModal = (initDate = null , initTime = null) => {
     const userPets = [
-      {petId:1, petName: "Buddy"},
-      {petId:2, petName: "Mittens"},
+      {petId:18, petName: "송댕댕"},
+      {petId:14, petName: "김땡땡"},
+      {petId:11, petName: "하이"},
     ]
 
     setModalProps({
@@ -28,25 +29,24 @@ const VisitScheduleList = ({ data, placeId }) => {
       initTime,
       userPets
     })
-    alert(initDate+initTime)
     setIsModalOpen(true);
   }
 
   return (
     <>
       <Container>
-        {data.map((visit) => (
+        {data.length > 0 ? (data.map((visit) => (
           <VisitDateSection
             key={visit.visitDate}
             visitDate={visit.visitDate}
             petsAtVisitTimes={visit.petsAtVisitTimes}
             onVisitClick={openModal}
           />
-        ))}
+        ))): (<div>일주일간방문예정없음</div>)}
         <ConfirmBtn label="등록" onClick={()=> openModal()}/>
       </Container>
   
-      <VisitModal placeId={placeId} isOpen={isModalOpen} onClose={toggleModal} {...modalProps} />
+      <VisitModal placeId={placeId} isOpen={isModalOpen} onClose={toggleModal} setReloadTrigger={setReloadTrigger} {...modalProps} />
     </>
   );
 };

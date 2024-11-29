@@ -77,7 +77,7 @@ const Header = styled.div`
     }
 `;
 
-const Form = styled.form`
+const Form = styled.div`
   padding: 0px 41px;
   display: flex;
   flex-direction: column;
@@ -157,11 +157,25 @@ const selectStyles = {
       }),
 }
 
-const VisitModal = ({ placeId, isOpen, onClose, initDate = null, initTime = null, userPets = []  }) => {
+const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = null, initTime = null, userPets = []  }) => {
     const [isClosing, setIsClosing] = useState(false);
     const [selectedDate, setSelectedDate] = useState(initDate);
     const [selectedTime, setSelectedTime] = useState(initTime || "");
     const [selectedPets, setSelectedPets] = useState([]);
+    const [startTime, setStartTime] = useState("00:00");
+    const [endTime, setEndTime] = useState("24:00") ;
+
+    useEffect(()=>{
+        const fetchTime = async () => {
+            const response = await axios.get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`,{
+                withCredentials: true,
+            });
+            setStartTime(response.data.data.startTime);
+            setEndTime(response.data.data.endTime);
+            console.log(response.data.data.startTime, response.data.data.endTime)
+        }
+        fetchTime();
+    },[])
 
     const generateTimeOptions = (startTime, endTime) => {
         const options = [];
@@ -177,9 +191,6 @@ const VisitModal = ({ placeId, isOpen, onClose, initDate = null, initTime = null
     
         return options;
     };
-
-    const startTime = "09:00"; // 시작 시간
-    const endTime = "18:00"; // 끝 시간
     const timeOptions = generateTimeOptions(startTime, endTime);
 
     useEffect(() => {
@@ -228,26 +239,30 @@ const VisitModal = ({ placeId, isOpen, onClose, initDate = null, initTime = null
         setSelectedPets(petIds);
       };
 
-      const handleSubmit = async (e) => {
-        e.preventDefault();
+      const handleSubmit = async () => {
         if (!selectedDate || !selectedTime || selectedPets.length === 0) {
             alert("모두 선택해주세요");
             return;
         }
-        // try{
-        //   const response = await axios.post("https://www.daengdaeng-where.link/api/v1/visitHope",{
-        //   withCredentials: true
-        // })
-        // const {status, data} = response;
-        // if(status === 200){
-        //     console.log(data);
-        // }else{
-        //     console.error("응답에러")
-        // }
-        // }catch(error){
-        //   console.error("요청에러",error)
-        // }
-        alert(`날짜: ${selectedDate}, 시간: ${selectedTime}, 펫: ${selectedPets.join(", ")}`);
+
+        const payload = {
+            placeId,
+            petIds: selectedPets,
+            visitAt: `${selectedDate}T${selectedTime}:00`,
+        }
+        console.log(payload)
+        try{
+          await axios.post("https://www.daengdaeng-where.link/api/v1/visit", payload,{
+          withCredentials: true
+        })
+        setReloadTrigger((prev) => !prev);
+        }catch(error){
+            if (error.response && error.response.status === 409) {
+                alert("이미 방문등록된 반려동물입니다.");
+            } else {
+                console.error("요청 에러:", error);
+            }
+        }
         setSelectedDate("");
         setSelectedTime("");
         setSelectedPets([]);
@@ -256,13 +271,13 @@ const VisitModal = ({ placeId, isOpen, onClose, initDate = null, initTime = null
 
     useEffect(() => {
         if (isOpen) {
-            document.body.style.overflow = 'hidden'; // Body 스크롤 잠금
+            document.body.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'auto'; // Body 스크롤 복원
+            document.body.style.overflow = 'auto';
         }
 
         return () => {
-            document.body.style.overflow = 'auto'; // 컴포넌트 언마운트 시 복원
+            document.body.style.overflow = 'auto'; 
         };
     }, [isOpen]);
 
@@ -280,7 +295,7 @@ const VisitModal = ({ placeId, isOpen, onClose, initDate = null, initTime = null
                     <h2>방문등록하기</h2>
                     <img src={xIcon} alt="닫기" onClick={handleClose}/>
                 </Header>
-                <Form onSubmit={handleSubmit}>
+                <Form>
                     <SelectBox>
                     <Label>원하는 날짜를 선택해주세요</Label>
                     <Calendar onDateClick={handleDateClick} selectedDate={selectedDate}/>
@@ -302,7 +317,7 @@ const VisitModal = ({ placeId, isOpen, onClose, initDate = null, initTime = null
                         <ReactSelect id="pet-select" options={petOptions} onChange={handlePetChange} placeholder="댕댕이를 선택하세요" isMulti styles={selectStyles}/>
                     <InputAlert>*여러 마리 선택이 가능합니다.</InputAlert>
                     </SelectBox>
-                    <ConfirmBtn label="등록"/>
+                    <ConfirmBtn label="등록" onClick={handleSubmit}/>
                 </Form>
             </Modal>
         </>
