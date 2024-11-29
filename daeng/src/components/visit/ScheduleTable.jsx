@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import xIcon from "../../assets/icons/x.svg";
 import useVisitStore from "../../stores/useVisitStore";
+import AlertDialog from "../commons/SweetAlert";
 
 const TableWrapper = styled.div`
   margin: 0px 40px;
@@ -47,9 +48,23 @@ const Button = styled.button`
 
 const ScheduleTable = () => {
   const myVisits = useVisitStore((state)=>state.myVisits);
-  
-  const handleDelete = (index) => {
-    alert((index + 1) + "번째 줄 일정삭제");
+  const removeVisit  = useVisitStore((state) => state.removeVisit);
+  const handleDelete = (id) => {
+    AlertDialog({
+      mode: "confirm",
+      title: "방문예정취소",
+      text: "방문예정을 취소하시겠습니까?",
+      confirmText: "취소",
+      cancelText: "닫기",
+      onConfirm: async () => {
+          try{
+              console.log(id);
+              await removeVisit(id);
+          }catch (error) {
+              console.error("Error deleting favorite:", error);
+          }
+      }
+  })
   };
 
   return (
@@ -80,7 +95,7 @@ const ScheduleTable = () => {
                   ))}
                 </Td>
                 <Td>
-                  <Button onClick={() => handleDelete(index)}>
+                  <Button onClick={() => handleDelete(schedule.visitId)}>
                     <img src={xIcon} alt="삭제" />
                   </Button>
                 </Td>
