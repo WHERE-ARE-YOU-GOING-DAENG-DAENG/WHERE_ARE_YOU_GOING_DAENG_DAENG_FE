@@ -6,7 +6,7 @@ import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
 import BookMarker from "../commons/BookMarker";
 import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
 import CustomOverlay from "./CustomOverlay";
-
+import useLocationStore from "../../stores/LocationStore";
 const MapContainer = styled.div`
   width: 100%;
   height: ${({ $data }) => ($data && $data.length > 0 ? "calc(100vh - 172px)" : "485px")};
@@ -16,12 +16,13 @@ const MapContainer = styled.div`
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter, userLocation }) => {
+const Map = ({ data, removeUi, externalCenter }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const isLoaded = useGoogleMapsLoader();
   const [markers, setMarkers] = useState([]); // 마커 리스트 관리
   const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 }); // 초기 위치 (서울)
+  const setUserLocation = useLocationStore((state) => state.setUserLocation);
 
   useEffect(() => {
     if (isLoaded && !map) {
@@ -45,11 +46,11 @@ const Map = ({ data, removeUi, externalCenter, userLocation }) => {
     }
   }, [map, externalCenter]);
 
-  // 현재 위치 마커 추가
+  // 현재 위치 실시간으로 추적 후 마커 추가
   useEffect(() => {
     if (isLoaded && map) {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
+        const watchId = navigator.geolocation.watchPosition(
           (position) => {
             const location = {
               lat: position.coords.latitude,
@@ -57,7 +58,8 @@ const Map = ({ data, removeUi, externalCenter, userLocation }) => {
             };
             setCenter(location);
             map.setCenter(location);
-            userLocation && userLocation(location);
+            setUserLocation(location);
+            console.log(location)
 
             const currentLocationMarker = (
               <CustomOverlay
@@ -72,6 +74,7 @@ const Map = ({ data, removeUi, externalCenter, userLocation }) => {
           },
           (error) => console.error("Geolocation error:", error)
         );
+        return () => navigator.geolocation.clearWatch(watchId);
       }
     }
   }, [isLoaded, map]);
