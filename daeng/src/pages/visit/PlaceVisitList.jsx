@@ -16,179 +16,176 @@ const VisitBanner = styled.img`
 const PlaceVisitList = () => {
     const { id } = useParams();
     const [list, setList] = useState([]);
+    const [reloadTrigger, setReloadTrigger] = useState(false);
 
     useEffect(()=>{
         const fetchPlaceVisit = async() => {
             try{
-                const response = await axios.get(`https://www.daengdaeng-where.link/api/v1/visitHope/place/${id}`,{
+                const response = await axios.get(`https://www.daengdaeng-where.link/api/v1/visit/place/${id}`,{
                     withCredentials: true
                 })
-                const {status, data} = response;
-                if(status === 200){
-                    setList(data);
-                }else{
-                    console.error("응답에러")
-                }
+                console.log(response.data.data) //로그삭제
+                setList(response.data.data);
             }catch(error){
-                console.error("요청에러", error)
+                console.error("Error fetching visitlist", error)
             }
         }
-        // fetchPlaceVisit();
-    },[])
+        fetchPlaceVisit();
+    },[reloadTrigger])
 
-    const mockData = [ //list넣기
-        {
-            "visitDate": "2024-11-29",
-            "petsAtVisitTimes": [
-                {
-                    "visitAt": "2024-11-29T11:00:00",
-                    "pets": [
-                        {
-                            "petId": 1,
-                            "petName": "Buddy",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 2,
-                            "petName": "Mittens",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 3,
-                            "petName": "Max1",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 4,
-                            "petName": "Max2",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 5,
-                            "petName": "Max3",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 6,
-                            "petName": "Max4",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 7,
-                            "petName": "Max5",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 8,
-                            "petName": "Max6",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 9,
-                            "petName": "Max7",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 10,
-                            "petName": "Max8",
-                            "petImg": petIcon
-                        },
-                    ]
-                }
-            ]
-        },
-        {
-            "visitDate": "2024-11-30",
-            "petsAtVisitTimes": [
-                {
-                    "visitAt": "2024-11-30T10:00:00",
-                    "pets": [
-                        {
-                            "petId": 2,
-                            "petName": "Mittens",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 3,
-                            "petName": "Max",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 1,
-                            "petName": "Buddy",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 2,
-                            "petName": "Mittens",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 3,
-                            "petName": "Max1",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 4,
-                            "petName": "Max2",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 5,
-                            "petName": "Max3",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 6,
-                            "petName": "Max4",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 7,
-                            "petName": "Max5",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 8,
-                            "petName": "Max6",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 9,
-                            "petName": "Max7",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 10,
-                            "petName": "Max8",
-                            "petImg": petIcon
-                        },
-                    ]
-                },
-                {
-                    "visitAt": "2024-11-30T11:00:00",
-                    "pets": [
-                        {
-                            "petId": 2,
-                            "petName": "Mittens",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 3,
-                            "petName": "Max",
-                            "petImg": petIcon
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+    // const mockData = [ //list넣기
+    //     {
+    //         "visitDate": "2024-11-29",
+    //         "petsAtVisitTimes": [
+    //             {
+    //                 "visitAt": "2024-11-29T11:00:00",
+    //                 "pets": [
+    //                     {
+    //                         "petId": 1,
+    //                         "petName": "Buddy",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 2,
+    //                         "petName": "Mittens",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 3,
+    //                         "petName": "Max1",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 4,
+    //                         "petName": "Max2",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 5,
+    //                         "petName": "Max3",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 6,
+    //                         "petName": "Max4",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 7,
+    //                         "petName": "Max5",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 8,
+    //                         "petName": "Max6",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 9,
+    //                         "petName": "Max7",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 10,
+    //                         "petName": "Max8",
+    //                         "petImg": petIcon
+    //                     },
+    //                 ]
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "visitDate": "2024-11-30",
+    //         "petsAtVisitTimes": [
+    //             {
+    //                 "visitAt": "2024-11-30T10:00:00",
+    //                 "pets": [
+    //                     {
+    //                         "petId": 2,
+    //                         "petName": "Mittens",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 3,
+    //                         "petName": "Max",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 1,
+    //                         "petName": "Buddy",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 2,
+    //                         "petName": "Mittens",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 3,
+    //                         "petName": "Max1",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 4,
+    //                         "petName": "Max2",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 5,
+    //                         "petName": "Max3",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 6,
+    //                         "petName": "Max4",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 7,
+    //                         "petName": "Max5",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 8,
+    //                         "petName": "Max6",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 9,
+    //                         "petName": "Max7",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 10,
+    //                         "petName": "Max8",
+    //                         "petImg": petIcon
+    //                     },
+    //                 ]
+    //             },
+    //             {
+    //                 "visitAt": "2024-11-30T11:00:00",
+    //                 "pets": [
+    //                     {
+    //                         "petId": 2,
+    //                         "petName": "Mittens",
+    //                         "petImg": petIcon
+    //                     },
+    //                     {
+    //                         "petId": 3,
+    //                         "petName": "Max",
+    //                         "petImg": petIcon
+    //                     }
+    //                 ]
+    //             }
+    //         ]
+    //     }
+    // ]
 
     return (
         <>
             <Header label="방문예정목록" />
             <VisitBanner src="https://via.placeholder.com/554x242" alt="배너" />
-            <VisitScheduleList data={mockData} placeId={id}/>
+            <VisitScheduleList data={list} placeId={id} setReloadTrigger={setReloadTrigger}/>
             <Footer />
         </>
     )
