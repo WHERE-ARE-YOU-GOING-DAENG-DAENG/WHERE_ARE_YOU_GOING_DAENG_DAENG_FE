@@ -344,33 +344,28 @@ function RegisterInputForm() {
 
   let imageUrl = ''; // 이미지 URL을 저장할 변수
 
-  // Step 1: 이미지 업로드를 위한 Presigned URL 조회
+  // Presigned URL 조회
   if (imageFile) {
     try {
-      // 서버에서 Presigned URL을 요청합니다.
       const presignResponse = await axios.get(
         `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
       );
+      const presignedUrl = presignResponse.data.url; 
+      console.log("Presigned URL:", presignedUrl); 
+      console.log("이미지 타입:", imageFile.type);
 
-      // Presigned URL을 가져옵니다.
-      const presignedUrl = presignResponse.data.url; // 'presignedUrl'을 'url'로 수정
-      console.log("Presigned URL:", presignedUrl); // 확인 로그
-      console.log("Image File Type:", imageFile.type); // 이미지 파일의 타입 확인
-
-      // Step 2: PUT 요청을 통해 이미지를 S3에 업로드
       const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
         headers: {
-          'Content-Type': imageFile.type, // 이미지 파일의 Content-Type 설정
+          'Content-Type': imageFile.type, 
         },
         withCredentials: true,
       });
 
-      console.log("Image upload response:", imageUploadResponse); // 업로드 응답 확인
+      console.log("응답:", imageUploadResponse); 
 
       if (imageUploadResponse.status === 200) {
-        console.log('Image uploaded successfully to S3!');
-        // Presigned URL에서 S3 URL을 추출하여 저장
-        imageUrl = presignedUrl.split('?')[0]; // URL에서 쿼리 파라미터를 제외한 부분만 사용
+        console.log('성공');
+        imageUrl = presignedUrl.split('?')[0];
       } else {
         alert('이미지 업로드에 실패했습니다.');
         return;
@@ -382,7 +377,6 @@ function RegisterInputForm() {
     }
   }
 
-  // Step 3: 나머지 데이터 준비
   const petData = {
     name: petName, // 반려동물 이름
     image: imageUrl,  // 업로드한 이미지 URL
@@ -393,7 +387,6 @@ function RegisterInputForm() {
     neutering: selectedNeutering === "했어요", // 중성화 여부
   };
 
-  // Step 4: 서버로 데이터 전송
   try {
     console.log('보내는 Payload:', petData);
 
@@ -427,7 +420,6 @@ function RegisterInputForm() {
   }
 };
 
-      
   const handleNextRegisterClick = () => {
     navigate("/"); 
   };

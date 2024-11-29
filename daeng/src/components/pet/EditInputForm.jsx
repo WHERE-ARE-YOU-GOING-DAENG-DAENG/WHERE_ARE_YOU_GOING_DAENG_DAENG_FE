@@ -8,6 +8,9 @@ import footerSearch from "../../assets/icons/footer_search.svg";
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
 import DeletePetData from "./DeletePetData";
+import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
+import { useNavigate } from "react-router-dom";
+
 
 const Container = styled.div`
   display: flex;
@@ -167,7 +170,7 @@ const SelectWeight = styled.button`
   `}
 `;
 
-function EditInputForm({ petId }) {
+function EditInputForm() {
   const [preview, setPreview] = useState(null);
   const [selectedPetType, setSelectedPetType] = useState("");
   const [selectedWeight, setSelectedWeight] = useState("");
@@ -175,7 +178,47 @@ function EditInputForm({ petId }) {
   const [selectedNeutering, setSelectedNeutering] = useState(""); 
   const [petName, setPetName] = useState(""); 
   const [petPicture, setPetPicture] = useState(""); 
+  const [imageFile, setImageFile] = useState(null);
   const [petBirth, setPetBirth] = useState(""); 
+
+  const petId = 17;//일단 더미 넣어두기 
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    console.log("petId:", petId);
+    const fetchPetData = async () => {
+      try {
+        const response = await axios.get(
+          `https://www.daengdaeng-where.link/api/v1/pets/${petId}`, 
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        console.log(response.data); 
+  
+        const petData = response.data.data;
+
+        setPetName(petData.name);
+        setSelectedPetType(petData.species); 
+        setPetBirth(petData.birthday);
+        const gender = petData.gender;
+        const genderOption = genderOptions.find(option => option.name === gender);
+        setSelectedGender(genderOption ? genderOption.code : "");
+        setSelectedNeutering(petData.neutering ? "했어요" : "안 했어요");
+        const size = petData.size;
+        const sizeOption = petSizeOptions.find(option => option.name === size);
+        setSelectedWeight(sizeOption ? sizeOption.code : "");
+        setPetPicture(petData.image);
+      } catch (error) {
+        console.error("펫 정보 불러오기 실패:", error);
+      }
+    };
+  
+    fetchPetData();
+  }, [petId]);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -188,22 +231,6 @@ function EditInputForm({ petId }) {
     }
   };
 
-  const handlePetTypeChange = (e) => {
-    setSelectedPetType(e.target.value);
-  };
-
-  const handleGenderClick = (gender) => {
-    setSelectedGender(gender); 
-  };
-
-  const handleNeuteringClick = (status) => {
-    setSelectedNeutering(status); 
-  };
-
-  const handleWeightClick = (weight) => {
-    setSelectedWeight(weight); 
-  };
-
   const getTodayDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -212,45 +239,150 @@ function EditInputForm({ petId }) {
     return `${year}-${month}-${day}`;
   };
 
-  const axiosInstance = axios.create({
-    baseURL: '/api',
-  });
+  const handlePetNameChange = (e) => {
+    setPetName(e.target.value);
+  };
 
-  useEffect(() => {
-    const fetchPetData = async (petId) => {
-      try {
-        const response = await axiosInstance.get(`/pets/${petId}`);
-        const petData = response.data;
+  const handlePetBirthChange = (e) => {
+    setSelectedPetBirth(e.target.value);
+  };
 
-        if (petData) {
-          setPetPicture(petData.petPicture);
-          setPetName(petData.petName);
-          setPetBirth(petData.petBirth);
-          setSelectedGender(petData.gender ? "남아" : "여아");
-          setSelectedNeutering(petData.neutering ? "했어요" : "안 했어요");
-          setSelectedWeight(petData.petWeight);
-        }
-      } catch (error) {
-        console.error("펫 데이터 불러오기 실패:", error);
-      }
-    };
+  const handlePetTypeChange = (e) => {
+    setSelectedPetType(e.target.value);
+  };
 
-    if (petId) {
-      fetchPetData(petId); 
+
+  const handleNeuteringClick = (status) => {
+    setSelectedNeutering(status); 
+  };
+
+  const handleWeightClick = (weightCode) => {
+    setSelectedWeight(weightCode); 
+  };
+
+  //유효성 검사
+  const validateForm = () => {
+    const nameRegex = /^[가-힣a-zA-Z\s]+$/;
+  
+    if (!petName || !nameRegex.test(petName)) {
+      AlertDialog({
+        mode: "alert", 
+        title: "입력 오류",
+        text: "댕댕이 이름은 한글 또는 영문만 입력 가능합니다.",
+        confirmText: "확인"
+      });
+      return false;
     }
-  }, [petId]);
+    if (!selectedPetType) {
+      AlertDialog({
+        mode: "alert", 
+        title: "선택 오류",
+        text: "댕댕이 견종을 선택해주세요",
+        confirmText: "확인"
+      })
+      return false;
+    }
 
-  const handlePetDataUpdate = async () => {
+    if(!selectedPetBirth) {
+      AlertDialog({
+        mode: "alert", 
+        title: "선택 오류",
+        text: "댕댕이 생일을 선택해주세요",
+        confirmText: "확인"
+      })
+      return false;
+    }
+
+    if (!selectedGender) {
+      AlertDialog({
+        mode: "alert", 
+        title: "선택 오류",
+        text: "댕댕이 성별을 선택해주세요",
+        confirmText: "확인"
+      })
+      return false;
+    }
+    if (!selectedNeutering) {
+      AlertDialog({
+        mode: "alert", 
+        title: "선택 오류",
+        text: "댕댕이 중성화 여부를 선택해주세요",
+        confirmText: "확인"
+      })
+      return false;
+    }
+    if (!selectedWeight || !petSizeOptions.some(option => option.code === selectedWeight)) {
+      AlertDialog({
+        mode: "alert", 
+        title: "선택 오류",
+        text: "댕댕이 크기를 선택해주세요",
+        confirmText: "확인"
+      })
+      return false;
+    }
+    return true;
+  }; 
+
+  //API 연동 시작
+
+  const handlePetDataUpdate = async (event) => {
+    event.preventDefault();
+  
+    if (!validateForm()) return;
+  
+    let imageUrl = petPicture; // 기존 이미지 URL을 기본값으로 설정함
+  
+    // 새 이미지가 있을 경우에만 S3에 업로드 처리
+  if (imageFile) {
     try {
-      const response = await axios.put(`/api/v1/pets/${petId}`, {
-        petName,
-        petType: selectedPetType,
-        petBirth,
-        neutering: selectedNeutering === "했어요",
-        gender: selectedGender,
-        weight: selectedWeight, 
+      const presignResponse = await axios.get(
+        `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
+      );
+      const presignedUrl = presignResponse.data.url; 
+      
+      // 이미지 업로드
+      const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
+        headers: {
+          'Content-Type': imageFile.type, 
+        },
+        withCredentials: true,
       });
 
+      if (imageUploadResponse.status === 200) {
+        imageUrl = presignedUrl.split('?')[0]; // 쿼리 파라미터를 제외한 URL만 사용
+      } else {
+        alert('이미지 업로드에 실패했습니다.');
+        return;
+      }
+    } catch (error) {
+      console.error('Presigned URL 조회 또는 이미지 업로드 실패:', error);
+      alert('이미지 업로드 중 오류가 발생했습니다.');
+      return;
+    }
+  }
+
+  const petData = {
+    name: petName,
+    image: imageUrl, // 업로드한 이미지 URL 또는 기존 이미지 URL
+    gender: selectedGender, // 공통코드로 변경된 성별 코드
+    birthday: petBirth,
+    species: selectedPetType,
+    size: selectedWeight, // 공통코드로 변경된 사이즈 코드
+    neutering: selectedNeutering === "했어요",
+  };
+
+    try {
+      console.log('보내는 Payload:', petData);
+
+      const response = await axios.put(`https://www.daengdaeng-where.link/api/v1/pets/${petId}`, 
+        petData, 
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+      });
+  
       if (response.status === 200) {
         AlertDialog({
           mode: "success",
@@ -264,13 +396,6 @@ function EditInputForm({ petId }) {
       }
     } catch (error) {
       console.error("수정 실패:", error);
-
-      AlertDialog({
-        mode: "alert",
-        title: "수정 실패",
-        text: "수정 중 문제가 발생했습니다. 다시 시도해주세요.",
-        confirmText: "확인",
-      });
     }
   };
 
@@ -320,16 +445,14 @@ function EditInputForm({ petId }) {
       </BirthContainer>
       <SelectLabel label="성별" />
       <SelectContainer>
-        <SelectBtn
-          label="남아"
-          selected={selectedGender === "남아"}
-          onClick={() => handleGenderClick("남아")}
-        />
-        <SelectBtn
-          label="여아"
-          selected={selectedGender === "여아"}
-          onClick={() => handleGenderClick("여아")}
-        />
+        {genderOptions.map((option) => (
+          <SelectBtn
+            key={option.code}
+            label={option.name}
+            selected={selectedGender === option.code}
+            onClick={() => setSelectedGender(option.code)}
+          />
+        ))}
       </SelectContainer>
       <SelectLabel label="중성화 여부" />
       <SelectContainer>
@@ -346,39 +469,18 @@ function EditInputForm({ petId }) {
       </SelectContainer>
       <SelectLabel label="크기" />
       <SelectContainer>
+      {petSizeOptions.map((option) => (
         <SelectWeight
-          selected={selectedWeight === "초소형견(3kg 미만)"}
-          onClick={() => handleWeightClick("초소형견(3kg 미만)")}
+          key={option.code}
+          selected={selectedWeight === option.code}
+          onClick={() => handleWeightClick(option.code)}
         >
-          초소형견<br />(3kg 미만)
+          {option.name}<br />({option.size})
         </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "소형견(3kg ~ 7kg)"}
-          onClick={() => handleWeightClick("소형견(3kg ~ 7kg)")}
-        >
-          소형견<br />(3kg ~ 7kg)
-        </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "중형견(7kg ~ 12kg)"}
-          onClick={() => handleWeightClick("중형견(7kg ~ 12kg)")}
-        >
-          중형견<br />(7kg ~ 12kg)
-        </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "중대형견(12kg ~ 20kg)"}
-          onClick={() => handleWeightClick("중대형견(12kg ~ 20kg)")}
-        >
-          중대형견<br />(12kg ~ 20kg)
-        </SelectWeight>
-        <SelectWeight
-          selected={selectedWeight === "대형견(20kg 이상)"}
-          onClick={() => handleWeightClick("대형견(20kg 이상)")}
-        >
-          대형견<br />(20kg 이상)
-        </SelectWeight>
-      </SelectContainer>
+      ))}
+    </SelectContainer>
       <ConfirmBtn onClick={handlePetDataUpdate} label="수정 완료" />
-      <DeletePetData />
+      <DeletePetData petId={petId}/>
     </Container>
   );
 }
