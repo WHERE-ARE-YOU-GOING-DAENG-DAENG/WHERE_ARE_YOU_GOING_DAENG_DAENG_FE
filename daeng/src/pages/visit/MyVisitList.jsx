@@ -6,6 +6,7 @@ import Calendar from "../../components/visit/Calendar";
 import ScheduleTable from "../../components/visit/ScheduleTable";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import useVisitStore from "../../stores/useVisitStore";
 
 dayjs.extend(isBetween);
 
@@ -30,6 +31,20 @@ const Text = styled.div`
 const MyVisitList = () => {
   const [schedules, setSchedules] = useState([]);
   const [allSchedules, setAllSchedules] = useState([]);
+  const myVisits = useVisitStore((state)=>state.myVisits);
+  const fetchVisits = useVisitStore((state)=>state.fetchVisits);
+
+  useEffect(()=>{
+    const fetchmyVisits = async () => {
+        await fetchVisits();
+    };
+    
+    fetchmyVisits();
+  },[])
+
+  useEffect(() => {
+    console.log("Updated visites:", myVisits);
+  }, [myVisits]);
 
   const mockData = {
     "data": [
@@ -162,61 +177,13 @@ const MyVisitList = () => {
     ],
   };
 
-  const filterWeeklySchedules = () => {
-    const startDate = dayjs().format("YYYY-MM-DD");
-    const endDate = dayjs().add(6, "day").format("YYYY-MM-DD");
-
-    const weeklySchedules = mockData.data.filter((schedule) => {
-      const visitDate = dayjs(schedule.visitAt).format("YYYY-MM-DD");
-      return visitDate >= startDate && visitDate <= endDate;
-    });
-
-    setSchedules(weeklySchedules);
-  };
-
-  const filterPastSchedules = () => {
-    const today = dayjs().format("YYYY-MM-DD");
-
-    const pastSchedules = mockData.data.filter((schedule) => {
-      const visitDate = dayjs(schedule.visitAt).format("YYYY-MM-DD");
-      return visitDate < today;
-    });
-
-    const sortedSchedules = pastSchedules.sort(
-      (a, b) => new Date(b.visitTime) - new Date(a.visitTime)
-    );
-
-    setSchedules(sortedSchedules);
-  };
-
-  const handleDateClick = (date) => {
-    const today = dayjs().format("YYYY-MM-DD");
-    const startDate = dayjs().format("YYYY-MM-DD");
-    const endDate = dayjs().add(6, "day").format("YYYY-MM-DD");
-
-    // 클릭된 날짜가 오늘 이전인지, 오늘부터 일주일 구간인지 확인
-    if (dayjs(date).isBefore(today, "day")) {
-      filterPastSchedules(); // 이전 날짜 클릭
-    } else if (dayjs(date).isBetween(startDate, endDate, "day", "[]")) {
-      filterWeeklySchedules(); // 당일부터 일주일 클릭
-    }
-  };
-
-  useEffect(() => {
-    setAllSchedules(mockData.data);
-    filterWeeklySchedules(); // 초기화 시 당일 기준 일주일 일정
-  }, []);
-
   return (
     <>
       <Header label="방문일정" />
-      <Calendar
-        onDateClick={handleDateClick}
-        allSchedules={allSchedules}
-      />
+      <Calendar dot={true}/>
       <Division />
       <Text><span>내가진짜</span>님 방문일정 알려드려요</Text>
-      <ScheduleTable schedules={schedules} />
+      <ScheduleTable />
       <Footer />
     </>
   );

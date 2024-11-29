@@ -298,7 +298,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
                 <Form>
                     <SelectBox>
                     <Label>원하는 날짜를 선택해주세요</Label>
-                    <Calendar onDateClick={handleDateClick} selectedDate={selectedDate}/>
+                    <Calendar onDateClick={handleDateClick} selectedDate={selectedDate} dot={false}/>
                     {initDate ? <InputAlert>*방문참여시 날짜 변경이 불가합니다.</InputAlert> : <InputAlert>*최대 일주일까지 선택이 가능합니다.</InputAlert>}
                     </SelectBox>
                     <SelectBox>
