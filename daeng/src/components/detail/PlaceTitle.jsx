@@ -5,8 +5,8 @@ import ReviewKeywords from "../../components/commons/ReviewKeywords";
 import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg";
 import starIcon from "../../assets/icons/star.svg"
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+// import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const Container = styled.div`
   padding: 0px 44px;
@@ -49,12 +49,14 @@ const SubTitleSection = styled.div`
 
 const PlaceTitle = ({ data }) => {
     const [isFavorite, setIsFavorite] = useState(data.isFavorite);
+    // const { getFavoriteId } = useFavoriteStore();
+    // const favoriteId = getFavoriteId(data.placeId);
     const navigate = useNavigate();
     
     const toggleFavorite = () => {
         setIsFavorite((prev) => !prev);
     };
-
+    
     return(
         <Container>
             <TitleSection>
@@ -62,11 +64,11 @@ const PlaceTitle = ({ data }) => {
                 <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={()=> navigate(`/visit-list/${data.placeId}`)}/>
             </TitleSection>
             <SubTitleSection>
-                <p className="detail-category">{data.categories[0]}</p>
+                <p className="detail-category">{data.placeType}</p>
                 <p>| 평점</p>
                 <img src={starIcon} alt="평점" />
-                <p>{data.rating}</p>
-                <p className="detail-reviewcnt">({data.reviews.length})</p>
+                <p>{data.score}</p>
+                <p className="detail-reviewcnt">({data.total})</p>
                 <img
                     src={isFavorite ? filledbookmarkIcon : bookmarkIcon}
                     alt="Favorite"
@@ -77,23 +79,5 @@ const PlaceTitle = ({ data }) => {
         </Container>
     )
 }
-
-PlaceTitle.propTypes = {
-    data: PropTypes.shape({
-      placeId: PropTypes.number.isRequired, 
-      name: PropTypes.string.isRequired,         
-      isFavorite: PropTypes.bool.isRequired,    
-      categories: PropTypes.arrayOf(              
-        PropTypes.string.isRequired
-      ).isRequired,
-      rating: PropTypes.number.isRequired,    
-      reviews: PropTypes.arrayOf(               
-        PropTypes.shape({
-          userId: PropTypes.number.isRequired, 
-          content: PropTypes.string.isRequired,  
-        })
-      ).isRequired,
-    }).isRequired,
-  };
 
 export default PlaceTitle;
