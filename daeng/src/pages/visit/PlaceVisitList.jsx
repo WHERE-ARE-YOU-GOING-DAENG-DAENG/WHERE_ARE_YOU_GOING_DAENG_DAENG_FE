@@ -4,6 +4,8 @@ import Footer from "../../components/commons/Footer";
 import VisitScheduleList from "../../components/visit/VisitScheduleList";
 import styled from "styled-components";
 import petIcon from "../../assets/icons/user.svg"
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const VisitBanner = styled.img`
     width: 100%;
@@ -13,8 +15,28 @@ const VisitBanner = styled.img`
 
 const PlaceVisitList = () => {
     const { id } = useParams();
+    const [list, setList] = useState([]);
 
-    const mockData = [
+    useEffect(()=>{
+        const fetchPlaceVisit = async() => {
+            try{
+                const response = await axios.get(`https://www.daengdaeng-where.link/api/v1/visitHope/place/${id}`,{
+                    withCredentials: true
+                })
+                const {status, data} = response;
+                if(status === 200){
+                    setList(data);
+                }else{
+                    console.error("응답에러")
+                }
+            }catch(error){
+                console.error("요청에러", error)
+            }
+        }
+        // fetchPlaceVisit();
+    },[])
+
+    const mockData = [ //list넣기
         {
             "visitDate": "2024-11-29",
             "petsAtVisitTimes": [
@@ -166,7 +188,7 @@ const PlaceVisitList = () => {
         <>
             <Header label="방문예정목록" />
             <VisitBanner src="https://via.placeholder.com/554x242" alt="배너" />
-            <VisitScheduleList data={mockData} />
+            <VisitScheduleList data={mockData} placeId={id}/>
             <Footer />
         </>
     )

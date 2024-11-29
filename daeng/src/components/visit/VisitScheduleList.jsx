@@ -9,7 +9,7 @@ const Container = styled.div`
   padding-bottom: 77px;
 `;
 
-const VisitScheduleList = ({ data }) => {
+const VisitScheduleList = ({ data, placeId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState({});
 
@@ -46,7 +46,7 @@ const VisitScheduleList = ({ data }) => {
         <ConfirmBtn label="등록" onClick={()=> openModal()}/>
       </Container>
   
-      <VisitModal isOpen={isModalOpen} onClose={toggleModal} {...modalProps} />
+      <VisitModal placeId={placeId} isOpen={isModalOpen} onClose={toggleModal} {...modalProps} />
     </>
   );
 };
