@@ -6,8 +6,10 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 목록조회
   fetchFavorites: async () => {
     try {
-      const response = await axios.get("https://www.daengdaeng-where.link/api/v1/favorites");
-      set({ favorites: response.data });
+      const response = await axios.get("https://www.daengdaeng-where.link/api/v1/favorites?page=0&size=10");
+      
+      set({ favorites: response.data.data.content });
+      console.log(response.data.data.content)
     } catch (error) {
       console.error("Error fetching favorites:", error);
     }

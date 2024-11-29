@@ -44,11 +44,20 @@ const OpenModalButton = styled.button`
 const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
 	const [center, setCenter] = useState(false);
-	const { favorites, fetchFavorites } = useFavoriteStore(); //data->favorites로 바꾸기
+	const favorites = useFavoriteStore((state) => state.favorites);
+	const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites); //data->favorites로 바꾸기
 
-	// useEffect(()=>{
-	// 	fetchFavorites();
-	// },[fetchFavorites]);
+	useEffect(() => {
+		const fetchData = async () => {
+		  await fetchFavorites();
+		};
+	
+		fetchData();
+	  }, []);
+
+	  useEffect(() => {
+		console.log("Updated favorites:", favorites); // 상태 변경 확인
+	  }, [favorites]);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
@@ -61,57 +70,15 @@ const Bookmark = () => {
     return(
         <>  
             <Header label="즐겨찾기"/>
-            <Map data={data} removeUi={true} externalCenter={center}/>
-            <Footer></Footer>
+            <Map data={favorites} removeUi={true} externalCenter={center}/>
+            <Footer/>
 			<OpenModalButton onClick={toggleModal}>
 				<img src={pinIcon} alt="즐겨찾기" />
 				<p>즐겨찾기한 장소</p>
             </OpenModalButton>
-			<BookMarkList isOpen={isModalOpen} onClose={toggleModal} data={data} onPlaceClick={handlePlaceClick}/>
+			<BookMarkList isOpen={isModalOpen} onClose={toggleModal} data={favorites} onPlaceClick={handlePlaceClick}/>
         </>
     )
 };
 
-const data = [
-    {
-		"favoriteId": 32,
-	    "placeId": 1,
-	    "name": "댕댕이카페",
-	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
-		"latitude": 35.13710340299098,
-		"longitude": 129.10329727721913,
-	    "startTime": "09:00",
-	    "endTime": "21:00"
-	  },
-	  {
-		"favoriteId": 34,
-		"placeId": 2,
-        "name": "댕댕이동산",
-  	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
-		"latitude": 35.136080,
-		"longitude": 129.104060,
-	    "startTime": "09:00",
-	    "endTime": "21:00"
-	  },
-	  {
-		"favoriteId": 35,
-		"placeId": 3,
-        "name": "댕댕이동산",
-  	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
-		"latitude": 35.456080,
-		"longitude": 129.104060,
-	    "startTime": "09:00",
-	    "endTime": "21:00"
-	  },
-	  {
-		"favoriteId": 36,
-		"placeId": 4,
-        "name": "댕댕이동산",
-  	    "streetAddresses": "서울특별시 강남구 테헤란로 123",
-		"latitude": 35.123080,
-		"longitude": 129.104060,
-	    "startTime": "09:00",
-	    "endTime": "21:00"
-	  },
-	]
 export default Bookmark;

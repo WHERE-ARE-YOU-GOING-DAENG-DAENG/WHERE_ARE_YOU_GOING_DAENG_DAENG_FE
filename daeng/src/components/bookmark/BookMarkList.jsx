@@ -78,7 +78,7 @@ const ModalContent = styled.div`
 const BookMarkList = ({ isOpen, onClose , data, onPlaceClick}) => {
     const [isClosing, setIsClosing] = useState(false);
     const navigate = useNavigate();
-    const { removeFavorite } = useFavoriteStore();
+    const removeFavorite  = useFavoriteStore((state) => state.removeFavorite);
 
     const handleDelete = async (id) => {
         AlertDialog({
@@ -89,8 +89,8 @@ const BookMarkList = ({ isOpen, onClose , data, onPlaceClick}) => {
             cancelText: "취소",
             onConfirm: async () => {
                 try{
-                    // await removeFavorite(id);
-                    alert("삭제됨",id);
+                    console.log(id);
+                    await removeFavorite(id);
                 }catch (error) {
                     console.error("Error deleting favorite:", error);
                 }
@@ -141,7 +141,7 @@ const BookMarkList = ({ isOpen, onClose , data, onPlaceClick}) => {
                             time={`영업시간 | ${location.startTime} - ${location.endTime}`}
                             onTitleClick={()=> navigate(`/search/${location.placeId}`)}
                             onPlaceClick={() => handlePlace(location)}
-                            onDelete={()=>handleDelete(location.placeId)}
+                            onDelete={()=>handleDelete(location.favoriteId)}
                         />
                     ))}
                 </ModalContent>
