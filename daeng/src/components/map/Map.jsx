@@ -96,26 +96,27 @@ const Map = ({ data, removeUi, externalCenter }) => {
 }, [isLoaded, map, setUserLocation]);
 
  //다른 마커 표시
-  useEffect(() => {
-    if (isLoaded && map && data && data.length > 0) {
+ useEffect(() => {
+  if (isLoaded && map) {
+    // 기존 마커 정리 (Google Maps OverlayView의 상태 관리)
+    markers.forEach((marker) => marker.onRemove && marker.onRemove());
+    setMarkers([]);
 
-      setMarkers([]);
-
+    if (data && data.length > 0) {
+      // 새로운 CustomOverlay 생성 및 렌더링
       const newMarkers = data.map((location) => (
         <CustomOverlay
           key={location.placeId}
           position={{ lat: location.latitude, lng: location.longitude }}
           map={map}
         >
-          <BookMarker label={location.name} icon={bookmarkerIcon}/>
+          <BookMarker label={location.name} icon={bookmarkerIcon} />
         </CustomOverlay>
       ));
-      setMarkers(newMarkers);
-    }else {
-      // 데이터가 없으면 마커 비우기
-      setMarkers([]);
+      setMarkers(newMarkers); // 상태 관리
     }
-  }, [isLoaded, map, data])
+  }
+}, [isLoaded, map, data]);
 
   return (
     <MapContainer ref={mapRef} $data={data} $removeUi={removeUi}>
