@@ -1,9 +1,11 @@
-import { useEffect, useRef } from "react";
+import ReactDOM from "react-dom/client";
 import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
 
 const CustomOverlay = ({ position, map, children }) => {
   const overlayRef = useRef(null);
   const containerRef = useRef(document.createElement("div"));
+  const rootRef = useRef(null);
 
   useEffect(() => {
     if (!map || !window.google || !window.google.maps) return;
@@ -13,8 +15,13 @@ const CustomOverlay = ({ position, map, children }) => {
     overlayView.onAdd = () => {
       const panes = overlayView.getPanes();
       if (panes) {
-        panes.overlayLayer.appendChild(containerRef.current);
+        panes.overlayMouseTarget.appendChild(containerRef.current);
       }
+
+      if (!rootRef.current) {
+        rootRef.current = ReactDOM.createRoot(containerRef.current);
+      }
+      rootRef.current.render(children);
     };
 
     overlayView.draw = () => {
@@ -25,9 +32,8 @@ const CustomOverlay = ({ position, map, children }) => {
         new window.google.maps.LatLng(position.lat, position.lng)
       );
 
-      const container = containerRef.current;
-
-      if (point && container) {   
+      if (point) {
+        const container = containerRef.current;
         container.style.position = "absolute";
         container.style.left = `${point.x}px`;
         container.style.top = `${point.y}px`;
@@ -37,12 +43,19 @@ const CustomOverlay = ({ position, map, children }) => {
     };
 
     overlayView.onRemove = () => {
-      if (containerRef.current) {
-        const parentNode = containerRef.current.parentNode;
-        if (parentNode && parentNode.contains(containerRef.current)) {
-          parentNode.removeChild(containerRef.current);
-        }
-        containerRef.current = null;
+      if (rootRef.current) {
+        setTimeout(() => {
+          rootRef.current.unmount();
+          rootRef.current = null;
+        }, 0);
+      }
+    
+      if (
+        containerRef.current &&
+        containerRef.current.parentNode &&
+        containerRef.current.parentNode.contains(containerRef.current)
+      ) {
+        containerRef.current.parentNode.removeChild(containerRef.current);
       }
     };
 
@@ -52,19 +65,9 @@ const CustomOverlay = ({ position, map, children }) => {
     return () => {
       overlayView.setMap(null);
     };
-  }, [map, position]);
+  }, [map, position, children]);
 
-  useEffect(() => {
-    if (overlayRef.current) {
-      overlayRef.current.draw();
-    }
-  }, [position]);
-
-  return map ? (
-    <div ref={containerRef} style={{ display: "none" }}>
-      {children}
-    </div>
-  ) : null;
+  return null;
 };
 
 CustomOverlay.propTypes = {
