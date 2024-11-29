@@ -67,8 +67,8 @@ const PlaceTitle = ({ data }) => {
                 <p className="detail-category">{data.placeType}</p>
                 <p>| 평점</p>
                 <img src={starIcon} alt="평점" />
-                <p>{data.reviewStats.score}</p>
-                <p className="detail-reviewcnt">({data.reviewStats.total})</p>
+                <p>{data.score}</p>
+                <p className="detail-reviewcnt">({data.total})</p>
                 <img
                     src={isFavorite ? filledbookmarkIcon : bookmarkIcon}
                     alt="Favorite"
