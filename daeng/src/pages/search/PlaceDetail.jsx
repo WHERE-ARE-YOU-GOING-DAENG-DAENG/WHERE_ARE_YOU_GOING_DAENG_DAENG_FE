@@ -59,7 +59,7 @@ const PlaceDetail = () => {
         <>
           <Header label="시설 상세페이지" />
           <HeaderImage src={ data.img_path ? data.img_path : "https://via.placeholder.com/552x375"} alt="시설이미지" />
-          <PlaceTitle data={data}/>
+          <PlaceTitle data={data} setData={setData}/>
           <PlaceInfo data={data} />
           <Division />
           <PlaceDescription data={data}/>
@@ -72,79 +72,4 @@ const PlaceDetail = () => {
     )
 };
 
-// const data = {
-//   placeId: 1929,
-//   name: "양재천근린공원",
-//   city: "서울특별시",
-//   cityDetail: "서초구",
-//   township: "양재동",
-//   latitude: 37.47662396,
-//   longitude: 127.041508,
-//   streetAddresses: "서울특별시 서초구 양재동",
-//   telNumber: "02-2155-6896",
-//   url: "https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=09d42fc7-cfd1-4af5-91ca-7d45e7bf9c36&big_category=A02&mid_category=A0202&big_area=1",
-//   placeType: "공원",
-//   description: "목줄, 배변봉투 공원",
-//   parking: true,
-//   indoor: false,
-//   outdoor: true,
-//   distance: 2.668402600535259,
-//   isFavorite: false,
-//   start_time: "09:00",
-//   end_time: "20:00",
-//   img_path: "https://via.placeholder.com/552x375",
-//   reviews: [
-//     {
-//       userId: 1,
-//       placeId: 1,
-//       nickname: "UserOne",
-//       petImg: "https://example.com/image1.jpg",
-//       reviewId: 1,
-//       pets: ["Max", "Mittens", "Buddy"],
-//       content: "마당이 넓어요",
-//       score: 5,
-//       media: ["path1"],
-//       keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
-//       visitedAt: "2024-04-10",
-//       createdAt: "2024-11-22T10:29:14.54327"
-//     },
-//     {
-//       userId: 1,
-//       placeId: 1,
-//       nickname: "UserOne",
-//       petImg: "https://example.com/image1.jpg",
-//       reviewId: 1,
-//       pets: ["Max", "Mittens", "Buddy"],
-//       content: "마당이 넓어요",
-//       score: 5,
-//       media: ["path1"],
-//       keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
-//       visitedAt: "2024-04-10",
-//       createdAt: "2024-11-22T10:29:14.54327"
-//     },
-//     {
-//       userId: 1,
-//       placeId: 1,
-//       nickname: "UserOne",
-//       petImg: "https://example.com/image1.jpg",
-//       reviewId: 1,
-//       pets: ["Max", "Mittens", "Buddy"],
-//       content: "마당이 넓어요",
-//       score: 5,
-//       media: ["path1"],
-//       keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
-//       visitedAt: "2024-04-10",
-//       createdAt: "2024-11-22T10:29:14.54327"
-//     },
-//   ],
-
-//     total: 5,
-//     page: 0,
-//     size: 15,
-//     isFirst: true,
-//     isLast: true,
-//     score: 3,
-//     bestKeywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"]
-  
-// }
 export default PlaceDetail;
