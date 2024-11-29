@@ -6,7 +6,7 @@ import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg";
 import starIcon from "../../assets/icons/star.svg"
 import { useNavigate } from "react-router-dom";
-// import useFavoriteStore from "../../stores/useFavoriteStore";
+import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const Container = styled.div`
   padding: 0px 44px;
@@ -47,16 +47,33 @@ const SubTitleSection = styled.div`
   }
 `
 
-const PlaceTitle = ({ data }) => {
-    const [isFavorite, setIsFavorite] = useState(data.isFavorite);
-    // const { getFavoriteId } = useFavoriteStore();
-    // const favoriteId = getFavoriteId(data.placeId);
+const PlaceTitle = ({ data, setData }) => {
     const navigate = useNavigate();
     
-    const toggleFavorite = () => {
-        setIsFavorite((prev) => !prev);
-    };
+    const toggleBookmark = async (placeId, isFavorite) => {
+      const favoriteStore = useFavoriteStore.getState();
+      
+      try {
+        if (isFavorite) {
+          const favoriteId = favoriteStore.getFavoriteId(placeId);
+          if (favoriteId) {
+            await favoriteStore.removeFavorite(favoriteId);
+          } else {
+            console.warn(`Favorite ID not found for placeId: ${placeId}`);
+          }
+        } else {
+          await favoriteStore.addFavorite(placeId);
+        }
     
+        setData((prevData) => ({
+          ...prevData,
+          isFavorite: !isFavorite,
+        }));
+      } catch (error) {
+        console.error("Error toggling favorite:", error);
+      }
+    };
+  
     return(
         <Container>
             <TitleSection>
@@ -70,10 +87,10 @@ const PlaceTitle = ({ data }) => {
                 <p>{data.score}</p>
                 <p className="detail-reviewcnt">({data.total})</p>
                 <img
-                    src={isFavorite ? filledbookmarkIcon : bookmarkIcon}
+                    src={data.isFavorite ? filledbookmarkIcon : bookmarkIcon}
                     alt="Favorite"
                     className="favorite-button"
-                    onClick={toggleFavorite}
+                    onClick={()=>toggleBookmark(data.placeId, data.isFavorite)}
                 />
             </SubTitleSection>
         </Container>

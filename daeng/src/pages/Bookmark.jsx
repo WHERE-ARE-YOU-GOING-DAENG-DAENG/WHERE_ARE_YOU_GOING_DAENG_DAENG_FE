@@ -45,7 +45,7 @@ const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
 	const [center, setCenter] = useState(false);
 	const favorites = useFavoriteStore((state) => state.favorites);
-	const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites); //data->favorites로 바꾸기
+	const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites);
 
 	useEffect(() => {
 		const fetchData = async () => {

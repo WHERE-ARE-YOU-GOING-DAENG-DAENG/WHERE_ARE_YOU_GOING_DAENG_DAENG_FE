@@ -5,6 +5,7 @@ import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import useLocationStore from "../../stores/LocationStore";
+import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const ListContainer = styled.div`
   padding-bottom: 81px;
@@ -97,7 +98,7 @@ const SearchPlaceList = ({ list }) => {
             "indoor": true,
             "outdoor": false,
             "distance": 0.2761599773174494,
-            "isFavorite": false,
+            "isFavorite": true,
             "startTime": "9:00",
             "endTime": "18:00",
             "favoriteCount": 0,
@@ -173,12 +174,28 @@ const SearchPlaceList = ({ list }) => {
   }
 
   //즐겨찾기 토글
-  const toggleBookmark = (id) => {
-    setPlaces((prevPlaces) =>
-      prevPlaces.map((place) =>
-        place.placeId === id ? { ...place, isFavorite: !place.isFavorite } : place
-      )
-    );
+  const toggleBookmark = async (placeId, isFavorite) => {
+    const favoriteStore = useFavoriteStore.getState();
+    
+    try {
+      if (isFavorite) {
+        const favoriteId = favoriteStore.getFavoriteId(placeId);
+        if (favoriteId) {
+          await favoriteStore.removeFavorite(favoriteId);
+        } else {
+          console.warn(`Favorite ID not found for placeId: ${placeId}`);
+        }
+      } else {
+        await favoriteStore.addFavorite(placeId);
+      }
+      setPlaces((prevPlaces) =>
+        prevPlaces.map((p) =>
+          p.placeId === placeId ? { ...p, isFavorite: !isFavorite } : p
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
   };
 
   const handlePlaceClick = (placeId) => {
@@ -212,7 +229,7 @@ const SearchPlaceList = ({ list }) => {
             src={place.isFavorite ? filledbookmarkIcon : bookmarkIcon}
             className="favorite"
             alt="즐겨찾기"
-            onClick={() => toggleBookmark(place.placeId)}
+            onClick={() => toggleBookmark(place.placeId, place.isFavorite)}
           />
         </PlaceItem>
       ))}

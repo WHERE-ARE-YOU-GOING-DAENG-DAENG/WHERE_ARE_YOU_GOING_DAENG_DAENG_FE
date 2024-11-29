@@ -9,7 +9,7 @@ const useFavoriteStore = create((set, get) => ({
       const response = await axios.get("https://www.daengdaeng-where.link/api/v1/favorites?page=0&size=10");
       
       set({ favorites: response.data.data.content });
-      console.log(response.data.data.content)
+      console.log("zustand-bookmark",response.data.data.content) //로그 삭제
     } catch (error) {
       console.error("Error fetching favorites:", error);
     }
@@ -19,7 +19,7 @@ const useFavoriteStore = create((set, get) => ({
     try {
       const response = await axios.post("https://www.daengdaeng-where.link/api/v1/favorites", { placeId });
       // await get().fetchFavorites();
-      const newFavorite = response.data;
+      const newFavorite = response.data.data;
         set((state) => ({ favorites: [...state.favorites, newFavorite] }));
     } catch (error) {
       console.error("Error adding favorite:", error);
