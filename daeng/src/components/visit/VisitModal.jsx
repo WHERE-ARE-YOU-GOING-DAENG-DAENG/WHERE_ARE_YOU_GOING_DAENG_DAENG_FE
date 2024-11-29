@@ -7,6 +7,7 @@ import isBetween from "dayjs/plugin/isBetween";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import ConfirmBtn from "../../components/commons/ConfirmBtn";
 import ReactSelect from "react-select"
+import axios from "axios";
 
 dayjs.extend(isBetween);
 dayjs.extend(customParseFormat);
@@ -95,18 +96,18 @@ const Label = styled.label`
   font-weight: bold;
 `;
 
-const Select = styled.select`
-  padding: 10px;
-  border: 0.5px solid #d9d9d9;
-  border-radius: 5px;
-  font-size: 15px;
-  cursor: pointer;
+// const Select = styled.select`
+//   padding: 10px;
+//   border: 0.5px solid #d9d9d9;
+//   border-radius: 5px;
+//   font-size: 15px;
+//   cursor: pointer;
 
-  &:focus {
-    border-color: #ff69a9;
-    outline: none;
-  }
-`;
+//   &:focus {
+//     border-color: #ff69a9;
+//     outline: none;
+//   }
+// `;
 
 const InputAlert = styled.p`
   color: #ff69a9;
@@ -156,7 +157,7 @@ const selectStyles = {
       }),
 }
 
-const VisitModal = ({ isOpen, onClose, initDate = null, initTime = null, userPets = []  }) => {
+const VisitModal = ({ placeId, isOpen, onClose, initDate = null, initTime = null, userPets = []  }) => {
     const [isClosing, setIsClosing] = useState(false);
     const [selectedDate, setSelectedDate] = useState(initDate);
     const [selectedTime, setSelectedTime] = useState(initTime || "");
@@ -227,12 +228,25 @@ const VisitModal = ({ isOpen, onClose, initDate = null, initTime = null, userPet
         setSelectedPets(petIds);
       };
 
-      const handleSubmit = (e) => {
+      const handleSubmit = async (e) => {
         e.preventDefault();
         if (!selectedDate || !selectedTime || selectedPets.length === 0) {
             alert("모두 선택해주세요");
             return;
         }
+        // try{
+        //   const response = await axios.post("https://www.daengdaeng-where.link/api/v1/visitHope",{
+        //   withCredentials: true
+        // })
+        // const {status, data} = response;
+        // if(status === 200){
+        //     console.log(data);
+        // }else{
+        //     console.error("응답에러")
+        // }
+        // }catch(error){
+        //   console.error("요청에러",error)
+        // }
         alert(`날짜: ${selectedDate}, 시간: ${selectedTime}, 펫: ${selectedPets.join(", ")}`);
         setSelectedDate("");
         setSelectedTime("");
