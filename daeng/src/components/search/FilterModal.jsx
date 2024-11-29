@@ -33,14 +33,14 @@ const FilterModal = ({ isOpen, onClose, keywords, setKeywords, setFilter }) => {
     const handleSubRegionSelect = (subRegion) => {
         setKeywords((prev) => ({
             ...prev,
-            cityDetail: subRegion, // 세부 지역 업데이트
+            cityDetail: subRegion,
         }));
     };
 
     const handlePlaceTypeSelect = (placeType) => {
         setKeywords((prev) => ({
             ...prev,
-            placeType, // 장소 유형 업데이트
+            placeType,
         }));
     };
 
@@ -55,13 +55,13 @@ const FilterModal = ({ isOpen, onClose, keywords, setKeywords, setFilter }) => {
     useEffect(() => {
 
         if (isOpen) {
-            document.body.style.overflow = 'hidden'; // Body 스크롤 잠금
+            document.body.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'auto'; // Body 스크롤 복원
+            document.body.style.overflow = 'auto';
         }
 
         return () => {
-            document.body.style.overflow = 'auto'; // 컴포넌트 언마운트 시 복원
+            document.body.style.overflow = 'auto';
         };
 
     }, [isOpen]);
@@ -119,22 +119,26 @@ const FilterModal = ({ isOpen, onClose, keywords, setKeywords, setFilter }) => {
                 <Reset onClick={resetKeywords}>
                     <img src={trashcan} alt="초기화" />
                 </Reset>
-                <div>
-                    {Object.entries(keywords).map(([key, value]) => (
-                        value && ( 
+                <Gap>
+                {Object.entries(keywords)
+                    .filter(([key]) => key === "cityDetail" || key === "placeType") // 필터링
+                    .map(([key, value]) =>
+                        value ? (
                             <AreaBtn
-                                key={key} 
+                                key={key}
                                 mode="keyword"
                                 isSelected={true}
                                 label={`${value}`}
-                                onClick={() => setKeywords((prev) => ({
-                                    ...prev,
-                                    [key]: "",
-                                }))}
+                                onClick={() =>
+                                    setKeywords((prev) => ({
+                                        ...prev,
+                                        [key]: "",
+                                    }))
+                                }
                             />
-                        )
-                    ))}
-                </div>
+                        ) : null
+                    )}
+                </Gap>
                 </Keyword>
                 <Thindivision />
                 <Footer>
@@ -266,6 +270,10 @@ const Keyword = styled.div`
     margin: 20px 30px;
     display: flex;
     flex-wrap: wrap;
+    gap: 10px;
+`
+const Gap = styled.div`
+    display: flex;
     gap: 10px;
 `
 
