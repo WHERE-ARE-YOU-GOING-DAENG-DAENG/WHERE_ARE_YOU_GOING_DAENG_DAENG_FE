@@ -106,7 +106,7 @@ const PlaceInfo = ({data}) => {
                   </div>
                   <div className="info-item">
                     <img src={hourIcon} alt="운영시간" />
-                    <span>{data.start_time} - {data.end_time}</span>
+                    <span>{data.startTime} - {data.endTime}</span>
                   </div>
                   <div className="info-item">
                     <img src={callnumberIcon} alt="전화번호" />

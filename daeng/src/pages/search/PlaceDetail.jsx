@@ -24,42 +24,41 @@ const Division = styled.div`
 
 const PlaceDetail = () => {
     const { id } = useParams(); //나중에 id기준으로 API 호출
-    // const [data, setData] = useState("");
+    const [data, setData] = useState("");
       useEffect(()=>{
         const fetchPlaceDetail = async () => {
           try{
             const placeResponse = await axios.get(`https://www.daengdaeng-where.link/api/v1/places/${id}`,{
               withCredentials: true,
             });
-            const reviewResponse = await axios.get(`https://www.daengdaeng-where.link/api/v1/reviews/${id}/LATEST?page=1&size=3`)
+            const reviewResponse = await axios.get(`https://www.daengdaeng-where.link/api/v1/reviews/place/${id}/LATEST?page=0&size=3`)
             
-            const placeData = placeResponse.data;
-            const reviewData = reviewResponse.data;
+            const placeData = placeResponse.data.data;
+            const reviewData = reviewResponse.data.data;
 
             const combinedData = {
               ...placeData,
               reviews: reviewData.reviews,
-              reviewStats: { //필요없는 건 삭제하기
-                total: reviewData.total,
-                page: reviewData.page,
-                size: reviewData.size,
-                isFirst: reviewData.isFirst,
-                isLast: reviewData.isLast,
-                score: reviewData.score,
-                bestKeywords: reviewData.bestKeywords,
-              }
+              total: reviewData.total,
+              page: reviewData.page,
+              size: reviewData.size,
+              isFirst: reviewData.isFirst,
+              isLast: reviewData.isLast,
+              score: reviewData.score,
+              bestKeywords: reviewData.bestKeywords,
             }
+            console.log(combinedData) //로그 삭제
             setData(combinedData);
           }catch(error){
             console.error("Error fetching place detail:", error)
           }
         }
-        // fetchPlaceDetail();
+        fetchPlaceDetail();
       },[id]);
     return(
         <>
           <Header label="시설 상세페이지" />
-          <HeaderImage src={data.img_path} alt="시설이미지" />
+          <HeaderImage src={ data.img_path ? data.img_path : "https://via.placeholder.com/552x375"} alt="시설이미지" />
           <PlaceTitle data={data}/>
           <PlaceInfo data={data} />
           <Division />
@@ -73,79 +72,79 @@ const PlaceDetail = () => {
     )
 };
 
-const data = {
-  placeId: 1929,
-  name: "양재천근린공원",
-  city: "서울특별시",
-  cityDetail: "서초구",
-  township: "양재동",
-  latitude: 37.47662396,
-  longitude: 127.041508,
-  streetAddresses: "서울특별시 서초구 양재동",
-  telNumber: "02-2155-6896",
-  url: "https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=09d42fc7-cfd1-4af5-91ca-7d45e7bf9c36&big_category=A02&mid_category=A0202&big_area=1",
-  placeType: "공원",
-  description: "목줄, 배변봉투 공원",
-  parking: true,
-  indoor: false,
-  outdoor: true,
-  distance: 2.668402600535259,
-  isFavorite: false,
-  start_time: "09:00",
-  end_time: "20:00",
-  img_path: "https://via.placeholder.com/552x375",
-  reviews: [
-    {
-      userId: 1,
-      placeId: 1,
-      nickname: "UserOne",
-      petImg: "https://example.com/image1.jpg",
-      reviewId: 1,
-      pets: ["Max", "Mittens", "Buddy"],
-      content: "마당이 넓어요",
-      score: 5,
-      media: ["path1"],
-      keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
-      visitedAt: "2024-04-10",
-      createdAt: "2024-11-22T10:29:14.54327"
-    },
-    {
-      userId: 1,
-      placeId: 1,
-      nickname: "UserOne",
-      petImg: "https://example.com/image1.jpg",
-      reviewId: 1,
-      pets: ["Max", "Mittens", "Buddy"],
-      content: "마당이 넓어요",
-      score: 5,
-      media: ["path1"],
-      keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
-      visitedAt: "2024-04-10",
-      createdAt: "2024-11-22T10:29:14.54327"
-    },
-    {
-      userId: 1,
-      placeId: 1,
-      nickname: "UserOne",
-      petImg: "https://example.com/image1.jpg",
-      reviewId: 1,
-      pets: ["Max", "Mittens", "Buddy"],
-      content: "마당이 넓어요",
-      score: 5,
-      media: ["path1"],
-      keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
-      visitedAt: "2024-04-10",
-      createdAt: "2024-11-22T10:29:14.54327"
-    },
-  ],
-  reviewStats: {
-    total: 5,
-    page: 0,
-    size: 15,
-    isFirst: true,
-    isLast: true,
-    score: 3,
-    bestKeywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"]
-  }
-}
+// const data = {
+//   placeId: 1929,
+//   name: "양재천근린공원",
+//   city: "서울특별시",
+//   cityDetail: "서초구",
+//   township: "양재동",
+//   latitude: 37.47662396,
+//   longitude: 127.041508,
+//   streetAddresses: "서울특별시 서초구 양재동",
+//   telNumber: "02-2155-6896",
+//   url: "https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=09d42fc7-cfd1-4af5-91ca-7d45e7bf9c36&big_category=A02&mid_category=A0202&big_area=1",
+//   placeType: "공원",
+//   description: "목줄, 배변봉투 공원",
+//   parking: true,
+//   indoor: false,
+//   outdoor: true,
+//   distance: 2.668402600535259,
+//   isFavorite: false,
+//   start_time: "09:00",
+//   end_time: "20:00",
+//   img_path: "https://via.placeholder.com/552x375",
+//   reviews: [
+//     {
+//       userId: 1,
+//       placeId: 1,
+//       nickname: "UserOne",
+//       petImg: "https://example.com/image1.jpg",
+//       reviewId: 1,
+//       pets: ["Max", "Mittens", "Buddy"],
+//       content: "마당이 넓어요",
+//       score: 5,
+//       media: ["path1"],
+//       keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
+//       visitedAt: "2024-04-10",
+//       createdAt: "2024-11-22T10:29:14.54327"
+//     },
+//     {
+//       userId: 1,
+//       placeId: 1,
+//       nickname: "UserOne",
+//       petImg: "https://example.com/image1.jpg",
+//       reviewId: 1,
+//       pets: ["Max", "Mittens", "Buddy"],
+//       content: "마당이 넓어요",
+//       score: 5,
+//       media: ["path1"],
+//       keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
+//       visitedAt: "2024-04-10",
+//       createdAt: "2024-11-22T10:29:14.54327"
+//     },
+//     {
+//       userId: 1,
+//       placeId: 1,
+//       nickname: "UserOne",
+//       petImg: "https://example.com/image1.jpg",
+//       reviewId: 1,
+//       pets: ["Max", "Mittens", "Buddy"],
+//       content: "마당이 넓어요",
+//       score: 5,
+//       media: ["path1"],
+//       keywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"],
+//       visitedAt: "2024-04-10",
+//       createdAt: "2024-11-22T10:29:14.54327"
+//     },
+//   ],
+
+//     total: 5,
+//     page: 0,
+//     size: 15,
+//     isFirst: true,
+//     isLast: true,
+//     score: 3,
+//     bestKeywords: ["PLACE_FTE_01", "PLACE_FTE_02", "PLACE_FTE_03"]
+  
+// }
 export default PlaceDetail;
