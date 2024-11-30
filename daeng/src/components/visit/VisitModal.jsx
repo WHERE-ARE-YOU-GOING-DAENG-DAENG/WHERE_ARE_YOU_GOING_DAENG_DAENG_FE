@@ -146,7 +146,7 @@ const selectStyles = {
       }),
 }
 
-const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = null, initTime = null, userPets = []  }) => {
+const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = null, initTime = null, pets = []  }) => {
     const [isClosing, setIsClosing] = useState(false);
     const [selectedDate, setSelectedDate] = useState(initDate);
     const [selectedTime, setSelectedTime] = useState(initTime || "");
@@ -329,9 +329,9 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         };
     }, [isOpen]);
 
-    const petOptions = userPets.map((pet) => ({
+    const petOptions = pets.map((pet) => ({
         value: pet.petId,
-        label: pet.petName,
+        label: pet.name,
     }));
 
     if (!isOpen) return null;

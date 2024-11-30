@@ -2,7 +2,8 @@ import styled from "styled-components";
 import VisitDateSection from "./VisitDateSection";
 import ConfirmBtn from "../../components/commons/ConfirmBtn";
 import VisitModal from "./VisitModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import usePetStore from "../../stores/usePetStore";
 
 const Container = styled.div`
   display: flex;
@@ -24,21 +25,29 @@ const FixedButtonWrapper = styled.div`
 const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState({});
+  const pets = usePetStore((state)=> state.pets);
+  const fetchPetList = usePetStore((state)=> state.fetchPetList);
+
+  useEffect(()=>{
+    const fetchPets = async () => {
+        await fetchPetList();
+        console.log(pets)
+    };
+    
+    fetchPets();
+  },[])
 
   const toggleModal = () => {
       setIsModalOpen(!isModalOpen);
   };
 
   const openModal = (initDate = null , initTime = null) => {
-    const userPets = [
-      {petId:32, petName: "이보리"},
-      {petId:33, petName: "지연우"},
-    ]
+    console.log("현재 펫:",pets)
 
     setModalProps({
       initDate,
       initTime,
-      userPets
+      pets
     })
     setIsModalOpen(true);
   }
