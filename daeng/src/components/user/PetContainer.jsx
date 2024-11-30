@@ -154,7 +154,6 @@ const handleToPetEdit = (petId) => {
   navigate(`/pet-edit/${petId}`);
 };
 
-
 if (!petData) {
   return <div>Loading...</div>;
 }
