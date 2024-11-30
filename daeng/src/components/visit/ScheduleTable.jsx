@@ -57,12 +57,8 @@ const ScheduleTable = () => {
       confirmText: "취소",
       cancelText: "닫기",
       onConfirm: async () => {
-          try{
-              console.log(id);
-              await removeVisit(id);
-          }catch (error) {
-              console.error("Error deleting favorite:", error);
-          }
+        await removeVisit(id);
+          
       }
   })
   };

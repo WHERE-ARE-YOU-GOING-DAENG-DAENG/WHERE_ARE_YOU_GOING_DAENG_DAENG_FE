@@ -7,6 +7,7 @@ import isBetween from "dayjs/plugin/isBetween";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import ConfirmBtn from "../../components/commons/ConfirmBtn";
 import ReactSelect from "react-select"
+import AlertDialog from "../commons/SweetAlert";
 import axios from "axios";
 
 dayjs.extend(isBetween);
@@ -167,12 +168,23 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
 
     useEffect(()=>{
         const fetchTime = async () => {
-            const response = await axios.get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`,{
+            try{const response = await axios.get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`,{
                 withCredentials: true,
             });
             setStartTime(response.data.data.startTime);
             setEndTime(response.data.data.endTime);
             console.log(response.data.data.startTime, response.data.data.endTime)
+        }catch(error){
+            if(error.response){
+                AlertDialog({
+                mode: "alert",
+                title: "영업시간 조회",
+                text: "영업시간 조회에 실패하였습니다.",
+                confirmText: "확인",
+                onConfirm: () => console.log("영업시간 조회 실패"),
+            });
+          }
+        }
         }
         fetchTime();
     },[])
@@ -258,9 +270,23 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         setReloadTrigger((prev) => !prev);
         }catch(error){
             if (error.response && error.response.status === 409) {
-                alert("이미 방문등록된 반려동물입니다.");
+                AlertDialog({
+                mode: "alert",
+                title: "방문예정 등록",
+                text: "이미 등록된 반려동물입니다.",
+                confirmText: "확인",
+                onConfirm: () => console.log("방문예정 중복 등록"),
+            });
             } else {
-                console.error("요청 에러:", error);
+                if(error.response){
+                    AlertDialog({
+                    mode: "alert",
+                    title: "방문예정등록",
+                    text: "방문예정 등록에 실패하였습니다.",
+                    confirmText: "확인",
+                    onConfirm: () => console.log("방문예정 등록 실패"),
+                });
+              }
             }
         }
         setSelectedDate("");
