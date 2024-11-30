@@ -115,6 +115,6 @@ function ReviewForm() {
     </ReviewPictureContainer>
   </>
   )
-} //일단 더미데이터로 > 나중에 사용자 정보 받아와야 함
+} 
 
 export default ReviewForm
