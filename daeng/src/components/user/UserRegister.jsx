@@ -56,12 +56,50 @@ function UserRegister() {
     }));
   };
 
+  const validateFields = () => {
+    if (!userData.nickname.trim()) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 필요",
+        text: "닉네임은 최소 1자 이상 작성해 주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
+      });
+      return false;
+    }
+  
+    const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
+    if (!userData.nickname || !nicknameRegex.test(userData.nickname)) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 오류",
+        text: "특수문자는 사용하실 수 없습니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 오류 경고 확인됨"),
+      });
+      return false;
+    }
+  
+    if (!userData.nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.alarmAgreement) {
+      AlertDialog({
+        mode: "alert",
+        title: "입력 필요",
+        text: "모든 필드를 작성해주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("모든 필드 작성 경고 확인됨"),
+      });
+      return false;
+    }
+  
+    return true;
+  };
 
 
   
   const handleConfirm = async () => {
-    
-  
+    if (!validateFields()) {
+      return;
+    }
     const payload = {
       nickname: userData.nickname,
       PushAgreement: userData.alarmAgreement === "받을래요",
