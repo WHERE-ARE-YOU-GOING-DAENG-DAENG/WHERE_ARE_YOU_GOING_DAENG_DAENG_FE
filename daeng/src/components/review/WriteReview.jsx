@@ -295,7 +295,7 @@ function WriteReview() {
   const [userNickname, setUserNickname] = useState('내가 진짜'); //zustand 처리
   const [selectKeywords, setSelectKeywords] = useState([]); 
   const [text, setText] = useState(""); // 리뷰 내용 상태
-  const [visitedAt, setVisitedAt] = useState(getCurrentDate()); // 방문한 날짜 
+  const [visitedAt, setVisitedAt] = useState(""); // 초기값을 빈 문자열로 설정
   const [selectedPetImage, setSelectedPetImage] = useState(""); // 선택된 펫 이미지 상태
   
   useEffect(() => {
@@ -347,6 +347,62 @@ function WriteReview() {
     setText(value); 
   };
 
+  const validateForm = () => {
+
+    if (selectKeywords.length === 0) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "최소 하나 이상의 키워드를 선택해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+
+    if (!selectPet) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "함께한 펫을 선택해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+  
+    if (!visitedAt) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "방문한 날짜를 선택해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+  
+    if (!ratings.filter(Boolean).length) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "별점을 선택해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+  
+    if (!text.trim()) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "리뷰 내용을 작성해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+  
+    return true;
+  };
+
+
  // S3 업로드 시작
   const uploadMedia = async (files) => {
   const uploadedUrls = [];
@@ -378,15 +434,25 @@ function WriteReview() {
       console.error(`Failed to upload ${file.name}:`, error.message);
     }
   }
-  return uploadedUrls;
-};
+    return uploadedUrls;
+  };
 
-const handlePetSelection = (e) => {
-  console.log("선택된 펫:", e.target.value);
-  setSelectPet(e.target.value);
-};
+  const handlePetSelection = (e) => {
+    const selectedPetId = e.target.value;
+    setSelectPet(selectedPetId);
 
-  const handleSubmit = async () => {
+  const selectedPet = pets.find((pet) => pet.petId === parseInt(selectedPetId));
+  if (selectedPet) {
+    setSelectedPetImage(selectedPet.image); 
+  } else {
+    setSelectedPetImage(""); 
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) return;
+
     const placeId = 1; 
     const media = await uploadMedia(placeImgs); 
     console.log("Uploaded media URLs:", media);
@@ -396,7 +462,6 @@ const handlePetSelection = (e) => {
       return;
     }
   
-
     const reviewData = {
       placeId,
       content: text.trim(), 
@@ -405,8 +470,7 @@ const handlePetSelection = (e) => {
       keywords: selectKeywords, 
       pets: selectPet ? [parseInt(selectPet)] : [], 
       visitedAt, 
-  };
-
+    };
 
     try {
       const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
@@ -415,6 +479,7 @@ const handlePetSelection = (e) => {
           },
           withCredentials: true,
       });
+      alert('성공 ~~~~~')
       console.log("리뷰 등록 성공:", response.data);
     } catch (error) {
       console.error("리뷰 등록 실패:", error);
@@ -436,7 +501,10 @@ const handlePetSelection = (e) => {
         onSelectOptions={setSelectKeywords}
       />
         <UserInfoContainer>
-        <UserImg />
+        <UserImg
+          src={selectedPetImage || "/default-user-image.png"} //만든 이미지 넣어야함
+          alt="선택된 펫 이미지" 
+        />
           <UserNickname>{userNickname || "내가 진짜"}</UserNickname>
         </UserInfoContainer>
         <UserQuestionContainer>
