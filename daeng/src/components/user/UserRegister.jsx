@@ -115,7 +115,56 @@ function UserRegister() {
     }
   };
   
+  const handleNicknameCheck = async () => {
+    if (!userData.nickname.trim()) {
+        AlertDialog({
+            mode: "alert",
+            title: "닉네임 필요",
+            text: "닉네임을 입력해 주세요.",
+            confirmText: "확인",
+            onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
+        });
+        return;
+    }
 
+    try {
+        const { data } = await axios.get(
+            `https://www.daengdaeng-where.link/api/v1/user/duplicateNicname`,
+            {
+                params: { nickname: userData.nickname },
+                withCredentials: true,
+            }
+        );
+
+        if (data.data.isDuplicate === false) {
+            AlertDialog({
+                mode: "alert",
+                title: "닉네임 사용 가능",
+                text: "사용 가능한 닉네임입니다.",
+                confirmText: "확인",
+                onConfirm: () => console.log("사용 가능한 닉네임 확인됨"),
+            });
+        } else if (data.data.isDuplicate === true) {
+            AlertDialog({
+                mode: "alert",
+                title: "닉네임 중복",
+                text: "사용 불가능한 닉네임입니다. 다른 닉네임을 입력해주세요.",
+                confirmText: "확인",
+                onConfirm: () => console.log("닉네임 중복 확인됨"),
+            });
+        }
+    } catch (error) {
+        if (error.response) {
+            AlertDialog({
+                mode: "alert",
+                title: "닉네임 확인 실패",
+                text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+                confirmText: "확인",
+                onConfirm: () => console.log("서버 응답 오류 확인됨"),
+            });
+        }
+    }
+};
 
 
   return (
@@ -134,7 +183,7 @@ function UserRegister() {
           value={userData.nickname}
           onChange={(e) => handleInputChange('nickname', e.target.value)}
         />
-        <DuplicateBtn>중복확인</DuplicateBtn>
+        <DuplicateBtn onClick={handleNicknameCheck}>중복확인</DuplicateBtn>
       </InputBox>
       <InputAlert>*닉네임은 최소 1자 이상 작성해 주세요. 특수문자는 사용할 수 없습니다.</InputAlert>
 
