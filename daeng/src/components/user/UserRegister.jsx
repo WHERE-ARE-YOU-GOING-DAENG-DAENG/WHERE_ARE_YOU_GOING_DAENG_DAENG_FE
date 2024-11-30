@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
+import AlertDialog from "../commons/SweetAlert";
 
 function UserRegister() {
   const navigate = useNavigate();
@@ -29,20 +30,20 @@ function UserRegister() {
     gender: '', 
     city: '',
     cityDetail: '',
-    alarmAgreement: '',
+    alarmAgreement: '받을래요', 
   });
 
   const handleInputChange = (field, value) => {
     setUserData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: prev[field] === value ? '' : value,
     }));
   };
 
   const handleGenderChange = (genderCode) => {
     setUserData((prev) => ({
       ...prev,
-      gender: genderCode, 
+      gender: prev.gender === genderCode ? '' : genderCode,
     }));
   };
 
@@ -55,53 +56,67 @@ function UserRegister() {
     }));
   };
 
+
+
+  
   const handleConfirm = async () => {
+    
+  
     const payload = {
       nickname: userData.nickname,
-      PushAgreement: userData.alarmAgreement === '받을래요',
-      RegionAgreement: true,
+      PushAgreement: userData.alarmAgreement === "받을래요",
       email: userData.email,
-      gender: userData.gender, 
-      city: userData.city, 
+      gender: userData.gender,
+      city: userData.city,
       cityDetail: userData.cityDetail,
     };
-
-    console.log('회원가입 데이터:', payload);
-
+  
+    console.log("회원가입 데이터:", payload);
+  
     try {
       const { data, status } = await axios.post(
-        'https://www.daengdaeng-where.link/api/v1/signup',
+        "https://www.daengdaeng-where.link/api/v1/signup",
         payload,
         {
-          withCredentials: true
+          withCredentials: true,
         }
       );
-
+  
       if (status === 200 || status === 201) {
-        console.log('응답 데이터:', data);
-        alert('회원가입 성공!');
-        navigate('/');
+        console.log("응답 데이터:", data);
+        AlertDialog({
+          mode: "alert",
+          title: "회원가입 성공",
+          text: "회원가입이 성공적으로 완료되었습니다.",
+          confirmText: "확인",
+          onConfirm: () => navigate("/"),
+        });
       } else {
         console.error(`Unexpected status code: ${status}`);
-        alert('회원가입 중 문제가 발생했습니다. 다시 시도해주세요.');
+        AlertDialog({
+          mode: "alert",
+          title: "회원가입 실패",
+          text: "회원가입 중 문제가 발생했습니다. 다시 시도해주세요.",
+          confirmText: "확인",
+          onConfirm: () => console.log("회원가입 실패 확인됨"),
+        });
       }
     } catch (error) {
       if (error.response) {
-        console.error('회원가입 실패 - 서버 응답:', error.response.data);
-        alert(
-          `회원가입 실패: ${
-            error.response.data.message || '알 수 없는 오류가 발생했습니다.'
-          }`
-        );
-      } else if (error.request) {
-        console.error('회원가입 실패 - 응답 없음:', error.request);
-        alert('회원가입 중 네트워크 문제가 발생했습니다. 다시 시도해주세요.');
-      } else {
-        console.error('회원가입 실패 - 요청 설정 오류:', error.message);
-        alert('회원가입 중 알 수 없는 오류가 발생했습니다.');
+        console.error("회원가입 실패 - 서버 응답:", error.response.data);
+        AlertDialog({
+          mode: "alert",
+          title: "회원가입 실패",
+          text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+          confirmText: "확인",
+          onConfirm: () => console.log("서버 오류 확인됨"),
+        });
       }
     }
   };
+  
+
+
 
   return (
     <UserContainer>
@@ -141,7 +156,7 @@ function UserRegister() {
       <SelectionContainer>
         <SelectBox onChange={handleCityChange} value={userData.city}>
           <option value="" disabled>
-            시 선택
+            도 선택
           </option>
           {Object.keys(AreaField).map((cityName, index) => (
             <option key={index} value={cityName}>
@@ -155,7 +170,7 @@ function UserRegister() {
           disabled={!AreaField[userData.city]?.length}
         >
           <option value="" disabled>
-            군 선택
+          시/군/구 선택
           </option>
           {(AreaField[userData.city] || []).map((districtName, index) => (
             <option key={index} value={districtName}>
