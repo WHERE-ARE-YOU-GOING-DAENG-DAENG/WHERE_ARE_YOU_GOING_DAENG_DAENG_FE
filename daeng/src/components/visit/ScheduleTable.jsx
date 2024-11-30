@@ -3,6 +3,7 @@ import styled from "styled-components";
 import xIcon from "../../assets/icons/x.svg";
 import useVisitStore from "../../stores/useVisitStore";
 import AlertDialog from "../commons/SweetAlert";
+import { useNavigate } from "react-router-dom";
 
 const TableWrapper = styled.div`
   margin: 0px 40px;
@@ -37,6 +38,12 @@ const Td = styled.td`
   border: 1px solid #ddd;
 `;
 
+const ColSpanTd = styled(Td)`
+  text-align: center;
+  font-weight: bold;
+  padding-top: 3vh;
+`;
+
 const Button = styled.button`
   border: none;
   background-color: white;
@@ -49,7 +56,14 @@ const Button = styled.button`
 const ScheduleTable = () => {
   const myVisits = useVisitStore((state)=>state.myVisits);
   const removeVisit  = useVisitStore((state) => state.removeVisit);
-  const handleDelete = (id) => {
+  const navigate = useNavigate();
+
+  const handleVisitClick = (placeId) => {
+    navigate(`/visit-list/${placeId}`);
+  };
+
+  const handleDelete = (e, id) => {
+    e.stopPropagation();
     AlertDialog({
       mode: "confirm",
       title: "방문예정취소",
@@ -78,8 +92,12 @@ const ScheduleTable = () => {
         <tbody>
           {myVisits.length > 0 ? (
             myVisits.map((schedule, index) => (
-              <tr key={index}>
-                <Td>{schedule.visitAt.split("T")[0]}</Td>
+              <tr
+                key={index}
+                onClick={() => handleVisitClick(schedule.placeId)}
+                style={{ cursor: "pointer" }}
+              >
+                <Td>{schedule.visitAt.split("T")[0].slice(5).replace("-","/")}</Td>
                 <Td>{schedule.visitAt.split("T")[1].slice(0, 5)}</Td>
                 <Td>{schedule.placeName}</Td>
                 <Td>
@@ -91,7 +109,7 @@ const ScheduleTable = () => {
                   ))}
                 </Td>
                 <Td>
-                  <Button onClick={() => handleDelete(schedule.visitId)}>
+                  <Button onClick={(e) => handleDelete(e, schedule.visitId)}>
                     <img src={xIcon} alt="삭제" />
                   </Button>
                 </Td>
@@ -99,7 +117,7 @@ const ScheduleTable = () => {
             ))
           ) : (
             <tr>
-              <Td colSpan="5">일정 없음</Td>
+              <ColSpanTd colSpan="5">일정이 없습니다.</ColSpanTd>
             </tr>
           )}
         </tbody>

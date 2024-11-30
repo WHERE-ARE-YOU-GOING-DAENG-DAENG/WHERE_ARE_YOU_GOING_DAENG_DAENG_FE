@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import ConfirmBtn from "../../components/commons/ConfirmBtn";
-import ReactSelect from "react-select"
+import ReactSelect from "react-select" // 다중선택 select라이브러리
 import AlertDialog from "../commons/SweetAlert";
 import axios from "axios";
 
@@ -97,19 +97,6 @@ const Label = styled.label`
   font-weight: bold;
 `;
 
-// const Select = styled.select`
-//   padding: 10px;
-//   border: 0.5px solid #d9d9d9;
-//   border-radius: 5px;
-//   font-size: 15px;
-//   cursor: pointer;
-
-//   &:focus {
-//     border-color: #ff69a9;
-//     outline: none;
-//   }
-// `;
-
 const InputAlert = styled.p`
   color: #ff69a9;
   font-size: 11px;
@@ -117,6 +104,7 @@ const InputAlert = styled.p`
   gap: 1px;
 `;
 
+// select css
 const selectStyles = {
     control: (provided, state) => ({
         ...provided,
@@ -191,14 +179,14 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
 
     const generateTimeOptions = (startTime, endTime) => {
         const options = [];
-        let currentTime = dayjs(startTime, "HH:mm"); // 시작 시간 파싱
-        const end = dayjs(endTime, "HH:mm"); // 끝 시간 파싱
+        let currentTime = dayjs(startTime, "HH:mm");
+        const end = dayjs(endTime, "HH:mm");
         while (currentTime.isBefore(end) || currentTime.isSame(end)) {
             options.push({
                 value: currentTime.format("HH:mm"),
                 label: currentTime.format("HH:mm"),
             });
-            currentTime = currentTime.add(30, "minute"); // 30분 증가
+            currentTime = currentTime.add(30, "minute");
         }
     
         return options;
@@ -225,7 +213,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         const startDate = dayjs().format("YYYY-MM-DD");
         const endDate = dayjs().add(6, "day").format("YYYY-MM-DD");
     
-        // 클릭된 날짜가 오늘 이전인지, 오늘부터 일주일 구간인지 확인
         if (dayjs(date).isBefore(today, "day")) {
           alert("등록불가")
         } else if (dayjs(date).isBetween(startDate, endDate, "day", "[]")) {
@@ -251,12 +238,47 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         setSelectedPets(petIds);
       };
 
+      const validateInputs = () => {
+        if (!selectedDate) {
+            AlertDialog({
+                mode: "alert",
+                title: "",
+                text: "날짜를 선택해주세요.",
+                confirmText: "확인",
+                onConfirm: () => console.log("날짜 선택 누락"),
+            });
+            return false;
+        }
+    
+        if (!selectedTime) {
+            AlertDialog({
+                mode: "alert",
+                title: "",
+                text: "시간을 선택해주세요.",
+                confirmText: "확인",
+                onConfirm: () => console.log("시간 선택 누락"),
+            });
+            return false;
+        }
+    
+        if (selectedPets.length === 0) {
+            AlertDialog({
+                mode: "alert",
+                title: "",
+                text: "반려동물을 선택해주세요.",
+                confirmText: "확인",
+                onConfirm: () => console.log("반려동물 선택 누락"),
+            });
+            return false;
+        }
+    
+        return true;
+    };
+
       const handleSubmit = async () => {
-        if (!selectedDate || !selectedTime || selectedPets.length === 0) {
-            alert("모두 선택해주세요");
+        if (!validateInputs()) {
             return;
         }
-
         const payload = {
             placeId,
             petIds: selectedPets,
