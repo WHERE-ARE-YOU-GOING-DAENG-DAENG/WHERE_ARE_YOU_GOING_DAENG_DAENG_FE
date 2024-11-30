@@ -122,9 +122,9 @@ function UserRegister() {
         AlertDialog({
           mode: "alert",
           title: "회원가입 성공",
-          text: "회원가입이 성공적으로 완료되었습니다.",
+          text: "회원가입이 성공적으로 완료되었습니다. 선호도 등록페이지로 이동합니다.",
           confirmText: "확인",
-          onConfirm: () => navigate("/"),
+          onConfirm: () => navigate("/preference-register"),
         });
       } else {
         console.error(`Unexpected status code: ${status}`);
