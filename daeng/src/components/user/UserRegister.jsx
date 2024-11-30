@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
+import AlertDialog from "../commons/SweetAlert";
 
 function UserRegister() {
   const navigate = useNavigate();
@@ -29,20 +30,20 @@ function UserRegister() {
     gender: '', 
     city: '',
     cityDetail: '',
-    alarmAgreement: '',
+    alarmAgreement: '받을래요', 
   });
 
   const handleInputChange = (field, value) => {
     setUserData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: prev[field] === value ? '' : value,
     }));
   };
 
   const handleGenderChange = (genderCode) => {
     setUserData((prev) => ({
       ...prev,
-      gender: genderCode, 
+      gender: prev.gender === genderCode ? '' : genderCode,
     }));
   };
 
@@ -55,53 +56,150 @@ function UserRegister() {
     }));
   };
 
+  const validateFields = () => {
+    if (!userData.nickname.trim()) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 필요",
+        text: "닉네임은 최소 1자 이상 작성해 주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
+      });
+      return false;
+    }
+  
+    const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
+    if (!userData.nickname || !nicknameRegex.test(userData.nickname)) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 오류",
+        text: "특수문자는 사용하실 수 없습니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 오류 경고 확인됨"),
+      });
+      return false;
+    }
+  
+    if (!userData.nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.alarmAgreement) {
+      AlertDialog({
+        mode: "alert",
+        title: "입력 필요",
+        text: "모든 필드를 작성해주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("모든 필드 작성 경고 확인됨"),
+      });
+      return false;
+    }
+  
+    return true;
+  };
   const handleConfirm = async () => {
+    if (!validateFields()) {
+      return;
+    }
     const payload = {
       nickname: userData.nickname,
-      PushAgreement: userData.alarmAgreement === '받을래요',
-      RegionAgreement: true,
+      PushAgreement: userData.alarmAgreement === "받을래요",
       email: userData.email,
-      gender: userData.gender, 
-      city: userData.city, 
+      gender: userData.gender,
+      city: userData.city,
       cityDetail: userData.cityDetail,
     };
-
-    console.log('회원가입 데이터:', payload);
-
+  
+    console.log("회원가입 데이터:", payload);
+  
     try {
       const { data, status } = await axios.post(
-        'https://www.daengdaeng-where.link/api/v1/signup',
+        "https://www.daengdaeng-where.link/api/v1/signup",
         payload,
         {
-          withCredentials: true
+          withCredentials: true,
         }
       );
-
+  
       if (status === 200 || status === 201) {
-        console.log('응답 데이터:', data);
-        alert('회원가입 성공!');
-        navigate('/');
+        console.log("응답 데이터:", data);
+        AlertDialog({
+          mode: "alert",
+          title: "회원가입 성공",
+          text: "회원가입이 성공적으로 완료되었습니다. 선호도 등록페이지로 이동합니다.",
+          confirmText: "확인",
+          onConfirm: () => navigate("/preference-register"),
+        });
       } else {
         console.error(`Unexpected status code: ${status}`);
-        alert('회원가입 중 문제가 발생했습니다. 다시 시도해주세요.');
+        AlertDialog({
+          mode: "alert",
+          title: "회원가입 실패",
+          text: "회원가입 중 문제가 발생했습니다. 다시 시도해주세요.",
+          confirmText: "확인",
+          onConfirm: () => console.log("회원가입 실패 확인됨"),
+        });
       }
     } catch (error) {
       if (error.response) {
-        console.error('회원가입 실패 - 서버 응답:', error.response.data);
-        alert(
-          `회원가입 실패: ${
-            error.response.data.message || '알 수 없는 오류가 발생했습니다.'
-          }`
-        );
-      } else if (error.request) {
-        console.error('회원가입 실패 - 응답 없음:', error.request);
-        alert('회원가입 중 네트워크 문제가 발생했습니다. 다시 시도해주세요.');
-      } else {
-        console.error('회원가입 실패 - 요청 설정 오류:', error.message);
-        alert('회원가입 중 알 수 없는 오류가 발생했습니다.');
+        console.error("회원가입 실패 - 서버 응답:", error.response.data);
+        AlertDialog({
+          mode: "alert",
+          title: "회원가입 실패",
+          text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+          confirmText: "확인",
+          onConfirm: () => console.log("서버 오류 확인됨"),
+        });
       }
     }
   };
+  
+  const handleNicknameCheck = async () => {
+    if (!userData.nickname.trim()) {
+        AlertDialog({
+            mode: "alert",
+            title: "닉네임 필요",
+            text: "닉네임을 입력해 주세요.",
+            confirmText: "확인",
+            onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
+        });
+        return;
+    }
+
+    try {
+        const { data } = await axios.get(
+            `https://www.daengdaeng-where.link/api/v1/user/duplicateNicname`,
+            {
+                params: { nickname: userData.nickname },
+                withCredentials: true,
+            }
+        );
+
+        if (data.data.isDuplicate === false) {
+            AlertDialog({
+                mode: "alert",
+                title: "닉네임 사용 가능",
+                text: "사용 가능한 닉네임입니다.",
+                confirmText: "확인",
+                onConfirm: () => console.log("사용 가능한 닉네임 확인됨"),
+            });
+        } else if (data.data.isDuplicate === true) {
+            AlertDialog({
+                mode: "alert",
+                title: "닉네임 중복",
+                text: "사용 불가능한 닉네임입니다. 다른 닉네임을 입력해주세요.",
+                confirmText: "확인",
+                onConfirm: () => console.log("닉네임 중복 확인됨"),
+            });
+        }
+    } catch (error) {
+        if (error.response) {
+            AlertDialog({
+                mode: "alert",
+                title: "닉네임 확인 실패",
+                text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+                confirmText: "확인",
+                onConfirm: () => console.log("서버 응답 오류 확인됨"),
+            });
+        }
+    }
+};
 
   return (
     <UserContainer>
@@ -119,7 +217,7 @@ function UserRegister() {
           value={userData.nickname}
           onChange={(e) => handleInputChange('nickname', e.target.value)}
         />
-        <DuplicateBtn>중복확인</DuplicateBtn>
+        <DuplicateBtn onClick={handleNicknameCheck}>중복확인</DuplicateBtn>
       </InputBox>
       <InputAlert>*닉네임은 최소 1자 이상 작성해 주세요. 특수문자는 사용할 수 없습니다.</InputAlert>
 
@@ -141,7 +239,7 @@ function UserRegister() {
       <SelectionContainer>
         <SelectBox onChange={handleCityChange} value={userData.city}>
           <option value="" disabled>
-            시 선택
+            도 선택
           </option>
           {Object.keys(AreaField).map((cityName, index) => (
             <option key={index} value={cityName}>
@@ -155,9 +253,11 @@ function UserRegister() {
           disabled={!AreaField[userData.city]?.length}
         >
           <option value="" disabled>
-            군 선택
+          시/군/구 선택
           </option>
-          {(AreaField[userData.city] || []).map((districtName, index) => (
+          {(AreaField[userData.city] || [])
+          .slice(1)
+          .map((districtName, index) => (
             <option key={index} value={districtName}>
               {districtName}
             </option>
