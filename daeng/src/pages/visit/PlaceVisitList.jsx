@@ -3,7 +3,7 @@ import Header from "../../components/commons/Header";
 import Footer from "../../components/commons/Footer";
 import VisitScheduleList from "../../components/visit/VisitScheduleList";
 import styled from "styled-components";
-import petIcon from "../../assets/icons/user.svg"
+import AlertDialog from "../../components/commons/SweetAlert";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -27,7 +27,15 @@ const PlaceVisitList = () => {
                 console.log(response.data.data) //로그삭제
                 setList(response.data.data);
             }catch(error){
-                console.error("Error fetching visitlist", error)
+                if(error.response){
+                    AlertDialog({
+                    mode: "alert",
+                    title: "방문예정목록 조회",
+                    text: "방문예정목록 조회에 실패하였습니다.",
+                    confirmText: "확인",
+                    onConfirm: () => console.log("방문예정 조회 실패"),
+                });
+              }
             }
         }
         fetchPlaceVisit();

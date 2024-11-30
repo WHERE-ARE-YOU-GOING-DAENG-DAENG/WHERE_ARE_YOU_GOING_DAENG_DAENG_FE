@@ -19,9 +19,8 @@ const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
 
   const openModal = (initDate = null , initTime = null) => {
     const userPets = [
-      {petId:18, petName: "송댕댕"},
-      {petId:14, petName: "김땡땡"},
-      {petId:11, petName: "하이"},
+      {petId:32, petName: "이보리"},
+      {petId:33, petName: "지연우"},
     ]
 
     setModalProps({
