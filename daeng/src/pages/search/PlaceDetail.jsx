@@ -7,6 +7,7 @@ import PlaceInfo from "../../components/detail/PlaceInfo";
 import PlaceDescription from "../../components/detail/PlaceDescription";
 import PlaceAiReview from "../../components/commons/PlaceAiReview";
 import PlaceReviewList from "../../components/detail/PlaceReviewList";
+import AlertDialog from "../../components/commons/SweetAlert";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -50,7 +51,15 @@ const PlaceDetail = () => {
             console.log(combinedData) //로그 삭제
             setData(combinedData);
           }catch(error){
-            console.error("Error fetching place detail:", error)
+            if (error.response) {
+              AlertDialog({
+                  mode: "alert",
+                  title: "시설 상세 데이터 오류",
+                  text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+                  confirmText: "확인",
+                  onConfirm: () => console.log("서버 응답 오류 확인됨"),
+              });
+            }
           }
         }
         fetchPlaceDetail();

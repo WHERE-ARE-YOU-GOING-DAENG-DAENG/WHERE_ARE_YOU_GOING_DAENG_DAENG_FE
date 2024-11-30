@@ -7,6 +7,7 @@ import BookMarker from "../commons/BookMarker";
 import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
 import CustomOverlay from "./CustomOverlay";
 import useLocationStore from "../../stores/LocationStore";
+import AlertDialog from "../../components/commons/SweetAlert";
 const MapContainer = styled.div`
   width: 100%;
   height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 172px)" : "485px")};
@@ -81,7 +82,17 @@ const Map = ({ data, removeUi, externalCenter }) => {
             );
             setCurrentLocation(currentLocationMarker);
           },
-          (error) => console.error("Geolocation error:", error)
+          (error) => {
+            if (error.response) {
+              AlertDialog({
+                  mode: "alert",
+                  title: "위치 추적 실패",
+                  text: "현재 위치를 확인할 수 없습니다",
+                  confirmText: "확인",
+                  onConfirm: () => console.log("현재위치 마커표시 안됨"),
+              });
+            }
+          }
         );
       }
     };
