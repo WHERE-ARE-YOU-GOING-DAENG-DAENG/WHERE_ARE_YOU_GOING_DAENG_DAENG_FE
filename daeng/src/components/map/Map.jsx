@@ -6,22 +6,24 @@ import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
 import BookMarker from "../commons/BookMarker";
 import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
 import CustomOverlay from "./CustomOverlay";
-
+import useLocationStore from "../../stores/LocationStore";
 const MapContainer = styled.div`
   width: 100%;
-  height: ${({ $data }) => ($data && $data.length > 0 ? "calc(100vh - 172px)" : "485px")};
+  height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 172px)" : "485px")};
 
   @media (max-width: 554px) {
-    height: ${({ $data }) => ($data && $data.length > 0 ? "calc(100vh - 173px)" : "385px")};
+    height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 173px)" : "385px")};
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter, userLocation }) => {
+const Map = ({ data, removeUi, externalCenter }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const isLoaded = useGoogleMapsLoader();
-  const [markers, setMarkers] = useState([]); // 마커 리스트 관리
-  const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 }); // 초기 위치 (서울)
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 });
+  const setUserLocation = useLocationStore((state) => state.setUserLocation);
 
   useEffect(() => {
     if (isLoaded && !map) {
@@ -45,19 +47,28 @@ const Map = ({ data, removeUi, externalCenter, userLocation }) => {
     }
   }, [map, externalCenter]);
 
-  // 현재 위치 마커 추가
+  // 현재 위치 실시간으로 추적 후 마커 추가
+  const watchIdRef = useRef(null);
+
   useEffect(() => {
     if (isLoaded && map) {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
+
+        if (watchIdRef.current !== null) {
+          navigator.geolocation.clearWatch(watchIdRef.current);
+        }
+
+        watchIdRef.current = navigator.geolocation.watchPosition(
           (position) => {
             const location = {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             };
+
             setCenter(location);
             map.setCenter(location);
-            userLocation && userLocation(location);
+            setUserLocation(location);
+            console.log(location) //로그 삭제
 
             const currentLocationMarker = (
               <CustomOverlay
@@ -68,40 +79,49 @@ const Map = ({ data, removeUi, externalCenter, userLocation }) => {
                 <BookMarker label="현재 위치" icon={markerIcon} />
               </CustomOverlay>
             );
-            setMarkers((prevMarkers) => [...prevMarkers, currentLocationMarker]);
+            setCurrentLocation(currentLocationMarker);
           },
           (error) => console.error("Geolocation error:", error)
         );
       }
+    };
+
+
+  return () => {
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
     }
-  }, [isLoaded, map]);
+  };
+}, [isLoaded, map, setUserLocation]);
 
+ //다른 마커 표시
+ useEffect(() => {
+  if (isLoaded && map) {
+    // 기존 마커 정리 (Google Maps OverlayView의 상태 관리)
+    markers.forEach((marker) => marker.onRemove && marker.onRemove());
+    setMarkers([]);
 
-  // bookMark 데이터를 기반으로 마커 추가, 검색도 나중에 이거 쓰면될듯
-  useEffect(() => {
-    if (isLoaded && map && data && data.length > 0) {
-
-      setMarkers([]);
-
+    if (data && data.length > 0) {
+      // 새로운 CustomOverlay 생성 및 렌더링
       const newMarkers = data.map((location) => (
         <CustomOverlay
           key={location.placeId}
           position={{ lat: location.latitude, lng: location.longitude }}
           map={map}
         >
-          <BookMarker label={location.name} icon={bookmarkerIcon}/>
+          <BookMarker label={location.name} icon={bookmarkerIcon} />
         </CustomOverlay>
       ));
-      setMarkers(newMarkers);
-    }else {
-      // 데이터가 없으면 마커 비우기
-      setMarkers([]);
+      setMarkers(newMarkers); // 상태 관리
     }
-  }, [isLoaded, map, data])
+  }
+}, [isLoaded, map, data]);
 
   return (
-    <MapContainer ref={mapRef} $data={data}>
+    <MapContainer ref={mapRef} $data={data} $removeUi={removeUi}>
       {!isLoaded && <div>구글 맵 로딩 중...</div>}
+      {currentLocation}
       {markers}
     </MapContainer>
   );
