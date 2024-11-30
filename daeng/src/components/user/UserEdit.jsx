@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import SelectLabel from '../../components/commons/SelectLabel';
 import SelectBtn from '../../components/commons/SelectBtn';
@@ -8,18 +8,10 @@ import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
+import useUserStore from '../../stores/userStore';
 
 function UserEdit() {
-  const [userData, setUserData] = useState({
-    userId: '',
-    email: '',
-    nickname: '',
-    gender: '',
-    city: '',
-    cityDetail: '',
-    pushAgreement: '',
-    oauthProvider: '',
-  });
+  const { userData, setUserData } = useUserStore();
 
   useEffect(() => {
     const fetchUserData = async () => {
