@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SelectLabel from '../../components/commons/SelectLabel';
 import SelectBtn from '../../components/commons/SelectBtn';
@@ -11,7 +11,16 @@ import AlertDialog from "../commons/SweetAlert";
 import useUserStore from '../../stores/userStore';
 
 function UserEdit() {
-  const { userData, setUserData } = useUserStore();
+  const { userId, setUserId } = useUserStore();
+  const [userData, setUserData] = useState({
+    email: '',
+    nickname: '',
+    gender: '',
+    city: '',
+    cityDetail: '',
+    pushAgreement: '',
+    oauthProvider: '',
+  });
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -21,8 +30,9 @@ function UserEdit() {
         });
         const { user } = response.data.data;
   
+        setUserId(user.userId || '');
+
         setUserData({
-          userId: user.userId || '',
           email: user.email || '',
           nickname: user.nickname || '',
           gender: user.gender || '',
@@ -46,7 +56,7 @@ function UserEdit() {
     };
   
     fetchUserData();
-  }, []);
+  }, [setUserId]);
 
   const handleInputChange = (field, value) => {
     setUserData((prev) => {
@@ -181,7 +191,7 @@ const handleUpdate = async () => {
   const genderCode = userData.gender === '남자' ? 'GND_01' : userData.gender === '여자' ? 'GND_02' : '';
 
   const payload = {
-    userId: userData.userId,
+    userId,
     nickname: userData.nickname,
     gender: genderCode, 
     city: userData.city,
