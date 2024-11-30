@@ -34,6 +34,15 @@ const FavoriteListPicture = styled.div`
   background-image: url(${(props) => props.imgUrl});  // 이미지 URL을 props로 받도록 수정
   background-size: cover;
   background-position: center;
+
+  @media (max-width: 554px) {
+    width: 90px;
+    height: 108px;
+  }
+  @media (max-width: 450px) {
+    width: 80px;
+    height: 96px;
+  }
 `;
 
 const FavoritePlaceTitle = styled.h3`
@@ -47,6 +56,20 @@ const FavoritePlaceTitle = styled.h3`
   }
   @media (max-width: 554px) {
     font-size: 18px;
+
+    img{
+      width: 20px;
+      margin-left: 8px;
+    }
+  }
+
+   @media (max-width: 450px) {
+    font-size: 15px;
+
+    img{
+      width: 15px;
+      margin-left: 5px;
+    }
   }
 `;
 
@@ -58,6 +81,9 @@ const FavoritePlace = styled.p`
   @media (max-width: 554px) {
     font-size: 13px;
   }
+  @media (max-width: 450px) {
+    font-size: 10px;
+  }
 `;
 
 const FavoritePlaceTime = styled.p`
@@ -66,6 +92,9 @@ const FavoritePlaceTime = styled.p`
   margin: 0;
   @media (max-width: 554px) {
     font-size: 10px;
+  }
+    @media (max-width: 450px) {
+    font-size: 8px;
   }
 `;
 

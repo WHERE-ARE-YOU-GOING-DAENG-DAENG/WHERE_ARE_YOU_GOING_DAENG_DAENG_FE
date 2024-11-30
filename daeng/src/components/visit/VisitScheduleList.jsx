@@ -9,13 +9,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100vh - 250px);
   padding: 20px 44px;
   padding-bottom: 47px;
 `;
 
 const NoVisit = styled.div`
-  padding-top: 15vh;
+  padding: 15vh 0;
   font-weight: bold;
 `
 const FixedButtonWrapper = styled.div`
