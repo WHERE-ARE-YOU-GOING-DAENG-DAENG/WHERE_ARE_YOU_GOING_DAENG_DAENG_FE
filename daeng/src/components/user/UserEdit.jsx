@@ -287,7 +287,9 @@ const handleUpdate = async () => {
           <option value="시/군/구" disabled>
           시/군/구 선택
           </option>
-          {(AreaField[userData.city] || []).map((districtName, index) => (
+          {(AreaField[userData.city] || [])
+          .slice(1)
+          .map((districtName, index) => (
             <option key={index} value={districtName}>
               {districtName}
             </option>
