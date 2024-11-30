@@ -8,6 +8,7 @@ import axios from "axios";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
+import { placeFeatures } from "../../data/CommonCode";
 
 const WriteReviewAllContainer = styled.div`
   display: block;
@@ -220,7 +221,7 @@ const AddImgButton = styled.img`
   margin-bottom: 0px;
   cursor: pointer;
 `;
-//text container css
+
 const QuestionBox = styled.span`
   font-size: 15px;
   display: inline; 
@@ -287,39 +288,37 @@ const getCurrentDate = () => {
 
 
 function WriteReview() {
-  const { pets, isLoading, fetchPetList } = usePetStore();
+  const { pets, fetchPetList } = usePetStore();
   const [selectPet, setSelectPet] = useState(""); // 선택된 펫 ID
   const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
   const [previews, setPreviews] = useState([]); //이미지 미리보기
+  const [placeImgs, setPlaceImgs] = useState([]); // 업로드할 이미지 파일
   const [userNickname, setUserNickname] = useState('내가 진짜'); //zustand 처리
-  const [userImage, setUserImage] = useState(''); 
-  const [selectKeywords, setSelectKeywords] = useState([]); // 키워드 선택
-  const [content, setContent] = useState(""); // 리뷰 내용
+  const [selectKeywords, setSelectKeywords] = useState([]); 
+  const [text, setText] = useState(""); // 리뷰 내용 상태
   const [visitedAt, setVisitedAt] = useState(getCurrentDate()); // 방문한 날짜 
-  const S3_BASE_URL = "https://<bucket-name>.s3.<region>.amazonaws.com";
-  
   
   useEffect(() => {
     fetchPetList();
   }, [fetchPetList]);
-
+  console.log("펫 데이터:", pets); 
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-  
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviews((prevPreviews) => [...prevPreviews, reader.result]);
+        setPreviews((prev) => [...prev, reader.result]); 
       };
       reader.readAsDataURL(file);
+
+      setPlaceImgs((prev) => [...prev, file]);
     });
-    e.target.value = null;
   };
 
   const handleStarClick = (index) => {
-    setRatings((prevRatings) => {
-      const newRatings = [...prevRatings];
+    setRatings((prev) => {
+      const newRatings = [...prev];
       newRatings[index] = !newRatings[index];
       return newRatings;
     });
@@ -329,68 +328,76 @@ function WriteReview() {
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
-  const [text, setText] = useState('');
-  const maxLength = 500;
-
   const handleChange = (e) => {
-    if (e.target.value.length > maxLength) {
+    const maxLength = 500;
+    const value = e.target.value;
+  
+    if (value.length > maxLength) {
       AlertDialog({
         mode: "alert",
         title: "선택 제한",
         text: `최대 ${maxLength}자까지만 작성 가능합니다.`,
         confirmText: "닫기" 
       });
-    } else {
-      setText(e.target.value);  
-    }
+      return;
+    }   
+    setText(value); 
   };
+ // S3 업로드 함수
+  const uploadMedia = async (file) => {
+  try {
+    console.log(`Requesting presigned URL for file: ${file.name}`);
+    const presignResponse = await axios.get(
+      `https://www.daengdaeng-where.link/api/v1/S3?prefix=review&fileName=${encodeURIComponent(file.name)}`
+    );
+    const presignedUrl = presignResponse.data.presignUrl; // S3 프리사인드 URL
+    console.log("Presign Response:", presignResponse.data);
+
+    const uploadResponse = await axios.put(presignedUrl, file, {
+      headers: { "Content-Type": file.type },
+    });
+    console.log("Upload Response:", uploadResponse);
+
+
+    if (uploadResponse.status === 200) {
+      console.log(`${file.name} 업로드 성공!`);
+      console.log(`File uploaded successfully: ${uploadedUrl}`);
+      return presignedUrl.split("?")[0]; // 업로드된 파일의 URL 반환
+    }
+  } catch (error) {
+    console.error("파일 업로드 실패:", error);
+  }
+  return null;
+};
 
   const handleSubmit = async () => {
-    const placeId = 1; // 예시로 1번 장소
-    const score = ratings.filter((rating) => rating).length; // 별점 
-    const media = previews;
-    const keywords = selectKeywords; // 선택한 키워드들 > 공통 코드로 설정해야함
-
-    // Step 1: 이미지 / 동영상 업로드 처리
-  const uploadMedia = async (file) => {
-    try {
-      const presignResponse = await axios.get(
-        `https://your-server-url.com/api/v1/S3?prefix=review&fileName=${file.name}`
-      );
-
-      const presignedUrl = presignResponse.data.presignUrl;
-
-      const fileUploadResponse = await axios.put(presignedUrl, file, {
-        headers: {
-          'Content-Type': file.type, 
-        },
-      });
-
-      if (fileUploadResponse.status === 200) {
-        console.log(`${file.name} 업로드 성공!`);
-        return presignedUrl.split('?')[0]; // S3 URL 추출 (쿼리 파라미터 제외)
+    const placeId = 1; // 더미
+    const media = [];
+  
+    // 업로드된 URL을 media 배열에 추가
+    for (const file of placeImgs) {
+      const uploadedUrl = await uploadMedia(file);
+      if (uploadedUrl) {
+        media.push(uploadedUrl);
+      }else {
+        console.error("Failed to upload file:", file.name);
       }
-    } catch (error) {
-      console.error(`${file.name} 업로드 실패:`, error);
-      return null;
     }
-  };
+  
+    console.log("Uploaded media URLs:", media); // 업로드된 URL 확인
 
-  // 모든 미디어 파일을 업로드하고, 업로드된 URL을 media 배열에 저장
-  for (const file of previews) {
-    const uploadedUrl = await uploadMedia(file);
-    if (uploadedUrl) media.push(uploadedUrl); // 업로드된 URL을 media 배열에 추가
-  }
 
-    const reviewData = {
-      placeId,
-      content,
-      score,
-      media,
-      keywords,
-      pets,
-      visitedAt,
-    };
+ // 리뷰 데이터 생성
+  const reviewData = {
+    placeId,
+    content: text.trim(), // 입력된 리뷰 텍스트
+    score: ratings.filter(Boolean).length, // 선택된 별점 개수
+    media, // 업로드된 이미지 URL 배열
+    keywords: selectKeywords, // 선택된 키워드
+    pets: selectPet ? [parseInt(selectPet)] : [], // 선택된 펫 ID 배열
+    visitedAt, // 방문 날짜
+};
+
 
     try {
       const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
@@ -415,7 +422,10 @@ function WriteReview() {
         <WhatPointLike>어떤 점이 좋았나요?</WhatPointLike>
         <br />
         <SelectWarning>*이 장소에 맞는 키워드를 골라주세요 (1개~3개)</SelectWarning>
-        <PreferenceFavoriteOptionList />
+      <PreferenceFavoriteOptionList
+        selectedOptions={selectKeywords}
+        onSelectOptions={setSelectKeywords}
+      />
         <UserInfoContainer>
         <UserImg />
           <UserNickname>{userNickname || "내가 진짜"}</UserNickname>
