@@ -59,6 +59,7 @@ function UserEdit() {
   const handleInputChange = (field, value) => {
     setUserData((prev) => {
       if (field === "pushAgreement") {
+        console.log(`Updating pushAgreement to: ${value === "받을래요"}`);
         return {
           ...prev,
           pushAgreement: value === "받을래요",
@@ -88,7 +89,7 @@ function UserEdit() {
   };
 
   const validateFields = () => {
-    if (!userData.nickname.trim()) {
+    if (!nickname.trim()) { // Zustand에서 가져온 nickname 사용
       AlertDialog({
         mode: "alert",
         title: "닉네임 필요",
@@ -100,7 +101,7 @@ function UserEdit() {
     }
   
     const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
-    if (!userData.nickname || !nicknameRegex.test(userData.nickname)) {
+    if (!nickname || !nicknameRegex.test(nickname)) {
       AlertDialog({
         mode: "alert",
         title: "닉네임 오류",
@@ -111,7 +112,7 @@ function UserEdit() {
       return false;
     }
   
-    if (!userData.nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.pushAgreement) {
+    if (!nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.pushAgreement) {
       AlertDialog({
         mode: "alert",
         title: "입력 필요",
@@ -124,6 +125,7 @@ function UserEdit() {
   
     return true;
   };
+  
 
   const getOAuthIcon = () => {
     if (userData.oauthProvider === 'kakao') return kakaoBtn;
