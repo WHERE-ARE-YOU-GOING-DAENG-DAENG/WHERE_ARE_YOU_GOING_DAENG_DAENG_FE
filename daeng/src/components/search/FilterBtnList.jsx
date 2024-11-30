@@ -18,7 +18,7 @@ const Container = styled.div`
     }
 `;
 
-const FilterBtnList = () => {
+const FilterBtnList = ({keywords, setKeywords, setFilter}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const toggleModal = () => {
@@ -35,7 +35,7 @@ const FilterBtnList = () => {
                 <FilterBtn label="음식점" icon={restaurantIcon} size="small" />
             </Container>
 
-            <FilterModal isOpen={isModalOpen} onClose={toggleModal} />
+            <FilterModal isOpen={isModalOpen} onClose={toggleModal} keywords={keywords} setKeywords={setKeywords} setFilter={setFilter}/>
         </>
     );
 };
