@@ -26,44 +26,65 @@ const Division = styled.div`
 const PlaceDetail = () => {
     const { id } = useParams(); //나중에 id기준으로 API 호출
     const [data, setData] = useState("");
-      useEffect(()=>{
-        const fetchPlaceDetail = async () => {
-          try{
-            const placeResponse = await axios.get(`https://www.daengdaeng-where.link/api/v1/places/${id}`,{
-              withCredentials: true,
-            });
-            const reviewResponse = await axios.get(`https://www.daengdaeng-where.link/api/v1/reviews/place/${id}/LATEST?page=0&size=3`)
-            
-            const placeData = placeResponse.data.data;
-            const reviewData = reviewResponse.data.data;
-
-            const combinedData = {
-              ...placeData,
-              reviews: reviewData.reviews,
-              total: reviewData.total,
-              page: reviewData.page,
-              size: reviewData.size,
-              isFirst: reviewData.isFirst,
-              isLast: reviewData.isLast,
-              score: reviewData.score,
-              bestKeywords: reviewData.bestKeywords,
-            }
-            console.log(combinedData) //로그 삭제
-            setData(combinedData);
-          }catch(error){
-            if (error.response) {
+      
+    useEffect(() => {
+      const fetchPlaceDetail = async () => {
+        try {
+          const placeResponse = await axios.get(`https://www.daengdaeng-where.link/api/v1/places/${id}`, {
+            withCredentials: true,
+          });
+          const placeData = placeResponse.data.data;
+    
+          let reviewData = {};
+          try {
+            const reviewResponse = await axios.get(
+              `https://www.daengdaeng-where.link/api/v1/reviews/place/${id}/LATEST?page=0&size=3`,
+              { withCredentials: true }
+            );
+            reviewData = reviewResponse.data.data;
+          } catch (reviewError) {
+            if (reviewError.response) {
               AlertDialog({
-                  mode: "alert",
-                  title: "시설 상세 데이터 오류",
-                  text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
-                  confirmText: "확인",
-                  onConfirm: () => console.log("서버 응답 오류 확인됨"),
+                mode: "alert",
+                title: "리뷰 데이터 오류",
+                text: reviewError.response.data.message || "리뷰 데이터를 불러오는 데 실패했습니다.",
+                confirmText: "확인",
+                onConfirm: () => console.log("리뷰 요청 오류 확인됨"),
               });
             }
           }
+    
+          const combinedData = {
+            ...placeData,
+            reviews: reviewData.reviews || [],
+            total: reviewData.total || 0,
+            page: reviewData.page || 0,
+            size: reviewData.size || 0,
+            isFirst: reviewData.isFirst || true,
+            isLast: reviewData.isLast || true,
+            score: reviewData.score || 0,
+            bestKeywords: reviewData.bestKeywords || [],
+          };
+    
+          console.log(combinedData); // 로그 삭제
+          setData(combinedData);
+        } catch (placeError) {
+          if (placeError.response) {
+            AlertDialog({
+              mode: "alert",
+              title: "시설 데이터 오류",
+              text: placeError.response.data.message || "시설 데이터를 불러오는 데 실패했습니다.",
+              confirmText: "확인",
+              onConfirm: () => console.log("시설 요청 오류 확인됨"),
+            });
+          }
         }
-        fetchPlaceDetail();
-      },[id]);
+      };
+    
+      fetchPlaceDetail();
+    }, [id]);
+    
+
     return(
         <>
           <Header label="시설 상세페이지" />
