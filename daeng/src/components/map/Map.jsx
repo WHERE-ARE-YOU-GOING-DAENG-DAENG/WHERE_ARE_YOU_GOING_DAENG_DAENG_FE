@@ -6,7 +6,7 @@ import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
 import BookMarker from "../commons/BookMarker";
 import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
 import CustomOverlay from "./CustomOverlay";
-import useLocationStore from "../../stores/LocationStore";
+import useLocationStore from "../../stores/useLocationStore";
 const MapContainer = styled.div`
   width: 100%;
   height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 172px)" : "485px")};

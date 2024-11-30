@@ -8,7 +8,7 @@ import HomeRecommendPlaces from "../components/Home/HomeRecommendPlaces";
 import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
 import Wrapper from "../components/Home/HomeWrapper";
 import Footer from "../components/commons/Footer";
-import useLocationStore from "../stores/LocationStore";
+import useLocationStore from "../stores/useLocationStore";
 import useFavoriteStore from "../stores/useFavoriteStore";
 import { useEffect } from "react";
 
