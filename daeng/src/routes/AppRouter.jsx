@@ -36,7 +36,7 @@ const AppRouter = () => {
         <Route path="/bookmark" element={<Bookmark />} />
         <Route path="/pet-register" element={<PetRegisterPage />} />
         <Route path="/pet-add" element={<AddPetPage />} />
-        <Route path="/pet-edit" element={<PetEditPage />} />
+        <Route path="/pet-edit/:petId" element={<PetEditPage />} />
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/alarm" element={<AlarmPage/>} />
         <Route path="/my-review" element={<MyReviewPage />} />

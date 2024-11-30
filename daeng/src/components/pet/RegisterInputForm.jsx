@@ -104,12 +104,6 @@ const PetTypeOption = styled.select`
     border-color: #FF69A9;  
     outline: none;  
   }
-
-
-  &:focus {
-    outline: none;
-    border-color: #ff69a9; 
-  }
 `;
 
 const BirthInput = styled.input`
@@ -196,11 +190,10 @@ const NextRegisterBtn = styled.button`
     font-weight: bold;
   }
 `
-//퍼블리싱 
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-  
+    
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -218,33 +211,30 @@ function RegisterInputForm() {
   const [petName, setPetName] = useState(""); //반려동물 이름
   const [selectedPetBirth, setSelectedPetBirth] = useState(""); //반려동물 생일
   const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
-  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
+  const [selectedSize, setSelectedSize] = useState(""); // 반려동물 사이즈
   const [selectedGender, setSelectedGender] = useState(""); //성별
   const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
 
   
   const handlePetNameChange = (e) => {
     setPetName(e.target.value);
-  };
+  }; //이름 
 
   const handlePetBirthChange = (e) => {
     setSelectedPetBirth(e.target.value);
-  };
+  }; //생일 
 
   const handlePetTypeChange = (e) => {
     setSelectedPetType(e.target.value);
-  };
-
+  };//종 
 
   const handleNeuteringClick = (status) => {
     setSelectedNeutering(status); 
-  };
+  }; //중성화
 
-  const handleWeightClick = (weightCode) => {
-    setSelectedWeight(weightCode); 
-  };
-
-  
+  const handleSizeClick = (sizeCode) => {
+    setSelectedSize(sizeCode); 
+  }; //사이즈 
 
   //오늘 이후로는 날짜 선택 못하게
   const getTodayDate = () => {
@@ -306,7 +296,7 @@ function RegisterInputForm() {
       })
       return false;
     }
-    if (!selectedWeight || !petSizeOptions.some(option => option.code === selectedWeight)) {
+    if (!selectedSize|| !petSizeOptions.some(option => option.code === selectedSize)) {
       AlertDialog({
         mode: "alert", 
         title: "선택 오류",
@@ -318,98 +308,91 @@ function RegisterInputForm() {
     return true;
   }; 
 
-  //axios 처리 시작 ~ 
+  //API 연동 시작
+  const handleSubmit = async (event) => {
+  event.preventDefault();
+  
+  if (!validateForm()) return;
 
-  const handleSubmit = async (event) => { // 여기에서 async 추가
-    event.preventDefault();
-  
-    if (!validateForm()) return;
-  
-    let imageUrl = ''; // 이미지 URL을 저장할 변수
-  
-    // Step 1: 이미지 업로드를 위한 Presigned URL 조회
-    if (imageFile) {
-      try {
-        // 서버에서 Presigned URL을 요청합니다.
-        const presignResponse = await axios.get(
-          `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
-        );
-  
-        // Presigned URL을 가져옵니다.
-        const presignedUrl = presignResponse.data.presignUrl;
-  
-        // Step 2: PUT 요청을 통해 이미지를 S3에 업로드
-        const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
-          headers: {
-            'Content-Type': imageFile.type, // 이미지 파일의 Content-Type 설정
-          },
-        });
-  
-        if (imageUploadResponse.status === 200) {
-          console.log('Image uploaded successfully to S3!');
-          // Presigned URL에서 S3 URL을 추출하여 저장
-          imageUrl = presignedUrl.split('?')[0]; // URL에서 쿼리 파라미터를 제외한 부분만 사용
-        } else {
-          alert('이미지 업로드에 실패했습니다.');
-          return;
-        }
-      } catch (error) {
-        console.error('Presigned URL 조회 또는 이미지 업로드 실패:', error);
-        alert('이미지 업로드 중 오류가 발생했습니다.');
+  let imageUrl = ''; // 이미지 URL을 저장할 변수
+
+  // Presigned URL 조회
+  if (imageFile) {
+    try {
+      const presignResponse = await axios.get(
+        `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
+      );
+      const presignedUrl = presignResponse.data.url; 
+      console.log("Presigned URL:", presignedUrl); 
+
+      const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
+        headers: {
+          'Content-Type': imageFile.type, 
+        },
+        withCredentials: true,
+      });
+      console.log("응답:", imageUploadResponse); 
+
+      if (imageUploadResponse.status === 200) {
+        console.log('성공');
+        imageUrl = presignedUrl.split('?')[0];
+      } else {
+        console.error('이미지 업로드 실패:', error);
         return;
       }
-    }
-  
-    // Step 3: 나머지 데이터 준비
-    const petData = {
-      name: petName, // 반려동물 이름
-      image: imageUrl,  // 업로드한 이미지 URL
-      gender: selectedGender, // 성별
-      birthday: selectedPetBirth, // 생년월일
-      species: selectedPetType, // 품종
-      size: selectedWeight, // 크기
-      neutering: selectedNeutering === "했어요", // 중성화 여부
-      userId: 1, 
-    };
-  
-    // Step 4: 서버로 데이터 전송
-    try {
-      console.log('보내는 Payload:', petData);
-  
-      const response = await axios.post(
-        "https://www.daengdaeng-where.link/api/v1/pets", 
-        petData, 
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        }
-      );
-  
-      if (response.status === 200) {
-        console.log('성공');
-        console.log('응답 데이터:', response.data);
-        alert("댕댕어디가 회원이 되신걸 축하드려요!");
-      } else {
-        console.log('응답 상태:', response.status);
-        console.log('응답 데이터:', response.data);
-        alert("등록 중 오류가 발생했습니다. 다시 시도해주세요.");
-      }
     } catch (error) {
-      console.log('에러 전체 정보:', error);
-      console.log('에러 메시지:', error.message);
-      console.log('에러 응답:', error.response?.data);
-      console.log('에러 상태 코드:', error.response?.status);
-      console.log('에러 헤더:', error.response?.headers);
-      alert("서버와 통신 중 오류가 발생했습니다.");
+      console.error('Presigned URL 조회 또는 이미지 업로드 실패:', error);
+      return;
     }
+  }
+
+  const petData = {
+    name: petName, // 반려동물 이름
+    image: imageUrl,  // 업로드한 이미지 URL
+    gender: selectedGender, // 성별
+    birthday: selectedPetBirth, // 생년월일
+    species: selectedPetType, // 품종
+    size: selectedSize, // 크기
+    neutering: selectedNeutering === "했어요", // 중성화 여부
   };
+
+  try {
+    console.log('보내는 Payload:', petData);
+
+    const response = await axios.post(
+      "https://www.daengdaeng-where.link/api/v1/pets", 
+      petData, 
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      }
+    );
+
+    if (response.status === 200) {
+      console.log('성공');
+      console.log('응답 데이터:', response.data);
+      alert("댕댕어디가 회원이 되신걸 축하드려요!");
+      navigate("/"); 
+    } else {
+      console.log('응답 상태:', response.status);
+      console.log('응답 데이터:', response.data);
+      alert("등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  } catch (error) {
+    console.log('에러 전체 정보:', error);
+    console.log('에러 메시지:', error.message);
+    console.log('에러 응답:', error.response?.data);
+    console.log('에러 상태 코드:', error.response?.status);
+    console.log('에러 헤더:', error.response?.headers);
+    alert("서버와 통신 중 오류가 발생했습니다.");
+  }
+};
 
   const handleNextRegisterClick = () => {
     navigate("/"); 
   };
-
 
   return (
     <Container>
@@ -485,8 +468,8 @@ function RegisterInputForm() {
       {petSizeOptions.map((option) => (
         <SelectWeight
           key={option.code}
-          selected={selectedWeight === option.code}
-          onClick={() => handleWeightClick(option.code)}
+          selected={selectedSize === option.code}
+          onClick={() => handleSizeClick(option.code)}
         >
           {option.name}<br />({option.size})
         </SelectWeight>
