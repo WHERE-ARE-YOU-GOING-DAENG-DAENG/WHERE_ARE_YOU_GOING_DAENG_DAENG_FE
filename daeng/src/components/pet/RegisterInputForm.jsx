@@ -33,10 +33,6 @@ const FirstInputContainer = styled.div`
   @media (max-width: 554px) {
     margin-bottom:5%;
   }
-
-  @media (max-width: 554px) {
-    margin-bottom:5%;
-  }
 `;
 
 const PetImg = styled.div`
@@ -112,12 +108,6 @@ const PetTypeOption = styled.select`
   &:focus {
     border-color: #FF69A9;  
     outline: none;  
-  }
-
-
-  &:focus {
-    outline: none;
-    border-color: #ff69a9; 
   }
 `;
 
@@ -204,21 +194,14 @@ const NextRegisterBtn = styled.button`
     margin-right:5%;
   }
 
-  @media (max-width: 554px) {
-    margin-top:1%;
-    margin-right:5%;
-  }
-
   &:hover{
     font-weight: bold;
   }
 `
-//퍼블리싱 
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-  
-  
+    
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -236,33 +219,30 @@ function RegisterInputForm() {
   const [petName, setPetName] = useState(""); //반려동물 이름
   const [selectedPetBirth, setSelectedPetBirth] = useState(""); //반려동물 생일
   const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
-  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
+  const [selectedSize, setSelectedSize] = useState(""); // 반려동물 사이즈
   const [selectedGender, setSelectedGender] = useState(""); //성별
   const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
 
   
   const handlePetNameChange = (e) => {
     setPetName(e.target.value);
-  };
+  }; //이름 
 
   const handlePetBirthChange = (e) => {
     setSelectedPetBirth(e.target.value);
-  };
+  }; //생일 
 
   const handlePetTypeChange = (e) => {
     setSelectedPetType(e.target.value);
-  };
-
+  };//종 
 
   const handleNeuteringClick = (status) => {
     setSelectedNeutering(status); 
-  };
+  }; //중성화
 
-  const handleWeightClick = (weightCode) => {
-    setSelectedWeight(weightCode); 
-  };
-
-  
+  const handleSizeClick = (sizeCode) => {
+    setSelectedSize(sizeCode); 
+  }; //사이즈 
 
   //오늘 이후로는 날짜 선택 못하게
   const getTodayDate = () => {
@@ -324,7 +304,7 @@ function RegisterInputForm() {
       })
       return false;
     }
-    if (!selectedWeight || !petSizeOptions.some(option => option.code === selectedWeight)) {
+    if (!selectedSize|| !petSizeOptions.some(option => option.code === selectedSize)) {
       AlertDialog({
         mode: "alert", 
         title: "선택 오류",
@@ -352,7 +332,6 @@ function RegisterInputForm() {
       );
       const presignedUrl = presignResponse.data.url; 
       console.log("Presigned URL:", presignedUrl); 
-      console.log("이미지 타입:", imageFile.type);
 
       const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
         headers: {
@@ -360,19 +339,17 @@ function RegisterInputForm() {
         },
         withCredentials: true,
       });
-
       console.log("응답:", imageUploadResponse); 
 
       if (imageUploadResponse.status === 200) {
         console.log('성공');
         imageUrl = presignedUrl.split('?')[0];
       } else {
-        alert('이미지 업로드에 실패했습니다.');
+        console.error('이미지 업로드 실패:', error);
         return;
       }
     } catch (error) {
       console.error('Presigned URL 조회 또는 이미지 업로드 실패:', error);
-      alert('이미지 업로드 중 오류가 발생했습니다.');
       return;
     }
   }
@@ -383,7 +360,7 @@ function RegisterInputForm() {
     gender: selectedGender, // 성별
     birthday: selectedPetBirth, // 생년월일
     species: selectedPetType, // 품종
-    size: selectedWeight, // 크기
+    size: selectedSize, // 크기
     neutering: selectedNeutering === "했어요", // 중성화 여부
   };
 
@@ -405,6 +382,7 @@ function RegisterInputForm() {
       console.log('성공');
       console.log('응답 데이터:', response.data);
       alert("댕댕어디가 회원이 되신걸 축하드려요!");
+      navigate("/"); 
     } else {
       console.log('응답 상태:', response.status);
       console.log('응답 데이터:', response.data);
@@ -498,8 +476,8 @@ function RegisterInputForm() {
       {petSizeOptions.map((option) => (
         <SelectWeight
           key={option.code}
-          selected={selectedWeight === option.code}
-          onClick={() => handleWeightClick(option.code)}
+          selected={selectedSize === option.code}
+          onClick={() => handleSizeClick(option.code)}
         >
           {option.name}<br />({option.size})
         </SelectWeight>

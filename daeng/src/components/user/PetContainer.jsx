@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import styled from 'styled-components'
 import arrow from '../../assets/icons/arrow.svg';
 import addImg from '../../assets/icons/addImg.svg';
 import { useNavigate } from "react-router-dom";
-
+import axios from 'axios';
 
 const PetTotalContainer = styled.div`
   display: flex;
@@ -109,16 +109,50 @@ const StyleArrow = styled.img`
 `
 
 function PetContainer() {
-
+  const [petData, setPetData] = useState([]); 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPetData = async () => {
+      try {
+        const response = await axios.get("https://www.daengdaeng-where.link/api/v1/pets");
+        const petData = response.data.data;
+    
+        setPetData(petData.map(pet => ({
+          ...pet,
+          gender: pet.gender,  // 이미 서버에서 변환된 값
+          size: pet.size,      // 이미 서버에서 변환된 값
+          species: pet.species // 이미 서버에서 변환된 값
+        })));
+      } catch (error) {
+        console.error("펫 정보 불러오기 실패:", error);
+        if (error.response) {
+          console.error('서버 응답 오류:', error.response.data);
+          console.error('서버 상태 코드:', error.response.status);
+        } else if (error.request) {
+          console.error('요청 오류:', error.request);
+        } else {
+          console.error('요청 설정 오류:', error.message);
+        }
+        console.error('전체 오류 객체:', error);
+      }
+    };
+    fetchPetData();
+  }, []); 
 
   const handleToPetAdd  = () => {
     navigate("/pet-add");
 };
 
-  const handleToPetEdit  = () => {
-    navigate("/pet-edit");
+const handleToPetEdit = (petId) => {
+  navigate(`/pet-edit/${petId}`);
 };
+
+
+if (!petData) {
+  return <div>Loading...</div>;
+}
+
   return (
     <PetTotalContainer>
       <TitleInfo>
@@ -126,21 +160,23 @@ function PetContainer() {
         <AddPetImg src={addImg} alt="반려동물 추가" onClick={handleToPetAdd} />
         <PetAdd onClick={handleToPetAdd} > 추가</PetAdd>
       </TitleInfo>
-      <PetInfoContainer>
-        <PetImage />
+      {petData.map((pet) => (
+      <PetInfoContainer key={pet.petId}>
+      <PetImage src={pet.image || "default-image.jpg"} alt="펫 이미지" />
         <PetDetailInfoContainer>
           <PetDetailInfo>
-            <PetName>보리</PetName>
-            <StyleArrow src={arrow} alt="반려동물 정보 자세히 보기" onClick={handleToPetEdit} />
+            <PetName>{pet.name}</PetName>
+            <StyleArrow src={arrow} alt="반려동물 정보 자세히 보기" onClick={() => handleToPetEdit(pet.petId)} />
           </PetDetailInfo>
           <PetTypeContainer>
-            <PetWeight>대형견 |  </PetWeight>
-            <PetType> 말티즈</PetType>
+            <PetWeight>{pet.size} | </PetWeight>
+            <PetType>{pet.species}</PetType>
           </PetTypeContainer>
         </PetDetailInfoContainer>
       </PetInfoContainer>
-    </PetTotalContainer>
-  );
-}
+      ))}
+      </PetTotalContainer>
+    );
+  }
 
 export default PetContainer;
