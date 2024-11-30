@@ -6,12 +6,14 @@ import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
 import BookMarker from "../commons/BookMarker";
 import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
 import CustomOverlay from "./CustomOverlay";
-import useLocationStore from "../../stores/LocationStore";
 import AlertDialog from "../../components/commons/SweetAlert";
+import useLocationStore from "../../stores/useLocationStore";
+import Loading from "../commons/Loading";
+
 const MapContainer = styled.div`
   width: 100%;
   height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 172px)" : "485px")};
-
+  display: flex;
   @media (max-width: 554px) {
     height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 173px)" : "385px")};
   }
@@ -131,7 +133,7 @@ const Map = ({ data, removeUi, externalCenter }) => {
 
   return (
     <MapContainer ref={mapRef} $data={data} $removeUi={removeUi}>
-      {!isLoaded && <div>구글 맵 로딩 중...</div>}
+      {!isLoaded && <Loading label="지도 로딩 중.." />}
       {currentLocation}
       {markers}
     </MapContainer>
