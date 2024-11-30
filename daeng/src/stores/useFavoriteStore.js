@@ -7,10 +7,12 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 목록조회
   fetchFavorites: async () => {
     try {
-      const response = await axios.get("https://www.daengdaeng-where.link/api/v1/favorites?page=0&size=10");
+      const response = await axios.get("https://www.daengdaeng-where.link/api/v1/favorites?page=0&size=10",{
+        withCredentials: true
+      });
       
       set({ favorites: response.data.data.content });
-      console.log("zustand-bookmark",response.data.data.content) //로그 삭제
+      
     } catch (error) {
       if(error.response){
         AlertDialog({
@@ -26,7 +28,9 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 추가
   addFavorite: async (placeId) => {
     try {
-      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/favorites", { placeId });
+      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/favorites", { placeId },{
+        withCredentials: true
+      });
       // await get().fetchFavorites();
       const newFavorite = response.data.data;
         set((state) => ({ favorites: [...state.favorites, newFavorite] }));
@@ -45,7 +49,9 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 삭제
   removeFavorite: async (favoriteId) => {
     try {
-      await axios.delete(`https://www.daengdaeng-where.link/api/v1/favorites/${favoriteId}`);
+      await axios.delete(`https://www.daengdaeng-where.link/api/v1/favorites/${favoriteId}`,{
+        withCredentials: true
+      });
       // await get().fetchFavorites();
       set((state) => ({
         favorites: state.favorites.filter((fav) => fav.favoriteId !== favoriteId),
