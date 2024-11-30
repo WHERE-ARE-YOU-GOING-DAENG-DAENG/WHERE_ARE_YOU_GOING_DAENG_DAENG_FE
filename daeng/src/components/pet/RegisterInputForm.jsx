@@ -374,7 +374,7 @@ function RegisterInputForm() {
       console.log('성공');
       console.log('응답 데이터:', response.data);
       alert("댕댕어디가 회원이 되신걸 축하드려요!");
-      navigate("/"); 
+
     } else {
       console.log('응답 상태:', response.status);
       console.log('응답 데이터:', response.data);

@@ -8,7 +8,6 @@ import axios from "axios";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
-import { placeFeatures } from "../../data/CommonCode";
 
 const WriteReviewAllContainer = styled.div`
   display: block;
@@ -297,13 +296,14 @@ function WriteReview() {
   const [selectKeywords, setSelectKeywords] = useState([]); 
   const [text, setText] = useState(""); // 리뷰 내용 상태
   const [visitedAt, setVisitedAt] = useState(getCurrentDate()); // 방문한 날짜 
+  const [selectedPetImage, setSelectedPetImage] = useState(""); // 선택된 펫 이미지 상태
   
   useEffect(() => {
     fetchPetList();
   }, []);
   
   useEffect(() => {
-    console.log("펫 리스트 상태:", pets); // 디버깅 포인트
+    console.log("펫 리스트 상태:", pets);
   }, [pets]);
 
   const handleImageUpload = (e) => {
@@ -311,11 +311,11 @@ function WriteReview() {
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviews((prev) => [...prev, reader.result]); 
+        setPreviews((prev) => [...prev, reader.result]);
       };
       reader.readAsDataURL(file);
-
-      setPlaceImgs((prev) => [...prev, file]);
+  
+      setPlaceImgs((prev) => [...prev, file]); 
     });
   };
 
@@ -346,37 +346,39 @@ function WriteReview() {
     }   
     setText(value); 
   };
- // S3 업로드 함수
-  const uploadMedia = async (file) => {
-  try {
-    console.log(`Requesting presigned URL for file: ${file.name}`);
-    const presignResponse = await axios.get(
-      `https://www.daengdaeng-where.link/api/v1/S3?prefix=review&fileName=${encodeURIComponent(file.name)}`
-    );
 
-    if (!presignResponse.data || !presignResponse.data.presignUrl) {
-      throw new Error("Presigned URL is missing in the server response.");
+ // S3 업로드 시작
+  const uploadMedia = async (files) => {
+  const uploadedUrls = [];
+  for (const file of files) {
+    try {
+      const presignResponse = await axios.get(
+        `https://www.daengdaeng-where.link/api/v1/S3?prefix=review&fileName=${encodeURIComponent(file.name)}`
+      );
+
+      const presignedUrl = presignResponse.data.url;
+      if (!presignedUrl) {
+        throw new Error("서버에서 응답 안 줌");
+      }
+
+      const uploadResponse = await axios.put(presignedUrl, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      if (uploadResponse.status === 200) {
+        const uploadedUrl = presignedUrl.split("?")[0]; 
+        uploadedUrls.push(uploadedUrl); 
+        console.log(`File uploaded successfully: ${uploadedUrl}`);
+      } else {
+        console.error("Upload failed:", file.name);
+      }
+    } catch (error) {
+      console.error(`Failed to upload ${file.name}:`, error.message);
     }
-
-    const presignedUrl = presignResponse.data.presignUrl;
-    console.log("Presigned URL:", presignedUrl);
-
-    const uploadResponse = await axios.put(presignedUrl, file, {
-      headers: { "Content-Type": file.type },
-    });
-
-    console.log("Upload Response:", uploadResponse);
-    if (uploadResponse.status === 200) {
-      const uploadedUrl = presignedUrl.split("?")[0];
-      console.log(`File uploaded successfully: ${uploadedUrl}`);
-      return uploadedUrl;
-    } else {
-      throw new Error("Upload failed with status " + uploadResponse.status);
-    }
-  } catch (error) {
-    console.error("File upload failed:", error.message);
-    return null;
   }
+  return uploadedUrls;
 };
 
 const handlePetSelection = (e) => {
@@ -384,31 +386,26 @@ const handlePetSelection = (e) => {
   setSelectPet(e.target.value);
 };
 
-
   const handleSubmit = async () => {
     const placeId = 1; 
-    const media = [];
+    const media = await uploadMedia(placeImgs); 
+    console.log("Uploaded media URLs:", media);
   
-    for (const file of placeImgs) {
-      const uploadedUrl = await uploadMedia(file);
-      if (uploadedUrl) {
-        media.push(uploadedUrl);
-      }else {
-        console.error("Failed to upload file:", file.name);
-      }
+    if (media.length === 0) {
+      console.error("No media uploaded.");
+      return;
     }
   
-    console.log("Uploaded media URLs:", media); // 업로드된 URL 확인
 
-  const reviewData = {
-    placeId,
-    content: text.trim(), 
-    score: ratings.filter(Boolean).length, 
-    media, // 업로드된 이미지 URL 배열
-    keywords: selectKeywords, 
-    pets: selectPet ? [parseInt(selectPet)] : [], // 선택된 펫 ID 배열로 변환
-    visitedAt, 
-};
+    const reviewData = {
+      placeId,
+      content: text.trim(), 
+      score: ratings.filter(Boolean).length, 
+      media, 
+      keywords: selectKeywords, 
+      pets: selectPet ? [parseInt(selectPet)] : [], 
+      visitedAt, 
+  };
 
 
     try {
