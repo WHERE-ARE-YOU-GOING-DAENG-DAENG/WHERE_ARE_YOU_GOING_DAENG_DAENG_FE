@@ -81,7 +81,7 @@ const PetName = styled.p`
   color: #333;
 `;
 
-const VisitTimePets = ({ visitAt, pets }) => {
+const VisitTimePets = ({ visitAt, pets, onVisitClick }) => {
   const sliderRef = useRef(null);
   const [isLeftVisible, setIsLeftVisible] = useState(false);
   const [isRightVisible, setIsRightVisible] = useState(false);
@@ -126,6 +126,12 @@ const VisitTimePets = ({ visitAt, pets }) => {
     };
   }, []);
 
+  const handleVisitClick = () => {
+    const visitDate = new Date(visitAt).toISOString().split('T')[0];
+    const visitTime = visitAt.split("T")[1].slice(0, 5);
+    onVisitClick(visitDate, visitTime);
+  }
+
   return (
     <TimeContainer>
       <TimeTitle>
@@ -136,7 +142,7 @@ const VisitTimePets = ({ visitAt, pets }) => {
             })}
             <PetsCount>- {pets.length}마리 방문 예정</PetsCount>
         </div>
-        <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={()=> navigate(`/visit-list/${data.placeId}`)}/>
+        <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={handleVisitClick}/>
       </TimeTitle>
       <PetsWrapper>
         <LeftArrow onClick={scrollLeft} disabled={!isLeftVisible} visible={isLeftVisible}>

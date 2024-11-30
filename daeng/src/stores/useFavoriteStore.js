@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import AlertDialog from "../components/commons/SweetAlert";
 
 const useFavoriteStore = create((set, get) => ({
   favorites: [],
@@ -11,7 +12,15 @@ const useFavoriteStore = create((set, get) => ({
       set({ favorites: response.data.data.content });
       console.log("zustand-bookmark",response.data.data.content) //로그 삭제
     } catch (error) {
-      console.error("Error fetching favorites:", error);
+      if(error.response){
+        AlertDialog({
+        mode: "alert",
+        title: "즐겨찾기 조회",
+        text: "즐겨찾기 조회가 실패하였습니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("즐겨찾기 조회 실패"),
+    });
+  }
     }
   },
   // 즐겨찾기 추가
@@ -22,7 +31,15 @@ const useFavoriteStore = create((set, get) => ({
       const newFavorite = response.data.data;
         set((state) => ({ favorites: [...state.favorites, newFavorite] }));
     } catch (error) {
-      console.error("Error adding favorite:", error);
+      if(error.response){
+        AlertDialog({
+        mode: "alert",
+        title: "즐겨찾기 등록",
+        text: "즐겨찾기 등록이 실패하였습니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("즐겨찾기 등록 실패"),
+    });
+  }
     }
   },
   // 즐겨찾기 삭제
@@ -34,7 +51,15 @@ const useFavoriteStore = create((set, get) => ({
         favorites: state.favorites.filter((fav) => fav.favoriteId !== favoriteId),
       }));
     } catch (error) {
-      console.error("Error removing favorite:", error);
+      if(error.response){
+        AlertDialog({
+        mode: "alert",
+        title: "즐겨찾기 삭제",
+        text: "즐겨찾기 삭제가 실패하였습니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("즐겨찾기 삭제 실패"),
+    });
+  }
     }
   },
   // 즐겨찾기 id 가져오기
