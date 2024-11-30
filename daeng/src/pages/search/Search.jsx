@@ -7,7 +7,7 @@ import Map from "../../components/map/Map";
 import SearchPlaceList from "../../components/search/SearchPlaceList";
 import Sorting from "../../components/commons/Sorting";
 import FilterBtnList from "../../components/search/FilterBtnList";
-import useLocationStore from "../../stores/LocationStore";
+import useLocationStore from "../../stores/useLocationStore";
 import { placeTypes } from "../../data/CommonCode";
 import AlertDialog from "../../components/commons/SweetAlert";
 // import useFavoriteStore from "../../stores/useFavoriteStore";

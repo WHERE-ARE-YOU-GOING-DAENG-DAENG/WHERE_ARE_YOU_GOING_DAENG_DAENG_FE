@@ -4,7 +4,7 @@ import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg"
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import useLocationStore from "../../stores/LocationStore";
+import useLocationStore from "../../stores/useLocationStore";
 import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const ListContainer = styled.div`
