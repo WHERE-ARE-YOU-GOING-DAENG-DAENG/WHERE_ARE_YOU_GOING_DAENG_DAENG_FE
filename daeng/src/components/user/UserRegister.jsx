@@ -93,9 +93,6 @@ function UserRegister() {
   
     return true;
   };
-
-
-  
   const handleConfirm = async () => {
     if (!validateFields()) {
       return;
@@ -203,7 +200,6 @@ function UserRegister() {
         }
     }
 };
-
 
   return (
     <UserContainer>
