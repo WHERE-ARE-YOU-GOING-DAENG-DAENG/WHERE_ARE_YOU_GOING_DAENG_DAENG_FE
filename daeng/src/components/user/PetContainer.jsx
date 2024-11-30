@@ -4,6 +4,7 @@ import arrow from '../../assets/icons/arrow.svg';
 import addImg from '../../assets/icons/addImg.svg';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import AlertDialog from "../../components/commons/SweetAlert";
 
 const PetTotalContainer = styled.div`
   display: flex;
@@ -120,14 +121,19 @@ function PetContainer() {
     
         setPetData(petData.map(pet => ({
           ...pet,
-          gender: pet.gender,  // 이미 서버에서 변환된 값
-          size: pet.size,      // 이미 서버에서 변환된 값
-          species: pet.species // 이미 서버에서 변환된 값
+          gender: pet.gender,  
+          size: pet.size,     
+          species: pet.species 
         })));
       } catch (error) {
         console.error("펫 정보 불러오기 실패:", error);
+        AlertDialog({
+          mode: "alert", 
+          title: "오류",
+          text: "펫 정보 불러오기 실패",
+          confirmText: "닫기"
+        });
         if (error.response) {
-          console.error('서버 응답 오류:', error.response.data);
           console.error('서버 상태 코드:', error.response.status);
         } else if (error.request) {
           console.error('요청 오류:', error.request);
