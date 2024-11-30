@@ -9,8 +9,10 @@ import AreaField from '../../data/AreaField';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
 import useUserStore from '../../stores/userStore';
+import { useNavigate } from 'react-router-dom';
 
 function UserEdit() {
+  const navigate = useNavigate();
   const { userId, email, nickname, setUserId, setEmail, setNickname } = useUserStore();
   const [userData, setUserData] = useState({
     gender: '',
@@ -89,7 +91,7 @@ function UserEdit() {
   };
 
   const validateFields = () => {
-    if (!nickname.trim()) { // Zustand에서 가져온 nickname 사용
+    if (!nickname.trim()) {
       AlertDialog({
         mode: "alert",
         title: "닉네임 필요",
@@ -218,7 +220,10 @@ const handleUpdate = async () => {
       title: '회원정보 수정 성공',
       text: '회원 정보가 성공적으로 수정되었습니다!',
       confirmText: '확인',
-      onConfirm: () => console.log('수정 성공 확인됨'),
+      onConfirm: () => {
+        console.log("수정 성공 확인됨");
+        navigate("/my-page"); 
+      },
     });
   } catch (error) {
     if (error.response) {
