@@ -24,15 +24,16 @@ import clean from "../../assets/icons/clean.svg";
 import gongwon from "../../assets/icons/gongwon.svg";
 import parkingLot from "../../assets/icons/parkingLot.svg";
 import AlertDialog from "../commons/SweetAlert";
+import axios from "axios";
 
 function PreferenceRegister() {
   const [selectedPlaceOptions, setSelectedPlaceOptions] = useState([]);
   const [selectedFavoriteOptions, setSelectedFavoriteOptions] = useState([]);
 
-  const handlePlaceOptionClick = (label) => {
-    if (selectedPlaceOptions.length >= 3 && !selectedPlaceOptions.includes(label)) {
+  const handlePlaceOptionClick = (code) => {
+    if (selectedPlaceOptions.length >= 3 && !selectedPlaceOptions.includes(code)) {
       AlertDialog({
-        mode: "alert", 
+        mode: "alert",
         title: "선택 초과",
         text: "최대 3개만 선택 가능합니다.",
         confirmText: "확인",
@@ -40,18 +41,16 @@ function PreferenceRegister() {
       });
       return;
     }
-
+  
     setSelectedPlaceOptions((prev) =>
-      prev.includes(label)
-        ? prev.filter((option) => option !== label)
-        : [...prev, label]
+      prev.includes(code) ? prev.filter((option) => option !== code) : [...prev, code]
     );
   };
-
-  const handleFavoriteOptionClick = (label) => {
-    if (selectedFavoriteOptions.length >= 3 && !selectedFavoriteOptions.includes(label)) {
+  
+  const handleFavoriteOptionClick = (code) => {
+    if (selectedFavoriteOptions.length >= 3 && !selectedFavoriteOptions.includes(code)) {
       AlertDialog({
-        mode: "alert", 
+        mode: "alert",
         title: "선택 초과",
         text: "최대 3개만 선택 가능합니다.",
         confirmText: "확인",
@@ -59,13 +58,76 @@ function PreferenceRegister() {
       });
       return;
     }
-
+  
     setSelectedFavoriteOptions((prev) =>
-      prev.includes(label)
-        ? prev.filter((option) => option !== label)
-        : [...prev, label]
+      prev.includes(code) ? prev.filter((option) => option !== code) : [...prev, code]
     );
   };
+
+  const handleConfirm = async () => {
+    if (selectedPlaceOptions.length === 0 || selectedFavoriteOptions.length === 0) {
+      AlertDialog({
+        mode: "alert",
+        title: "항목 선택 필요",
+        text: "시설과 선호 항목을 각각 최소 1개 이상 선택해 주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("필수 항목 선택 경고 확인됨"),
+      });
+      return;
+    }
+  
+    const payload = {
+      preferenceInfo: "PLACE_TYP",
+      preferenceTypes: selectedPlaceOptions,
+    };
+  
+    const favoritePayload = {
+      preferenceInfo: "PLACE_FTE",
+      preferenceTypes: selectedFavoriteOptions,
+    };
+  
+    try {
+      const response1 = await axios.post(
+        "https://www.daengdaeng-where.link/api/v1/preferences",
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log("Response1 데이터:", response1.data);
+
+      const response2 = await axios.post(
+        "https://www.daengdaeng-where.link/api/v1/preferences",
+        favoritePayload,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log("Response2 데이터:", response2.data);
+  
+      AlertDialog({
+        mode: "alert",
+        title: "등록 성공",
+        text: "선호 정보가 성공적으로 등록되었습니다!",
+        confirmText: "확인",
+        onConfirm: () => console.log("등록 성공 확인됨"),
+      });
+    } catch (error) {
+      if (error.response) {
+        console.error("등록 실패:", error.response.data);
+        AlertDialog({
+          mode: "alert",
+          title: "등록 실패",
+          text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+          confirmText: "확인",
+          onConfirm: () => console.log("등록 실패 확인됨"),
+        });
+      }
+    }
+  };
+  
 
   return (
     <Wrap>
@@ -76,56 +138,56 @@ function PreferenceRegister() {
           <PreferencePlaceOption
             label="음식점"
             icon={restaurantIcon}
-            isSelected={selectedPlaceOptions.includes("01")}
-            onClick={() => handlePlaceOptionClick("01")}
+            isSelected={selectedPlaceOptions.includes("PLACE_TYP_01")}
+            onClick={() => handlePlaceOptionClick("PLACE_TYP_01")}
           />
           <PreferencePlaceOption
             label="카페"
             icon={cafeIcon}
-            isSelected={selectedPlaceOptions.includes("02")}
-            onClick={() => handlePlaceOptionClick("02")}
+            isSelected={selectedPlaceOptions.includes("PLACE_TYP_02")}
+            onClick={() => handlePlaceOptionClick("PLACE_TYP_02")}
           />
           <PreferencePlaceOption
             label="공원"
             icon={parkIcon}
-            isSelected={selectedPlaceOptions.includes("03")}
-            onClick={() => handlePlaceOptionClick("03")}
+            isSelected={selectedPlaceOptions.includes("PLACE_TYP_03")}
+            onClick={() => handlePlaceOptionClick("PLACE_TYP_03")}
           />
           <PreferencePlaceOption
             label="숙소"
             icon={houseIcon}
-            isSelected={selectedPlaceOptions.includes("04")}
-            onClick={() => handlePlaceOptionClick("04")}
+            isSelected={selectedPlaceOptions.includes("PLACE_TYP_04")}
+            onClick={() => handlePlaceOptionClick("PLACE_TYP_04")}
+          />
+            <PreferencePlaceOption
+              label="놀이터"
+              icon={playgroundIcon}
+              isSelected={selectedPlaceOptions.includes("PLACE_TYP_05")}
+              onClick={() => handlePlaceOptionClick("PLACE_TYP_05")}
+            />
+          <PreferencePlaceOption
+            label="여행지"
+            icon={travelIcon}
+            isSelected={selectedPlaceOptions.includes("PLACE_TYP_06")}
+            onClick={() => handlePlaceOptionClick("PLACE_TYP_06")}
           />
           <PreferencePlaceOption
             label="미술관"
             icon={galleryIcon}
-            isSelected={selectedPlaceOptions.includes("05")}
-            onClick={() => handlePlaceOptionClick("05")}
-          />
-          <PreferencePlaceOption
-            label="놀이터"
-            icon={playgroundIcon}
-            isSelected={selectedPlaceOptions.includes("06")}
-            onClick={() => handlePlaceOptionClick("06")}
-          />
-          <PreferencePlaceOption
-            label="여행지"
-            icon={travelIcon}
-            isSelected={selectedPlaceOptions.includes("07")}
-            onClick={() => handlePlaceOptionClick("07")}
+            isSelected={selectedPlaceOptions.includes("PLACE_TYP_07")}
+            onClick={() => handlePlaceOptionClick("PLACE_TYP_07")}
           />
           <PreferencePlaceOption
             label="박물관"
             icon={museumIcon}
-            isSelected={selectedPlaceOptions.includes("08")}
-            onClick={() => handlePlaceOptionClick("08")}
+            isSelected={selectedPlaceOptions.includes("PLACE_TYP_08")}
+            onClick={() => handlePlaceOptionClick("PLACE_TYP_08")}
           />
           <PreferencePlaceOption
             label="문예회관"
             icon={filmIcon}
-            isSelected={selectedPlaceOptions.includes("09")}
-            onClick={() => handlePlaceOptionClick("09")}
+            isSelected={selectedPlaceOptions.includes("PLACE_TYP_09")}
+            onClick={() => handlePlaceOptionClick("PLACE_TYP_09")}
           />
         </OptionContainer>
       </Section>
@@ -135,70 +197,70 @@ function PreferenceRegister() {
         <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
         <OptionContainer>
           <PreferenceFavoriteOption
-            label="강아지 전용 음식이 있어요"
-            icon={dogfood}
-            isSelected={selectedFavoriteOptions.includes("01")}
-            onClick={() => handleFavoriteOptionClick("01")}
-          />
-          <PreferenceFavoriteOption
             label="뛰어놀기 좋아요"
             icon={run}
-            isSelected={selectedFavoriteOptions.includes("02")}
-            onClick={() => handleFavoriteOptionClick("02")}
+            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_01")}
+            onClick={() => handleFavoriteOptionClick("PLACE_FTE_01")}
           />
+          <PreferenceFavoriteOption
+              label="사방이 철장/벽으로 막혀있어요"
+              icon={cage}
+              isSelected={selectedFavoriteOptions.includes("PLACE_FTE_02")}
+              onClick={() => handleFavoriteOptionClick("PLACE_FTE_02")}
+            />
           <PreferenceFavoriteOption
             label="급수대가 있어요"
             icon={water}
-            isSelected={selectedFavoriteOptions.includes("03")}
-            onClick={() => handleFavoriteOptionClick("03")}
+            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_03")}
+            onClick={() => handleFavoriteOptionClick("PLACE_FTE_03")}
+          />
+          <PreferenceFavoriteOption
+              label="배변봉투가 구비되어 있어요"
+              icon={paperbag}
+              isSelected={selectedFavoriteOptions.includes("PLACE_FTE_04")}
+              onClick={() => handleFavoriteOptionClick("PLACE_FTE_04")}
+            />
+          <PreferenceFavoriteOption
+            label="벌레가 별로 없어요"
+            icon={bug}
+            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_05")}
+            onClick={() => handleFavoriteOptionClick("PLACE_FTE_05")}
           />
           <PreferenceFavoriteOption
             label="화장실이 있어요"
             icon={toilet}
-            isSelected={selectedFavoriteOptions.includes("04")}
-            onClick={() => handleFavoriteOptionClick("04")}
+            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_06")}
+            onClick={() => handleFavoriteOptionClick("PLACE_FTE_06")}
           />
           <PreferenceFavoriteOption
-            label="벌레가 별로 없어요"
-            icon={bug}
-            isSelected={selectedFavoriteOptions.includes("05")}
-            onClick={() => handleFavoriteOptionClick("05")}
-          />
-          <PreferenceFavoriteOption
-            label="철장으로 막혀있어요"
-            icon={cage}
-            isSelected={selectedFavoriteOptions.includes("06")}
-            onClick={() => handleFavoriteOptionClick("06")}
-          />
-          <PreferenceFavoriteOption
-            label="강아지 친구들이 많아요"
-            icon={dogFriend}
-            isSelected={selectedFavoriteOptions.includes("07")}
-            onClick={() => handleFavoriteOptionClick("07")}
-          />
-          <PreferenceFavoriteOption
-            label="배변봉투가 구비되어 있어요"
-            icon={paperbag}
-            isSelected={selectedFavoriteOptions.includes("08")}
-            onClick={() => handleFavoriteOptionClick("08")}
-          />
-          <PreferenceFavoriteOption
-            label="시설이 청결해요"
-            icon={clean}
-            isSelected={selectedFavoriteOptions.includes("09")}
-            onClick={() => handleFavoriteOptionClick("09")}
+            label="강아지 전용 음식이 있어요"
+            icon={dogfood}
+            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_07")}
+            onClick={() => handleFavoriteOptionClick("PLACE_FTE_07")}
           />
           <PreferenceFavoriteOption
             label="산책로가 있어요"
             icon={gongwon}
-            isSelected={selectedFavoriteOptions.includes("10")}
-            onClick={() => handleFavoriteOptionClick("10")}
+            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_08")}
+            onClick={() => handleFavoriteOptionClick("PLACE_FTE_08")}
+          />
+          <PreferenceFavoriteOption
+            label="강아지 친구들이 많아요"
+            icon={dogFriend}
+            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_09")}
+            onClick={() => handleFavoriteOptionClick("PLACE_FTE_09")}
+          />
+          <PreferenceFavoriteOption
+            label="시설이 청결해요"
+            icon={clean}
+            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_10")}
+            onClick={() => handleFavoriteOptionClick("PLACE_FTE_10")}
           />
           <PreferenceFavoriteOption
             label="주차하기 편해요"
             icon={parkingLot}
-            isSelected={selectedFavoriteOptions.includes("11")}
-            onClick={() => handleFavoriteOptionClick("11")}
+            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_11")}
+            onClick={() => handleFavoriteOptionClick("PLACE_FTE_11")}
           />
         </OptionContainer>
       </Section>
@@ -207,7 +269,7 @@ function PreferenceRegister() {
       </StyledParagraph2>
 
       <Footer>
-        <ConfirmBtn label="완료" />
+        <ConfirmBtn label="완료" onClick={handleConfirm}/>
       </Footer>
     </Wrap>
   );
