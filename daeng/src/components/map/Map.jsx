@@ -131,6 +131,17 @@ const Map = ({ data, removeUi, externalCenter }) => {
   }
 }, [isLoaded, map, data]);
 
+useEffect(() => {
+  if (map && markers.length > 0) {
+    const firstMarkerPosition = {
+      lat: data[0].latitude,
+      lng: data[0].longitude,
+    };
+    setCenter(firstMarkerPosition);
+    map.setCenter(firstMarkerPosition);
+  }
+}, [map, markers, data]);
+
   return (
     <MapContainer ref={mapRef} $data={data} $removeUi={removeUi}>
       {!isLoaded && <Loading label="지도 로딩 중.." />}
