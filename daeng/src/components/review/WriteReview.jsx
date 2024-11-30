@@ -300,8 +300,11 @@ function WriteReview() {
   
   useEffect(() => {
     fetchPetList();
-  }, [fetchPetList]);
-  console.log("펫 데이터:", pets); 
+  }, []);
+  
+  useEffect(() => {
+    console.log("펫 리스트 상태:", pets); // 디버깅 포인트
+  }, [pets]);
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -350,31 +353,42 @@ function WriteReview() {
     const presignResponse = await axios.get(
       `https://www.daengdaeng-where.link/api/v1/S3?prefix=review&fileName=${encodeURIComponent(file.name)}`
     );
-    const presignedUrl = presignResponse.data.presignUrl; // S3 프리사인드 URL
-    console.log("Presign Response:", presignResponse.data);
+
+    if (!presignResponse.data || !presignResponse.data.presignUrl) {
+      throw new Error("Presigned URL is missing in the server response.");
+    }
+
+    const presignedUrl = presignResponse.data.presignUrl;
+    console.log("Presigned URL:", presignedUrl);
 
     const uploadResponse = await axios.put(presignedUrl, file, {
       headers: { "Content-Type": file.type },
     });
+
     console.log("Upload Response:", uploadResponse);
-
-
     if (uploadResponse.status === 200) {
-      console.log(`${file.name} 업로드 성공!`);
+      const uploadedUrl = presignedUrl.split("?")[0];
       console.log(`File uploaded successfully: ${uploadedUrl}`);
-      return presignedUrl.split("?")[0]; // 업로드된 파일의 URL 반환
+      return uploadedUrl;
+    } else {
+      throw new Error("Upload failed with status " + uploadResponse.status);
     }
   } catch (error) {
-    console.error("파일 업로드 실패:", error);
+    console.error("File upload failed:", error.message);
+    return null;
   }
-  return null;
 };
 
+const handlePetSelection = (e) => {
+  console.log("선택된 펫:", e.target.value);
+  setSelectPet(e.target.value);
+};
+
+
   const handleSubmit = async () => {
-    const placeId = 1; // 더미
+    const placeId = 1; 
     const media = [];
   
-    // 업로드된 URL을 media 배열에 추가
     for (const file of placeImgs) {
       const uploadedUrl = await uploadMedia(file);
       if (uploadedUrl) {
@@ -386,16 +400,14 @@ function WriteReview() {
   
     console.log("Uploaded media URLs:", media); // 업로드된 URL 확인
 
-
- // 리뷰 데이터 생성
   const reviewData = {
     placeId,
-    content: text.trim(), // 입력된 리뷰 텍스트
-    score: ratings.filter(Boolean).length, // 선택된 별점 개수
+    content: text.trim(), 
+    score: ratings.filter(Boolean).length, 
     media, // 업로드된 이미지 URL 배열
-    keywords: selectKeywords, // 선택된 키워드
-    pets: selectPet ? [parseInt(selectPet)] : [], // 선택된 펫 ID 배열
-    visitedAt, // 방문 날짜
+    keywords: selectKeywords, 
+    pets: selectPet ? [parseInt(selectPet)] : [], // 선택된 펫 ID 배열로 변환
+    visitedAt, 
 };
 
 
@@ -432,10 +444,10 @@ function WriteReview() {
         </UserInfoContainer>
         <UserQuestionContainer>
         <Question>함께한 댕댕이를 선택해주세요</Question>
-        <PetSelection value={selectPet} onChange={(e) => setSelectPet(e.target.value)}>
+        <PetSelection value={selectPet} onChange={handlePetSelection}>
           <option value="">댕댕이를 선택해주세요</option>
-          {pets && pets.map((pet) => (
-            <option key={pet.id} value={pet.id}>
+          {pets.map((pet) => (
+            <option key={pet.petId} value={pet.petId}>
               {pet.name}
             </option>
           ))}

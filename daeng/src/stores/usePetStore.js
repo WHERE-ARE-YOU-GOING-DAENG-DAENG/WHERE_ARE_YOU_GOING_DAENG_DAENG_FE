@@ -15,6 +15,8 @@ const usePetStore = create((set) => ({
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
+
+    console.log("API 응답 데이터:", response.data.data); // 디버깅 포인트
       set({ pets: response.data.data, isLoading: false });
     } catch (error) {
       set({ isLoading: false, error: "펫 리스트를 불러오는 데 실패했습니다." });
