@@ -10,7 +10,7 @@ import axios from 'axios';
 import DeletePetData from "./DeletePetData";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
-
+import usePetStore from "../../stores/usePetStore";
 
 const Container = styled.div`
   display: flex;
@@ -172,6 +172,7 @@ const SelectWeight = styled.button`
 
 function EditInputForm() {
   const { petId } = useParams();
+  const { petInfo, fetchPetData, isLoading, error } = usePetStore(); 
   const [petName, setPetName] = useState("");  //이름
   const [preview, setPreview] = useState(null); //미리보기
   const [selectedPetType, setSelectedPetType] = useState(""); //종
@@ -185,48 +186,25 @@ function EditInputForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("petId:", petId);
-    
-    if (!petId) {
-      console.error("petId is undefined");
-      return;
+    if (petId) {
+      fetchPetData(petId);
     }
-    const fetchPetData = async () => {
-      try {
-        const response = await axios.get(
-          `https://www.daengdaeng-where.link/api/v1/pets/${petId}`, 
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          }
-        );
-        console.log(response.data); 
-  
-        const petData = response.data.data;
+  }, [petId, fetchPetData]);
 
-        setPetName(petData.name);
-        setPetBirth(petData.birthday); 
-        const species = petData.species;
-        const speciesOption = petTypeOptions.find(option => option.name === species);
-        setSelectedPetType(speciesOption ? speciesOption.code : "");
-        const gender = petData.gender;
-        const genderOption = genderOptions.find(option => option.name === gender);
-        setSelectedGender(genderOption ? genderOption.code : "");
-        setSelectedNeutering(petData.neutering ? "했어요" : "안 했어요");
-        const size = petData.size;
-        const sizeOption = petSizeOptions.find(option => option.name === size);
-        setSelectedSize(sizeOption ? sizeOption.code : "");
-        
-        setPetPicture(petData.image);
-      } catch (error) {
-        console.error("펫 정보 불러오기 실패:", error);
-      }
-    };
-  
-    fetchPetData();
-  }, [petId]); //성공
+  useEffect(() => {
+    if (petInfo) {
+      setPetName(petInfo.name || "");
+      setPetBirth(petInfo.birthday || "");
+      setSelectedPetType(petInfo.species || "");
+      setSelectedGender(petInfo.gender || ""); 
+      setSelectedNeutering(petInfo.neutering ? "했어요" : "안 했어요");
+      setSelectedSize(petInfo.size || "");
+      setPetPicture(petInfo.image || "");
+    }
+  }, [petInfo]);
+
+  if (isLoading) return <p>로딩 중...</p>;
+  if (error) return <p>{error}</p>;
 
   const getTodayDate = () => {
     const today = new Date();
@@ -339,7 +317,7 @@ function EditInputForm() {
   
     if (!validateForm()) return;
   
-    let imageUrl = petPicture; // 기존 이미지 URL을 기본값으로 설정함
+    let imageUrl = petPicture;
   
     // 새 이미지가 있을 경우에만 S3에 업로드 처리
   if (imageFile) {
