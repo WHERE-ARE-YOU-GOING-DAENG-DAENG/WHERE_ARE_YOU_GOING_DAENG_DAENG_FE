@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import PreferencePlaceOption from "../commons/PreferencePlaceOption";
@@ -27,6 +28,7 @@ import AlertDialog from "../commons/SweetAlert";
 import axios from "axios";
 
 function PreferenceRegister() {
+  const navigate = useNavigate();
   const [selectedPlaceOptions, setSelectedPlaceOptions] = useState([]);
   const [selectedFavoriteOptions, setSelectedFavoriteOptions] = useState([]);
 
@@ -112,7 +114,10 @@ function PreferenceRegister() {
         title: "등록 성공",
         text: "선호 정보가 성공적으로 등록되었습니다!",
         confirmText: "확인",
-        onConfirm: () => console.log("등록 성공 확인됨"),
+        onConfirm: () => {
+          console.log("등록 성공 확인됨");
+          navigate("/");
+        },
       });
     } catch (error) {
       if (error.response) {
@@ -196,24 +201,30 @@ function PreferenceRegister() {
         <Title>어떤 부분이 중요하신가요?</Title>
         <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
         <OptionContainer>
-          <PreferenceFavoriteOption
+        <PreferenceFavoriteOption
             label="뛰어놀기 좋아요"
             icon={run}
             isSelected={selectedFavoriteOptions.includes("PLACE_FTE_01")}
             onClick={() => handleFavoriteOptionClick("PLACE_FTE_01")}
           />
           <PreferenceFavoriteOption
+              label="급수대가 있어요"
+              icon={water}
+              isSelected={selectedFavoriteOptions.includes("PLACE_FTE_03")}
+              onClick={() => handleFavoriteOptionClick("PLACE_FTE_03")}
+                />
+          <PreferenceFavoriteOption
+              label="주차하기 편해요"
+              icon={parkingLot}
+              isSelected={selectedFavoriteOptions.includes("PLACE_FTE_11")}
+              onClick={() => handleFavoriteOptionClick("PLACE_FTE_11")}
+              />
+          <PreferenceFavoriteOption
               label="사방이 철장/벽으로 막혀있어요"
               icon={cage}
               isSelected={selectedFavoriteOptions.includes("PLACE_FTE_02")}
               onClick={() => handleFavoriteOptionClick("PLACE_FTE_02")}
             />
-          <PreferenceFavoriteOption
-            label="급수대가 있어요"
-            icon={water}
-            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_03")}
-            onClick={() => handleFavoriteOptionClick("PLACE_FTE_03")}
-          />
           <PreferenceFavoriteOption
               label="배변봉투가 구비되어 있어요"
               icon={paperbag}
@@ -256,12 +267,6 @@ function PreferenceRegister() {
             isSelected={selectedFavoriteOptions.includes("PLACE_FTE_10")}
             onClick={() => handleFavoriteOptionClick("PLACE_FTE_10")}
           />
-          <PreferenceFavoriteOption
-            label="주차하기 편해요"
-            icon={parkingLot}
-            isSelected={selectedFavoriteOptions.includes("PLACE_FTE_11")}
-            onClick={() => handleFavoriteOptionClick("PLACE_FTE_11")}
-          />
         </OptionContainer>
       </Section>
       <StyledParagraph2>
@@ -269,7 +274,7 @@ function PreferenceRegister() {
       </StyledParagraph2>
 
       <Footer>
-        <ConfirmBtn label="완료" onClick={handleConfirm}/>
+        <ConfirmBtn label="등록 완료" onClick={handleConfirm}/>
       </Footer>
     </Wrap>
   );
