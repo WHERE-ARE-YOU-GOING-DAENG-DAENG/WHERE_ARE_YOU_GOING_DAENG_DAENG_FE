@@ -72,88 +72,19 @@ const PlaceItem = styled.div`
   }
 `;
 
-const SearchPlaceList = ({ list }) => {
-  const [places, setPlaces] = useState(Array.isArray(list) ? list : []);
+const SearchPlaceList = ({ places, setPlaces, setNearPlaces }) => {
+  // const [places, setPlaces] = useState(Array.isArray(list) ? list : []);
   const userLocation = useLocationStore((state) => state.userLocation);
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    if (!Array.isArray(list) || list.length === 0) { //추천리스트
+
+  useEffect(()=>{
+    if (!Array.isArray(places) || places.length === 0) { //추천리스트
       // fetchNearestPlaces();
-      setPlaces([
-        {
-            "placeId": 185,
-            "name": "경성대학교박물관",
-            "city": "부산",
-            "cityDetail": "남구",
-            "township": "대연동",
-            "latitude": 35.13843836,
-            "longitude": 129.100099,
-            "streetAddresses": "부산광역시 남구 수영로 309",
-            "telNumber": "051-663-4114",
-            "url": "http://www.ks.ac.kr/ksmuseum",
-            "placeType": "박물관",
-            "description": "해당없음 박물관",
-            "parking": true,
-            "indoor": true,
-            "outdoor": false,
-            "distance": 0.2761599773174494,
-            "isFavorite": true,
-            "startTime": "9:00",
-            "endTime": "18:00",
-            "favoriteCount": 0,
-            "placeScore": 4.7
-        },
-        {
-            "placeId": 184,
-            "name": "경성대학교 미술관",
-            "city": "부산",
-            "cityDetail": "남구",
-            "township": "대연동",
-            "latitude": 35.13843836,
-            "longitude": 129.100099,
-            "streetAddresses": "부산광역시 남구 수영로 309",
-            "telNumber": "051-663-5361",
-            "url": "https://cms1.ks.ac.kr/culture",
-            "placeType": "미술관",
-            "description": "해당없음 미술관",
-            "parking": true,
-            "indoor": true,
-            "outdoor": true,
-            "distance": 0.2761599773174494,
-            "isFavorite": false,
-            "startTime": "10:00",
-            "endTime": "18:00",
-            "favoriteCount": 0,
-            "placeScore": 4.7
-        },
-        {
-            "placeId": 1278,
-            "name": "부경대학교박물관",
-            "city": "부산",
-            "cityDetail": "남구",
-            "township": "대연동",
-            "latitude": 35.13117521,
-            "longitude": 129.104866,
-            "streetAddresses": "부산광역시 남구 용소로 45",
-            "telNumber": "051-629-6771",
-            "url": "http://cms.pknu.ac.kr/museum",
-            "placeType": "박물관",
-            "description": "해당없음 박물관",
-            "parking": true,
-            "indoor": true,
-            "outdoor": false,
-            "distance": 0.7868715140598589,
-            "isFavorite": false,
-            "startTime": "10:00",
-            "endTime": "17:00",
-            "favoriteCount": 0,
-            "placeScore": 5
-        },])
-    } else {
-      setPlaces(list);
-    }
-  }, [list]);
+      setPlaces(mockData);
+      setNearPlaces(mockData);
+    } 
+  },[places])
+
 
   //가까운순 추천장소 30개
   const fetchNearestPlaces = async () => {
@@ -168,6 +99,7 @@ const SearchPlaceList = ({ list }) => {
       });
       console.log(response.data.data); //로그 삭제
       setPlaces(response.data.data);
+      setNearPlaces(response.data.data)
     }catch (error){
       console.error("Error fetching nearest places:", error);
     }
@@ -212,7 +144,10 @@ const SearchPlaceList = ({ list }) => {
               <div className="facility-type">{place.placeType || "시설 정보 없음"}</div>
             </div>
             <div className="details">
-              <div className="status">{place.startTime} - {place.endTime} |</div>
+              <div className="status">{place.startTime && place.endTime
+                  ? `${place.startTime} - ${place.endTime}`
+                  : "24시간 운영"}
+                {" | "}</div>
               <div className="address">{place.streetAddresses || "주소 정보 없음"}</div>
             </div>
             <div className="images">
@@ -237,9 +172,74 @@ const SearchPlaceList = ({ list }) => {
   );
 };
 
-// 기본값 정의
-SearchPlaceList.defaultProps = {
-  list: [],
-};
-
+const mockData = [
+  {
+      "placeId": 185,
+      "name": "경성대학교박물관",
+      "city": "부산",
+      "cityDetail": "남구",
+      "township": "대연동",
+      "latitude": 35.13843836,
+      "longitude": 129.100099,
+      "streetAddresses": "부산광역시 남구 수영로 309",
+      "telNumber": "051-663-4114",
+      "url": "http://www.ks.ac.kr/ksmuseum",
+      "placeType": "박물관",
+      "description": "해당없음 박물관",
+      "parking": true,
+      "indoor": true,
+      "outdoor": false,
+      "distance": 0.2761599773174494,
+      "isFavorite": true,
+      "startTime": "9:00",
+      "endTime": "18:00",
+      "favoriteCount": 0,
+      "placeScore": 4.7
+  },
+  {
+      "placeId": 184,
+      "name": "경성대학교 미술관",
+      "city": "부산",
+      "cityDetail": "남구",
+      "township": "대연동",
+      "latitude": 35.13843836,
+      "longitude": 129.100099,
+      "streetAddresses": "부산광역시 남구 수영로 309",
+      "telNumber": "051-663-5361",
+      "url": "https://cms1.ks.ac.kr/culture",
+      "placeType": "미술관",
+      "description": "해당없음 미술관",
+      "parking": true,
+      "indoor": true,
+      "outdoor": true,
+      "distance": 0.2761599773174494,
+      "isFavorite": false,
+      "startTime": "10:00",
+      "endTime": "18:00",
+      "favoriteCount": 0,
+      "placeScore": 4.7
+  },
+  {
+      "placeId": 1278,
+      "name": "부경대학교박물관",
+      "city": "부산",
+      "cityDetail": "남구",
+      "township": "대연동",
+      "latitude": 35.13117521,
+      "longitude": 129.104866,
+      "streetAddresses": "부산광역시 남구 용소로 45",
+      "telNumber": "051-629-6771",
+      "url": "http://cms.pknu.ac.kr/museum",
+      "placeType": "박물관",
+      "description": "해당없음 박물관",
+      "parking": true,
+      "indoor": true,
+      "outdoor": false,
+      "distance": 0.7868715140598589,
+      "isFavorite": false,
+      "startTime": "10:00",
+      "endTime": "17:00",
+      "favoriteCount": 0,
+      "placeScore": 5
+  },]
 export default SearchPlaceList;

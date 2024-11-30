@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import searchIcon from "../../assets/icons/footer_search.svg";
@@ -54,9 +54,15 @@ const SearchIcon = styled.img`
   cursor: pointer;
 `;
 
-const SearchBar = ({ placeholder, onSearch }) => {
+const SearchBar = ({ placeholder, onSearch, query }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [value, setValue] = useState("");
+
+  useEffect(()=>{
+    if (query === "") {
+      setValue("");
+    }
+  },[query])
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && onSearch) {
