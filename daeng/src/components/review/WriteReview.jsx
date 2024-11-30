@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PreferenceFavoriteOptionList from "./PreferenceFavoriteOptionList";
 import star from "../../assets/icons/star.svg";
@@ -7,7 +7,7 @@ import addImg from "../../assets/icons/addImg.svg";
 import axios from "axios";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
-
+import usePetStore from "../../stores/usePetStore";
 
 const WriteReviewAllContainer = styled.div`
   display: block;
@@ -283,18 +283,26 @@ const getCurrentDate = () => {
   const month = String(today.getMonth() + 1).padStart(2, "0"); 
   const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
-};
+}; //오늘 날짜 가지고 오기
 
 
 function WriteReview() {
+  const { pets, isLoading, fetchPetList } = usePetStore();
+  const [selectPet, setSelectPet] = useState(""); // 선택된 펫 ID
   const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
-  const [previews, setPreviews] = useState([]); // 첨부하는 이미지 미리보기
-  const [selectPet, setSelectPet] = useState(""); // 펫 선택
-  const [userNickname, setUserNickname] = useState('내가 진짜'); //나중에 zustand로 받아야 와하는 유저 닉네임
-  const [userImage, setUserImage] = useState(''); // 예시 이미지 URL, 나중에 zustand로 받아야 와하는 유저 이미지 > 같이간 펫 이미지를 불러와야함
+  const [previews, setPreviews] = useState([]); //이미지 미리보기
+  const [userNickname, setUserNickname] = useState('내가 진짜'); //zustand 처리
+  const [userImage, setUserImage] = useState(''); 
   const [selectKeywords, setSelectKeywords] = useState([]); // 키워드 선택
   const [content, setContent] = useState(""); // 리뷰 내용
-  const [visitedAt, setVisitedAt] = useState(getCurrentDate()); // 방문한 날짜
+  const [visitedAt, setVisitedAt] = useState(getCurrentDate()); // 방문한 날짜 
+  const S3_BASE_URL = "https://<bucket-name>.s3.<region>.amazonaws.com";
+  
+  
+  useEffect(() => {
+    fetchPetList();
+  }, [fetchPetList]);
+
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -306,8 +314,6 @@ function WriteReview() {
       };
       reader.readAsDataURL(file);
     });
-  
-    // 파일을 업로드한 후 input을 리셋
     e.target.value = null;
   };
 
@@ -344,21 +350,19 @@ function WriteReview() {
     const score = ratings.filter((rating) => rating).length; // 별점 
     const media = previews;
     const keywords = selectKeywords; // 선택한 키워드들 > 공통 코드로 설정해야함
-    const pets = [1, 2, 3]; // 예시로 넣음
 
     // Step 1: 이미지 / 동영상 업로드 처리
   const uploadMedia = async (file) => {
     try {
       const presignResponse = await axios.get(
-        `https://your-server-url.com/api/v1/S3?prefix=review-media&fileName=${file.name}`
+        `https://your-server-url.com/api/v1/S3?prefix=review&fileName=${file.name}`
       );
 
       const presignedUrl = presignResponse.data.presignUrl;
 
-      // PUT 요청으로 파일을 S3에 업로드
       const fileUploadResponse = await axios.put(presignedUrl, file, {
         headers: {
-          'Content-Type': file.type, // 이미지 또는 동영상의 MIME 타입 설정
+          'Content-Type': file.type, 
         },
       });
 
@@ -389,7 +393,7 @@ function WriteReview() {
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/review", reviewData, {
+      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -413,15 +417,18 @@ function WriteReview() {
         <SelectWarning>*이 장소에 맞는 키워드를 골라주세요 (1개~3개)</SelectWarning>
         <PreferenceFavoriteOptionList />
         <UserInfoContainer>
-          <UserImg/> 
+        <UserImg />
           <UserNickname>{userNickname || "내가 진짜"}</UserNickname>
         </UserInfoContainer>
         <UserQuestionContainer>
-          <Question>함께한 댕댕이를 선택해주세요</Question>
-          <PetSelection value={selectPet} onChange={(e) => setSelectPet(e.target.value)}>
-          <option value="pet1">댕댕이 1</option>
-          <option value="pet2">댕댕이 2</option>
-          <option value="pet3">댕댕이 3</option>
+        <Question>함께한 댕댕이를 선택해주세요</Question>
+        <PetSelection value={selectPet} onChange={(e) => setSelectPet(e.target.value)}>
+          <option value="">댕댕이를 선택해주세요</option>
+          {pets && pets.map((pet) => (
+            <option key={pet.id} value={pet.id}>
+              {pet.name}
+            </option>
+          ))}
         </PetSelection>
         </UserQuestionContainer>
         <UserQuestionContainer>
