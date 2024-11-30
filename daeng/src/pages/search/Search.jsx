@@ -14,7 +14,8 @@ import { placeTypes } from "../../data/CommonCode";
 const Search = () => {
     const [query, setQuery] = useState("");
     const [places, setPlaces] = useState([]);
-    // const [userLocation, setUserLocation] = useState(null);
+    const [sortIndex, setSortIndex] = useState(0);
+    const [nearPlaces, setNearPlaces] = useState([]);
     const userLocation = useLocationStore((state) => state.userLocation);
     const [keywords, setKeywords] = useState({
       city: "서울",
@@ -26,6 +27,22 @@ const Search = () => {
 
     const handleSearch = (keyword) => {
         setQuery(keyword);
+    };
+    const handleSortChange = (index) => {
+      setSortIndex(index); // 정렬 방식 변경
+      sortPlaces(index); // 정렬 함수 호출
+    };
+  
+    const sortPlaces = (index) => {
+      if (index === 0) {
+        // 가까운 순 정렬
+        setPlaces([...nearPlaces]);
+      } else if (index === 1) {
+        // 별점 높은 순 정렬
+        setPlaces((prevPlaces) =>
+          [...prevPlaces].sort((a, b) => b.placeScore - a.placeScore)
+        );
+      }
     };
 
     useEffect(() => {
@@ -40,17 +57,20 @@ const Search = () => {
             try {
               const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/search", payload,
               {
-                withCredentials: true, // 옵션 추가
+                withCredentials: true,
               }
               );
               setPlaces(response.data.data);
+              setNearPlaces(response.data.data);
+              setQuery("");
             } catch (error) {
               console.error("Error fetching places:", error);
             }
           };
     
           fetchPlaces();
-        }else if(filter && userLocation){
+        }
+        if(filter && userLocation){
           const fetchPlaces = async () => {
             let matchedType = placeTypes.find((type) => type.name === keywords.placeType);
             const payload = {
@@ -82,11 +102,17 @@ const Search = () => {
     return (
         <>
           <Header label="장소검색"/>
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar query={query} onSearch={handleSearch} />
           <Map data={places} removeUi={false}/>
           <FilterBtnList keywords={keywords} setKeywords={setKeywords} setFilter={setFilter}/>
-          <Sorting mode="list" label={places ? "검색결과" : "보호자님께 추천하는 장소!"} sortingOptions={['가까운순', '별점 높은순']} activeIndex={0}/>
-          <SearchPlaceList list={places}/>
+          <Sorting 
+            mode="list" 
+            label={places ? "검색결과" : "보호자님께 추천하는 장소!"} 
+            sortingOptions={['가까운순', '별점 높은순']} 
+            activeIndex={sortIndex}
+            onSortChange={handleSortChange}
+            />
+          <SearchPlaceList places={places} setPlaces={setPlaces} setNearPlaces={setNearPlaces}/>
           <Footer />
         </>
     );
