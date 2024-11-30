@@ -31,7 +31,7 @@ function DeletePetData({ petId }) {
     AlertDialog({
       mode: "confirm",
       title: "삭제 확인",
-      text: "정말로 이 펫 정보를 삭제하시겠습니까?\n삭제된 정보는 복구할 수 없습니다.",
+      text: "삭제된 정보는 복구할 수 없습니다.",
       cancelText: "취소",
       icon: "warning",
       confirmText: "삭제",
