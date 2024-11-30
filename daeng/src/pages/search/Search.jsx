@@ -9,6 +9,7 @@ import Sorting from "../../components/commons/Sorting";
 import FilterBtnList from "../../components/search/FilterBtnList";
 import useLocationStore from "../../stores/LocationStore";
 import { placeTypes } from "../../data/CommonCode";
+import AlertDialog from "../../components/commons/SweetAlert";
 // import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const Search = () => {
@@ -64,7 +65,15 @@ const Search = () => {
               setNearPlaces(response.data.data);
               setQuery("");
             } catch (error) {
-              console.error("Error fetching places:", error);
+              if (error.response) {
+                AlertDialog({
+                    mode: "alert",
+                    title: "장소 검색 실패",
+                    text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+                    confirmText: "확인",
+                    onConfirm: () => console.log("서버 응답 오류 확인됨"),
+                });
+              }
             }
           };
     
@@ -90,8 +99,15 @@ const Search = () => {
               console.log(response.data.data); //로그없애기
               setPlaces(response.data.data);
           } catch (error) {
-            console.error("Error fetching places:", error);
-            
+              if (error.response) {
+                AlertDialog({
+                    mode: "alert",
+                    title: "장소 검색 실패",
+                    text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+                    confirmText: "확인",
+                    onConfirm: () => console.log("서버 응답 오류 확인됨"),
+                });
+              }
           }
           setFilter(false);
         }
