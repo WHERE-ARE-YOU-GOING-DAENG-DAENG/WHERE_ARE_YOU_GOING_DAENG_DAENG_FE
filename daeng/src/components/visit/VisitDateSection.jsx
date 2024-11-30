@@ -1,10 +1,6 @@
 import styled from "styled-components";
 import VisitTimePets from "./VisitTimePets";
 
-const DateSection = styled.div`
-  margin-bottom: 20px;
-`;
-
 const DateTitle = styled.h2`
   font-size: 20px;
   background-color: #FDF2F8;
@@ -15,7 +11,7 @@ const DateTitle = styled.h2`
 
 const VisitDateSection = ({ visitDate, petsAtVisitTimes, onVisitClick }) => {
   return (
-    <DateSection>
+    <div>
       <DateTitle>
         {new Date(visitDate).toLocaleDateString("ko-KR", {
           weekday: "long",
@@ -31,7 +27,7 @@ const VisitDateSection = ({ visitDate, petsAtVisitTimes, onVisitClick }) => {
           onVisitClick={onVisitClick}
         />
       ))}
-    </DateSection>
+    </div>
   );
 };
 
