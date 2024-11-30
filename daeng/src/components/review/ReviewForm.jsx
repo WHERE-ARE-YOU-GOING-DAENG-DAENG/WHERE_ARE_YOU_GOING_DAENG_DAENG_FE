@@ -11,18 +11,6 @@ const ReviewDivision = styled.div`
   background-color: #E5E5E5;
   margin-top: 17px;
 `
-const StyledTotalReview = styled.span`
-  font-weight: bold;
-  font-size: 20px;
-  display: block;
-  margin-right: 58%;
-  margin-top: 5%;
-
-  @media (max-width: 554px) {
-    font-size: 18px;
-    margin-right: 50%;
-  }
-`
 
 const ReviewContainer = styled.div`
   display: flex;
@@ -108,7 +96,6 @@ const ReviewPicture = styled.div`
 function ReviewForm() {
   return (
   <>
-  <StyledTotalReview>내가 쓴 총 리뷰 개</StyledTotalReview> 
     <ReviewDivision />
     <ReviewContainer>
       <PlaceTitle>가평 트리하우스</PlaceTitle>
