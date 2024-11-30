@@ -1,21 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
 import { PetType } from "../../data/PetType";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
+import AlertDialog from "../../components/commons/SweetAlert";
+import axios from 'axios';
+import DeletePetData from "./DeletePetData";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 3%;
-  margin-left: 4%;
+  margin-left: 4%;  
+  
+  @media (max-width: 554px) {
+    margin-top: 3%;
+  }
 `;
 
 const FirstInputContainer = styled.div`
   display: flex;
   flex-direction: row;
+
+  @media (max-width: 554px) {
+    margin-bottom: 5%;
+  }
 `;
 
 const PetImg = styled.div`
@@ -41,7 +52,7 @@ const PetNameInfoContainer = styled.div`
 `;
 
 const PetNameInput = styled.input`
-  width: 194%;
+  width: 191%;
   height: 44px;
   font-size: 14px;
   border-radius: 5px;
@@ -49,16 +60,14 @@ const PetNameInput = styled.input`
   margin-bottom: 10px;
   padding: 10px;
 
+  @media (max-width: 554px) {
+    width: 185%;
+    font-size: 14px;
+    height: 48px;
+  }
   &:focus {
     outline: none;
     border-color: #ff69a9; 
-  }
-
-
-  @media (max-width: 554px) {
-    max-width: 150%;
-    font-size: 14px;
-    height: 48px;
   }
 `;
 
@@ -90,18 +99,12 @@ const PetTypeOption = styled.select`
     border-color: #FF69A9;  
     outline: none;  
   }
-
-
-  &:focus {
-    outline: none;
-    border-color: #ff69a9; 
-  }
 `;
 
 const BirthInput = styled.input`
   width: 96%;
   height: 44px;
-  margin-right:10%;
+  margin-right: 10%;
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
@@ -128,24 +131,29 @@ const PetTypeContainer = styled.div`
 
 const BirthContainer = styled.div`
   margin-bottom: 20px;
-`    
+`;
+
 const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
-`
+`;
 
 const SelectWeight = styled.button`
   width: 90px;
-  height : 44px;
+  height: 44px;
   margin-right: 12px;
   background-color: white;
-  border : 0.5px solid #E4E4E4;
+  border: 0.5px solid #E4E4E4;
   border-radius: 5px;
   font-size: 10px;
   cursor: pointer;
-  color:  #B3B3B3;
-
+  color: #B3B3B3;
+  
+  @media (max-width: 554px) {
+    margin-bottom: 3%;
+  }
+  
   &:hover {
     background-color: #ff69a9;
     font-weight: bold;
@@ -153,33 +161,21 @@ const SelectWeight = styled.button`
   }
 
   ${(props) => props.selected && `
-        background-color: #FF69A9;
-        font-weight: bold;
-        color: #ffffff;
-    `}
+    background-color: #FF69A9;
+    font-weight: bold;
+    color: #ffffff;
+  `}
 `;
 
-const DeletePet = styled.button`
-  background-color: white;
-  color:#B3B3B3;
-  font-size:14px;
-  border:none;
-  cursor: pointer;
-  text-align: center;
-  margin-right:23px;
-  margin-bottom: 20px;
-
-  &:hover{
-    font-weight: bold;
-  }
-`
-
-function EditInputForm() {
+function EditInputForm({ petId }) {
   const [preview, setPreview] = useState(null);
   const [selectedPetType, setSelectedPetType] = useState("");
   const [selectedWeight, setSelectedWeight] = useState("");
   const [selectedGender, setSelectedGender] = useState(""); 
   const [selectedNeutering, setSelectedNeutering] = useState(""); 
+  const [petName, setPetName] = useState(""); 
+  const [petPicture, setPetPicture] = useState(""); 
+  const [petBirth, setPetBirth] = useState(""); 
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -216,12 +212,73 @@ function EditInputForm() {
     return `${year}-${month}-${day}`;
   };
 
+  const axiosInstance = axios.create({
+    baseURL: '/api',
+  });
+
+  useEffect(() => {
+    const fetchPetData = async (petId) => {
+      try {
+        const response = await axiosInstance.get(`/pets/${petId}`);
+        const petData = response.data;
+
+        if (petData) {
+          setPetPicture(petData.petPicture);
+          setPetName(petData.petName);
+          setPetBirth(petData.petBirth);
+          setSelectedGender(petData.gender ? "남아" : "여아");
+          setSelectedNeutering(petData.neutering ? "했어요" : "안 했어요");
+          setSelectedWeight(petData.petWeight);
+        }
+      } catch (error) {
+        console.error("펫 데이터 불러오기 실패:", error);
+      }
+    };
+
+    if (petId) {
+      fetchPetData(petId); 
+    }
+  }, [petId]);
+
+  const handlePetDataUpdate = async () => {
+    try {
+      const response = await axios.put(`/api/v1/pets/${petId}`, {
+        petName,
+        petType: selectedPetType,
+        petBirth,
+        neutering: selectedNeutering === "했어요",
+        gender: selectedGender,
+        weight: selectedWeight, 
+      });
+
+      if (response.status === 200) {
+        AlertDialog({
+          mode: "success",
+          title: "수정 완료",
+          text: "펫 정보가 성공적으로 수정되었습니다!",
+          confirmText: "확인",
+          onConfirm: () => {
+            navigate("/my-page");
+          }
+        });
+      }
+    } catch (error) {
+      console.error("수정 실패:", error);
+
+      AlertDialog({
+        mode: "alert",
+        title: "수정 실패",
+        text: "수정 중 문제가 발생했습니다. 다시 시도해주세요.",
+        confirmText: "확인",
+      });
+    }
+  };
 
   return (
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-          <PetImg src={preview} />
+          <PetImg src={preview || petPicture} />
         </label>
         <HiddenInput
           id="file-input"
@@ -231,7 +288,10 @@ function EditInputForm() {
         />
         <PetNameInfoContainer>
           <SelectLabel label="댕댕이 이름" />
-          <PetNameInput />
+          <PetNameInput 
+            value={petName} 
+            onChange={(e) => setPetName(e.target.value)} 
+          />
           <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
         </PetNameInfoContainer>
       </FirstInputContainer>
@@ -254,6 +314,8 @@ function EditInputForm() {
           type="date"
           max={getTodayDate()} 
           placeholder="우리 댕댕일 생일을 알려주세요!"
+          value={petBirth} 
+          onChange={(e) => setPetBirth(e.target.value)} 
         />
       </BirthContainer>
       <SelectLabel label="성별" />
@@ -315,8 +377,8 @@ function EditInputForm() {
           대형견<br />(20kg 이상)
         </SelectWeight>
       </SelectContainer>
-      <ConfirmBtn label="완료" />
-      <DeletePet>삭제하기</DeletePet>
+      <ConfirmBtn onClick={handlePetDataUpdate} label="수정 완료" />
+      <DeletePetData />
     </Container>
   );
 }

@@ -66,7 +66,7 @@ const StyledLink = styled(Link)`
 function RoutePage() {
   const list = ['즐겨찾기', '내가 작성한 리뷰', '키워드 수정', '방문 등록 리스트'];
   const icons = [mypageFavorite, mypageKeyword, mypageReview, visitList];
-  const routes = ['/', '/my-review', '/preference-edit', '/'];
+  const routes = ['/bookmark', '/my-review', '/preference-edit', '/'];
 
   return (
     <RoutePageContainer>
