@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import xIcon from "../../assets/icons/x.svg"
+import xIcon from "../../assets/icons/x.svg";
+import useVisitStore from "../../stores/useVisitStore";
+import AlertDialog from "../commons/SweetAlert";
+import { useNavigate } from "react-router-dom";
+
 const TableWrapper = styled.div`
   margin: 0px 40px;
   overflow: auto;
@@ -34,35 +38,45 @@ const Td = styled.td`
   border: 1px solid #ddd;
 `;
 
-const Strikethrough = styled.span`
-  text-decoration: line-through;
-  color: #4c4c4c;
+const ColSpanTd = styled(Td)`
+  text-align: center;
+  font-weight: bold;
+  padding-top: 3vh;
 `;
 
 const Button = styled.button`
   border: none;
   background-color: white;
   cursor: pointer;
-  img{
+  img {
     width: 18px;
   }
-`
+`;
 
-const ScheduleTable = ({ schedules }) => {
+const ScheduleTable = () => {
+  const myVisits = useVisitStore((state)=>state.myVisits);
+  const removeVisit  = useVisitStore((state) => state.removeVisit);
+  const navigate = useNavigate();
 
-  const handleDelete = (index) => {
-    alert((index+1)+"번째 줄 일정삭제")
-  }
-  const isPastSchedule = (visitAt) => {
-    const currentDate = new Date();
-    const scheduleDate = new Date(visitAt);
-    return scheduleDate < currentDate; // 지난 일정인지 확인
+  const handleVisitClick = (placeId) => {
+    navigate(`/visit-list/${placeId}`);
   };
 
-  const hasFutureSchedules = schedules.some(
-    (schedule) => !isPastSchedule(schedule.visitAt)
-  );
-  
+  const handleDelete = (e, id) => {
+    e.stopPropagation();
+    AlertDialog({
+      mode: "confirm",
+      title: "방문예정취소",
+      text: "방문예정을 취소하시겠습니까?",
+      confirmText: "취소",
+      cancelText: "닫기",
+      onConfirm: async () => {
+        await removeVisit(id);
+          
+      }
+  })
+  };
+
   return (
     <TableWrapper>
       <Table>
@@ -72,63 +86,38 @@ const ScheduleTable = ({ schedules }) => {
             <Th>시간</Th>
             <Th>장소</Th>
             <Th>반려동물</Th>
-            {hasFutureSchedules && <Th>취소</Th>}
+            <Th>취소</Th>
           </tr>
         </Thead>
         <tbody>
-          {schedules.length > 0 ? (
-            schedules.map((schedule, index) => (
-              <tr key={index}>
-                <Td>
-                  {isPastSchedule(schedule.visitAt) ? (
-                    <Strikethrough>{schedule.visitAt.split("T")[0]}</Strikethrough>
-                  ) : (
-                    schedule.visitAt.split("T")[0]
-                  )}
-                </Td>
-                <Td>
-                  {isPastSchedule(schedule.visitAt) ? (
-                    <Strikethrough>{schedule.visitAt.split("T")[1].slice(0, 5)}</Strikethrough>
-                  ) : (
-                    schedule.visitAt.split("T")[1].slice(0, 5)
-                  )}
-                </Td>
-                <Td>
-                  {isPastSchedule(schedule.visitAt) ? (
-                    <Strikethrough>{schedule.placeName}</Strikethrough>
-                  ) : (
-                    schedule.placeName
-                  )}
-                </Td>
+          {myVisits.length > 0 ? (
+            myVisits.map((schedule, index) => (
+              <tr
+                key={index}
+                onClick={() => handleVisitClick(schedule.placeId)}
+                style={{ cursor: "pointer" }}
+              >
+                <Td>{schedule.visitAt.split("T")[0].slice(5).replace("-","/")}</Td>
+                <Td>{schedule.visitAt.split("T")[1].slice(0, 5)}</Td>
+                <Td>{schedule.placeName}</Td>
                 <Td>
                   {schedule.pets.map((pet, idx) => (
                     <span key={pet.petId}>
-                      {isPastSchedule(schedule.visitAt) ? (
-                        <Strikethrough>
-                          {pet.petName}
-                          {idx < schedule.pets.length - 1 ? ", " : ""}
-                        </Strikethrough>
-                      ) : (
-                        <>
-                          {pet.petName}
-                          {idx < schedule.pets.length - 1 ? ", " : ""}
-                        </>
-                      )}
+                      {pet.petName}
+                      {idx < schedule.pets.length - 1 ? ", " : ""}
                     </span>
                   ))}
                 </Td>
-                {!isPastSchedule(schedule.visitAt) && (
-                  <Td>
-                    <Button onClick={() => handleDelete(index)}>
-                      <img src={xIcon} alt="삭제" />
-                    </Button>
-                  </Td>
-                )}
+                <Td>
+                  <Button onClick={(e) => handleDelete(e, schedule.visitId)}>
+                    <img src={xIcon} alt="삭제" />
+                  </Button>
+                </Td>
               </tr>
             ))
           ) : (
             <tr>
-              <Td colSpan="5">일정 없음</Td>
+              <ColSpanTd colSpan="5">일정이 없습니다.</ColSpanTd>
             </tr>
           )}
         </tbody>

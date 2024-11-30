@@ -88,12 +88,7 @@ const BookMarkList = ({ isOpen, onClose , data, onPlaceClick}) => {
             confirmText: "삭제",
             cancelText: "취소",
             onConfirm: async () => {
-                try{
-                    console.log(id);
-                    await removeFavorite(id);
-                }catch (error) {
-                    console.error("Error deleting favorite:", error);
-                }
+                await removeFavorite(id);
             }
         })
     };
