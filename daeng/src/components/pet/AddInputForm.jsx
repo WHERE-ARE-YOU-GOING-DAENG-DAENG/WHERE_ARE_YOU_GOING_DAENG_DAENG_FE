@@ -218,10 +218,9 @@ function RegisterInputForm() {
   const [petName, setPetName] = useState(""); //반려동물 이름
   const [selectedPetBirth, setSelectedPetBirth] = useState(""); //반려동물 생일
   const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
-  const [selectedWeight, setSelectedWeight] = useState(""); // 반려동물 사이즈
+  const [selectedSize, setSelectedSize] = useState(""); // 반려동물 사이즈
   const [selectedGender, setSelectedGender] = useState(""); //성별
   const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
-
   
   const handlePetNameChange = (e) => {
     setPetName(e.target.value);
@@ -240,9 +239,9 @@ function RegisterInputForm() {
     setSelectedNeutering(status); 
   };
 
-  const handleWeightClick = (weightCode) => {
-    setSelectedWeight(weightCode); 
-  };
+  const handleSizeClick = (sizeCode) => {
+    setSelectedSize(sizeCode); 
+  }; //사이즈 
 
   //오늘 이후로는 날짜 선택 못하게
   const getTodayDate = () => {
@@ -304,7 +303,7 @@ function RegisterInputForm() {
       })
       return false;
     }
-    if (!selectedWeight || !petSizeOptions.some(option => option.code === selectedWeight)) {
+    if (!selectedSize || !petSizeOptions.some(option => option.code === selectedSize)) {
       AlertDialog({
         mode: "alert", 
         title: "선택 오류",
@@ -373,10 +372,11 @@ function RegisterInputForm() {
         withCredentials: true,
       }
     );
-      if (response.status === 201) {
+      if (response.status === 200) {
         console.log('성공');
         console.log('응답 데이터:', response.data);
-        alert("성공적으로 추가 되었습니다");
+        alert("펫 정보가 성공적으로 수정되었습니다!");
+        navigate("/my-page");
       } else {
         console.log('응답 상태:', response.status);
         console.log('응답 데이터:', response.data);
@@ -467,8 +467,8 @@ function RegisterInputForm() {
       {petSizeOptions.map((option) => (
         <SelectWeight
           key={option.code}
-          selected={selectedWeight === option.code}
-          onClick={() => handleWeightClick(option.code)}
+          selected={selectedSize === option.code}
+          onClick={() => handleSizeClick(option.code)}
         >
           {option.name}<br />({option.size})
         </SelectWeight>

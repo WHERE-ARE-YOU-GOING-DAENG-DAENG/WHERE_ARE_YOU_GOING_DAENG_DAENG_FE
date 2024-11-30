@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
-import { PetType } from "../../data/PetType";
+import { useParams } from 'react-router-dom';
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
@@ -171,22 +171,26 @@ const SelectWeight = styled.button`
 `;
 
 function EditInputForm() {
-  const [preview, setPreview] = useState(null);
-  const [selectedPetType, setSelectedPetType] = useState("");
-  const [selectedWeight, setSelectedWeight] = useState("");
-  const [selectedGender, setSelectedGender] = useState(""); 
-  const [selectedNeutering, setSelectedNeutering] = useState(""); 
-  const [petName, setPetName] = useState(""); 
-  const [petPicture, setPetPicture] = useState(""); 
-  const [imageFile, setImageFile] = useState(null);
-  const [petBirth, setPetBirth] = useState(""); 
+  const { petId } = useParams();
+  const [petName, setPetName] = useState("");  //이름
+  const [preview, setPreview] = useState(null); //미리보기
+  const [selectedPetType, setSelectedPetType] = useState(""); //종
+  const [selectedSize, setSelectedSize] = useState(""); // 반려동물 사이즈
+  const [selectedGender, setSelectedGender] = useState(""); //성별
+  const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화
+  const [petPicture, setPetPicture] = useState(""); //서버에서 받아온 기존 사진 URL
+  const [imageFile, setImageFile] = useState(null); //사용자가 새로 업로드하려는 이미지 파일
+  const [petBirth, setPetBirth] = useState(""); //생일
 
-  const petId = 17;//일단 더미 넣어두기 
   const navigate = useNavigate();
-
 
   useEffect(() => {
     console.log("petId:", petId);
+    
+    if (!petId) {
+      console.error("petId is undefined");
+      return;
+    }
     const fetchPetData = async () => {
       try {
         const response = await axios.get(
@@ -195,6 +199,7 @@ function EditInputForm() {
             headers: {
               'Content-Type': 'application/json',
             },
+            withCredentials: true,
           }
         );
         console.log(response.data); 
@@ -202,15 +207,18 @@ function EditInputForm() {
         const petData = response.data.data;
 
         setPetName(petData.name);
-        setSelectedPetType(petData.species); 
-        setPetBirth(petData.birthday);
+        setPetBirth(petData.birthday); 
+        const species = petData.species;
+        const speciesOption = petTypeOptions.find(option => option.name === species);
+        setSelectedPetType(speciesOption ? speciesOption.code : "");
         const gender = petData.gender;
         const genderOption = genderOptions.find(option => option.name === gender);
         setSelectedGender(genderOption ? genderOption.code : "");
         setSelectedNeutering(petData.neutering ? "했어요" : "안 했어요");
         const size = petData.size;
         const sizeOption = petSizeOptions.find(option => option.name === size);
-        setSelectedWeight(sizeOption ? sizeOption.code : "");
+        setSelectedSize(sizeOption ? sizeOption.code : "");
+        
         setPetPicture(petData.image);
       } catch (error) {
         console.error("펫 정보 불러오기 실패:", error);
@@ -218,7 +226,15 @@ function EditInputForm() {
     };
   
     fetchPetData();
-  }, [petId]);
+  }, [petId]); //성공
+
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); 
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }; // 오늘 이후는 선택 불가하게
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -228,37 +244,30 @@ function EditInputForm() {
         setPreview(reader.result);
       };
       reader.readAsDataURL(file);
+      setImageFile(file); 
     }
-  };
-
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0"); 
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
   };
 
   const handlePetNameChange = (e) => {
     setPetName(e.target.value);
-  };
-
-  const handlePetBirthChange = (e) => {
-    setSelectedPetBirth(e.target.value);
-  };
+  }; //이름
 
   const handlePetTypeChange = (e) => {
-    setSelectedPetType(e.target.value);
+    setSelectedPetType(e.target.value);  
   };
-
+  
+  const handlePetBirthChange = (e) => {
+    setPetBirth(e.target.value);
+  };
 
   const handleNeuteringClick = (status) => {
     setSelectedNeutering(status); 
-  };
+  };//중성화
 
-  const handleWeightClick = (weightCode) => {
-    setSelectedWeight(weightCode); 
-  };
+  const handleSizeClick = (sizeCode) => {
+    setSelectedSize(sizeCode); 
+  }; //사이즈 
+
 
   //유효성 검사
   const validateForm = () => {
@@ -283,7 +292,7 @@ function EditInputForm() {
       return false;
     }
 
-    if(!selectedPetBirth) {
+    if(!setPetBirth) {
       AlertDialog({
         mode: "alert", 
         title: "선택 오류",
@@ -311,7 +320,7 @@ function EditInputForm() {
       })
       return false;
     }
-    if (!selectedWeight || !petSizeOptions.some(option => option.code === selectedWeight)) {
+    if (!selectedSize || !petSizeOptions.some(option => option.code === selectedSize)) {
       AlertDialog({
         mode: "alert", 
         title: "선택 오류",
@@ -338,8 +347,10 @@ function EditInputForm() {
       const presignResponse = await axios.get(
         `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
       );
+
+      console.log('Presigned URL:', presignResponse.data.url);
+
       const presignedUrl = presignResponse.data.url; 
-      
       // 이미지 업로드
       const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
         headers: {
@@ -360,40 +371,44 @@ function EditInputForm() {
       return;
     }
   }
-
   const petData = {
     name: petName,
-    image: imageUrl, // 업로드한 이미지 URL 또는 기존 이미지 URL
-    gender: selectedGender, // 공통코드로 변경된 성별 코드
-    birthday: petBirth,
+    image: imageUrl, 
+    gender: selectedGender,  
+    birthday: petBirth,      
     species: selectedPetType,
-    size: selectedWeight, // 공통코드로 변경된 사이즈 코드
+    size: selectedSize,     
     neutering: selectedNeutering === "했어요",
   };
 
-    try {
-      console.log('보내는 Payload:', petData);
+  try {
+    console.log('보내는 Payload:', petData);
 
-      const response = await axios.put(`https://www.daengdaeng-where.link/api/v1/pets/${petId}`, 
-        petData, 
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-      });
-  
-      if (response.status === 200) {
-        AlertDialog({
-          mode: "success",
-          title: "수정 완료",
-          text: "펫 정보가 성공적으로 수정되었습니다!",
-          confirmText: "확인",
-          onConfirm: () => {
-            navigate("/my-page");
-          }
-        });
+    const response = await axios.put(
+      `https://www.daengdaeng-where.link/api/v1/pets/${petId}`,
+      petData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
       }
+    );
+
+    if (response.status === 200) {
+
+      console.log("Updated pet data:", {
+        petName,
+        selectedPetType,
+        imageUrl,
+        petBirth,
+        selectedGender,
+        selectedNeutering,
+        selectedSize
+      }); 
+      alert("펫 정보가 성공적으로 수정되었습니다!");
+      navigate("/my-page");
+    }
     } catch (error) {
       console.error("수정 실패:", error);
     }
@@ -415,7 +430,7 @@ function EditInputForm() {
           <SelectLabel label="댕댕이 이름" />
           <PetNameInput 
             value={petName} 
-            onChange={(e) => setPetName(e.target.value)} 
+            onChange={handlePetNameChange} 
           />
           <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
         </PetNameInfoContainer>
@@ -426,22 +441,22 @@ function EditInputForm() {
           <option value="" disabled>
             견종을 선택하세요
           </option>
-          {PetType.map((breed, index) => (
-            <option key={index} value={breed.value}>
-              {breed.label}
+          {petTypeOptions.map((option) => (
+            <option key={option.code} value={option.code}>
+              {option.name}
             </option>
           ))}
         </PetTypeOption>
       </PetTypeContainer>
+      <SelectLabel label="생일" />
       <BirthContainer>
-        <SelectLabel label="생년월일" />
-        <BirthInput
-          type="date"
-          max={getTodayDate()} 
-          placeholder="우리 댕댕일 생일을 알려주세요!"
-          value={petBirth} 
-          onChange={(e) => setPetBirth(e.target.value)} 
-        />
+      <BirthInput
+        type="date"
+        max={getTodayDate()} 
+        placeholder="우리 댕댕일 생일을 알려주세요!"
+        value={petBirth || ""} 
+        onChange={handlePetBirthChange} 
+      />
       </BirthContainer>
       <SelectLabel label="성별" />
       <SelectContainer>
@@ -472,8 +487,8 @@ function EditInputForm() {
       {petSizeOptions.map((option) => (
         <SelectWeight
           key={option.code}
-          selected={selectedWeight === option.code}
-          onClick={() => handleWeightClick(option.code)}
+          selected={selectedSize === option.code}
+          onClick={() => handleSizeClick(option.code)}
         >
           {option.name}<br />({option.size})
         </SelectWeight>
