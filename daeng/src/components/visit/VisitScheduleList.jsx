@@ -5,10 +5,22 @@ import VisitModal from "./VisitModal";
 import { useState } from "react";
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 250px);
   padding: 20px 44px;
-  padding-bottom: 77px;
+  padding-bottom: 47px;
 `;
 
+const NoVisit = styled.div`
+  padding-top: 15vh;
+  font-weight: bold;
+`
+const FixedButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState({});
@@ -41,10 +53,12 @@ const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
             petsAtVisitTimes={visit.petsAtVisitTimes}
             onVisitClick={openModal}
           />
-        ))): (<div>일주일간방문예정없음</div>)}
-        <ConfirmBtn label="등록" onClick={()=> openModal()}/>
+        ))): (<NoVisit>일주일간 등록된 방문예정이 없습니다.</NoVisit>)}
+        <FixedButtonWrapper>
+          <ConfirmBtn label="등록" onClick={() => openModal()} />
+        </FixedButtonWrapper>
       </Container>
-  
+      
       <VisitModal placeId={placeId} isOpen={isModalOpen} onClose={toggleModal} setReloadTrigger={setReloadTrigger} {...modalProps} />
     </>
   );
