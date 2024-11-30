@@ -24,7 +24,6 @@ const DeletePet = styled.button`
   }
 `
 
-
 function DeletePetData({ petId }) {
   const navigate = useNavigate();
 
@@ -60,7 +59,7 @@ function DeletePetData({ petId }) {
 
   return (
     <DeletePet onClick={handleDelete}>
-      삭제하기
+      반려동물 정보 삭제하기
     </DeletePet>
   );
 }
