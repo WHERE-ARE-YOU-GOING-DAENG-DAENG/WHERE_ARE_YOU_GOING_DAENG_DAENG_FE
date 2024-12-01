@@ -1,14 +1,16 @@
-import React from 'react'
-import Header from '../../components/commons/Header'
-import Footer from '../../components/commons/Footer'
-import ReviewForm from '../../components/review/ReviewForm'
+import React, { useEffect } from "react";
+import Header from "../../components/commons/Header";
+import Footer from "../../components/commons/Footer";
+import ReviewForm from "../../components/review/ReviewForm";
 import styled from "styled-components";
+import Sorting from "../../components/commons/Sorting";
+import useReviewStore from "../../stores/UseReviewStore";
 
 const ReviewContainer = styled.div`
   display: flex;
-  flex-direction: column; 
-  min-height: 100vh;  
-  overflow: auto; 
+  flex-direction: column;
+  min-height: 100vh;
+  overflow: auto;
   padding-bottom: 20%;
 `;
 
@@ -16,26 +18,47 @@ const StyledTotalReview = styled.span`
   font-weight: bold;
   font-size: 20px;
   display: block;
-  margin-right: 58%;
+  margin-right: 65%;
   margin-top: 5%;
 
   @media (max-width: 554px) {
     font-size: 18px;
     margin-right: 50%;
   }
-`
+`;
 
+function MyReviewPage({ userId }) {
+  const { reviews, total, fetchUserReviews, sortedType, setSortedType } = useReviewStore();
 
-function MyReviewPage() {
+  useEffect(() => {
+    fetchUserReviews(userId, sortedType);
+  }, [userId, sortedType]);
+
+  const handleSortChange = (index) => {
+    const sortingOptions = ["LATEST", "OLDEST"];
+    setSortedType(sortingOptions[index]);
+  };
+
   return (
-    <ReviewContainer>
-      <Header label="내가 작성한 리뷰" />
-      <StyledTotalReview>내가 쓴 총 리뷰 개</StyledTotalReview> 
-        <ReviewForm />
-        <ReviewForm />
-      <Footer />
-    </ReviewContainer>
-  )
+    <>
+      <Header label="내 리뷰" />
+      <ReviewContainer>
+        <StyledTotalReview>등록한 리뷰 {total} 건</StyledTotalReview>
+        <Sorting
+          mode="list"
+          sortingOptions={["최신순", "오래된순"]}
+          activeIndex={sortedType === "LATEST" ? 0 : 1}
+          onSortChange={handleSortChange}
+        />
+        {reviews.length > 0 ? (
+          reviews.map((review) => <ReviewForm key={review.reviewId} review={review} />)
+        ) : (
+          <div>작성한 리뷰가 없습니다.</div>
+        )}
+        <Footer />
+      </ReviewContainer>
+    </>
+  );
 }
 
 export default MyReviewPage;
