@@ -479,9 +479,20 @@ function WriteReview() {
           },
           withCredentials: true,
       });
-      alert('성공 ~~~~~')
+      AlertDialog({
+        mode: "alert",
+        title: "성공",
+        text: `리뷰가 성공적으로 등록되었습니다.`,
+        confirmText: "닫기" 
+      });
       console.log("리뷰 등록 성공:", response.data);
     } catch (error) {
+      AlertDialog({
+        mode: "alert",
+        title: "실패",
+        text: `리뷰 등록에 실패했습니다.`,
+        confirmText: "닫기" 
+      });
       console.error("리뷰 등록 실패:", error);
     }
   };
