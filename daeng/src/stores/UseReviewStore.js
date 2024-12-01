@@ -11,6 +11,9 @@ const useReviewStore = create((set) => ({
   isLoading: false, // 로딩 상태
   error: null, // 에러 메시지
 
+  setSortedType: (type) => set({ sortedType: type }),
+
+
   fetchUserReviews: async (page = 0, size = 15) => {
     set({ isLoading: true, error: null });
     try {

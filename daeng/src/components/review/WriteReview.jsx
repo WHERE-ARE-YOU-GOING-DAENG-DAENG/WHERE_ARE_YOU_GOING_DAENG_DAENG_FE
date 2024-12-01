@@ -8,6 +8,7 @@ import axios from "axios";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
+import { useNavigate } from "react-router-dom";
 
 const WriteReviewAllContainer = styled.div`
   display: block;
@@ -287,6 +288,8 @@ const getCurrentDate = () => {
 
 
 function WriteReview() {
+  const navigate = useNavigate();
+
   const { pets, fetchPetList } = usePetStore();
   const [selectPet, setSelectPet] = useState(""); // 선택된 펫 ID
   const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
@@ -483,7 +486,8 @@ function WriteReview() {
         mode: "alert",
         title: "성공",
         text: `리뷰가 성공적으로 등록되었습니다.`,
-        confirmText: "닫기" 
+        confirmText: "닫기" ,
+        onConfirm: () => navigate("/my-page"), 
       });
       console.log("리뷰 등록 성공:", response.data);
     } catch (error) {
