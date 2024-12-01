@@ -531,7 +531,12 @@ function WriteReview() {
         </UserQuestionContainer>
         <UserQuestionContainer>
           <Question>방문한 날짜를 선택해주세요</Question>
-          <DateSelection type="date" max={getCurrentDate()} />
+          <DateSelection
+            type="date"
+            max={getCurrentDate()}
+            value={visitedAt} 
+            onChange={(e) => setVisitedAt(e.target.value)} 
+          />
         </UserQuestionContainer>
         <UserQuestionContainer>
           <Question>별점을 눌러 만족도를 공유해주세요</Question>
