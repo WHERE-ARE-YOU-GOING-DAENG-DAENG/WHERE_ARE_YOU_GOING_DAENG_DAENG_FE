@@ -10,6 +10,7 @@ import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
 import { useNavigate } from "react-router-dom";
 
+
 const WriteReviewAllContainer = styled.div`
   display: block;
   padding: 3%;
@@ -504,7 +505,7 @@ function WriteReview() {
   return (
     <WriteReviewAllContainer>
       <WriteReviewContainer>
-        <PlaceTitle>가평 트리하우스</PlaceTitle>
+      <PlaceTitle>{review.placeId || "장소 불러오는 중"}</PlaceTitle>
         <WriteReviewDate>{getCurrentDate()}</WriteReviewDate>
       </WriteReviewContainer>
       <SelectPlaceOptionContainer>
