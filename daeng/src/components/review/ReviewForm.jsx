@@ -45,7 +45,7 @@ const StyledArrow = styled.img`
 const PetContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 삭제 버튼을 맨 오른쪽으로 정렬 */
+  justify-content: space-between; 
   margin: 20px 0;
 `;
 
@@ -58,7 +58,7 @@ const UserImg = styled.img`
 
 const PetInfoContainer = styled.div`
   flex-grow: 1;
-  margin-left: 20px; /* 삭제 버튼과 정보 간격 확보 */
+  margin-left: 20px; 
 `;
 
 const PetName = styled.h3`
