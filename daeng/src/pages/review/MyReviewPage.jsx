@@ -44,12 +44,6 @@ function MyReviewPage({ userId }) {
       <Header label="내 리뷰" />
       <ReviewContainer>
         <StyledTotalReview>등록한 리뷰 {total} 건</StyledTotalReview>
-        <Sorting
-          mode="list"
-          sortingOptions={["최신순", "오래된순"]}
-          activeIndex={sortedType === "LATEST" ? 0 : 1}
-          onSortChange={handleSortChange}
-        />
         {reviews.length > 0 ? (
           reviews.map((review) => <ReviewForm key={review.reviewId} review={review} />)
         ) : (
