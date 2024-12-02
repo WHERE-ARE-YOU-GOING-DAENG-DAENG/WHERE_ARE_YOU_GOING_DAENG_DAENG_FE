@@ -1,7 +1,41 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import useLocationStore from "../../stores/useLocationStore"; 
+import axios from "axios";
 import HomeDogLoveIcon from "../../assets/icons/home_doglove.svg";
 
 function HomeDogPlaces() {
+  const [dogPlaces, setDogPlaces] = useState([]); 
+  const userLocation = useLocationStore((state) => state.userLocation); 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchDogPlaces = async () => {
+      try {
+        const response = await axios.post(
+          "https://www.daengdaeng-where.link/api/v1/places/recommend",
+          {
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        setDogPlaces(response.data.data);
+      } catch (error) {
+        console.error("추천 장소 데이터 가져오기 실패:", error);
+      }
+    };
+
+    fetchDogPlaces();
+  }, [userLocation]);
+
+  const handleDogPlaceClick = (placeId) => {
+    navigate(`/search/${placeId}`);
+  };
+
   return (
     <DogPlacesWrapper>
       <DogTitle>
@@ -9,9 +43,13 @@ function HomeDogPlaces() {
         <img src={HomeDogLoveIcon} alt="Dog Love Icon" />
       </DogTitle>
       <DogLinkContainer>
-        <DogLinkBox />
-        <DogLinkBox />
-        <DogLinkBox />
+        {dogPlaces.slice(0, 3).map((place) => (
+          <DogLinkBox
+            key={place.placeId}
+            onClick={() => handleDogPlaceClick(place.placeId)}
+          >
+          </DogLinkBox>
+        ))}
       </DogLinkContainer>
     </DogPlacesWrapper>
   );
