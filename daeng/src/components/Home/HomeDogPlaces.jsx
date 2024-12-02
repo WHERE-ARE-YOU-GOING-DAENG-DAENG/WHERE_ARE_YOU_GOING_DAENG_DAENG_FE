@@ -27,6 +27,9 @@ function HomeDogPlaces() {
           {
             latitude: locationToUse.latitude,
             longitude: locationToUse.longitude,
+          },
+          {
+            withCredentials: true,
           }
         );
         setDogPlaces(response.data.data);
