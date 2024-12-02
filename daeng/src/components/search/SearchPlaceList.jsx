@@ -79,7 +79,7 @@ const SearchPlaceList = ({ places, setPlaces, setNearPlaces }) => {
 
   useEffect(()=>{
     if (!Array.isArray(places) || places.length === 0) { //추천리스트
-      // fetchNearestPlaces();
+      //fetchNearestPlaces();
       setPlaces(mockData);
       setNearPlaces(mockData);
     } 
@@ -88,13 +88,8 @@ const SearchPlaceList = ({ places, setPlaces, setNearPlaces }) => {
 
   //가까운순 추천장소 30개
   const fetchNearestPlaces = async () => {
-    const payload = {
-      latitude: userLocation.lat,
-      longitude: userLocation.lng,
-    }
-    console.log(payload)
     try{
-      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/nearest",payload,{
+      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/nearest",userLocation,{
         withCredentials: true,
       });
       console.log(response.data.data); //로그 삭제

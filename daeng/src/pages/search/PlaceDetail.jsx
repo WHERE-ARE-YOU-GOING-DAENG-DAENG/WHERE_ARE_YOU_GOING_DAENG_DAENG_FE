@@ -5,12 +5,20 @@ import Footer from "../../components/commons/Footer";
 import PlaceTitle from "../../components/detail/PlaceTitle";
 import PlaceInfo from "../../components/detail/PlaceInfo";
 import PlaceDescription from "../../components/detail/PlaceDescription";
-import PlaceAiReview from "../../components/commons/PlaceAiReview";
+import AiReviewSummary from '../../components/review/AIReview';
 import PlaceReviewList from "../../components/detail/PlaceReviewList";
 import AlertDialog from "../../components/commons/SweetAlert";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const AiReview = styled.div`
+  max-width: 554px;
+  margin-left: 5%;
+
+  @media(max-width: 554px){
+    margin-left: 8%
+  }
+`
 const HeaderImage = styled.img`
   width: 100%;
   height: 50%;
@@ -24,7 +32,7 @@ const Division = styled.div`
 `;
 
 const PlaceDetail = () => {
-    const { id } = useParams(); //나중에 id기준으로 API 호출
+    const { id } = useParams();
     const [data, setData] = useState("");
       
     useEffect(() => {
@@ -94,9 +102,9 @@ const PlaceDetail = () => {
           <Division />
           <PlaceDescription data={data}/>
           <Division />
-          <PlaceAiReview />
+          <AiReview><AiReviewSummary placeId={id} /></AiReview>
           <Division />
-          <PlaceReviewList reviews={data}/>
+          <PlaceReviewList data={data}/>/
           <Footer />
         </>
     )
