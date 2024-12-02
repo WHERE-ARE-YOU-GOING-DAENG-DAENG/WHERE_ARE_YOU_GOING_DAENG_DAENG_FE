@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import SelectLabel from '../../components/commons/SelectLabel';
 import SelectBtn from '../../components/commons/SelectBtn';
 import kakaoBtn from '../../assets/icons/kakaoBtn.svg';
-import googleBtn from '../../assets/icons/googleBtn.svg';
+import googleBtn from '../../assets/icons/GoogleBtn.svg';
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
