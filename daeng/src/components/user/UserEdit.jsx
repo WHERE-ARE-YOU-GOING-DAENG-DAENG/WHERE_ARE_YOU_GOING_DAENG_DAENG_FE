@@ -9,12 +9,12 @@ import AreaField from '../../data/AreaField';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
 import useUserStore from '../../stores/userStore';
+import { useNavigate } from 'react-router-dom';
 
 function UserEdit() {
-  const { userId, setUserId } = useUserStore();
+  const navigate = useNavigate();
+  const { userId, email, nickname, setUserId, setEmail, setNickname } = useUserStore();
   const [userData, setUserData] = useState({
-    email: '',
-    nickname: '',
     gender: '',
     city: '',
     cityDetail: '',
@@ -31,10 +31,10 @@ function UserEdit() {
         const { user } = response.data.data;
   
         setUserId(user.userId || '');
+        setEmail(user.email || '');
+        setNickname(user.nickname || '');
 
         setUserData({
-          email: user.email || '',
-          nickname: user.nickname || '',
           gender: user.gender || '',
           city: user.city || '도',
           cityDetail: user.cityDetail || '시/군/구',
@@ -56,11 +56,12 @@ function UserEdit() {
     };
   
     fetchUserData();
-  }, [setUserId]);
+  }, [setUserId, setEmail, setNickname]);
 
   const handleInputChange = (field, value) => {
     setUserData((prev) => {
       if (field === "pushAgreement") {
+        console.log(`Updating pushAgreement to: ${value === "받을래요"}`);
         return {
           ...prev,
           pushAgreement: value === "받을래요",
@@ -90,7 +91,7 @@ function UserEdit() {
   };
 
   const validateFields = () => {
-    if (!userData.nickname.trim()) {
+    if (!nickname.trim()) {
       AlertDialog({
         mode: "alert",
         title: "닉네임 필요",
@@ -102,7 +103,7 @@ function UserEdit() {
     }
   
     const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
-    if (!userData.nickname || !nicknameRegex.test(userData.nickname)) {
+    if (!nickname || !nicknameRegex.test(nickname)) {
       AlertDialog({
         mode: "alert",
         title: "닉네임 오류",
@@ -113,7 +114,7 @@ function UserEdit() {
       return false;
     }
   
-    if (!userData.nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.pushAgreement) {
+    if (!nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.pushAgreement) {
       AlertDialog({
         mode: "alert",
         title: "입력 필요",
@@ -126,6 +127,7 @@ function UserEdit() {
   
     return true;
   };
+  
 
   const getOAuthIcon = () => {
     if (userData.oauthProvider === 'kakao') return kakaoBtn;
@@ -134,7 +136,7 @@ function UserEdit() {
   };
 
   const handleNicknameCheck = async () => {
-    if (!userData.nickname.trim()) {
+    if (!nickname.trim()) { 
         AlertDialog({
             mode: "alert",
             title: "닉네임 필요",
@@ -149,7 +151,7 @@ function UserEdit() {
         const { data } = await axios.get(
             `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
             {
-                params: { nickname: userData.nickname },
+                params: { nickname }, 
                 withCredentials: true,
             }
         );
@@ -192,12 +194,12 @@ const handleUpdate = async () => {
 
   const payload = {
     userId,
-    nickname: userData.nickname,
+    nickname,
     gender: genderCode, 
     city: userData.city,
     cityDetail: userData.cityDetail,
     pushAgreement: userData.pushAgreement,
-    email: userData.email,
+    email,
   };
 
   try {
@@ -218,7 +220,10 @@ const handleUpdate = async () => {
       title: '회원정보 수정 성공',
       text: '회원 정보가 성공적으로 수정되었습니다!',
       confirmText: '확인',
-      onConfirm: () => console.log('수정 성공 확인됨'),
+      onConfirm: () => {
+        console.log("수정 성공 확인됨");
+        navigate("/my-page"); 
+      },
     });
   } catch (error) {
     if (error.response) {
@@ -237,18 +242,22 @@ const handleUpdate = async () => {
     <UserContainer>
       <SelectLabel label="이메일" />
       <InputEmailContainer>
-        <Input type="email" value={userData.email} disabled />
+      <Input
+          type="email"
+          value={email} 
+          disabled
+        />
         {getOAuthIcon() && <Icon src={getOAuthIcon()} alt="OAuth Provider" />}
       </InputEmailContainer>
 
       <SelectLabel label="닉네임" />
       <InputBox>
         <Input
-          type="text"
-          placeholder="사용하실 닉네임을 입력해 주세요."
-          value={userData.nickname}
-          onChange={(e) => handleInputChange('nickname', e.target.value)}
-        />
+            type="text"
+            placeholder="사용하실 닉네임을 입력해 주세요."
+            value={nickname} 
+            onChange={(e) => setNickname(e.target.value)} 
+          />
         <DuplicateBtn onClick={handleNicknameCheck}>중복확인</DuplicateBtn>
       </InputBox>
       <InputAlert>*닉네임은 최소 1자 이상 작성해 주세요. 특수문자는 사용할 수 없습니다.</InputAlert>
