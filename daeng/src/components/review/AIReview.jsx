@@ -15,7 +15,8 @@ const AiCommentContainer = styled.div`
   font-size: 12px;
   font-weight: bold;
   align-items: center;
-  padding: 5px 10px;
+  padding: 5px 10px; 
+  text-align: left;
 
   @media (max-width: 554px) {
     width: 91%;
@@ -49,10 +50,6 @@ function AiReviewSummary({ placeId }) {
   useEffect(() => {
   const fetchAiSummary = async () => {
     try {
-      // POST 요청
-      console.log(`장소Id: ${placeId}`)
-      // GET 요청
-      console.log(`[GET] Fetching AI Summary for placeId: ${placeId}`);
       const getResponse = await axios.get(
         `https://www.daengdaeng-where.link/api/v1/places/${placeId}/reviews/summary`,
         {
@@ -64,7 +61,6 @@ function AiReviewSummary({ placeId }) {
       );
       console.log("[GET Response]", getResponse.data);
 
-      // 데이터 설정
       setGoodSummary(getResponse.data.goodSummary || "요약된 좋은 점이 없습니다.");
       setBadSummary(getResponse.data.badSummary || "요약된 나쁜 점이 없습니다.");
     } catch (error) {

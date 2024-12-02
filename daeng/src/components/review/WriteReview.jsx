@@ -10,6 +10,8 @@ import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import Select from "react-select";
 
 const WriteReviewAllContainer = styled.div`
   display: block;
@@ -290,8 +292,13 @@ const getCurrentDate = () => {
 
 function WriteReview({ review = {} }) {
   const { placeId } = useParams();
-  console.log("URL placeId:", placeId);
-  console.log("Review object:", review);
+  const location = useLocation();
+  const placeName = location.state?.placeName || "장소 이름 없음"; // placeName 선언
+
+  console.log("Debugging WriteReview Component:");
+  console.log("placeId from URL:", placeId);
+  console.log("location.state:", location.state);
+  console.log("Resolved placeName:", placeName);
 
   const placeIdValue = review?.placeId || placeId;
 
@@ -301,7 +308,7 @@ function WriteReview({ review = {} }) {
 
   const navigate = useNavigate();
   const { pets, fetchPetList } = usePetStore();
-  const [selectPet, setSelectPet] = useState([]); // 선택된 펫 ID
+  const [selectPet, setSelectPet] = useState([]); // 선택된 펫 목록들
   const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
   const [previews, setPreviews] = useState([]); //이미지 미리보기
   const [placeImgs, setPlaceImgs] = useState([]); // 업로드할 이미지 파일
@@ -309,16 +316,28 @@ function WriteReview({ review = {} }) {
   const [selectKeywords, setSelectKeywords] = useState([]); 
   const [text, setText] = useState(""); // 리뷰 내용 상태
   const [visitedAt, setVisitedAt] = useState(""); // 초기값을 빈 문자열로 설정
-  const [selectedPetImage, setSelectedPetImage] = useState(""); // 선택된 펫 이미지 상태
+  const [selectedPetImage, setSelectedPetImage] = useState(""); //첫번째 펫 이미지
   
   useEffect(() => {
-    fetchPetList();
-  }, []);
-  
-  useEffect(() => {
-    console.log("펫 리스트 상태:", pets);
-  }, [pets]);
+    fetchPetList(); // Zustand에서 펫 리스트 불러오기
+  }, [fetchPetList]);
 
+  const petOptions = pets.map((pet) => ({
+    value: pet.petId,
+    label: pet.name,
+    image: pet.image,
+  }));
+  
+const handlePetSelection = (selectedOptions) => {
+  setSelectPet(selectedOptions);
+
+  // 첫 번째 선택된 펫의 이미지를 설정
+  if (selectedOptions.length > 0) {
+    setSelectedPetImage(selectedOptions[0].image); // 첫 번째 선택된 펫 이미지 설정
+  } else {
+    setSelectedPetImage(""); // 선택이 해제되면 이미지 초기화
+  }
+};
 
   useEffect(() => {
     console.log("useParams placeId:", placeId);
@@ -443,6 +462,7 @@ function WriteReview({ review = {} }) {
         headers: {
           "Content-Type": file.type,
         },
+        withCredentials: true,
       });
 
       if (uploadResponse.status === 200) {
@@ -459,18 +479,6 @@ function WriteReview({ review = {} }) {
     return uploadedUrls;
   };
 
-  const handlePetSelection = (e) => {
-    const selectedPetId = e.target.value;
-    setSelectPet(selectedPetId);
-
-  const selectedPet = pets.find((pet) => pet.petId === parseInt(selectedPetId));
-  if (selectedPet) {
-    setSelectedPetImage(selectedPet.image); 
-  } else {
-    setSelectedPetImage(""); 
-    }
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm()) return;
@@ -483,15 +491,18 @@ function WriteReview({ review = {} }) {
       return;
     }
   
+    const pets = selectPet.map((pet) => pet.value); 
+
     const reviewData = {
       placeId,
       content: text.trim(), 
       score: ratings.filter(Boolean).length, 
       media, 
       keywords: selectKeywords, 
-      pets: selectPet ? [parseInt(selectPet)] : [], 
+      pets,
       visitedAt, 
     };
+    console.log("Review Data:", reviewData); 
 
     try {
       const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
@@ -522,7 +533,7 @@ function WriteReview({ review = {} }) {
   return (
     <WriteReviewAllContainer>
       <WriteReviewContainer>
-      <PlaceTitle>{review.placeId || "장소 불러오는 중"}</PlaceTitle>
+      <PlaceTitle>{placeName}</PlaceTitle>
         <WriteReviewDate>{getCurrentDate()}</WriteReviewDate>
       </WriteReviewContainer>
       <SelectPlaceOptionContainer>
@@ -542,19 +553,15 @@ function WriteReview({ review = {} }) {
         </UserInfoContainer>
         <UserQuestionContainer>
         <Question>함께한 댕댕이를 선택해주세요</Question>
-        <PetSelection 
-            value={selectPet}
-            onChange={handlePetSelection}
-            multiple // 다중 선택 활성화
-          >
-          <option value="">댕댕이를 선택해주세요</option>
-          {pets.map((pet) => (
-            <option key={pet.petId} value={pet.petId}>
-              {pet.name}
-            </option>
-          ))}
-        </PetSelection>
+        <Select
+        isMulti
+        options={petOptions} // 펫 리스트 옵션
+        value={selectPet} // 선택된 펫 리스트
+        onChange={handlePetSelection} // 선택 변경 핸들러
+        placeholder="댕댕이를 선택해주세요"
+      />
         </UserQuestionContainer>
+
         <UserQuestionContainer>
           <Question>방문한 날짜를 선택해주세요</Question>
           <DateSelection
