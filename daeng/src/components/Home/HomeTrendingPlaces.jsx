@@ -1,7 +1,35 @@
 import styled from "styled-components";
 import HomeHotIcon from "../../assets/icons/home_hot.svg";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function HomeTrendingPlaces() {
+  const [trendingPlaces, setTrendingPlaces] = useState([]); 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTrendingPlaces = async () => {
+      try {
+        const response = await axios.get(
+          "https://www.daengdaeng-where.link/api/v1/places/topfavorites",
+          {
+            withCredentials: true, 
+          }
+        );
+        setTrendingPlaces(response.data.data); 
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+      }
+    };
+
+    fetchTrendingPlaces();
+  }, []);
+
+  const handleTrendingPlaceClick = (placeId) => {
+    navigate(`/search/${placeId}`); 
+  };
+
   return (
     <TrendingPlacesWrapper>
       <TrendingTitle>
@@ -9,9 +37,13 @@ function HomeTrendingPlaces() {
         <img src={HomeHotIcon} alt="Hot Icon" />
       </TrendingTitle>
       <TrendingLinkContainer>
-        <TrendingLinkBox />
-        <TrendingLinkBox />
-        <TrendingLinkBox />
+        {trendingPlaces.slice(0, 3).map((place) => (
+          <TrendingLinkBox
+            key={place.placeId} 
+            onClick={() => handleTrendingPlaceClick(place.placeId)}
+          >
+          </TrendingLinkBox>
+        ))}
       </TrendingLinkContainer>
     </TrendingPlacesWrapper>
   );
