@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import SelectLabel from '../../components/commons/SelectLabel';
 import SelectBtn from '../../components/commons/SelectBtn';
 import kakaoBtn from '../../assets/icons/kakaoBtn.svg';
+import googleBtn from '../../assets/icons/GoogleBtn.svg';
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,11 +16,13 @@ function UserRegister() {
   useEffect(() => {
     const queryString = new URLSearchParams(window.location.search);
     let email = queryString.get('email');
+    let provider = queryString.get('provider');
     if (email) {
       email = email.trim();
       setUserData((prev) => ({
         ...prev,
         email: decodeURIComponent(email),
+        oauthProvider: decodeURIComponent(provider),
       }));
     }
   }, []);
@@ -31,6 +34,7 @@ function UserRegister() {
     city: '',
     cityDetail: '',
     alarmAgreement: '받을래요', 
+    oauthProvider: '',
   });
 
   const handleInputChange = (field, value) => {
@@ -104,6 +108,7 @@ function UserRegister() {
       gender: userData.gender,
       city: userData.city,
       cityDetail: userData.cityDetail,
+      oauthProvider: userData.oauthProvider,
     };
   
     console.log("회원가입 데이터:", payload);
@@ -164,7 +169,7 @@ function UserRegister() {
 
     try {
         const { data } = await axios.get(
-            `https://www.daengdaeng-where.link/api/v1/user/duplicateNicname`,
+            `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
             {
                 params: { nickname: userData.nickname },
                 withCredentials: true,
@@ -206,7 +211,11 @@ function UserRegister() {
       <SelectLabel label="이메일" />
       <InputEmailContainer>
         <Input type="email" value={userData.email} disabled />
-        <Icon src={kakaoBtn} alt="카카오 로그인" />
+        {userData.oauthProvider === 'google' ? (
+          <Icon src={googleBtn} alt="구글 로그인" />
+        ) : userData.oauthProvider === 'kakao' ? (
+          <Icon src={kakaoBtn} alt="카카오 로그인" />
+        ) : null}
       </InputEmailContainer>
 
       <SelectLabel label="닉네임" />
