@@ -10,14 +10,23 @@ function HomeDogPlaces() {
   const userLocation = useLocationStore((state) => state.userLocation); 
   const navigate = useNavigate();
 
+  const defaultLocation = {
+    latitude: 0.0, // 실시간 위치를 허용하지 않았을 경우
+    longitude: 0.0, //위도, 경도 모두 0.0
+  };
+
   useEffect(() => {
     const fetchDogPlaces = async () => {
       try {
+        const locationToUse = userLocation.latitude && userLocation.longitude
+          ? userLocation
+          : defaultLocation;
+
         const response = await axios.post(
           "https://www.daengdaeng-where.link/api/v1/places/recommend",
           {
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
+            latitude: locationToUse.latitude,
+            longitude: locationToUse.longitude,
           },
           {
             withCredentials: true,
