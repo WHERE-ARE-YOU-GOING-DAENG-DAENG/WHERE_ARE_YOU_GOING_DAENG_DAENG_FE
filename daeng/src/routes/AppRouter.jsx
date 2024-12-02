@@ -19,6 +19,7 @@ import UserRegisterPage from '../pages/user/UserRegisterPage';
 import UserEditPage from '../pages/user/UserEditPage';
 import MyVisitList from '../pages/visit/MyVisitList';
 import PlaceVisitList from '../pages/visit/PlaceVisitList';
+import Error from "../pages/Error";
 
 const AppRouter = () => {
   return (
@@ -44,6 +45,8 @@ const AppRouter = () => {
         <Route path="/write-review" element={<WriteReviewPage />} />
         <Route path="/visit-list" element={<MyVisitList />} />
         <Route path="/visit-list/:id" element={<PlaceVisitList />} />
+        <Route path="/error" element={<Error />} />
+        <Route path="*" element={<Error/>} />
       </Routes>
     </Router>
   );
