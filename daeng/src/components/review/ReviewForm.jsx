@@ -1,120 +1,168 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components'
-import star from '../../assets/icons/star.svg'
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
+import arrow from '../../assets/icons/arrow.svg';
+import ReviewKeywords from '../../components/commons/ReviewKeywords';
+import useReviewStore from '../../stores/UseReviewStore';
 
-//리뷰 모아보기를 보여주는 페이지
+const ReviewWrapper = styled.div`
+  margin: 20px;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+`;
 
-const ReviewDivision = styled.div`
-  height: 1px;
-  width:100%;
-  background-color: #E5E5E5;
-  margin-top: 17px;
-`
-
-const ReviewContainer = styled.div`
+const HeaderContainer = styled.div`
   display: flex;
-  margin-top:4%;
-  margin-bottom:2%;
-  margin-left:9%;
-  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-  @media (max-width: 554px){
-    margin-left:8%;
-  }
-`
+const TitleSection = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
-const PlaceTitle = styled.span`
-  font-size:15px;
+const PlaceTitle = styled.h2`
+  font-size: 20px;
   font-weight: bold;
-  display: block;
-  margin-right: 62%;
-
-  @media (max-width: 554px) {
-    margin-right: 50%;
-    font-size: 14px;
-    margin-left:1%;
-  }
-`
+  margin-right: 10px;
+`;
 
 const ReviewDate = styled.span`
-  font-size:12px;
-  font-weight: bold;
+  font-size: 12px;
   color: #818181;
-  display:flex;
-  margin-left: 9%;
-`
+`;
+
+const StyledArrow = styled.img`
+  width: 16px;
+  margin-left: 5px;
+  cursor: pointer;
+`;
+
+const PetContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  margin: 20px 0;
+`;
+
+const UserImg = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+`;
+
+const PetInfoContainer = styled.div`
+  flex-grow: 1;
+  margin-left: 20px; 
+`;
+
+const PetName = styled.h3`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-right: 43%;
+`;
+
+const StarSection = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const StyledStar = styled.img`
-  width: 2.5%;
-  height: auto;
-  display: block; 
-  margin-bottom: 20px; 
-  margin-left: 9%;
-  margin-top:1%;
+  width: 16px;
+  height: 16px;
+  margin-right: 2px;
 `;
 
-const ReviewContents = styled.span`
-  font-size: 13px;
-  display: block; 
-  padding-left: 9%;
-  padding-right: 9%;
-  text-align: justify;  
-  line-height: 1.5;  
-  word-break: break-word;  
-
-  @media (max-width: 554px) {
-    font-size: 11px;
-  }
+const VisitDate = styled.span`
+  font-size: 12px;
+  color: #818181;
+  margin-left: 10px;
 `;
 
-const ReviewPictureContainer = styled.div`
+const KeywordsContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  margin-left:6%;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+`;
 
-  @media (max-width: 554px) {
-    margin-left:7%;
-  }
-`
+const ReviewContent = styled.p`
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333333;
+  margin-top: 15px;
+  text-align:left;
+`;
 
-const ReviewPicture = styled.div`
-  display: block;
-  width: 100px;
-  height:103px;
-  background-color: #D9D9D9;
-  border-radius:5px;
-  margin-left: 10px; 
-  margin-top: 3%;
+const PictureContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+`;
 
-  @media (max-width: 554px) {
-    width: 80px;
-    height:90px;
-  }
-`
+const Picture = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-color: #d9d9d9;
+`;
 
-
-function ReviewForm() {
-  const [reviewData, setReviewData] = useState(null);
-  //size = 15 고정
+function ReviewForm({ review }) {
   return (
-  <>
-    <ReviewDivision />
-    <ReviewContainer>
-      <PlaceTitle>가평 트리하우스</PlaceTitle>
-      <DeleteReview reviewId={reviewId} />
-    </ReviewContainer>
-    <ReviewDate>2024.10.11</ReviewDate>
-    <StyledStar src={star} alt="별점" /> 
-    <ReviewContents>
-    강아지와 함께하는 첫 펜션 여행, 정말 즐거웠어요! 🐾펜션이 너무 깔끔하고, 강아지를 위한 편의시설도 잘 갖춰져 있어서 걱정 없이 머물 수 있었어요. 넓은 정원에서 강아지가 자유롭게 뛰어놀 수 있었고, 바닥도 미끄럽지 않아 안전하게 놀 수 있었습니다. 주인분도 친절하게 강아지용 식사와 편안한 침구도 준비해주셔서 정말 감사했어요. 강아지가 너무 편안해 보였고, 우리도 마음 놓고 힐링할 수 있었답니다.강아지와 함께 여행 가기에 정말 좋은 곳이었어요. 다음에도 꼭 다시 오고 싶어요! 🐕💖
-    </ReviewContents>
-    <ReviewPictureContainer>
-      <ReviewPicture /><ReviewPicture /><ReviewPicture />
-    </ReviewPictureContainer>
-  </>
-  )
-} 
+    <ReviewWrapper>
+      <HeaderContainer>
+        <TitleSection>
+          <PlaceTitle>{review.placeName || "장소 불러오는 중"}</PlaceTitle>
+          <StyledArrow src={arrow} alt="이동" />
+        </TitleSection>
+        <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>
+      </HeaderContainer>
 
-export default ReviewForm
+      <PetContainer>
+        <UserImg
+          src={review.petImg || "default-user.jpg"}
+          alt="반려동물 이미지"
+        />
+        <PetInfoContainer>
+          <PetName>
+            [{review.pets.join(" | ")}]랑 함께 방문했어요
+          </PetName>
+          <StarSection>
+            {[...Array(review.score)].map((_, index) => (
+              <StyledStar key={index} src={star} alt={`별점 ${index + 1}`} />
+            ))}
+            <VisitDate>방문 날짜 | {review.visitedAt}</VisitDate>
+          </StarSection>
+        </PetInfoContainer>
+        <DeleteReview reviewId={review.reviewId} />
+      </PetContainer>
+
+      <KeywordsContainer>
+        {review.keywords.map((keyword, index) => (
+          <ReviewKeywords key={index} label={keyword} />
+        ))}
+      </KeywordsContainer>
+
+      <ReviewContent>{review.content}</ReviewContent>
+
+      <PictureContainer>
+        {review.media.map((mediaUrl, index) => (
+          <Picture
+            key={index}
+            style={{ backgroundImage: `url(${mediaUrl})` }}
+          />
+        ))}
+      </PictureContainer>
+    </ReviewWrapper>
+  );
+}
+
+export default ReviewForm;

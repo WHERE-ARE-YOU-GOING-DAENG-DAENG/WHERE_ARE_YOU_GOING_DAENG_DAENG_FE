@@ -3,7 +3,6 @@ import Header from '../../components/commons/Header'
 import TotalReviewForm from '../../components/review/TotalReviewForm'
 import Footer from '../../components/commons/Footer'
 import styled from "styled-components";
-import ReviewDetail from '../../components/review/ReviewDetail';
 
 const ReviewContainer = styled.div`
   display: flex;
@@ -19,10 +18,7 @@ function TotalReviewPage() {
   return (
     <ReviewContainer>
       <Header label="리뷰 전체보기" />
-        <ReviewDetail />
-          <TotalReviewForm />
-          <TotalReviewForm />
-          <TotalReviewForm />
+        <TotalReviewForm />
       <Footer />
     </ReviewContainer>
   )
