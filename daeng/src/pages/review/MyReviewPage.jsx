@@ -27,11 +27,14 @@ const StyledTotalReview = styled.span`
 `;
 
 function MyReviewPage({ userId }) {
-  const { reviews, total, fetchUserReviews, sortedType, setSortedType } = useReviewStore();
+  const { reviews, total, fetchUserReviews, isLoading, error } = useReviewStore();
 
   useEffect(() => {
-    fetchUserReviews(userId, sortedType);
-  }, [userId, sortedType]);
+    fetchUserReviews(0, 15);
+  }, [userId]);
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>오류 발생: {error}</div>;
 
   return (
     <>
@@ -39,7 +42,9 @@ function MyReviewPage({ userId }) {
       <ReviewContainer>
         <StyledTotalReview>등록한 리뷰 {total} 건</StyledTotalReview>
         {reviews.length > 0 ? (
-          reviews.map((review) => <ReviewForm key={review.reviewId} review={review} />)
+          reviews.map((review) => (
+            <ReviewForm key={review.reviewId} review={review} />
+          ))
         ) : (
           <div>작성한 리뷰가 없습니다.</div>
         )}
@@ -48,5 +53,6 @@ function MyReviewPage({ userId }) {
     </>
   );
 }
+
 
 export default MyReviewPage;

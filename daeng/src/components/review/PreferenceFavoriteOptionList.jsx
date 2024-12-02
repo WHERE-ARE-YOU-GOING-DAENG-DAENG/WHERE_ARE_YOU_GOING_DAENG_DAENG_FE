@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PreferenceFavoriteOption from "../commons/PreferenceFavoriteOption";
 import AlertDialog from "../../components/commons/SweetAlert";
-import { placeFeatures } from "../../data/CommonCode"; // 공통 코드 import
+import { placeFeatures } from "../../data/CommonCode";
 import dogfood from "../../assets/icons/dogFood.svg";
 import run from "../../assets/icons/run.svg";
 import water from "../../assets/icons/water.svg";
@@ -18,7 +18,6 @@ import parkingLot from "../../assets/icons/parkingLot.svg";
 function PreferenceFavoriteOptionList({ selectedOptions, onSelectOptions }) {
   const maxOptions = 3;
 
-  // 코드 ID와 아이콘 매핑
   const featureIcons = {
     PLACE_FTE_01: dogfood,
     PLACE_FTE_02: run,
@@ -57,7 +56,7 @@ function PreferenceFavoriteOptionList({ selectedOptions, onSelectOptions }) {
         <PreferenceFavoriteOption
           key={codeId}
           label={name}
-          icon={featureIcons[codeId]} // 아이콘 매핑
+          icon={featureIcons[codeId]} 
           isSelected={selectedOptions.includes(codeId)}
           onClick={() => handleOptionClick(codeId)}
         />

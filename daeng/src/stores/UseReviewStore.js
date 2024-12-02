@@ -26,7 +26,7 @@ const useReviewStore = create((set) => ({
       const data = response.data.data;
 
       set({
-        reviews: data.reviews,
+        reviews: page === 0 ? data.reviews : [...get().reviews, ...data.reviews], // 페이지가 0이면 초기화, 아니면 추가
         total: data.total,
         page: data.page,
         size: data.size,

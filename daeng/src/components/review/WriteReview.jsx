@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Select from "react-select";
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 
 const WriteReviewAllContainer = styled.div`
   display: block;
@@ -293,7 +294,7 @@ const getCurrentDate = () => {
 function WriteReview({ review = {} }) {
   const { placeId } = useParams();
   const location = useLocation();
-  const placeName = location.state?.placeName || "장소 이름 없음"; // placeName 선언
+  const placeName = location.state?.placeName || "장소 이름 없음"; 
 
   console.log("Debugging WriteReview Component:");
   console.log("placeId from URL:", placeId);
@@ -319,7 +320,7 @@ function WriteReview({ review = {} }) {
   const [selectedPetImage, setSelectedPetImage] = useState(""); //첫번째 펫 이미지
   
   useEffect(() => {
-    fetchPetList(); // Zustand에서 펫 리스트 불러오기
+    fetchPetList(); 
   }, [fetchPetList]);
 
   const petOptions = pets.map((pet) => ({
@@ -331,11 +332,10 @@ function WriteReview({ review = {} }) {
 const handlePetSelection = (selectedOptions) => {
   setSelectPet(selectedOptions);
 
-  // 첫 번째 선택된 펫의 이미지를 설정
   if (selectedOptions.length > 0) {
     setSelectedPetImage(selectedOptions[0].image); // 첫 번째 선택된 펫 이미지 설정
   } else {
-    setSelectedPetImage(""); // 선택이 해제되면 이미지 초기화
+    setSelectedPetImage(""); 
   }
 };
 
@@ -468,27 +468,23 @@ const handlePetSelection = (selectedOptions) => {
       if (uploadResponse.status === 200) {
         const uploadedUrl = presignedUrl.split("?")[0]; 
         uploadedUrls.push(uploadedUrl); 
-        console.log(`File uploaded successfully: ${uploadedUrl}`);
       } else {
-        console.error("Upload failed:", file.name);
       }
     } catch (error) {
-      console.error(`Failed to upload ${file.name}:`, error.message);
     }
   }
     return uploadedUrls;
   };
 
   const handleSubmit = async (event) => {
+    
     event.preventDefault();
     if (!validateForm()) return;
     
-    const media = await uploadMedia(placeImgs); 
-    console.log("Uploaded media URLs:", media);
-  
-    if (media.length === 0) {
-      console.error("No media uploaded.");
-      return;
+    let media = [];
+    if (placeImgs.length > 0) {
+      media = await uploadMedia(placeImgs);
+      console.log("Uploaded media URLs:", media);
     }
   
     const pets = selectPet.map((pet) => pet.value); 
@@ -502,7 +498,7 @@ const handlePetSelection = (selectedOptions) => {
       pets,
       visitedAt, 
     };
-    console.log("Review Data:", reviewData); 
+    console.log("리뷰데이터: ", reviewData); 
 
     try {
       const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
@@ -546,7 +542,7 @@ const handlePetSelection = (selectedOptions) => {
       />
         <UserInfoContainer>
         <UserImg
-          src={selectedPetImage || "/default-user-image.png"}
+          src={selectedPetImage || reviewDefaultImg}
           alt="선택된 펫 이미지" 
         />
           <UserNickname>{userNickname || "내가 진짜"}</UserNickname>
@@ -555,9 +551,9 @@ const handlePetSelection = (selectedOptions) => {
         <Question>함께한 댕댕이를 선택해주세요</Question>
         <Select
         isMulti
-        options={petOptions} // 펫 리스트 옵션
-        value={selectPet} // 선택된 펫 리스트
-        onChange={handlePetSelection} // 선택 변경 핸들러
+        options={petOptions} 
+        value={selectPet} 
+        onChange={handlePetSelection} 
         placeholder="댕댕이를 선택해주세요"
       />
         </UserQuestionContainer>
