@@ -16,7 +16,6 @@ const AiCommentContainer = styled.div`
   font-weight: bold;
   align-items: center;
   padding: 5px 10px;
-  
 
   @media (max-width: 554px) {
     width: 91%;
@@ -28,10 +27,10 @@ const AiCommentContainer = styled.div`
 const CommentAi = styled.span`
   font-size: 20px;
   font-weight: bold;
-  display: block; 
+  display: block;
   text-align: left;
   margin-top: 5%;
-  margin-bottom:22px;
+  margin-bottom: 22px;
 `;
 
 const StyleImg = styled.img`
@@ -44,31 +43,58 @@ function AiReviewSummary({ placeId }) {
   const [goodSummary, setGoodSummary] = useState("");
   const [badSummary, setBadSummary] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  console.log("AiReviewSummary placeId:", placeId);
 
   useEffect(() => {
-    console.log("placeId:", placeId); 
-    const fetchAiSummary = async () => {
-      try {
-        const response = await axios.get(
-          `https://www.daengdaeng-where.link/api/v1/places/${placeId}/reviews/summary`,
-          { 
-            withCredentials: true 
-          }
-        );
-        setGoodSummary(response.data.goodSummary);
-        setBadSummary(response.data.badSummary);
-        setLoading(false);
-      } catch (error) {
-        console.error("AI 요약 데이터를 가져오는 중 오류 발생:", error);
-        setLoading(false);
-      }
-    };
+  const fetchAiSummary = async () => {
+    try {
+      // POST 요청
+      console.log(`장소Id: ${placeId}`);
+      const postResponse = await axios.post(
+        `https://www.daengdaeng-where.link/api/v1/places/${placeId}/reviews/summary`,
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("[POST Response]", postResponse.data);
+
+      // GET 요청
+      console.log(`[GET] Fetching AI Summary for placeId: ${placeId}`);
+      const getResponse = await axios.get(
+        `https://www.daengdaeng-where.link/api/v1/places/${placeId}/reviews/summary`,
+        {
+          withCredentials: true,
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+      console.log("[GET Response]", getResponse.data);
+
+      // 데이터 설정
+      setGoodSummary(getResponse.data.goodSummary || "요약된 좋은 점이 없습니다.");
+      setBadSummary(getResponse.data.badSummary || "요약된 나쁜 점이 없습니다.");
+    } catch (error) {
+      console.error("[ERROR] AI 요약 데이터 처리 중 문제 발생:", error.response || error.message);
+      setGoodSummary("요약 데이터를 가져오는 중 오류가 발생했습니다.");
+      setBadSummary("요약 데이터를 가져오는 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (placeId) fetchAiSummary();
+}, [placeId]);
   
-    if (placeId) fetchAiSummary(); 
-  }, [placeId]);
-  if (loading) {
-    return <div>로딩 중...</div>;
-  }
+
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <>
