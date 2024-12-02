@@ -46,6 +46,7 @@ const AppRouter = () => {
         <Route path="/visit-list" element={<MyVisitList />} />
         <Route path="/visit-list/:id" element={<PlaceVisitList />} />
         <Route path="/error" element={<Error />} />
+        <Route path="*" element={<Error/>} />
       </Routes>
     </Router>
   );
