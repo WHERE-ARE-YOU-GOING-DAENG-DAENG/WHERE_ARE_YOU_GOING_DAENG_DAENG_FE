@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
-import DeleteBtn from '../../components/commons/DeleteBtn'
 import star from '../../assets/icons/star.svg'
+import axios from 'axios';
+import DeleteReview from './DeleteReview';
 
 //리뷰 모아보기를 보여주는 페이지
 
@@ -93,13 +94,16 @@ const ReviewPicture = styled.div`
   }
 `
 
+
 function ReviewForm() {
+  const [reviewData, setReviewData] = useState(null);
+  //size = 15 고정
   return (
   <>
     <ReviewDivision />
     <ReviewContainer>
       <PlaceTitle>가평 트리하우스</PlaceTitle>
-      <DeleteBtn label="삭제" />
+      <DeleteReview reviewId={reviewId} />
     </ReviewContainer>
     <ReviewDate>2024.10.11</ReviewDate>
     <StyledStar src={star} alt="별점" /> 
@@ -111,6 +115,6 @@ function ReviewForm() {
     </ReviewPictureContainer>
   </>
   )
-} //일단 더미데이터로 > 나중에 사용자 정보 받아와야 함
+} 
 
 export default ReviewForm
