@@ -4,9 +4,9 @@ import { genderOptions, petSizeOptions, petTypeOptions } from "../data/CommonCod
 
 const usePetStore = create((set) => ({
   pets: [], // 펫 리스트 > 리뷰 등록에서 사용
-  petInfo: null, 
-  isLoading: false, 
-  error: null, 
+  petInfo: null,
+  isLoading: false,
+  error: null,
 
   fetchPetList: async () => {
     set({ isLoading: true, error: null });
@@ -16,14 +16,13 @@ const usePetStore = create((set) => ({
         withCredentials: true,
       });
 
-    console.log("API 응답 데이터:", response.data.data); 
-      set({ pets: response.data.data, isLoading: false });
+      console.log("API 응답 데이터:", response.data.data);
+      set({ pets: response.data.data || [], isLoading: false });
     } catch (error) {
       set({ isLoading: false, error: "펫 리스트를 불러오는 데 실패했습니다." });
       console.error(error);
     }
   },
-
 
   fetchPetData: async (petId) => {
     set({ isLoading: true, error: null });
