@@ -4,7 +4,6 @@ import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
 import arrow from '../../assets/icons/arrow.svg';
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
-import useReviewStore from '../../stores/UseReviewStore';
 
 const ReviewWrapper = styled.div`
   margin: 20px;
