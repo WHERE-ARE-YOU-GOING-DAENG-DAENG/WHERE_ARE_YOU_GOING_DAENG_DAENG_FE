@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PreferenceFavoriteOptionList from "./PreferenceFavoriteOptionList";
 import star from "../../assets/icons/star.svg";
@@ -7,7 +7,7 @@ import addImg from "../../assets/icons/addImg.svg";
 import axios from "axios";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
-
+import usePetStore from "../../stores/usePetStore";
 
 const WriteReviewAllContainer = styled.div`
   display: block;
@@ -45,7 +45,7 @@ const WriteReviewDate = styled.span`
 
 const SelectPlaceOptionContainer = styled.div`
   width: auto;
-  height: 266px;
+  height: 300px;
   background-color: rgba(247, 247, 247, 0.78);
   text-align: left;
   padding: 5%;
@@ -220,7 +220,7 @@ const AddImgButton = styled.img`
   margin-bottom: 0px;
   cursor: pointer;
 `;
-//text container css
+
 const QuestionBox = styled.span`
   font-size: 15px;
   display: inline; 
@@ -283,37 +283,45 @@ const getCurrentDate = () => {
   const month = String(today.getMonth() + 1).padStart(2, "0"); 
   const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
-};
+}; //오늘 날짜 가지고 오기
 
 
 function WriteReview() {
+  const { pets, fetchPetList } = usePetStore();
+  const [selectPet, setSelectPet] = useState(""); // 선택된 펫 ID
   const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
-  const [previews, setPreviews] = useState([]); // 첨부하는 이미지 미리보기
-  const [selectPet, setSelectPet] = useState(""); // 펫 선택
-  const [userNickname, setUserNickname] = useState('내가 진짜'); //나중에 zustand로 받아야 와하는 유저 닉네임
-  const [userImage, setUserImage] = useState(''); // 예시 이미지 URL, 나중에 zustand로 받아야 와하는 유저 이미지 > 같이간 펫 이미지를 불러와야함
-  const [selectKeywords, setSelectKeywords] = useState([]); // 키워드 선택
-  const [content, setContent] = useState(""); // 리뷰 내용
-  const [visitedAt, setVisitedAt] = useState(getCurrentDate()); // 방문한 날짜
+  const [previews, setPreviews] = useState([]); //이미지 미리보기
+  const [placeImgs, setPlaceImgs] = useState([]); // 업로드할 이미지 파일
+  const [userNickname, setUserNickname] = useState('내가 진짜'); //zustand 처리
+  const [selectKeywords, setSelectKeywords] = useState([]); 
+  const [text, setText] = useState(""); // 리뷰 내용 상태
+  const [visitedAt, setVisitedAt] = useState(""); // 초기값을 빈 문자열로 설정
+  const [selectedPetImage, setSelectedPetImage] = useState(""); // 선택된 펫 이미지 상태
+  
+  useEffect(() => {
+    fetchPetList();
+  }, []);
+  
+  useEffect(() => {
+    console.log("펫 리스트 상태:", pets);
+  }, [pets]);
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-  
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviews((prevPreviews) => [...prevPreviews, reader.result]);
+        setPreviews((prev) => [...prev, reader.result]);
       };
       reader.readAsDataURL(file);
-    });
   
-    // 파일을 업로드한 후 input을 리셋
-    e.target.value = null;
+      setPlaceImgs((prev) => [...prev, file]); 
+    });
   };
 
   const handleStarClick = (index) => {
-    setRatings((prevRatings) => {
-      const newRatings = [...prevRatings];
+    setRatings((prev) => {
+      const newRatings = [...prev];
       newRatings[index] = !newRatings[index];
       return newRatings;
     });
@@ -323,80 +331,168 @@ function WriteReview() {
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
-  const [text, setText] = useState('');
-  const maxLength = 500;
-
   const handleChange = (e) => {
-    if (e.target.value.length > maxLength) {
+    const maxLength = 500;
+    const value = e.target.value;
+  
+    if (value.length > maxLength) {
       AlertDialog({
         mode: "alert",
         title: "선택 제한",
         text: `최대 ${maxLength}자까지만 작성 가능합니다.`,
         confirmText: "닫기" 
       });
-    } else {
-      setText(e.target.value);  
-    }
+      return;
+    }   
+    setText(value); 
   };
 
-  const handleSubmit = async () => {
-    const placeId = 1; // 예시로 1번 장소
-    const score = ratings.filter((rating) => rating).length; // 별점 
-    const media = previews;
-    const keywords = selectKeywords; // 선택한 키워드들 > 공통 코드로 설정해야함
-    const pets = [1, 2, 3]; // 예시로 넣음
+  const validateForm = () => {
 
-    // Step 1: 이미지 / 동영상 업로드 처리
-  const uploadMedia = async (file) => {
+    if (selectKeywords.length === 0) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "최소 하나 이상의 키워드를 선택해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+
+    if (!selectPet) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "함께한 펫을 선택해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+  
+    if (!visitedAt) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "방문한 날짜를 선택해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+  
+    if (!ratings.filter(Boolean).length) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "별점을 선택해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+  
+    if (!text.trim()) {
+      AlertDialog({
+        mode: "alert",
+        title: "등록 실패",
+        text: "리뷰 내용을 작성해주세요.",
+        confirmText: "확인"
+      });
+      return false;
+    }
+  
+    return true;
+  };
+
+
+ // S3 업로드 시작
+  const uploadMedia = async (files) => {
+  const uploadedUrls = [];
+  for (const file of files) {
     try {
       const presignResponse = await axios.get(
-        `https://your-server-url.com/api/v1/S3?prefix=review-media&fileName=${file.name}`
+        `https://www.daengdaeng-where.link/api/v1/S3?prefix=review&fileName=${encodeURIComponent(file.name)}`
       );
 
-      const presignedUrl = presignResponse.data.presignUrl;
+      const presignedUrl = presignResponse.data.url;
+      if (!presignedUrl) {
+        throw new Error("서버에서 응답 안 줌");
+      }
 
-      // PUT 요청으로 파일을 S3에 업로드
-      const fileUploadResponse = await axios.put(presignedUrl, file, {
+      const uploadResponse = await axios.put(presignedUrl, file, {
         headers: {
-          'Content-Type': file.type, // 이미지 또는 동영상의 MIME 타입 설정
+          "Content-Type": file.type,
         },
       });
 
-      if (fileUploadResponse.status === 200) {
-        console.log(`${file.name} 업로드 성공!`);
-        return presignedUrl.split('?')[0]; // S3 URL 추출 (쿼리 파라미터 제외)
+      if (uploadResponse.status === 200) {
+        const uploadedUrl = presignedUrl.split("?")[0]; 
+        uploadedUrls.push(uploadedUrl); 
+        console.log(`File uploaded successfully: ${uploadedUrl}`);
+      } else {
+        console.error("Upload failed:", file.name);
       }
     } catch (error) {
-      console.error(`${file.name} 업로드 실패:`, error);
-      return null;
+      console.error(`Failed to upload ${file.name}:`, error.message);
+    }
+  }
+    return uploadedUrls;
+  };
+
+  const handlePetSelection = (e) => {
+    const selectedPetId = e.target.value;
+    setSelectPet(selectedPetId);
+
+  const selectedPet = pets.find((pet) => pet.petId === parseInt(selectedPetId));
+  if (selectedPet) {
+    setSelectedPetImage(selectedPet.image); 
+  } else {
+    setSelectedPetImage(""); 
     }
   };
 
-  // 모든 미디어 파일을 업로드하고, 업로드된 URL을 media 배열에 저장
-  for (const file of previews) {
-    const uploadedUrl = await uploadMedia(file);
-    if (uploadedUrl) media.push(uploadedUrl); // 업로드된 URL을 media 배열에 추가
-  }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) return;
 
+    const placeId = 1; 
+    const media = await uploadMedia(placeImgs); 
+    console.log("Uploaded media URLs:", media);
+  
+    if (media.length === 0) {
+      console.error("No media uploaded.");
+      return;
+    }
+  
     const reviewData = {
       placeId,
-      content,
-      score,
-      media,
-      keywords,
-      pets,
-      visitedAt,
+      content: text.trim(), 
+      score: ratings.filter(Boolean).length, 
+      media, 
+      keywords: selectKeywords, 
+      pets: selectPet ? [parseInt(selectPet)] : [], 
+      visitedAt, 
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/review", reviewData, {
+      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
           headers: {
             'Content-Type': 'application/json',
           },
           withCredentials: true,
       });
+      AlertDialog({
+        mode: "alert",
+        title: "성공",
+        text: `리뷰가 성공적으로 등록되었습니다.`,
+        confirmText: "닫기" 
+      });
       console.log("리뷰 등록 성공:", response.data);
     } catch (error) {
+      AlertDialog({
+        mode: "alert",
+        title: "실패",
+        text: `리뷰 등록에 실패했습니다.`,
+        confirmText: "닫기" 
+      });
       console.error("리뷰 등록 실패:", error);
     }
   };
@@ -411,17 +507,26 @@ function WriteReview() {
         <WhatPointLike>어떤 점이 좋았나요?</WhatPointLike>
         <br />
         <SelectWarning>*이 장소에 맞는 키워드를 골라주세요 (1개~3개)</SelectWarning>
-        <PreferenceFavoriteOptionList />
+      <PreferenceFavoriteOptionList
+        selectedOptions={selectKeywords}
+        onSelectOptions={setSelectKeywords}
+      />
         <UserInfoContainer>
-          <UserImg/> 
+        <UserImg
+          src={selectedPetImage || "/default-user-image.png"} //만든 이미지 넣어야함
+          alt="선택된 펫 이미지" 
+        />
           <UserNickname>{userNickname || "내가 진짜"}</UserNickname>
         </UserInfoContainer>
         <UserQuestionContainer>
-          <Question>함께한 댕댕이를 선택해주세요</Question>
-          <PetSelection value={selectPet} onChange={(e) => setSelectPet(e.target.value)}>
-          <option value="pet1">댕댕이 1</option>
-          <option value="pet2">댕댕이 2</option>
-          <option value="pet3">댕댕이 3</option>
+        <Question>함께한 댕댕이를 선택해주세요</Question>
+        <PetSelection value={selectPet} onChange={handlePetSelection}>
+          <option value="">댕댕이를 선택해주세요</option>
+          {pets.map((pet) => (
+            <option key={pet.petId} value={pet.petId}>
+              {pet.name}
+            </option>
+          ))}
         </PetSelection>
         </UserQuestionContainer>
         <UserQuestionContainer>
