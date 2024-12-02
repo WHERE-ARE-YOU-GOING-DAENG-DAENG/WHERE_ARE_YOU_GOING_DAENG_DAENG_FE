@@ -32,14 +32,14 @@ function Home() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const newLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
           };
   
           // 위치가 변경된 경우에만 상태 업데이트
           if (
-            userLocation.lat !== newLocation.lat ||
-            userLocation.lng !== newLocation.lng
+            userLocation.latitude !== newLocation.latitude ||
+            userLocation.longitude !== newLocation.longitude
           ) {
             setUserLocation(newLocation);
             console.log("Location updated:", newLocation);
@@ -47,7 +47,7 @@ function Home() {
         },
         (error) => {
           // console.error("Geolocation error:", error); 위치동의안한것도 에러로 받음
-          if (!userLocation.lat && !userLocation.lng) {
+          if (!userLocation.latitude && !userLocation.longitude) {
             console.log("위치정보 비동의, 기본값:", userLocation);
           }
         }
