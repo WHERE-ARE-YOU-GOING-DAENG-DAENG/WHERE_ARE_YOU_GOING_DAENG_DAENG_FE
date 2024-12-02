@@ -3,7 +3,9 @@ import Header from "../../components/commons/Header";
 import Footer from "../../components/commons/Footer";
 import VisitScheduleList from "../../components/visit/VisitScheduleList";
 import styled from "styled-components";
-import petIcon from "../../assets/icons/user.svg"
+import AlertDialog from "../../components/commons/SweetAlert";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const VisitBanner = styled.img`
     width: 100%;
@@ -13,160 +15,37 @@ const VisitBanner = styled.img`
 
 const PlaceVisitList = () => {
     const { id } = useParams();
+    const [list, setList] = useState([]);
+    const [reloadTrigger, setReloadTrigger] = useState(false);
 
-    const mockData = [
-        {
-            "visitDate": "2024-11-24",
-            "petsAtVisitTimes": [
-                {
-                    "visitAt": "2024-11-24T11:00:00",
-                    "pets": [
-                        {
-                            "petId": 1,
-                            "petName": "Buddy",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 2,
-                            "petName": "Mittens",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 3,
-                            "petName": "Max1",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 4,
-                            "petName": "Max2",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 5,
-                            "petName": "Max3",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 6,
-                            "petName": "Max4",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 7,
-                            "petName": "Max5",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 8,
-                            "petName": "Max6",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 9,
-                            "petName": "Max7",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 10,
-                            "petName": "Max8",
-                            "petImg": petIcon
-                        },
-                    ]
-                }
-            ]
-        },
-        {
-            "visitDate": "2024-11-25",
-            "petsAtVisitTimes": [
-                {
-                    "visitAt": "2024-11-25T10:00:00",
-                    "pets": [
-                        {
-                            "petId": 2,
-                            "petName": "Mittens",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 3,
-                            "petName": "Max",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 1,
-                            "petName": "Buddy",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 2,
-                            "petName": "Mittens",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 3,
-                            "petName": "Max1",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 4,
-                            "petName": "Max2",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 5,
-                            "petName": "Max3",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 6,
-                            "petName": "Max4",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 7,
-                            "petName": "Max5",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 8,
-                            "petName": "Max6",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 9,
-                            "petName": "Max7",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 10,
-                            "petName": "Max8",
-                            "petImg": petIcon
-                        },
-                    ]
-                },
-                {
-                    "visitAt": "2024-11-25T11:00:00",
-                    "pets": [
-                        {
-                            "petId": 2,
-                            "petName": "Mittens",
-                            "petImg": petIcon
-                        },
-                        {
-                            "petId": 3,
-                            "petName": "Max",
-                            "petImg": petIcon
-                        }
-                    ]
-                }
-            ]
+    useEffect(()=>{
+        const fetchPlaceVisit = async() => {
+            try{
+                const response = await axios.get(`https://www.daengdaeng-where.link/api/v1/visit/place/${id}`,{
+                    withCredentials: true
+                })
+                console.log(response.data.data) //로그삭제
+                setList(response.data.data);
+            }catch(error){
+                if(error.response){
+                    AlertDialog({
+                    mode: "alert",
+                    title: "방문예정목록 조회",
+                    text: "방문예정목록 조회에 실패하였습니다.",
+                    confirmText: "확인",
+                    onConfirm: () => console.log("방문예정 조회 실패"),
+                });
+              }
+            }
         }
-    ]
+        fetchPlaceVisit();
+    },[reloadTrigger])
 
     return (
         <>
             <Header label="방문예정목록" />
             <VisitBanner src="https://via.placeholder.com/554x242" alt="배너" />
-            <VisitScheduleList data={mockData} />
+            <VisitScheduleList data={list} placeId={id} setReloadTrigger={setReloadTrigger}/>
             <Footer />
         </>
     )
