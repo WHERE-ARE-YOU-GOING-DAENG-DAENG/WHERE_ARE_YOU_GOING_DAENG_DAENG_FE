@@ -79,7 +79,7 @@ const KeywordsContainer = styled.div`
   }
 `;
 
-const PlaceReviewList = ({ reviews, placeName}) => {
+const PlaceReviewList = ({ reviews }) => {
   const navigate = useNavigate();
   const { id: placeId } = useParams();
 

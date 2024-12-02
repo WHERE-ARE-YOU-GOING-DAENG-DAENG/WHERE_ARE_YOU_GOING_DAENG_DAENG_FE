@@ -7,6 +7,7 @@ import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import Sorting from '../../components/commons/Sorting';
 import useTotalReviewStore from '../../stores/UseTotalReviewStore';
 import AiReviewSummary from './AIReview';
+import axios from 'axios';
 //리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
   display: block;
@@ -270,11 +271,27 @@ const TotalReviewForm = () => {
     isLoading,
     isLast,
     sortedType,
-    placeName, 
   } = useTotalReviewStore();
 
+  const [placeName, setPlaceName] = useState("장소 정보가 없습니다.");
   const [isExpanded, setIsExpanded] = useState({});
   const observerRef = useRef(null);
+
+   // placeName 가져오기
+  useEffect(() => {
+    if (placeId) {
+      axios
+        .get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`)
+        .then((response) => {
+          const name = response.data?.data?.name;
+          setPlaceName(name || "장소 정보가 없습니다.");
+        })
+        .catch((error) => {
+          console.error("Failed to fetch placeName:", error);
+          setPlaceName("장소 정보가 없습니다.");
+        });
+    }
+  }, [placeId]);
 
   useEffect(() => {
     if (placeId) {
@@ -320,8 +337,7 @@ const TotalReviewForm = () => {
 
   return (
     <TotalReviewContainer>
-      <ReviewPlaceTitle>{placeName || "장소 정보가 없습니다."}</ReviewPlaceTitle>
-
+      <ReviewPlaceTitle>{placeName}</ReviewPlaceTitle>
       <PreferenceContainer>
         {bestKeywords.map((keyword, index) => (
           <ReviewKeywords key={index} label={keyword} />

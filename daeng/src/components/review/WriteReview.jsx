@@ -293,13 +293,22 @@ const getCurrentDate = () => {
 
 function WriteReview({ review = {} }) {
   const { placeId } = useParams();
-  const location = useLocation();
-  const placeName = location.state?.placeName || "장소 이름 없음"; 
+  const [placeName, setPlaceName] = useState("장소 이름 없음");
 
-  console.log("Debugging WriteReview Component:");
-  console.log("placeId from URL:", placeId);
-  console.log("location.state:", location.state);
-  console.log("Resolved placeName:", placeName);
+  useEffect(() => {
+    if (placeId) {
+      axios
+        .get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`)
+        .then((response) => {
+          const name = response.data?.data?.name; 
+          setPlaceName(name || "장소 이름 없음"); 
+        })
+        .catch((error) => {
+          console.error("Failed to fetch place name:", error);
+          setPlaceName("장소 이름 없음");
+        });
+    }
+  }, [placeId]);
 
   const placeIdValue = review?.placeId || placeId;
 
