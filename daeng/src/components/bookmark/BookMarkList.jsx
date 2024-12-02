@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import PropTypes from "prop-types";
 import pinIcon from "../../assets/icons/pin.svg";
@@ -7,6 +7,7 @@ import houseIcon from "../../assets/icons/house.svg"
 import { useNavigate } from "react-router-dom";
 import useFavoriteStore from "../../stores/useFavoriteStore";
 import AlertDialog from "../commons/SweetAlert";
+import Loading from "../commons/Loading";
 const slideUp = keyframes`
     from {
         transform: translateY(80%);
@@ -74,11 +75,38 @@ const ModalContent = styled.div`
     overflow-y: auto; /* 스크롤 활성화 */
     -webkit-overflow-scrolling: touch;
     height: calc(100% - 120px);
+
+    p{
+        font-weight: bold;
+    }
 `
-const BookMarkList = ({ isOpen, onClose , data, onPlaceClick}) => {
+const BookMarkList = ({ isOpen, onClose , data, onPlaceClick, fetchNextPage, page}) => {
     const [isClosing, setIsClosing] = useState(false);
     const navigate = useNavigate();
+
+    const observerRef = useRef(null);
     const removeFavorite  = useFavoriteStore((state) => state.removeFavorite);
+    const isLoading = useFavoriteStore((state) => state.isLoading);
+
+    // IntersectionObserver 설정
+    useEffect(() => {
+        if (!observerRef.current) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !isLoading) {
+                    fetchNextPage(); // 다음 페이지 데이터 로드
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        observer.observe(observerRef.current);
+
+        return () => {
+            if (observerRef.current) observer.unobserve(observerRef.current);
+        };
+    }, [isLoading, fetchNextPage]);
 
     const handleDelete = async (id) => {
         AlertDialog({
@@ -127,18 +155,29 @@ const BookMarkList = ({ isOpen, onClose , data, onPlaceClick}) => {
                 <ModalIcon className="pin" src={pinIcon} alt="즐겨찾기" />
                 <ModalTitle>즐겨찾기한 장소</ModalTitle>
                 <ModalContent>
-                    {data.map((location)=>(
-                        <FavoriteList
-                            key={location.favoriteId}
-                            icon={houseIcon}
-                            title={location.name}
-                            place={location.streetAddresses}
-                            time={`영업시간 | ${location.startTime} - ${location.endTime}`}
-                            onTitleClick={()=> navigate(`/search/${location.placeId}`)}
-                            onPlaceClick={() => handlePlace(location)}
-                            onDelete={()=>handleDelete(location.favoriteId)}
-                        />
-                    ))}
+                    { isLoading && page === 0 ?(
+                        <Loading />
+                    ): data.length === 0 ? (
+                        <p>즐겨찾기한 장소가 없습니다.</p>
+                    ):(
+                        <>
+                            {data.map((location)=>(
+                                <FavoriteList
+                                    key={location.favoriteId}
+                                    icon={houseIcon}
+                                    title={location.name}
+                                    place={location.streetAddresses}
+                                    time={`영업시간 | ${location.startTime} - ${location.endTime}`}
+                                    onTitleClick={()=> navigate(`/search/${location.placeId}`)}
+                                    onPlaceClick={() => handlePlace(location)}
+                                    onDelete={()=>handleDelete(location.favoriteId)}
+                                />
+                            ))}
+                            <div ref={observerRef}>
+                                {isLoading && page > 0 && <Loading />}
+                            </div>
+                        </>
+                    )}
                 </ModalContent>
             </Modal>
         </>
@@ -161,6 +200,7 @@ BookMarkList.propTypes = {
         })
     ),
     onPlaceClick: PropTypes.func.isRequired,
+    fetchNextPage: PropTypes.func.isRequired,
 };
 
 export default BookMarkList;
