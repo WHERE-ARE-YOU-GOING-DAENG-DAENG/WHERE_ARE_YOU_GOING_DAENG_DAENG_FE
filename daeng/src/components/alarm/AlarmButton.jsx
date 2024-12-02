@@ -4,6 +4,7 @@ import { requestNotificationPermission } from '../../firebase/firebaseMessaging'
 import axios from 'axios';
 import { pushAgree } from '../../data/CommonCode';
 import AlertDialog from "../commons/SweetAlert";
+import AlarmDelete from "./AlarmDelete";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -66,6 +67,7 @@ function AlarmButton() {
   return (
     <ButtonContainer>
       <AgreeButton onClick={handleNotificationRequest}>알림 받기</AgreeButton>
+      <AlarmDelete />
     </ButtonContainer>
   );
 }
