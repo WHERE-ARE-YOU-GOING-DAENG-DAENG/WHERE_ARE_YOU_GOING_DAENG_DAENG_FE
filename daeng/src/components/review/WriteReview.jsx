@@ -49,7 +49,7 @@ const WriteReviewDate = styled.span`
 
 const SelectPlaceOptionContainer = styled.div`
   width: auto;
-  height: 266px;
+  height: 300px;
   background-color: rgba(247, 247, 247, 0.78);
   text-align: left;
   padding: 5%;
