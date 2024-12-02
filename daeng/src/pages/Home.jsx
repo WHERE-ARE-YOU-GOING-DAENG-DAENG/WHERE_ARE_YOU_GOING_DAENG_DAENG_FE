@@ -8,11 +8,10 @@ import HomeRecommendPlaces from "../components/Home/HomeRecommendPlaces";
 import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
 import Wrapper from "../components/Home/HomeWrapper";
 import Footer from "../components/commons/Footer";
-import useLocationStore from "../stores/LocationStore";
+import useLocationStore from "../stores/useLocationStore";
 import useFavoriteStore from "../stores/useFavoriteStore";
+import AlertDialog from "../components/commons/SweetAlert";
 import { useEffect } from "react";
-
-
 
 function Home() {
   const userLocation = useLocationStore((state) => state.userLocation);
@@ -32,14 +31,14 @@ function Home() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const newLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
           };
   
           // 위치가 변경된 경우에만 상태 업데이트
           if (
-            userLocation.lat !== newLocation.lat ||
-            userLocation.lng !== newLocation.lng
+            userLocation.latitude !== newLocation.latitude ||
+            userLocation.longitude !== newLocation.longitude
           ) {
             setUserLocation(newLocation);
             console.log("Location updated:", newLocation);
@@ -47,13 +46,19 @@ function Home() {
         },
         (error) => {
           // console.error("Geolocation error:", error); 위치동의안한것도 에러로 받음
-          if (!userLocation.lat && !userLocation.lng) {
-            console.log("위치정보 비동의, 기본값:", userLocation);
+          if (!userLocation.latitude && !userLocation.longitude) {
+            AlertDialog({
+              mode: "alert",
+              title: "위치 접근 동의",
+              text: "위치 접근이 제한되었습니다.",
+              confirmText: "확인",
+              onConfirm: () => console.log("위치정보 비동의, 기본값:", userLocation),
+          });
           }
         }
       );
     }
-  }, [setUserLocation, userLocation]);
+  }, [userLocation.lat, userLocation.lng]);
 
   return (
     <Wrapper>
