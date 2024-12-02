@@ -115,66 +115,53 @@ const Picture = styled.div`
   background-color: #d9d9d9;
 `;
 
-function ReviewForm() {
-  const { reviews, isLoading, error, fetchUserReviews } = useReviewStore();
-
-  useEffect(() => {
-    fetchUserReviews(0, 15);
-  }, []);
-
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>오류 발생: {error}</div>;
-
+function ReviewForm({ review }) {
   return (
-    <>
-      {reviews.map((review) => (
-        <ReviewWrapper key={review.reviewId}>
-          <HeaderContainer>
-            <TitleSection>
-              <PlaceTitle>{review.placeName || "장소 불러오는 중"}</PlaceTitle>
-              <StyledArrow src={arrow} alt="이동" />
-            </TitleSection>
-            <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>
-          </HeaderContainer>
+    <ReviewWrapper>
+      <HeaderContainer>
+        <TitleSection>
+          <PlaceTitle>{review.placeName || "장소 불러오는 중"}</PlaceTitle>
+          <StyledArrow src={arrow} alt="이동" />
+        </TitleSection>
+        <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>
+      </HeaderContainer>
 
-          <PetContainer>
-            <UserImg
-              src={review.petImg || "default-user.jpg"}
-              alt="반려동물 이미지"
-            />
-            <PetInfoContainer>
-              <PetName>
-                [{review.pets.join(" | ")}]랑 함께 방문했어요
-              </PetName>
-              <StarSection>
-                {[...Array(review.score)].map((_, index) => (
-                  <StyledStar key={index} src={star} alt={`별점 ${index + 1}`} />
-                ))}
-                <VisitDate>방문 날짜 | {review.visitedAt}</VisitDate>
-              </StarSection>
-            </PetInfoContainer>
-            <DeleteReview reviewId={review.reviewId} />
-          </PetContainer>
-
-          <KeywordsContainer>
-            {review.keywords.map((keyword, index) => (
-              <ReviewKeywords key={index} label={keyword} />
+      <PetContainer>
+        <UserImg
+          src={review.petImg || "default-user.jpg"}
+          alt="반려동물 이미지"
+        />
+        <PetInfoContainer>
+          <PetName>
+            [{review.pets.join(" | ")}]랑 함께 방문했어요
+          </PetName>
+          <StarSection>
+            {[...Array(review.score)].map((_, index) => (
+              <StyledStar key={index} src={star} alt={`별점 ${index + 1}`} />
             ))}
-          </KeywordsContainer>
+            <VisitDate>방문 날짜 | {review.visitedAt}</VisitDate>
+          </StarSection>
+        </PetInfoContainer>
+        <DeleteReview reviewId={review.reviewId} />
+      </PetContainer>
 
-          <ReviewContent>{review.content}</ReviewContent>
+      <KeywordsContainer>
+        {review.keywords.map((keyword, index) => (
+          <ReviewKeywords key={index} label={keyword} />
+        ))}
+      </KeywordsContainer>
 
-          <PictureContainer>
-            {review.media.map((mediaUrl, index) => (
-              <Picture
-                key={index}
-                style={{ backgroundImage: `url(${mediaUrl})` }}
-              />
-            ))}
-          </PictureContainer>
-        </ReviewWrapper>
-      ))}
-    </>
+      <ReviewContent>{review.content}</ReviewContent>
+
+      <PictureContainer>
+        {review.media.map((mediaUrl, index) => (
+          <Picture
+            key={index}
+            style={{ backgroundImage: `url(${mediaUrl})` }}
+          />
+        ))}
+      </PictureContainer>
+    </ReviewWrapper>
   );
 }
 
