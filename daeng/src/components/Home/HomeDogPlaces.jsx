@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import useLocationStore from "../../stores/LocationStore"; 
+import useLocationStore from "../../stores/useLocationStore"; 
 import axios from "axios";
 import HomeDogLoveIcon from "../../assets/icons/home_doglove.svg";
 
@@ -10,23 +10,14 @@ function HomeDogPlaces() {
   const userLocation = useLocationStore((state) => state.userLocation); 
   const navigate = useNavigate();
 
-  const defaultLocation = {
-    latitude: 0.0,
-    longitude: 0.0,
-  };
-
   useEffect(() => {
     const fetchDogPlaces = async () => {
       try {
-        const locationToUse = userLocation.latitude && userLocation.longitude
-          ? userLocation
-          : defaultLocation;
-
         const response = await axios.post(
           "https://www.daengdaeng-where.link/api/v1/places/recommend",
           {
-            latitude: locationToUse.latitude,
-            longitude: locationToUse.longitude,
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
           },
           {
             withCredentials: true,

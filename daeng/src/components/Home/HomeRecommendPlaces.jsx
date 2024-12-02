@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import useLocationStore from "../../stores/LocationStore"; 
+import useLocationStore from "../../stores/useLocationStore"; 
 import axios from "axios";
 import HomeRecommendIcon from "../../assets/icons/home_recommend.svg";
 
@@ -11,8 +11,8 @@ function HomeRecommendPlaces() {
   const navigate = useNavigate();
 
   const defaultLocation = {
-    latitude: 37.497942,
-    longitude: 127.027621,
+    latitude: 37.5666, //실시간 위치를 허용하지 않았을 경우
+    longitude: 126.9782, //서울시청 위도 경도
   };
 
   useEffect(() => {
