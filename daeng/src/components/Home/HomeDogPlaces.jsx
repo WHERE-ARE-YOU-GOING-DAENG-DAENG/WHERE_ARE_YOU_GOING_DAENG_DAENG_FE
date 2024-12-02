@@ -57,7 +57,6 @@ function HomeDogPlaces() {
             key={place.placeId}
             onClick={() => handleDogPlaceClick(place.placeId)}
           >
-            {/* {place.name} */}
           </DogLinkBox>
         ))}
       </DogLinkContainer>
