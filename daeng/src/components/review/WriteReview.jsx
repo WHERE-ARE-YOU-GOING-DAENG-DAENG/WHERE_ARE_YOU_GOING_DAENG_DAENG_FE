@@ -301,7 +301,7 @@ function WriteReview({ review = {} }) {
 
   const navigate = useNavigate();
   const { pets, fetchPetList } = usePetStore();
-  const [selectPet, setSelectPet] = useState(""); // 선택된 펫 ID
+  const [selectPet, setSelectPet] = useState([]); // 선택된 펫 ID
   const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
   const [previews, setPreviews] = useState([]); //이미지 미리보기
   const [placeImgs, setPlaceImgs] = useState([]); // 업로드할 이미지 파일
@@ -542,7 +542,11 @@ function WriteReview({ review = {} }) {
         </UserInfoContainer>
         <UserQuestionContainer>
         <Question>함께한 댕댕이를 선택해주세요</Question>
-        <PetSelection value={selectPet} onChange={handlePetSelection}>
+        <PetSelection 
+            value={selectPet}
+            onChange={handlePetSelection}
+            multiple // 다중 선택 활성화
+          >
           <option value="">댕댕이를 선택해주세요</option>
           {pets.map((pet) => (
             <option key={pet.petId} value={pet.petId}>

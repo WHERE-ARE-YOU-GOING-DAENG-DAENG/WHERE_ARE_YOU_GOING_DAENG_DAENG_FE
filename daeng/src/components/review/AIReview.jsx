@@ -50,20 +50,7 @@ function AiReviewSummary({ placeId }) {
   const fetchAiSummary = async () => {
     try {
       // POST 요청
-      console.log(`장소Id: ${placeId}`);
-      const postResponse = await axios.post(
-        `https://www.daengdaeng-where.link/api/v1/places/${placeId}/reviews/summary`,
-        {},
-        {
-          withCredentials: true,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("[POST Response]", postResponse.data);
-
+      console.log(`장소Id: ${placeId}`)
       // GET 요청
       console.log(`[GET] Fetching AI Summary for placeId: ${placeId}`);
       const getResponse = await axios.get(
