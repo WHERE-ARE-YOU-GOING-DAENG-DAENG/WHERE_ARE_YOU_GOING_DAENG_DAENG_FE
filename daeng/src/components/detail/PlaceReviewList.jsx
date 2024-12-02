@@ -89,11 +89,11 @@ const PlaceReviewList = ({ reviews }) => {
         <ReviewHeader>
           <h2>보호자님들의 리뷰</h2>
           <div className="actions">
-            <button className="action" onClick={()=> navigate(`/write-review?placeId=${placeId}`)}>
+            <button className="action" onClick={()=> navigate(`/write-review/${placeId}`)}>
               리뷰 작성
               <img src={writeIcon} alt="리뷰 작성" />
             </button>
-            <button className="action"  onClick={() => navigate(`/total-review?placeId=${placeId}`)}>전체보기 &gt;</button>
+            <button className="action"  onClick={() => navigate(`/total-review/${placeId}`)}>전체보기 &gt;</button>
           </div>
         </ReviewHeader>
 
