@@ -1,11 +1,28 @@
 import { create } from "zustand";
 import axios from "axios";
-import { genderOptions, petSizeOptions, petTypeOptions }from '../data/CommonCode';
+import { genderOptions, petSizeOptions, petTypeOptions } from "../data/CommonCode";
 
 const usePetStore = create((set) => ({
+  pets: [], // 펫 리스트 > 리뷰 등록에서 사용
   petInfo: null,
   isLoading: false,
   error: null,
+
+  fetchPetList: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.get("https://www.daengdaeng-where.link/api/v1/pets", {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+
+      console.log("API 응답 데이터:", response.data.data);
+      set({ pets: response.data.data || [], isLoading: false });
+    } catch (error) {
+      set({ isLoading: false, error: "펫 리스트를 불러오는 데 실패했습니다." });
+      console.error(error);
+    }
+  },
 
   fetchPetData: async (petId) => {
     set({ isLoading: true, error: null });
@@ -28,10 +45,10 @@ const usePetStore = create((set) => ({
         petInfo: {
           name: petData.name,
           birthday: petData.birthday,
-          species: speciesOption ? speciesOption.code : "", 
-          gender: genderOption ? genderOption.code : "",   
+          species: speciesOption ? speciesOption.code : "",
+          gender: genderOption ? genderOption.code : "",
           neutering: petData.neutering,
-          size: sizeOption ? sizeOption.code : "",       
+          size: sizeOption ? sizeOption.code : "",
           image: petData.image,
         },
         isLoading: false,
@@ -45,4 +62,3 @@ const usePetStore = create((set) => ({
 }));
 
 export default usePetStore;
-

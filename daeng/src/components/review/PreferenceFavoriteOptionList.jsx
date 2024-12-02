@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import PreferenceFavoriteOption from "../commons/PreferenceFavoriteOption";
+import AlertDialog from "../../components/commons/SweetAlert";
+import { placeFeatures } from "../../data/CommonCode";
 import dogfood from "../../assets/icons/dogFood.svg";
 import run from "../../assets/icons/run.svg";
 import water from "../../assets/icons/water.svg";
@@ -12,53 +14,51 @@ import paperbag from "../../assets/icons/paperbag.svg";
 import clean from "../../assets/icons/clean.svg";
 import gongwon from "../../assets/icons/gongwon.svg";
 import parkingLot from "../../assets/icons/parkingLot.svg";
-import AlertDialog from "../../components/commons/SweetAlert";
 
-function PreferenceFavoriteOptionList() {
-  const [selectedOptions, setSelectedOptions] = useState([]);
+function PreferenceFavoriteOptionList({ selectedOptions, onSelectOptions }) {
   const maxOptions = 3;
 
-  const handleOptionClick = (label) => {
-    if (selectedOptions.length >= maxOptions && !selectedOptions.includes(label)) {
+  const featureIcons = {
+    PLACE_FTE_01: dogfood,
+    PLACE_FTE_02: run,
+    PLACE_FTE_03: water,
+    PLACE_FTE_04: toilet,
+    PLACE_FTE_05: bug,
+    PLACE_FTE_06: cage,
+    PLACE_FTE_07: dogFriend,
+    PLACE_FTE_08: paperbag,
+    PLACE_FTE_09: clean,
+    PLACE_FTE_10: gongwon,
+    PLACE_FTE_11: parkingLot,
+  };
+
+  const handleOptionClick = (codeId) => {
+    if (selectedOptions.length >= maxOptions && !selectedOptions.includes(codeId)) {
       AlertDialog({
-        mode: "alert", 
+        mode: "alert",
         title: "선택 초과",
         text: "최대 3개만 선택 가능합니다.",
-        confirmText: "확인"
+        confirmText: "확인",
       });
       return;
     }
-  
-    setSelectedOptions((prev) =>
-      prev.includes(label)
-        ? prev.filter((option) => option !== label) 
-        : [...prev, label] 
-    );
-  };
 
-  const options = [
-    { label: "강아지 전용 음식이 있어요", icon: dogfood },
-    { label: "뛰어놀기 좋아요", icon: run },
-    { label: "급수대가 있어요", icon: water },
-    { label: "화장실이 있어요", icon: toilet },
-    { label: "벌레가 별로 없어요", icon: bug },
-    { label: "철장으로 막혀있어요", icon: cage },
-    { label: "강아지 친구들이 많아요", icon: dogFriend },
-    { label: "배변봉투가 구비되어 있어요", icon: paperbag },
-    { label: "시설이 청결해요", icon: clean },
-    { label: "산책로가 있어요", icon: gongwon },
-    { label: "주차하기 편해요", icon: parkingLot },
-  ];
+    const newSelectedOptions = selectedOptions.includes(codeId)
+      ? selectedOptions.filter((option) => option !== codeId)
+      : [...selectedOptions, codeId];
+
+    onSelectOptions(newSelectedOptions);
+  };
 
   return (
     <PreferenceFavoriteOptionContainer>
-      {options.map(({ label, icon }) => (
+      {placeFeatures.map(({ codeId, name }) => (
         <PreferenceFavoriteOption
-          key={label}
-          label={label}
-          icon={icon}
-          isSelected={selectedOptions.includes(label)}
-          onClick={() => handleOptionClick(label)}
+          key={codeId}
+          label={name}
+          icon={featureIcons[codeId]} 
+          isSelected={selectedOptions.includes(codeId)}
+          onClick={() => handleOptionClick(codeId)}
         />
       ))}
     </PreferenceFavoriteOptionContainer>
