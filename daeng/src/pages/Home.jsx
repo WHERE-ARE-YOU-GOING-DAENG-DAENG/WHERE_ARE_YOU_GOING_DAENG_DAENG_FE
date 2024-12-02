@@ -9,22 +9,12 @@ import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
 import Wrapper from "../components/Home/HomeWrapper";
 import Footer from "../components/commons/Footer";
 import useLocationStore from "../stores/useLocationStore";
-import useFavoriteStore from "../stores/useFavoriteStore";
 import AlertDialog from "../components/commons/SweetAlert";
 import { useEffect } from "react";
 
 function Home() {
   const userLocation = useLocationStore((state) => state.userLocation);
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
-  const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites);
-
-  useEffect(() => {
-		const fetchBookmark = async () => {
-		  await fetchFavorites();
-		};
-	
-		fetchBookmark();
-	  }, []);
 
   useEffect(() => {
     if (navigator.geolocation) {
