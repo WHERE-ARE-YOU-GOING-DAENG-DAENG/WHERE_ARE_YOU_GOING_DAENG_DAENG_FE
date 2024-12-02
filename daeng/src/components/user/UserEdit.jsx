@@ -1,28 +1,83 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SelectLabel from '../../components/commons/SelectLabel';
 import SelectBtn from '../../components/commons/SelectBtn';
 import kakaoBtn from '../../assets/icons/kakaoBtn.svg';
+import GoogleBtn from '../../assets/icons/GoogleBtn.svg';
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
+import axios from 'axios';
+import AlertDialog from "../commons/SweetAlert";
+import useUserStore from '../../stores/userStore';
+import { useNavigate } from 'react-router-dom';
 
 function UserEdit() {
   const navigate = useNavigate();
-  
+  const { userId, email, nickname, setUserId, setEmail, setNickname } = useUserStore();
   const [userData, setUserData] = useState({
-    email: 'qweqwe@gmail.com', 
-    nickname: '',
     gender: '',
     city: '',
-    district: '',
-    alarmAgreement: '',
+    cityDetail: '',
+    pushAgreement: '',
+    oauthProvider: '',
   });
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('https://www.daengdaeng-where.link/api/v1/user/adjust', {
+          withCredentials: true,
+        });
+        const { user } = response.data.data;
+  
+        setUserId(user.userId || '');
+        setEmail(user.email || '');
+        setNickname(user.nickname || '');
+
+        setUserData({
+          gender: user.gender || '',
+          city: user.city || '도',
+          cityDetail: user.cityDetail || '시/군/구',
+          pushAgreement: user.pushAgreement,
+          oauthProvider: user.oauthProvider || '',
+        });
+  
+        console.log('Fetched User Data:', user);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        AlertDialog({
+          mode: 'alert',
+          title: '데이터 불러오기 실패',
+          text: '사용자 정보를 불러오는 데 문제가 발생했습니다.',
+          confirmText: '확인',
+          onConfirm: () => console.log('데이터 불러오기 실패 확인됨'),
+        });
+      }
+    };
+  
+    fetchUserData();
+  }, [setUserId, setEmail, setNickname]);
+
   const handleInputChange = (field, value) => {
+    setUserData((prev) => {
+      if (field === "pushAgreement") {
+        console.log(`Updating pushAgreement to: ${value === "받을래요"}`);
+        return {
+          ...prev,
+          pushAgreement: value === "받을래요",
+        };
+      }
+      return {
+        ...prev,
+        [field]: prev[field] === value ? "" : value,
+      };
+    });
+  };
+
+  const handleGenderChange = (genderCode) => {
     setUserData((prev) => ({
       ...prev,
-      [field]: value,
+      gender: prev.gender === genderCode ? '' : genderCode, 
     }));
   };
 
@@ -31,67 +86,201 @@ function UserEdit() {
     setUserData((prev) => ({
       ...prev,
       city: selectedCity,
-      district: '', 
+      cityDetail: '시/군/구',
     }));
   };
 
-  const handleConfirm = () => {
-      const payload = {
-      nickname: userData.nickname,
-      PushAgreement: userData.alarmAgreement === '받을래요',
-      RegionAgreement: true,
-      email: userData.email,
-      gender: userData.gender,
-      region: {
-        city: userData.city,
-        district: userData.district,
-      },
-    };
-
-    console.log('회원가입 데이터:', JSON.stringify(payload, null, 2));
-    alert('입력된 데이터가 콘솔에 출력되었습니다!');
-    navigate('/my-page');
+  const validateFields = () => {
+    if (!nickname.trim()) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 필요",
+        text: "닉네임은 최소 1자 이상 작성해 주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
+      });
+      return false;
+    }
+  
+    const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
+    if (!nickname || !nicknameRegex.test(nickname)) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 오류",
+        text: "특수문자는 사용하실 수 없습니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 오류 경고 확인됨"),
+      });
+      return false;
+    }
+  
+    if (!nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.pushAgreement) {
+      AlertDialog({
+        mode: "alert",
+        title: "입력 필요",
+        text: "모든 필드를 작성해주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("모든 필드 작성 경고 확인됨"),
+      });
+      return false;
+    }
+  
+    return true;
   };
+  
+
+  const getOAuthIcon = () => {
+    if (userData.oauthProvider === 'kakao') return kakaoBtn;
+    if (userData.oauthProvider === 'google') return GoogleBtn;
+    return null;
+  };
+
+  const handleNicknameCheck = async () => {
+    if (!nickname.trim()) { 
+        AlertDialog({
+            mode: "alert",
+            title: "닉네임 필요",
+            text: "닉네임을 입력해 주세요.",
+            confirmText: "확인",
+            onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
+        });
+        return;
+    }
+
+    try {
+        const { data } = await axios.get(
+            `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
+            {
+                params: { nickname }, 
+                withCredentials: true,
+            }
+        );
+
+        if (data.data.isDuplicate === false) {
+            AlertDialog({
+                mode: "alert",
+                title: "닉네임 사용 가능",
+                text: "사용 가능한 닉네임입니다.",
+                confirmText: "확인",
+                onConfirm: () => console.log("사용 가능한 닉네임 확인됨"),
+            });
+        } else if (data.data.isDuplicate === true) {
+            AlertDialog({
+                mode: "alert",
+                title: "닉네임 중복",
+                text: "사용 불가능한 닉네임입니다. 다른 닉네임을 입력해주세요.",
+                confirmText: "확인",
+                onConfirm: () => console.log("닉네임 중복 확인됨"),
+            });
+        }
+    } catch (error) {
+        if (error.response) {
+            AlertDialog({
+                mode: "alert",
+                title: "닉네임 확인 실패",
+                text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+                confirmText: "확인",
+                onConfirm: () => console.log("서버 응답 오류 확인됨"),
+            });
+        }
+    }
+};
+  
+const handleUpdate = async () => {
+  if (!validateFields()) return;
+
+  
+  const genderCode = userData.gender === '남자' ? 'GND_01' : userData.gender === '여자' ? 'GND_02' : '';
+
+  const payload = {
+    userId,
+    nickname,
+    gender: genderCode, 
+    city: userData.city,
+    cityDetail: userData.cityDetail,
+    pushAgreement: userData.pushAgreement,
+    email,
+  };
+
+  try {
+    const response = await axios.put(
+      'https://www.daengdaeng-where.link/api/v1/user/adjust',
+      payload,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      }
+    );
+
+    console.log('Updated User Data:', response.data);
+    AlertDialog({
+      mode: 'alert',
+      title: '회원정보 수정 성공',
+      text: '회원 정보가 성공적으로 수정되었습니다!',
+      confirmText: '확인',
+      onConfirm: () => {
+        console.log("수정 성공 확인됨");
+        navigate("/my-page"); 
+      },
+    });
+  } catch (error) {
+    if (error.response) {
+      AlertDialog({
+        mode: 'alert',
+        title: '회원정보 수정 실패',
+        text: error.response.data.message || '알 수 없는 오류가 발생했습니다.',
+        confirmText: '확인',
+        onConfirm: () => console.log('수정 실패 확인됨'),
+      });
+    }
+  }
+};
 
   return (
     <UserContainer>
       <SelectLabel label="이메일" />
       <InputEmailContainer>
-        <Input type="email" value={userData.email} disabled />
-        <Icon src={kakaoBtn} alt="카카오 로그인" />
+      <Input
+          type="email"
+          value={email} 
+          disabled
+        />
+        {getOAuthIcon() && <Icon src={getOAuthIcon()} alt="OAuth Provider" />}
       </InputEmailContainer>
 
       <SelectLabel label="닉네임" />
       <InputBox>
         <Input
-          type="text"
-          placeholder="사용하실 닉네임을 입력해 주세요."
-          value={userData.nickname}
-          onChange={(e) => handleInputChange('nickname', e.target.value)}
-        />
-        <DuplicateBtn>중복확인</DuplicateBtn>
+            type="text"
+            placeholder="사용하실 닉네임을 입력해 주세요."
+            value={nickname} 
+            onChange={(e) => setNickname(e.target.value)} 
+          />
+        <DuplicateBtn onClick={handleNicknameCheck}>중복확인</DuplicateBtn>
       </InputBox>
       <InputAlert>*닉네임은 최소 1자 이상 작성해 주세요. 특수문자는 사용할 수 없습니다.</InputAlert>
 
       <SelectLabel label="성별" />
-      <SelectionContainer>
-        <SelectBtn
-          label="남자"
-          selected={userData.gender === '남자'}
-          onClick={() => handleInputChange('gender', '남자')}
-        />
-        <SelectBtn
-          label="여자"
-          selected={userData.gender === '여자'}
-          onClick={() => handleInputChange('gender', '여자')}
-        />
-      </SelectionContainer>
+        <SelectionContainer>
+          <SelectBtn
+            label="남자"
+            selected={userData.gender === '남자'}
+            onClick={() => handleGenderChange('남자')}
+          />
+          <SelectBtn
+            label="여자"
+            selected={userData.gender === '여자'}
+            onClick={() => handleGenderChange('여자')}
+          />
+        </SelectionContainer>
 
       <SelectLabel label="주소" />
       <SelectionContainer>
         <SelectBox onChange={handleCityChange} value={userData.city}>
-          <option value="" disabled>
-            시 선택
+          <option value="도" disabled>
+            도 선택
           </option>
           {Object.keys(AreaField).map((cityName, index) => (
             <option key={index} value={cityName}>
@@ -100,14 +289,16 @@ function UserEdit() {
           ))}
         </SelectBox>
         <SelectBox
-          onChange={(e) => handleInputChange('district', e.target.value)}
-          value={userData.district}
-          disabled={!AreaField[userData.city]?.length}
+          onChange={(e) => handleInputChange('cityDetail', e.target.value)}
+          value={userData.cityDetail}
+          disabled={!userData.city || !AreaField[userData.city]?.length}
         >
-          <option value="" disabled>
-            구 선택
+          <option value="시/군/구" disabled>
+          시/군/구 선택
           </option>
-          {(AreaField[userData.city] || []).map((districtName, index) => (
+          {(AreaField[userData.city] || [])
+          .slice(1)
+          .map((districtName, index) => (
             <option key={index} value={districtName}>
               {districtName}
             </option>
@@ -120,18 +311,19 @@ function UserEdit() {
       <SelectionContainer>
         <SelectBtn
           label="받을래요"
-          selected={userData.alarmAgreement === '받을래요'}
-          onClick={() => handleInputChange('alarmAgreement', '받을래요')}
+          selected={userData.pushAgreement === true }
+          onClick={() => handleInputChange('pushAgreement', '받을래요')}
         />
         <SelectBtn
           label="괜찮아요"
-          selected={userData.alarmAgreement === '괜찮아요'}
-          onClick={() => handleInputChange('alarmAgreement', '괜찮아요')}
+          selected={userData.pushAgreement === false }
+          onClick={() => handleInputChange('pushAgreement', '괜찮아요')}
         />
       </SelectionContainer>
       <InputAlert>*장소에 함께하는 댕댕이를 알려드려요</InputAlert>
+
       <ConfirmContainer>
-        <ConfirmBtn label="수정 완료" onClick={handleConfirm} />
+        <ConfirmBtn label="수정 완료" onClick={handleUpdate} />
       </ConfirmContainer>
     </UserContainer>
   );
@@ -231,9 +423,6 @@ const SelectBox = styled.select`
   margin-bottom: 10px;
   border: 0.5px solid #e4e4e4;
   font-size: 12px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   text-align: center;
 
   &:focus {

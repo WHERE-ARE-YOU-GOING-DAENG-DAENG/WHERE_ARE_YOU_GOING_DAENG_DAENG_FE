@@ -44,16 +44,25 @@ const OpenModalButton = styled.button`
 const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
 	const [center, setCenter] = useState(false);
+	const [page, setPage] = useState(0); //불러올 페이지 번호
+
 	const favorites = useFavoriteStore((state) => state.favorites);
 	const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites);
+	const hasMore = useFavoriteStore((state) => state.hasMore);
 
 	useEffect(() => {
 		const fetchData = async () => {
-		  await fetchFavorites();
+		  await fetchFavorites(page);
 		};
 	
 		fetchData();
-	  }, []);
+	  }, [page]);
+
+	  const fetchNextPage = () => {
+		if (hasMore) {
+		  setPage((prevPage) => prevPage + 1); // 다음 페이지 로드
+		}
+	  };
 
 	  useEffect(() => {
 		console.log("Updated favorites:", favorites); // 상태 변경 확인
@@ -76,7 +85,14 @@ const Bookmark = () => {
 				<img src={pinIcon} alt="즐겨찾기" />
 				<p>즐겨찾기한 장소</p>
             </OpenModalButton>
-			<BookMarkList isOpen={isModalOpen} onClose={toggleModal} data={favorites} onPlaceClick={handlePlaceClick}/>
+			<BookMarkList
+				isOpen={isModalOpen} 
+				onClose={toggleModal} 
+				data={favorites} 
+				onPlaceClick={handlePlaceClick}
+				fetchNextPage={fetchNextPage}
+				page={page}
+			/>
         </>
     )
 };
