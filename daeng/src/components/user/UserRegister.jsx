@@ -164,7 +164,7 @@ function UserRegister() {
 
     try {
         const { data } = await axios.get(
-            `https://www.daengdaeng-where.link/api/v1/user/duplicateNicname`,
+            `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
             {
                 params: { nickname: userData.nickname },
                 withCredentials: true,

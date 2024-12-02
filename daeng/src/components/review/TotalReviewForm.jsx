@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import star from '../../assets/icons/star.svg';
@@ -7,7 +7,7 @@ import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import Sorting from '../../components/commons/Sorting';
 import useTotalReviewStore from '../../stores/UseTotalReviewStore';
 import AiReviewSummary from './AIReview';
-
+//리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
   display: block;
   padding:3%;
@@ -258,7 +258,7 @@ const ReadMoreButton = styled.button`
   }
 `;
 
-function TotalReviewForm({ review }) {
+const TotalReviewForm = () => {
   const { placeId } = useParams();
   const {
     reviews,
@@ -270,23 +270,23 @@ function TotalReviewForm({ review }) {
     isLoading,
     isLast,
     sortedType,
+    placeName, 
   } = useTotalReviewStore();
 
-
   const [isExpanded, setIsExpanded] = useState({});
-
+  const observerRef = useRef(null);
 
   useEffect(() => {
     if (placeId) {
-      fetchReviews(placeId); 
+      fetchReviews(placeId); // 첫 페이지 데이터 로드
     }
   }, [placeId, fetchReviews]);
 
   const handleSortChange = (index) => {
     const sortTypes = ['LATEST', 'HIGH_SCORE', 'LOW_SCORE'];
-    setSortedType(sortTypes[index]); 
+    setSortedType(sortTypes[index]);
     if (placeId) {
-      fetchReviews(placeId); 
+      fetchReviews(placeId); // 정렬 변경 시 첫 페이지부터 다시 로드
     }
   };
 
@@ -297,102 +297,121 @@ function TotalReviewForm({ review }) {
     }));
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
+  // Intersection Observer로 무한 스크롤 구현
+  const observeLastItem = useCallback(
+    (node) => {
+      if (isLoading || isLast) return; // 로딩 중이거나 마지막 페이지라면 요청하지 않음
+
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && placeId) {
+          fetchReviews(placeId); // 마지막 아이템에 도달하면 데이터 요청
+        }
+      });
+
+      if (node) observerRef.current.observe(node);
+    },
+    [isLoading, isLast, fetchReviews, placeId]
+  );
+
+  if (isLoading && reviews.length === 0) return <div>로딩 중...</div>;
   if (!placeId) return <div>장소 정보를 가져올 수 없습니다.</div>;
-  if (reviews.length === 0) return <div>리뷰가 없습니다.</div>;
 
   return (
-  <TotalReviewContainer>
-  <ReviewPlaceTitle>{review?.placeId || "장소 정보가 없습니다."}</ReviewPlaceTitle>
+    <TotalReviewContainer>
+      <ReviewPlaceTitle>{placeName || "장소 정보가 없습니다."}</ReviewPlaceTitle>
 
-  <PreferenceContainer>
-    {bestKeywords.map((keyword, index) => (
-      <ReviewKeywords key={index} label={keyword} />
-    ))}
-  </PreferenceContainer>
-  <DivisionLine />
+      <PreferenceContainer>
+        {bestKeywords.map((keyword, index) => (
+          <ReviewKeywords key={index} label={keyword} />
+        ))}
+      </PreferenceContainer>
+      <DivisionLine />
 
-  <AiReviewSummary placeId={placeId} />
+      <AiReviewSummary placeId={placeId} />
 
-  <ReviewSummaryContainer>
-  <div>
-    <StarImg src={star}/>
-  </div>
-  <TotalStarPoint>      
-    {reviews.length > 0
-        ? (reviews.reduce((sum, review) => sum + (review.score || 0), 0) / reviews.length).toFixed(0)
-        : 0}
-      /5</TotalStarPoint>
-    <TotalReviewCount>총 {total}개</TotalReviewCount>
-    <Sorting
-      mode="list"
-      sortingOptions={['최신순', '평점 높은순', '평점 낮은순']}
-      activeIndex={['LATEST', 'HIGH_SCORE', 'LOW_SCORE'].indexOf(sortedType)}
-      onSortChange={handleSortChange}
-    />
-    </ReviewSummaryContainer>
-    <DivisionLine />
-    {Array.isArray(reviews) && reviews.length > 0 ? (
-    reviews.map((review) => {
-      console.log("리뷰 데이터 구조:", review);
-      const maxLength = 200;
-      const isExpandedForReview = isExpanded[review.reviewId] || false;
-      const displayedText = isExpandedForReview
-        ? review.content
-        : review.content.slice(0, maxLength);
-        
-      return (
-        <div key={review.reviewId}>
-          <ReviewUserContainer>
-            <UserPhoto
-              src={review.petImg || "default-user.jpg"} 
-              alt="반려동물 이미지"
-            />
-            <TotalUserInfoContainer>
-              <CommentContainer>
-                <UserId>{review.nickname}</UserId>
-                <PetType>{review.pets?.join(", ") || "등록된 반려동물이 없습니다."}</PetType>
-                <PostDate>
-                  {new Date(review.createdAt).toLocaleDateString()}
-                </PostDate>
-              </CommentContainer>
-              <UserSecondInfoContainer>
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <UserStarImg
-                    key={index}
-                    src={index < review.score ? star : notfillstar} 
-                    alt={index < review.score ? `별점 ${index + 1}` : "빈 별"}
-                  />
-                ))}
-              </UserSecondInfoContainer>
-            </TotalUserInfoContainer>
-          </ReviewUserContainer>
-          <VisitDate>
-            방문날짜 {new Date(review.visitedAt).toLocaleDateString()}
-          </VisitDate>
-          <ReviewContent>
-            {displayedText}
-            {review.content.length > maxLength && (
-              <ReadMoreButton onClick={() => toggleText(review.reviewId)}>
-                {isExpandedForReview ? "접기" : "더보기"}
-              </ReadMoreButton>
-            )}
-          </ReviewContent>
-          <ReviewPictureContainer>
-            {Array.isArray(review.media) &&
-              review.media.map((mediaUrl, index) => (
-                <ReviewPicture key={index} src={mediaUrl} alt={`리뷰 이미지 ${index + 1}`} />
-              ))}
-          </ReviewPictureContainer>
+      <ReviewSummaryContainer>
+        <div>
+          <StarImg src={star} />
         </div>
-            );
-          })
-        ) : (
-          <div>리뷰가 없습니다.</div>
-        )}
-      </TotalReviewContainer>
+        <TotalStarPoint>
+          {typeof score === "number" && !isNaN(score) ? score.toFixed(1) : "0.0"}/5
+        </TotalStarPoint>
+        <TotalReviewCount>총 {total}개</TotalReviewCount>
+        <Sorting
+          mode="list"
+          sortingOptions={['최신순', '평점 높은순', '평점 낮은순']}
+          activeIndex={['LATEST', 'HIGH_SCORE', 'LOW_SCORE'].indexOf(sortedType)}
+          onSortChange={handleSortChange}
+        />
+      </ReviewSummaryContainer>
+      <DivisionLine />
 
+      {Array.isArray(reviews) && reviews.length > 0 ? (
+        reviews.map((review, index) => {
+          const maxLength = 200;
+          const isExpandedForReview = isExpanded[review.reviewId] || false;
+          const displayedText = isExpandedForReview
+            ? review.content
+            : review.content.slice(0, maxLength);
+
+          return (
+            <div
+              key={review.reviewId}
+              ref={index === reviews.length - 1 ? observeLastItem : null} 
+            >
+              <ReviewUserContainer>
+                <UserPhoto
+                  src={review.petImg || "default-user.jpg"}
+                  alt="반려동물 이미지"
+                />
+                <TotalUserInfoContainer>
+                  <CommentContainer>
+                    <UserId>{review.nickname}</UserId>
+                    <PetType>{review.pets?.join(", ") || "등록된 반려동물이 없습니다."}</PetType>
+                    <PostDate>
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </PostDate>
+                  </CommentContainer>
+                  <UserSecondInfoContainer>
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <UserStarImg
+                        key={idx}
+                        src={idx < review.score ? star : notfillstar}
+                        alt={idx < review.score ? `별점 ${idx + 1}` : "빈 별"}
+                      />
+                    ))}
+                  </UserSecondInfoContainer>
+                </TotalUserInfoContainer>
+              </ReviewUserContainer>
+              <VisitDate>
+                방문날짜 {new Date(review.visitedAt).toLocaleDateString()}
+              </VisitDate>
+              <ReviewContent>
+                {displayedText}
+                {review.content.length > maxLength && (
+                  <ReadMoreButton onClick={() => toggleText(review.reviewId)}>
+                    {isExpandedForReview ? "접기" : "더보기"}
+                  </ReadMoreButton>
+                )}
+              </ReviewContent>
+              <ReviewPictureContainer>
+                {Array.isArray(review.media) &&
+                  review.media.map((mediaUrl, idx) => (
+                    <ReviewPicture key={idx} src={mediaUrl} alt={`리뷰 이미지 ${idx + 1}`} />
+                  ))}
+              </ReviewPictureContainer>
+            </div>
+          );
+        })
+      ) : (
+        <div>리뷰가 없습니다.</div>
+      )}
+      {isLoading && <div>로딩 중...</div>}
+      {isLast && <div>더이상 리뷰가 없습니다.</div>}
+    </TotalReviewContainer>
   );
-}
+};
 
 export default TotalReviewForm;

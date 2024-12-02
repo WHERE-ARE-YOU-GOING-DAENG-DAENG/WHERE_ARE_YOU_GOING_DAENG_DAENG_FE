@@ -79,7 +79,7 @@ const KeywordsContainer = styled.div`
   }
 `;
 
-const PlaceReviewList = ({ reviews }) => {
+const PlaceReviewList = ({ reviews, placeName}) => {
   const navigate = useNavigate();
   const { id: placeId } = useParams();
 
@@ -126,6 +126,7 @@ PlaceReviewList.propTypes = {
       images: PropTypes.arrayOf(PropTypes.string),
       videos: PropTypes.arrayOf(PropTypes.string),
       keywords: PropTypes.arrayOf(PropTypes.string),
+      placeName: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

@@ -131,7 +131,7 @@ function ReviewForm() {
         <ReviewWrapper key={review.reviewId}>
           <HeaderContainer>
             <TitleSection>
-              <PlaceTitle>{review.placeId || "장소 불러오는 중"}</PlaceTitle>
+              <PlaceTitle>{review.placeName || "장소 불러오는 중"}</PlaceTitle>
               <StyledArrow src={arrow} alt="이동" />
             </TitleSection>
             <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>

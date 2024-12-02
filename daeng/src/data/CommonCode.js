@@ -73,3 +73,22 @@ export const placeTypes = [
   { code: "PLACE_TYP_08", group: "PLACE_TYP", name: "박물관"},
   { code: "PLACE_TYP_09", group: "PLACE_TYP", name: "문예회관"},
 ];
+
+export const pushTypes = [
+  {
+    code: "NOTI_TYP_01",
+    group: "NOTI_TYP",
+    name: "방문 예정 등록",
+  },
+  {
+    code: "NOTI_TYP_02",
+    group: "NOTI_TYP",
+    name: "즐겨찾기 이벤트",
+  },
+];
+
+export const pushAgree = [
+  {
+    code: "PUSH_TYP_01"
+  }
+]
