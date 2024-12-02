@@ -27,6 +27,9 @@ function HomeRecommendPlaces() {
           {
             latitude: locationToUse.latitude, 
             longitude: locationToUse.longitude,
+          },
+          {
+            withCredentials: true,
           }
         );
         setRecommendedPlaces(response.data.data); 
@@ -54,7 +57,6 @@ function HomeRecommendPlaces() {
             key={place.placeId}
             onClick={() => handleRecommendPlaceClick(place.placeId)}
           >
-            {/* {place.name} */}
           </RecommendLinkBox>
         ))}
       </RecommendLinkContainer>
