@@ -63,15 +63,15 @@ export const petTypeOptions = [
 ];
 
 export const placeTypes = [
-  { code: "PLACE_TYP_01", group: "PLACE_TYP", name: "음식점"},
-  { code: "PLACE_TYP_02", group: "PLACE_TYP", name: "카페"},
-  { code: "PLACE_TYP_03", group: "PLACE_TYP", name: "공원"},
-  { code: "PLACE_TYP_04", group: "PLACE_TYP", name: "숙소"},
-  { code: "PLACE_TYP_05", group: "PLACE_TYP", name: "놀이터"},
-  { code: "PLACE_TYP_06", group: "PLACE_TYP", name: "여행지"},
-  { code: "PLACE_TYP_07", group: "PLACE_TYP", name: "미술관"},
-  { code: "PLACE_TYP_08", group: "PLACE_TYP", name: "박물관"},
-  { code: "PLACE_TYP_09", group: "PLACE_TYP", name: "문예회관"},
+  { codeId: "PLACE_TYP_01", group: "PLACE_TYP", name: "음식점"},
+  { codeId: "PLACE_TYP_02", group: "PLACE_TYP", name: "카페"},
+  { codeId: "PLACE_TYP_03", group: "PLACE_TYP", name: "공원"},
+  { codeId: "PLACE_TYP_04", group: "PLACE_TYP", name: "숙소"},
+  { codeId: "PLACE_TYP_05", group: "PLACE_TYP", name: "놀이터"},
+  { codeId: "PLACE_TYP_06", group: "PLACE_TYP", name: "여행지"},
+  { codeId: "PLACE_TYP_07", group: "PLACE_TYP", name: "미술관"},
+  { codeId: "PLACE_TYP_08", group: "PLACE_TYP", name: "박물관"},
+  { codeId: "PLACE_TYP_09", group: "PLACE_TYP", name: "문예회관"},
 ];
 
 export const pushTypes = [
