@@ -19,11 +19,6 @@ const Container = styled.div`
   @media (max-width: 554px) {
     margin-top:3%;
   }
-  margin-left: 4%;  
-  
-  @media (max-width: 554px) {
-    margin-top:3%;
-  }
 `;
 
 const FirstInputContainer = styled.div`
@@ -158,10 +153,7 @@ const SelectWeight = styled.button`
   font-size: 10px;
   cursor: pointer;
   color:  #B3B3B3;
-  @media (max-width: 554px) {
-    margin-bottom:3%;
-  }
-  
+
   @media (max-width: 554px) {
     margin-bottom:3%;
   }
@@ -382,7 +374,7 @@ function RegisterInputForm() {
       console.log('성공');
       console.log('응답 데이터:', response.data);
       alert("댕댕어디가 회원이 되신걸 축하드려요!");
-      navigate("/"); 
+
     } else {
       console.log('응답 상태:', response.status);
       console.log('응답 데이터:', response.data);
