@@ -16,7 +16,7 @@ function DeleteReview({reviewId}) {
 
       onConfirm: async () => {
         try {
-          const response = await axios.delete(`https://www.daengdaeng-where.link/api/v1/pets/${petId}`);
+          const response = await axios.delete(`https://www.daengdaeng-where.link/api/v1/review/${reviewId}`);
           if (response.status === 200) {
             AlertDialog({
               mode: "alert",

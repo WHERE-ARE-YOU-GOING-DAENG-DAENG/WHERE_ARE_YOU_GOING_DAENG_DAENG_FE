@@ -4,6 +4,7 @@ import TotalReviewForm from '../../components/review/TotalReviewForm';
 import writeIcon from "../../assets/icons/pen.svg";
 import ReviewKeywords from "../commons/ReviewKeywords";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Container = styled.div`
   margin: 10px 0px;
@@ -78,8 +79,9 @@ const KeywordsContainer = styled.div`
   }
 `;
 
-const PlaceReviewList = ({ reviews }) => {
+const PlaceReviewList = ({ reviews, placeName}) => {
   const navigate = useNavigate();
+  const { id: placeId } = useParams();
 
   return (
     <>
@@ -87,11 +89,11 @@ const PlaceReviewList = ({ reviews }) => {
         <ReviewHeader>
           <h2>보호자님들의 리뷰</h2>
           <div className="actions">
-            <button className="action" onClick={()=> navigate("/write-review")}>
+            <button className="action" onClick={()=> navigate(`/write-review/${placeId}`)}>
               리뷰 작성
               <img src={writeIcon} alt="리뷰 작성" />
             </button>
-            <button className="action"onClick={()=> navigate("/total-review")}>전체보기 &gt;</button>
+            <button className="action"  onClick={() => navigate(`/total-review/${placeId}`)}>전체보기 &gt;</button>
           </div>
         </ReviewHeader>
 
@@ -124,6 +126,7 @@ PlaceReviewList.propTypes = {
       images: PropTypes.arrayOf(PropTypes.string),
       videos: PropTypes.arrayOf(PropTypes.string),
       keywords: PropTypes.arrayOf(PropTypes.string),
+      placeName: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

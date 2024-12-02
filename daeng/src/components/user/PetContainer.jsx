@@ -26,6 +26,28 @@ const Title = styled.h1`
   justify-content:flex-start;
 `;
 
+const PetCarouselContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const ArrowButton = styled.img`
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  opacity: ${(props) => (props.disabled ? "0.5" : "1")};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
+`;
+
+const PetListContainer = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  overflow: hidden;
+  width: 100%;
+`;
+
 const PetAdd = styled.span`
   font-size: 11px;
   display: flex;
@@ -111,6 +133,8 @@ const StyleArrow = styled.img`
 
 function PetContainer() {
   const [petData, setPetData] = useState([]); 
+  const [startIndex, setStartIndex] = useState(0); // 시작 인덱스
+  const petsPerPage = 2;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -159,6 +183,20 @@ const handleToPetEdit = (petId) => {
   navigate(`/pet-edit/${petId}`);
 };
 
+const handlePrev = () => {
+  if (startIndex > 0) {
+    setStartIndex((prevIndex) => prevIndex - petsPerPage);
+  }
+};
+
+const handleNext = () => {
+  if (startIndex + petsPerPage < petData.length) {
+    setStartIndex((prevIndex) => prevIndex + petsPerPage);
+  }
+};
+
+const visiblePets = petData.slice(startIndex, startIndex + petsPerPage);
+
 if (!petData) {
   return <div>Loading...</div>;
 }
@@ -170,23 +208,39 @@ if (!petData) {
         <AddPetImg src={addImg} alt="반려동물 추가" onClick={handleToPetAdd} />
         <PetAdd onClick={handleToPetAdd} > 추가</PetAdd>
       </TitleInfo>
-      {petData.map((pet) => (
-      <PetInfoContainer key={pet.petId}>
-      <PetImage src={pet.image || "default-image.jpg"} alt="펫 이미지" />
-        <PetDetailInfoContainer>
-          <PetDetailInfo>
-            <PetName>{pet.name}</PetName>
-            <StyleArrow src={arrow} alt="반려동물 정보 자세히 보기" onClick={() => handleToPetEdit(pet.petId)} />
-          </PetDetailInfo>
-          <PetTypeContainer>
-            <PetWeight>{pet.size} | </PetWeight>
-            <PetType>{pet.species}</PetType>
-          </PetTypeContainer>
-        </PetDetailInfoContainer>
-      </PetInfoContainer>
-      ))}
-      </PetTotalContainer>
-    );
-  }
+      <PetCarouselContainer>
+      <ArrowButton
+        src={arrow}
+        alt="이전"
+        onClick={handlePrev}
+        style={{
+          visibility: startIndex > 0 ? "visible" : "hidden",
+          transform: "rotate(180deg)", 
+        }}
+      />
+        <PetListContainer>
+          {visiblePets.map((pet) => (
+            <PetInfoContainer key={pet.petId}>
+              <PetImage src={pet.image || "default-image.jpg"} alt="펫 이미지" />
+              <PetDetailInfoContainer>
+                <PetName>{pet.name}</PetName>
+                <PetTypeContainer>
+                  <PetWeight>{pet.size}</PetWeight>
+                  <PetType>{pet.species}</PetType>
+                </PetTypeContainer>
+                <StyleArrow
+                  src={arrow}
+                  alt="반려동물 정보 자세히 보기"
+                  onClick={() => handleToPetEdit(pet.petId)}
+                />
+              </PetDetailInfoContainer>
+            </PetInfoContainer>
+          ))}
+        </PetListContainer>
+        <ArrowButton src={arrow} alt="다음" onClick={handleNext} />
+      </PetCarouselContainer>
+    </PetTotalContainer>
+  );
+}
 
 export default PetContainer;

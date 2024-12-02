@@ -8,6 +8,11 @@ import axios from "axios";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import Select from "react-select";
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 
 const WriteReviewAllContainer = styled.div`
   display: block;
@@ -286,9 +291,25 @@ const getCurrentDate = () => {
 }; //오늘 날짜 가지고 오기
 
 
-function WriteReview() {
+function WriteReview({ review = {} }) {
+  const { placeId } = useParams();
+  const location = useLocation();
+  const placeName = location.state?.placeName || "장소 이름 없음"; 
+
+  console.log("Debugging WriteReview Component:");
+  console.log("placeId from URL:", placeId);
+  console.log("location.state:", location.state);
+  console.log("Resolved placeName:", placeName);
+
+  const placeIdValue = review?.placeId || placeId;
+
+  if (!placeIdValue) {
+    return <div>장소 정보를 가져올 수 없습니다.</div>;
+  }
+
+  const navigate = useNavigate();
   const { pets, fetchPetList } = usePetStore();
-  const [selectPet, setSelectPet] = useState(""); // 선택된 펫 ID
+  const [selectPet, setSelectPet] = useState([]); // 선택된 펫 목록들
   const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
   const [previews, setPreviews] = useState([]); //이미지 미리보기
   const [placeImgs, setPlaceImgs] = useState([]); // 업로드할 이미지 파일
@@ -296,15 +317,35 @@ function WriteReview() {
   const [selectKeywords, setSelectKeywords] = useState([]); 
   const [text, setText] = useState(""); // 리뷰 내용 상태
   const [visitedAt, setVisitedAt] = useState(""); // 초기값을 빈 문자열로 설정
-  const [selectedPetImage, setSelectedPetImage] = useState(""); // 선택된 펫 이미지 상태
+  const [selectedPetImage, setSelectedPetImage] = useState(""); //첫번째 펫 이미지
   
   useEffect(() => {
-    fetchPetList();
-  }, []);
+    fetchPetList(); 
+  }, [fetchPetList]);
+
+  const petOptions = pets.map((pet) => ({
+    value: pet.petId,
+    label: pet.name,
+    image: pet.image,
+  }));
   
+const handlePetSelection = (selectedOptions) => {
+  setSelectPet(selectedOptions);
+
+  if (selectedOptions.length > 0) {
+    setSelectedPetImage(selectedOptions[0].image); // 첫 번째 선택된 펫 이미지 설정
+  } else {
+    setSelectedPetImage(""); 
+  }
+};
+
   useEffect(() => {
-    console.log("펫 리스트 상태:", pets);
-  }, [pets]);
+    console.log("useParams placeId:", placeId);
+  }, [placeId]);
+
+  if (!placeId) {
+    return <div>장소 정보를 불러오는 데 실패했습니다.</div>;
+  }
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -421,56 +462,43 @@ function WriteReview() {
         headers: {
           "Content-Type": file.type,
         },
+        withCredentials: true,
       });
 
       if (uploadResponse.status === 200) {
         const uploadedUrl = presignedUrl.split("?")[0]; 
         uploadedUrls.push(uploadedUrl); 
-        console.log(`File uploaded successfully: ${uploadedUrl}`);
       } else {
-        console.error("Upload failed:", file.name);
       }
     } catch (error) {
-      console.error(`Failed to upload ${file.name}:`, error.message);
     }
   }
     return uploadedUrls;
   };
 
-  const handlePetSelection = (e) => {
-    const selectedPetId = e.target.value;
-    setSelectPet(selectedPetId);
-
-  const selectedPet = pets.find((pet) => pet.petId === parseInt(selectedPetId));
-  if (selectedPet) {
-    setSelectedPetImage(selectedPet.image); 
-  } else {
-    setSelectedPetImage(""); 
-    }
-  };
-
   const handleSubmit = async (event) => {
+    
     event.preventDefault();
     if (!validateForm()) return;
-
-    const placeId = 1; 
-    const media = await uploadMedia(placeImgs); 
-    console.log("Uploaded media URLs:", media);
-  
-    if (media.length === 0) {
-      console.error("No media uploaded.");
-      return;
+    
+    let media = [];
+    if (placeImgs.length > 0) {
+      media = await uploadMedia(placeImgs);
+      console.log("Uploaded media URLs:", media);
     }
   
+    const pets = selectPet.map((pet) => pet.value); 
+
     const reviewData = {
       placeId,
       content: text.trim(), 
       score: ratings.filter(Boolean).length, 
       media, 
       keywords: selectKeywords, 
-      pets: selectPet ? [parseInt(selectPet)] : [], 
+      pets,
       visitedAt, 
     };
+    console.log("리뷰데이터: ", reviewData); 
 
     try {
       const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
@@ -483,7 +511,8 @@ function WriteReview() {
         mode: "alert",
         title: "성공",
         text: `리뷰가 성공적으로 등록되었습니다.`,
-        confirmText: "닫기" 
+        confirmText: "닫기" ,
+        onConfirm: () => navigate("/my-page"), 
       });
       console.log("리뷰 등록 성공:", response.data);
     } catch (error) {
@@ -500,7 +529,7 @@ function WriteReview() {
   return (
     <WriteReviewAllContainer>
       <WriteReviewContainer>
-        <PlaceTitle>가평 트리하우스</PlaceTitle>
+      <PlaceTitle>{placeName}</PlaceTitle>
         <WriteReviewDate>{getCurrentDate()}</WriteReviewDate>
       </WriteReviewContainer>
       <SelectPlaceOptionContainer>
@@ -513,25 +542,30 @@ function WriteReview() {
       />
         <UserInfoContainer>
         <UserImg
-          src={selectedPetImage || "/default-user-image.png"} //만든 이미지 넣어야함
+          src={selectedPetImage || reviewDefaultImg}
           alt="선택된 펫 이미지" 
         />
           <UserNickname>{userNickname || "내가 진짜"}</UserNickname>
         </UserInfoContainer>
         <UserQuestionContainer>
         <Question>함께한 댕댕이를 선택해주세요</Question>
-        <PetSelection value={selectPet} onChange={handlePetSelection}>
-          <option value="">댕댕이를 선택해주세요</option>
-          {pets.map((pet) => (
-            <option key={pet.petId} value={pet.petId}>
-              {pet.name}
-            </option>
-          ))}
-        </PetSelection>
+        <Select
+        isMulti
+        options={petOptions} 
+        value={selectPet} 
+        onChange={handlePetSelection} 
+        placeholder="댕댕이를 선택해주세요"
+      />
         </UserQuestionContainer>
+
         <UserQuestionContainer>
           <Question>방문한 날짜를 선택해주세요</Question>
-          <DateSelection type="date" max={getCurrentDate()} />
+          <DateSelection
+            type="date"
+            max={getCurrentDate()}
+            value={visitedAt} 
+            onChange={(e) => setVisitedAt(e.target.value)} 
+          />
         </UserQuestionContainer>
         <UserQuestionContainer>
           <Question>별점을 눌러 만족도를 공유해주세요</Question>
@@ -569,19 +603,19 @@ function WriteReview() {
               onChange={handleImageUpload}
               multiple
             />
-          </AddImg>
-        </AddImgContainer>
-        <TextDescriptionContainer>
-      <QuestionBox>리뷰를 작성해주세요</QuestionBox>
-      <CountText>{text.length}자 | 최대 500자</CountText>
-    </TextDescriptionContainer>
-    <DivisionLine />
-    <TextArea type='text' placeholder='경험을 공유해주세요' value={text} onChange={handleChange}/>
-    <DivisionLine />
-    <ConfirmBtn onClick={handleSubmit} marginBottom="29px" label="작성 완료" />
-      </SelectPlaceOptionContainer>
-    </WriteReviewAllContainer>
-  );
-}
+            </AddImg>
+          </AddImgContainer>
+          <TextDescriptionContainer>
+        <QuestionBox>리뷰를 작성해주세요</QuestionBox>
+        <CountText>{text.length}자 | 최대 500자</CountText>
+      </TextDescriptionContainer>
+      <DivisionLine />
+      <TextArea type='text' placeholder='경험을 공유해주세요' value={text} onChange={handleChange}/>
+      <DivisionLine />
+      <ConfirmBtn onClick={handleSubmit} marginBottom="29px" label="작성 완료" />
+        </SelectPlaceOptionContainer>
+      </WriteReviewAllContainer>
+    );
+  }
 
 export default WriteReview;
