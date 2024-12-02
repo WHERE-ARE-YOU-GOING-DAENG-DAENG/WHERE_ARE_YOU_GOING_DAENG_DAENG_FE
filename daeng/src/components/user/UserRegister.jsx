@@ -9,9 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
+import { pushAgree } from '../../data/CommonCode';
+import { requestNotificationPermission } from '../../firebase/firebaseMessaging';
 
 function UserRegister() {
   const navigate = useNavigate();
+  const [selectedPushType] = useState(pushAgree[0].code);
 
   useEffect(() => {
     const queryString = new URLSearchParams(window.location.search);
@@ -97,6 +100,36 @@ function UserRegister() {
   
     return true;
   };
+
+  const handleNotificationRequest = async () => {
+    try {
+      const token = await requestNotificationPermission();
+      if (token) {
+        console.log('FCM 토큰 발급 성공:', token);
+
+        // 서버로 FCM 토큰 전송
+        const response = await axios.post('https://www.daengdaeng-where.link/api/v1/notifications/pushToken', {
+          token,
+          pushType: selectedPushType, 
+        });
+
+        if (response.status === 200) {
+          console.log('서버에 FCM 토큰 전송 성공:', response.data);
+          alert('알림 권한이 설정되었습니다.');
+        } else {
+          console.error('서버에 FCM 토큰 전송 실패:', response);
+          alert('서버로 토큰 전송에 실패했습니다.');
+        }
+      } else {
+        console.error('알림 권한 요청 실패');
+        alert('알림 권한 요청이 거부되었습니다.');
+      }
+    } catch (error) {
+      console.error('알림 권한 요청 중 오류 발생:', error);
+      alert('알림 권한 요청 중 문제가 발생했습니다.');
+    }
+  };
+
   const handleConfirm = async () => {
     if (!validateFields()) {
       return;
@@ -124,6 +157,11 @@ function UserRegister() {
   
       if (status === 200 || status === 201) {
         console.log("응답 데이터:", data);
+
+        if (userData.alarmAgreement === '받을래요') {
+          await handleNotificationRequest();
+        }
+
         AlertDialog({
           mode: "alert",
           title: "회원가입 성공",
