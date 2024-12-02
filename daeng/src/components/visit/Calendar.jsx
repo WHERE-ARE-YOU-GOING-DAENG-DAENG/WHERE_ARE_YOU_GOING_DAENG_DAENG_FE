@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import arrowIcon from "../../assets/icons/arrow.svg"
 import reversearrowIcon from "../../assets/icons/reversearrow.svg"
+import useVisitStore from "../../stores/useVisitStore";
 dayjs.extend(isBetween);
 
 const CalendarWrapper = styled.div`
@@ -107,8 +108,8 @@ const Day = styled.div`
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: ${({ hasEvent, isPast }) =>
-      hasEvent ? (isPast ? "#E0E0E0" : "#FF4B98") : "transparent"};
+    background-color: ${({ hasEvent, dot }) =>
+      dot && hasEvent  ? "#FF4B98" : "transparent"};
   }
 
   &:hover {
@@ -120,12 +121,13 @@ const Day = styled.div`
   }
 `;
 
-const Calendar = ({ onDateClick, allSchedules }) => {
+const Calendar = ({ onDateClick, selectedDate, dot }) => {
   const [currentDate, setCurrentDate] = useState(dayjs());
-  const [selectedDate, setSelectedDate] = useState(null);
+  // const [selectedDate, setSelectedDate] = useState(null);
   const startOfMonth = currentDate.startOf("month");
   const endOfMonth = currentDate.endOf("month");
   const today = dayjs().format("YYYY-MM-DD");
+  const myVisits = useVisitStore((state)=>state.myVisits);
 
   // 오늘부터 1주일 구간
   const startDate = dayjs().format("YYYY-MM-DD");
@@ -165,7 +167,7 @@ const Calendar = ({ onDateClick, allSchedules }) => {
       const isPast = dayjs(date).isBefore(today, "day");
       const isToday = date === today;
 
-      const hasEvent = allSchedules?.some(
+      const hasEvent = myVisits?.some(
         (schedule) => dayjs(schedule.visitAt).format("YYYY-MM-DD") === date
       );
 
@@ -179,8 +181,8 @@ const Calendar = ({ onDateClick, allSchedules }) => {
           isToday={isToday}
           hasEvent={hasEvent}
           isSelected={isSelected}
+          dot={dot}
           onClick={() => {
-            setSelectedDate(date);
             onDateClick(date);
           }}
         >
