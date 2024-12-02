@@ -210,14 +210,14 @@ if (!petData) {
       </TitleInfo>
       <PetCarouselContainer>
       <ArrowButton
-    src={arrow} // 왼쪽 화살표 이미지 사용
-    alt="이전"
-    onClick={handlePrev}
-    style={{
-      visibility: startIndex > 0 ? "visible" : "hidden", // 첫 페이지에서 숨김 처리
-      transform: "rotate(180deg)", // 왼쪽 방향으로 회전
-    }}
-  />
+        src={arrow}
+        alt="이전"
+        onClick={handlePrev}
+        style={{
+          visibility: startIndex > 0 ? "visible" : "hidden",
+          transform: "rotate(180deg)", 
+        }}
+      />
         <PetListContainer>
           {visiblePets.map((pet) => (
             <PetInfoContainer key={pet.petId}>
