@@ -133,7 +133,7 @@ const StyleArrow = styled.img`
 
 function PetContainer() {
   const [petData, setPetData] = useState([]); 
-  const [startIndex, setStartIndex] = useState(0); // 시작 인덱스
+  const [startIndex, setStartIndex] = useState(0); 
   const petsPerPage = 2;
   const navigate = useNavigate();
 
