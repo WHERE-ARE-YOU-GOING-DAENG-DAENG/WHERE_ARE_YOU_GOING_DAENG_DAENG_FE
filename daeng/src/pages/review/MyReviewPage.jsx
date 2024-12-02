@@ -3,7 +3,6 @@ import Header from "../../components/commons/Header";
 import Footer from "../../components/commons/Footer";
 import ReviewForm from "../../components/review/ReviewForm";
 import styled from "styled-components";
-import Sorting from "../../components/commons/Sorting";
 import useReviewStore from "../../stores/UseReviewStore";
 
 const ReviewContainer = styled.div`
@@ -33,11 +32,6 @@ function MyReviewPage({ userId }) {
   useEffect(() => {
     fetchUserReviews(userId, sortedType);
   }, [userId, sortedType]);
-
-  const handleSortChange = (index) => {
-    const sortingOptions = ["LATEST", "OLDEST"];
-    setSortedType(sortingOptions[index]);
-  };
 
   return (
     <>

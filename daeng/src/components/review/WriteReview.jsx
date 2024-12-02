@@ -9,7 +9,7 @@ import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
 import { useNavigate } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 
 const WriteReviewAllContainer = styled.div`
   display: block;
@@ -288,9 +288,18 @@ const getCurrentDate = () => {
 }; //오늘 날짜 가지고 오기
 
 
-function WriteReview() {
-  const navigate = useNavigate();
+function WriteReview({ review = {} }) {
+  const { placeId } = useParams();
+  console.log("URL placeId:", placeId);
+  console.log("Review object:", review);
 
+  const placeIdValue = review?.placeId || placeId;
+
+  if (!placeIdValue) {
+    return <div>장소 정보를 가져올 수 없습니다.</div>;
+  }
+
+  const navigate = useNavigate();
   const { pets, fetchPetList } = usePetStore();
   const [selectPet, setSelectPet] = useState(""); // 선택된 펫 ID
   const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
@@ -309,6 +318,15 @@ function WriteReview() {
   useEffect(() => {
     console.log("펫 리스트 상태:", pets);
   }, [pets]);
+
+
+  useEffect(() => {
+    console.log("useParams placeId:", placeId);
+  }, [placeId]);
+
+  if (!placeId) {
+    return <div>장소 정보를 불러오는 데 실패했습니다.</div>;
+  }
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -456,8 +474,7 @@ function WriteReview() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm()) return;
-
-    const placeId = 1; 
+    
     const media = await uploadMedia(placeImgs); 
     console.log("Uploaded media URLs:", media);
   
@@ -518,7 +535,7 @@ function WriteReview() {
       />
         <UserInfoContainer>
         <UserImg
-          src={selectedPetImage || "/default-user-image.png"} //만든 이미지 넣어야함
+          src={selectedPetImage || "/default-user-image.png"}
           alt="선택된 펫 이미지" 
         />
           <UserNickname>{userNickname || "내가 진짜"}</UserNickname>
@@ -579,19 +596,19 @@ function WriteReview() {
               onChange={handleImageUpload}
               multiple
             />
-          </AddImg>
-        </AddImgContainer>
-        <TextDescriptionContainer>
-      <QuestionBox>리뷰를 작성해주세요</QuestionBox>
-      <CountText>{text.length}자 | 최대 500자</CountText>
-    </TextDescriptionContainer>
-    <DivisionLine />
-    <TextArea type='text' placeholder='경험을 공유해주세요' value={text} onChange={handleChange}/>
-    <DivisionLine />
-    <ConfirmBtn onClick={handleSubmit} marginBottom="29px" label="작성 완료" />
-      </SelectPlaceOptionContainer>
-    </WriteReviewAllContainer>
-  );
-}
+            </AddImg>
+          </AddImgContainer>
+          <TextDescriptionContainer>
+        <QuestionBox>리뷰를 작성해주세요</QuestionBox>
+        <CountText>{text.length}자 | 최대 500자</CountText>
+      </TextDescriptionContainer>
+      <DivisionLine />
+      <TextArea type='text' placeholder='경험을 공유해주세요' value={text} onChange={handleChange}/>
+      <DivisionLine />
+      <ConfirmBtn onClick={handleSubmit} marginBottom="29px" label="작성 완료" />
+        </SelectPlaceOptionContainer>
+      </WriteReviewAllContainer>
+    );
+  }
 
 export default WriteReview;
