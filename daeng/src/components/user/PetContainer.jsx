@@ -116,7 +116,12 @@ function PetContainer() {
   useEffect(() => {
     const fetchPetData = async () => {
       try {
-        const response = await axios.get("https://www.daengdaeng-where.link/api/v1/pets");
+        const response = await axios.get("https://www.daengdaeng-where.link/api/v1/pets",
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true, 
+        }
+      );
         const petData = response.data.data;
     
         setPetData(petData.map(pet => ({
