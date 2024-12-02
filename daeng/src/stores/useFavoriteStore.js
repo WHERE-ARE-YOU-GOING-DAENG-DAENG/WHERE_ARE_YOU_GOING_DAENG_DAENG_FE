@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import AlertDialog from "../components/commons/SweetAlert";
+import axiosInstance from "../services/axiosInstance"
 
 const useFavoriteStore = create((set, get) => ({
   favorites: [],
@@ -13,7 +14,7 @@ const useFavoriteStore = create((set, get) => ({
     if (state.isLoading) return; // 중복 요청 방지
     try {
       set({ isLoading: true }); // 로딩 시작
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `https://www.daengdaeng-where.link/api/v1/favorites?page=${page}&size=10`,
         {
           withCredentials: true,
@@ -51,7 +52,7 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 추가
   addFavorite: async (placeId) => {
     try {
-      await axios.post("https://www.daengdaeng-where.link/api/v1/favorites", { placeId },{
+      await axiosInstance.post("/api/v1/favorites", { placeId },{
         withCredentials: true
       });
       // await get().fetchFavorites();
@@ -70,7 +71,7 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 삭제
   removeFavorite: async (favoriteId) => {
     try {
-      await axios.delete(`https://www.daengdaeng-where.link/api/v1/favorites/${favoriteId}`,{
+      await axios.axiosInstance.delete(`/api/v1/favorites/${favoriteId}`,{
         withCredentials: true
       });
       // await get().fetchFavorites();
