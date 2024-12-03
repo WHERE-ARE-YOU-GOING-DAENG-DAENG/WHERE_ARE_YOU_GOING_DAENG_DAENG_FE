@@ -7,6 +7,7 @@ import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import Sorting from '../../components/commons/Sorting';
 import useTotalReviewStore from '../../stores/UseTotalReviewStore';
 import AiReviewSummary from './AIReview';
+import axios from 'axios';
 //리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
   display: block;
@@ -24,6 +25,10 @@ const ReviewPlaceTitle = styled.span`
   font-weight:bold;
   display: block;
   text-align: left;
+
+  @media (max-width: 554px) {
+    font-size:20px;
+  }
 `
 const PreferenceContainer = styled.div`
   display: flex;
@@ -31,26 +36,6 @@ const PreferenceContainer = styled.div`
   flex-direction: row;
   margin-bottom:3%;
 `
-
-const AiCommentContainer = styled.div`
-  display: flex;
-  width: 95%;
-  height: 48px;
-  margin-bottom:18px;
-  background-color: rgba(247, 247, 247, 0.78);  
-  color:#FF69A9;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: bold;
-  align-items: center; 
-  padding: 5px 0; 
-
-  @media (max-width: 554px) {
-    width: 91%;
-    height: 40px;
-    font-size: 9px;
-  }
-`;
 
 const ReviewSummaryContainer = styled.div`
   display: flex;
@@ -64,6 +49,10 @@ const TotalStarPoint = styled.span`
   display: block;
   margin-left: 2%;
   margin-right: 3%;
+
+  @media (max-width: 554px) {
+    font-size:13px;
+  }
 `
 
 const TotalReviewCount = styled.span`
@@ -74,15 +63,8 @@ const TotalReviewCount = styled.span`
 
   @media (max-width: 554px) {
     font-size: 11px;
-    margin-right:160px;
+    margin-right:54px;
   }
-`
-
-const StyleImg = styled.img`
-  width: 20px; 
-  height: 20px; 
-  margin-right: 10px; 
-  margin-left:37px;
 `
 
 const StarImg = styled.img`
@@ -143,7 +125,7 @@ const CommentContainer = styled.div`
   margin-top: 5px;
 
   @media (max-width: 554px) {
-    margin-top: -10px;
+    margin-top: -2px;
   }
 `
 
@@ -167,7 +149,6 @@ const PetType = styled.span`
   @media (max-width: 554px) {
     font-size: 9px;
     margin-top:13px;
-    margin-right:120px;
   }
 `
 
@@ -181,7 +162,7 @@ const PostDate = styled.span`
   @media (max-width: 554px) {
     font-size: 11px;
     margin-bottom:10px;
-    margin-left:130px;
+    margin-left:80px;
   }
 `
 
@@ -270,15 +251,30 @@ const TotalReviewForm = () => {
     isLoading,
     isLast,
     sortedType,
-    placeName, 
   } = useTotalReviewStore();
 
+  const [placeName, setPlaceName] = useState("장소 정보가 없습니다.");
   const [isExpanded, setIsExpanded] = useState({});
   const observerRef = useRef(null);
 
   useEffect(() => {
     if (placeId) {
-      fetchReviews(placeId); // 첫 페이지 데이터 로드
+      axios
+        .get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`)
+        .then((response) => {
+          const name = response.data?.data?.name;
+          setPlaceName(name || "장소 정보가 없습니다.");
+        })
+        .catch((error) => {
+          console.error("Failed to fetch placeName:", error);
+          setPlaceName("장소 정보가 없습니다.");
+        });
+    }
+  }, [placeId]);
+
+  useEffect(() => {
+    if (placeId) {
+      fetchReviews(placeId); 
     }
   }, [placeId, fetchReviews]);
 
@@ -320,8 +316,7 @@ const TotalReviewForm = () => {
 
   return (
     <TotalReviewContainer>
-      <ReviewPlaceTitle>{placeName || "장소 정보가 없습니다."}</ReviewPlaceTitle>
-
+      <ReviewPlaceTitle>{placeName}</ReviewPlaceTitle>
       <PreferenceContainer>
         {bestKeywords.map((keyword, index) => (
           <ReviewKeywords key={index} label={keyword} />
@@ -336,7 +331,7 @@ const TotalReviewForm = () => {
           <StarImg src={star} />
         </div>
         <TotalStarPoint>
-          {typeof score === "number" && !isNaN(score) ? score.toFixed(1) : "0.0"}/5
+          {score}/5
         </TotalStarPoint>
         <TotalReviewCount>총 {total}개</TotalReviewCount>
         <Sorting

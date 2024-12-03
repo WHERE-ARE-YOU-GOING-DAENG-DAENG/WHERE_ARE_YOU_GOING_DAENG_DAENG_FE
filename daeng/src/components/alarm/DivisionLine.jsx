@@ -15,13 +15,6 @@ const Division = styled.div`
   margin-right:33px;
 `;
 
-const EmptySpace = styled.div`
-  font-weight: bold;
-  text-align: center;
-  margin-top: 250px; 
-  margin-bottom: 300px;
-`;
-
 
 function DivisionLine() {
   return (

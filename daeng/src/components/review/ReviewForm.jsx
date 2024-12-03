@@ -4,7 +4,6 @@ import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
 import arrow from '../../assets/icons/arrow.svg';
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
-import useReviewStore from '../../stores/UseReviewStore';
 
 const ReviewWrapper = styled.div`
   margin: 20px;
@@ -23,6 +22,11 @@ const HeaderContainer = styled.div`
 const TitleSection = styled.div`
   display: flex;
   align-items: center;
+
+  @media (max-width: 554px) {
+    font-size:10px;
+    height: auto;
+  }
 `;
 
 const PlaceTitle = styled.h2`
@@ -40,13 +44,19 @@ const StyledArrow = styled.img`
   width: 16px;
   margin-left: 5px;
   cursor: pointer;
+
+  @media (max-width: 554px) {
+    width: 10px;
+    margin-left: 0px;
+    height: auto;
+  }
 `;
 
 const PetContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between; 
-  margin: 20px 0;
+  margin: 10px 0;
 `;
 
 const UserImg = styled.img`
@@ -54,6 +64,11 @@ const UserImg = styled.img`
   height: 80px;
   border-radius: 50%;
   margin-right: 20px;
+
+  @media (max-width: 554px) {
+    width: 60px;
+    height: 60px;
+  }
 `;
 
 const PetInfoContainer = styled.div`
@@ -66,23 +81,47 @@ const PetName = styled.h3`
   font-weight: bold;
   margin-bottom: 10px;
   margin-right: 43%;
+
+  @media (max-width: 554px) {
+    font-size: 11px;
+    margin-right: 0%;
+    text-align: left;
+    margin-left:-23px;
+  }
 `;
 
 const StarSection = styled.div`
   display: flex;
   align-items: center;
+
+  @media (max-width: 554px) {
+    margin-left: -23px;
+  }
 `;
 
 const StyledStar = styled.img`
   width: 16px;
   height: 16px;
   margin-right: 2px;
+
+
+  @media (max-width: 554px) {
+    width: 10px;
+    height: 10px;
+    margin-right: 0px;
+  }
 `;
 
 const VisitDate = styled.span`
   font-size: 12px;
   color: #818181;
   margin-left: 10px;
+  display: flex;
+
+  @media (max-width: 554px) {
+    display: flex;
+    margin-left: 4px;
+  }
 `;
 
 const KeywordsContainer = styled.div`
@@ -139,12 +178,11 @@ function ReviewForm({ review }) {
             {[...Array(review.score)].map((_, index) => (
               <StyledStar key={index} src={star} alt={`별점 ${index + 1}`} />
             ))}
-            <VisitDate>방문 날짜 | {review.visitedAt}</VisitDate>
           </StarSection>
         </PetInfoContainer>
         <DeleteReview reviewId={review.reviewId} />
       </PetContainer>
-
+      <VisitDate>방문 날짜 | {review.visitedAt}</VisitDate>
       <KeywordsContainer>
         {review.keywords.map((keyword, index) => (
           <ReviewKeywords key={index} label={keyword} />

@@ -1,9 +1,11 @@
-import React from 'react'
-import axios from 'axios'
-import DeleteBtn from '../../components/commons/DeleteBtn'
-import AlertDialog from '../commons/SweetAlert'
+import React from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import DeleteBtn from '../../components/commons/DeleteBtn';
+import AlertDialog from '../commons/SweetAlert';
 
-function DeleteReview({reviewId}) {
+function DeleteReview({ reviewId }) {
+  const navigate = useNavigate();
 
   const handleDelete = async () => {
     AlertDialog({
@@ -23,10 +25,19 @@ function DeleteReview({reviewId}) {
               title: "성공",
               text: "성공적으로 삭제되었습니다.",
               confirmText: "확인",
+              onConfirm: () => {
+                navigate(0); 
+              },
             });
           }
         } catch (error) {
           console.error("삭제 실패:", error);
+          AlertDialog({
+            mode: "alert",
+            title: "오류",
+            text: "삭제 중 문제가 발생했습니다.",
+            confirmText: "확인",
+          });
         }
       },
     });
@@ -36,7 +47,7 @@ function DeleteReview({reviewId}) {
     <>
       <DeleteBtn onClick={handleDelete} label="삭제" />
     </>
-  )
+  );
 }
 
-export default DeleteReview
+export default DeleteReview;
