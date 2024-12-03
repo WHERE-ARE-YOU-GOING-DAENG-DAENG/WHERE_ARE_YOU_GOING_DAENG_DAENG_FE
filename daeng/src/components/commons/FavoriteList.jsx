@@ -78,6 +78,7 @@ const FavoritePlace = styled.p`
   color: #808080;
   margin: 5px 0;
   cursor: pointer;
+  font-weight: normal !important;
   @media (max-width: 554px) {
     font-size: 13px;
   }
@@ -90,6 +91,7 @@ const FavoritePlaceTime = styled.p`
   font-size: 12px;
   color: black;
   margin: 0;
+  font-weight: normal !important;
   @media (max-width: 554px) {
     font-size: 11px;
   }
