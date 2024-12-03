@@ -27,11 +27,11 @@ const WriteReviewContainer = styled.div`
 `;
 
 const PlaceTitle = styled.span`
-  font-size: 20px;
+  font-size: 25px;
   font-weight: bold;
-  margin-right: 50%;
+  margin-right: 43%;
   margin-bottom: 27px;
-  margin-left: 10px;
+  margin-left: 3%;
 
   @media (max-width: 554px) {
     font-size: 20px;
@@ -43,7 +43,7 @@ const PlaceTitle = styled.span`
 
 const WriteReviewDate = styled.span`
   color: #b3b3b3;
-  font-size: 13px;
+  font-size: 18px;
   
   @media (max-width: 554px) {
     margin-left: 20%;
@@ -52,7 +52,7 @@ const WriteReviewDate = styled.span`
 
 const SelectPlaceOptionContainer = styled.div`
   width: auto;
-  height: 300px;
+  height: 330px;
   background-color: rgba(247, 247, 247, 0.78);
   text-align: left;
   padding: 5%;
@@ -65,7 +65,7 @@ const SelectPlaceOptionContainer = styled.div`
 `;
 
 const WhatPointLike = styled.span`
-  font-size: 14px;
+  font-size: 20px;
   color: #333;
   font-weight: 600;
 
@@ -78,9 +78,8 @@ const WhatPointLike = styled.span`
 `;
 
 const SelectWarning = styled.span`
-  font-size: 14px;
   color: #ff69a9;
-  font-size: 12px;
+  font-size: 15px;
 
   @media (max-width: 554px) {
     width: 95%;
@@ -101,7 +100,7 @@ const UserImg = styled.img`
   border-radius: 50%;
   margin-right: 10px;
   border: none;
-  background-color: #ff69a9;
+
 
   @media (max-width: 554px) {
     margin-top: 4%;
@@ -109,7 +108,7 @@ const UserImg = styled.img`
 `;
 
 const UserNickname = styled.span`
-  font-size: 18px;
+  font-size: 20px;
   color: #333;
   font-weight: bold;
 
@@ -141,11 +140,11 @@ const RemoveButton = styled.button`
 
 
 const Question = styled.span`
-  font-size: 15px;
+  font-size: 18px;
 
   p {
     display: inline-block;
-    font-size: 13px;
+    font-size: 15px;
     color: #d9d9d9;
     margin-left: 5px;
   }
@@ -223,7 +222,7 @@ const AddImgButton = styled.img`
 `;
 
 const QuestionBox = styled.span`
-  font-size: 15px;
+  font-size: 18px;
   display: inline; 
   color: #333;
 
@@ -236,7 +235,7 @@ const QuestionBox = styled.span`
 `
 
 const CountText = styled.span`
-  font-size: 11px;
+  font-size: 15px;
   color: #FF0000;
   margin-top:3px;
   margin-right:10px;
@@ -264,7 +263,7 @@ const TextArea = styled.textarea`
   border: none;
   padding: 5px;
   resize: none; 
-  font-size:13px;
+  font-size:15px;
   line-height: 1.5; 
 
   &:focus {
