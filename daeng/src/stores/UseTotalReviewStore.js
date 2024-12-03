@@ -41,7 +41,7 @@ const useTotalReviewStore = create((set, get) => ({
         }
       );
 
-      
+      console.log(response.data);
       const data = response.data.data;
     
       set((state) => ({

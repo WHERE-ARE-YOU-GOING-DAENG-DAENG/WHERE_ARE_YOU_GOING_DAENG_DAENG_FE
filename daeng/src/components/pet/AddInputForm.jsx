@@ -7,6 +7,7 @@ import footerSearch from "../../assets/icons/footer_search.svg";
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 
 const Container = styled.div`
@@ -14,6 +15,10 @@ const Container = styled.div`
   flex-direction: column;
   padding: 3%;
   margin-left: 4%;  
+  
+  @media (max-width: 554px) {
+    margin-top:3%;
+  }
 `;
 
 const FirstInputContainer = styled.div`
@@ -21,7 +26,7 @@ const FirstInputContainer = styled.div`
   flex-direction: row;
 
   @media (max-width: 554px) {
-    margin-left:10%;
+    margin-bottom:5%;
   }
 `;
 
@@ -30,19 +35,10 @@ const PetImg = styled.div`
   height: 135px;
   margin-right: 20px;
   border-radius: 100px;
-  background-color: #fbc9e4;
   background-image: url(${(props) => props.src || "none"});
   background-size: cover;
   background-position: center;
   cursor: pointer;
-
-
-  @media (max-width: 554px) {
-    width: 100px;
-    height: 100px;
-    margin-left:10%;
-    margin-top:10px;
-  }
 `;
 
 const HiddenInput = styled.input`
@@ -53,11 +49,6 @@ const PetNameInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 15px;
-
-  @media (max-width: 554px) {
-    margin-top: 0px;
-
-  }
 `;
 
 const PetNameInput = styled.input`
@@ -70,9 +61,8 @@ const PetNameInput = styled.input`
   padding: 10px;
 
   @media (max-width: 554px) {
-    width: 185%;
+    width: 170%;
     font-size: 14px;
-    width: 140%;
     height: 48px;
   }
     &:focus {
@@ -87,9 +77,9 @@ const PetNameInput = styled.input`
 
 const InputAlert = styled.p`
   color: #ff69a9;
-  font-size: 10px;
+  font-size: 12px;
   margin-top: -1px;
-  margin-right: 23%;
+  margin-right: 15%;
   margin-bottom: 4%;
 `;
 
@@ -122,10 +112,9 @@ const BirthInput = styled.input`
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
-  font-size: 13px;
+  font-size: 14px;
   color: #000; 
   cursor: pointer;
-  
 
   &::placeholder {
     color: #b3b3b3; 
@@ -142,43 +131,25 @@ const PetTypeContainer = styled.div`
   flex-direction: column;
   margin-top: 20px;
   margin-bottom: 20px;
-
-  @media (max-width: 554px) {
-    margin-left:15%;
-    font-size: 14px;
-    width:70%;
-  }
 `;
 
 const BirthContainer = styled.div`
   margin-bottom: 20px;
-
-  @media (max-width: 554px) {
-    margin-left:15%;
-    font-size: 14px;
-    width:70%;
-  }
 `    
 const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
-
-  @media (max-width: 554px) {
-    margin-left:15%;
-    font-size: 14px;
-    width:70%;
-  }
 `
 
 const SelectWeight = styled.button`
-  width: 90px;
+  width: 92px;
   height : 44px;
   margin-right: 12px;
   background-color: white;
   border : 0.5px solid #E4E4E4;
   border-radius: 5px;
-  font-size: 10px;
+  font-size: 11px;
   cursor: pointer;
   color:  #B3B3B3;
 
@@ -397,7 +368,7 @@ function RegisterInputForm() {
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-          <PetImg src={preview} />
+        <PetImg src={reviewDefaultImg} />
         </label>
         <HiddenInput
           id="file-input"

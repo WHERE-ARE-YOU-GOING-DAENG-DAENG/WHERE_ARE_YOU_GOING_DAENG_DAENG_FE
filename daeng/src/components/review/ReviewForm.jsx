@@ -4,6 +4,7 @@ import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
 import arrow from '../../assets/icons/arrow.svg';
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 
 const ReviewWrapper = styled.div`
   margin: 20px;
@@ -30,13 +31,13 @@ const TitleSection = styled.div`
 `;
 
 const PlaceTitle = styled.h2`
-  font-size: 20px;
+  font-size: 23px;
   font-weight: bold;
   margin-right: 10px;
 `;
 
 const ReviewDate = styled.span`
-  font-size: 12px;
+  font-size: 14px;
   color: #818181;
 `;
 
@@ -113,7 +114,7 @@ const StyledStar = styled.img`
 `;
 
 const VisitDate = styled.span`
-  font-size: 12px;
+  font-size: 14px;
   color: #818181;
   margin-left: 10px;
   display: flex;
@@ -167,7 +168,7 @@ function ReviewForm({ review }) {
 
       <PetContainer>
         <UserImg
-          src={review.petImg || "default-user.jpg"}
+          src={review.petImg || reviewDefaultImg}
           alt="반려동물 이미지"
         />
         <PetInfoContainer>

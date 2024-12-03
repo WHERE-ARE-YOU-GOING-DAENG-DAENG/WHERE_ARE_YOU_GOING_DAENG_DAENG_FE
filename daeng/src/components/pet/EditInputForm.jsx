@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
 import { useParams } from 'react-router-dom';
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
@@ -76,9 +77,9 @@ const PetNameInput = styled.input`
 
 const InputAlert = styled.p`
   color: #ff69a9;
-  font-size: 10px;
+  font-size: 12px;
   margin-top: -1px;
-  margin-right: 23%;
+  margin-right: 15%;
   margin-bottom: 4%;
 `;
 
@@ -111,7 +112,7 @@ const BirthInput = styled.input`
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
-  font-size: 13px;
+  font-size: 14px;
   color: #000; 
   cursor: pointer;
 
@@ -149,7 +150,7 @@ const SelectWeight = styled.button`
   background-color: white;
   border: 0.5px solid #E4E4E4;
   border-radius: 5px;
-  font-size: 10px;
+  font-size: 12px;
   cursor: pointer;
   color: #B3B3B3;
   
@@ -396,7 +397,7 @@ function EditInputForm() {
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-          <PetImg src={preview || petPicture} />
+          <PetImg src={reviewDefaultImg || petPicture} />
         </label>
         <HiddenInput
           id="file-input"
