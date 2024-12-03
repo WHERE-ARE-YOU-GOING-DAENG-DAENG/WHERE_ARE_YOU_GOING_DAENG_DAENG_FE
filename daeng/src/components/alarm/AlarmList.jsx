@@ -46,14 +46,19 @@ function AlarmList() {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://www.daengdaeng-where.link/api/v1/notifications"
+          "https://www.daengdaeng-where.link/api/v1/notifications",
+          {
+            withCredentials: true, // 추가 설정
+          }
         );
         if (response.status === 200) {
+          console.log("알림 데이터:", response.data.data); // 알림 데이터를 콘솔에 출력
           setNotifications(response.data.data);
         } else {
           throw new Error("알림 데이터를 불러오는 데 실패했습니다.");
         }
       } catch (err) {
+        console.error("오류 발생:", err.message); // 오류 내용을 콘솔에 출력
         setError(err.message || "알림 데이터를 가져오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
