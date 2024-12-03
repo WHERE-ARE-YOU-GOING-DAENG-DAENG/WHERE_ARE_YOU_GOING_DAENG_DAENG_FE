@@ -64,7 +64,7 @@ const FavoritePlaceTitle = styled.h3`
   }
 
    @media (max-width: 450px) {
-    font-size: 15px;
+    font-size: 17px;
 
     img{
       width: 15px;
@@ -82,7 +82,7 @@ const FavoritePlace = styled.p`
     font-size: 13px;
   }
   @media (max-width: 450px) {
-    font-size: 10px;
+    font-size: 11px;
   }
 `;
 
@@ -91,10 +91,10 @@ const FavoritePlaceTime = styled.p`
   color: black;
   margin: 0;
   @media (max-width: 554px) {
-    font-size: 10px;
+    font-size: 11px;
   }
     @media (max-width: 450px) {
-    font-size: 8px;
+    font-size: 10px;
   }
 `;
 

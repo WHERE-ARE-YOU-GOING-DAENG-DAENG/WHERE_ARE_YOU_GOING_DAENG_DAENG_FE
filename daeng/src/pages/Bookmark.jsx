@@ -31,7 +31,7 @@ const OpenModalButton = styled.button`
 
 	p{	
 		font-weight: bold;
-		font-size: 20px;
+		font-size: 24px;
 		margin: 20px 0 0; 
 	}
 
