@@ -19,16 +19,16 @@ function PreferenceFavoriteOptionList({ selectedOptions, onSelectOptions }) {
   const maxOptions = 3;
 
   const featureIcons = {
-    PLACE_FTE_01: dogfood,
-    PLACE_FTE_02: run,
+    PLACE_FTE_01: run,
+    PLACE_FTE_02: cage,
     PLACE_FTE_03: water,
-    PLACE_FTE_04: toilet,
+    PLACE_FTE_04: paperbag,
     PLACE_FTE_05: bug,
-    PLACE_FTE_06: cage,
-    PLACE_FTE_07: dogFriend,
-    PLACE_FTE_08: paperbag,
-    PLACE_FTE_09: clean,
-    PLACE_FTE_10: gongwon,
+    PLACE_FTE_06: toilet,
+    PLACE_FTE_07: dogfood,
+    PLACE_FTE_08: gongwon,
+    PLACE_FTE_09: dogFriend,
+    PLACE_FTE_10: clean,
     PLACE_FTE_11: parkingLot,
   };
 
