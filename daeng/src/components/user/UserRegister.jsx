@@ -12,7 +12,7 @@ import AlertDialog from "../commons/SweetAlert";
 import { pushAgree } from '../../data/CommonCode';
 import { requestNotificationPermission } from '../../firebase/firebaseMessaging';
 
-function UserRegister() {
+function UserRegister() { 
   const navigate = useNavigate();
   const [selectedPushType] = useState(pushAgree[0].code);
   const [fcmToken, setFcmToken] = useState(null); // FCM 토큰 상태 추가
@@ -394,7 +394,7 @@ const Input = styled.input`
   border: none;
   background: transparent;
   outline: none;
-  font-size: 12px;
+  font-size: 14px;
   color: black;
 
   ::placeholder {
@@ -403,6 +403,10 @@ const Input = styled.input`
 
   &:disabled {
     color: #b3b3b3;
+  }
+
+  @media (max-width: 554px) {
+    font-size: 10px;
   }
 `;
 
@@ -417,7 +421,7 @@ const DuplicateBtn = styled.button`
   height: 23px;
   border-radius: 10px;
   border: none;
-  font-size: 10px;
+  font-size: 11px;
   cursor: pointer;
   background-color: #ff69a9;
   color: white;
@@ -432,15 +436,23 @@ const DuplicateBtn = styled.button`
   &:hover {
     background-color: #f9a9d4;
   }
+
+  @media (max-width: 554px) {
+    font-size: 8px;
+  }
 `;
 
 const InputAlert = styled.p`
   color: #ff69a9;
-  font-size: 10px;
+  font-size: 12px;
   display: flex;
   margin-top: -1px;
   flex-direction: flex-start;
   margin-bottom: 4%;
+
+  @media (max-width: 554px) {
+    font-size: 10px;
+  }
 `;
 
 const SelectionContainer = styled.div`
@@ -457,7 +469,7 @@ const SelectBox = styled.select`
   margin-right: 18px;
   margin-bottom: 10px;
   border: 0.5px solid #e4e4e4;
-  font-size: 12px;
+  font-size: 14px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -466,6 +478,10 @@ const SelectBox = styled.select`
   &:focus {
     border-color: #ff69a9;
     outline: none;
+  }
+
+  @media (max-width: 554px) {
+    font-size: 11px;
   }
 `;
 
