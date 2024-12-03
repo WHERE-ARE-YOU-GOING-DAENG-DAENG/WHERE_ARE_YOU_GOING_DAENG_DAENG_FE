@@ -33,11 +33,12 @@ function UserRegister() {
   const [userData, setUserData] = useState({
     email: '',
     nickname: '',
-    gender: '', 
+    gender: '',
     city: '',
     cityDetail: '',
-    alarmAgreement: '받을래요', 
+    alarmAgreement: '받을래요',
     oauthProvider: '',
+    isNicknameChecked: false,
   });
 
   const handleInputChange = (field, value) => {
@@ -74,7 +75,7 @@ function UserRegister() {
       });
       return false;
     }
-  
+
     const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
     if (!userData.nickname || !nicknameRegex.test(userData.nickname)) {
       AlertDialog({
@@ -86,8 +87,25 @@ function UserRegister() {
       });
       return false;
     }
-  
-    if (!userData.nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.alarmAgreement) {
+
+    if (!userData.isNicknameChecked) {
+      AlertDialog({
+        mode: "alert",
+        title: "중복 확인 필요",
+        text: "닉네임 중복 확인을 완료해 주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 중복 확인 경고 확인됨"),
+      });
+      return false;
+    }
+
+    if (
+      !userData.nickname ||
+      !userData.gender ||
+      !userData.city ||
+      !userData.cityDetail ||
+      !userData.alarmAgreement
+    ) {
       AlertDialog({
         mode: "alert",
         title: "입력 필요",
@@ -97,37 +115,8 @@ function UserRegister() {
       });
       return false;
     }
-  
+
     return true;
-  };
-
-  const handleNotificationRequest = async () => {
-    try {
-      const token = await requestNotificationPermission();
-      if (token) {
-        console.log('FCM 토큰 발급 성공:', token);
-
-        // 서버로 FCM 토큰 전송
-        const response = await axios.post('https://www.daengdaeng-where.link/api/v1/notifications/pushToken', {
-          token,
-          pushType: selectedPushType, 
-        });
-
-        if (response.status === 200) {
-          console.log('서버에 FCM 토큰 전송 성공:', response.data);
-          alert('알림 권한이 설정되었습니다.');
-        } else {
-          console.error('서버에 FCM 토큰 전송 실패:', response);
-          alert('서버로 토큰 전송에 실패했습니다.');
-        }
-      } else {
-        console.error('알림 권한 요청 실패');
-        alert('알림 권한 요청이 거부되었습니다.');
-      }
-    } catch (error) {
-      console.error('알림 권한 요청 중 오류 발생:', error);
-      alert('알림 권한 요청 중 문제가 발생했습니다.');
-    }
   };
 
   const handleConfirm = async () => {
@@ -143,9 +132,9 @@ function UserRegister() {
       cityDetail: userData.cityDetail,
       oauthProvider: userData.oauthProvider,
     };
-  
+
     console.log("회원가입 데이터:", payload);
-  
+
     try {
       const { data, status } = await axios.post(
         "https://www.daengdaeng-where.link/api/v1/signup",
@@ -154,7 +143,7 @@ function UserRegister() {
           withCredentials: true,
         }
       );
-  
+
       if (status === 200 || status === 201) {
         console.log("응답 데이터:", data);
 
@@ -192,57 +181,59 @@ function UserRegister() {
       }
     }
   };
-  
+
   const handleNicknameCheck = async () => {
     if (!userData.nickname.trim()) {
-        AlertDialog({
-            mode: "alert",
-            title: "닉네임 필요",
-            text: "닉네임을 입력해 주세요.",
-            confirmText: "확인",
-            onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
-        });
-        return;
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 필요",
+        text: "닉네임을 입력해 주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
+      });
+      return;
     }
 
     try {
-        const { data } = await axios.get(
-            `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
-            {
-                params: { nickname: userData.nickname },
-                withCredentials: true,
-            }
-        );
+      const { data } = await axios.get(
+        `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
+        {
+          params: { nickname: userData.nickname },
+          withCredentials: true,
+        }
+      );
 
-        if (data.data.isDuplicate === false) {
-            AlertDialog({
-                mode: "alert",
-                title: "닉네임 사용 가능",
-                text: "사용 가능한 닉네임입니다.",
-                confirmText: "확인",
-                onConfirm: () => console.log("사용 가능한 닉네임 확인됨"),
-            });
-        } else if (data.data.isDuplicate === true) {
-            AlertDialog({
-                mode: "alert",
-                title: "닉네임 중복",
-                text: "사용 불가능한 닉네임입니다. 다른 닉네임을 입력해주세요.",
-                confirmText: "확인",
-                onConfirm: () => console.log("닉네임 중복 확인됨"),
-            });
-        }
+      if (data.data.isDuplicate === false) {
+        setUserData((prev) => ({ ...prev, isNicknameChecked: true }));
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 사용 가능",
+          text: "사용 가능한 닉네임입니다.",
+          confirmText: "확인",
+          onConfirm: () => console.log("사용 가능한 닉네임 확인됨"),
+        });
+      } else if (data.data.isDuplicate === true) {
+        setUserData((prev) => ({ ...prev, isNicknameChecked: false }));
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 중복",
+          text: "사용 불가능한 닉네임입니다. 다른 닉네임을 입력해주세요.",
+          confirmText: "확인",
+          onConfirm: () => console.log("닉네임 중복 확인됨"),
+        });
+      }
     } catch (error) {
-        if (error.response) {
-            AlertDialog({
-                mode: "alert",
-                title: "닉네임 확인 실패",
-                text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
-                confirmText: "확인",
-                onConfirm: () => console.log("서버 응답 오류 확인됨"),
-            });
-        }
+      if (error.response) {
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 확인 실패",
+          text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+          confirmText: "확인",
+          onConfirm: () => console.log("서버 응답 오류 확인됨"),
+        });
+      }
     }
-};
+  };
 
   return (
     <UserContainer>
