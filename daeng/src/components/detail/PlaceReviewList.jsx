@@ -252,7 +252,7 @@ const ReadMoreButton = styled.button`
   }
 `;
 
-const PlaceReviewList = ({ data, placeName}) => {
+const PlaceReviewList = ({ data }) => {
   const navigate = useNavigate();
   const { id: placeId } = useParams();
   const [isExpanded, setIsExpanded] = useState({});
