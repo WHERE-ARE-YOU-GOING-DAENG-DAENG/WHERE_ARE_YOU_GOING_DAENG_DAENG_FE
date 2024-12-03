@@ -18,24 +18,60 @@ const Container = styled.div`
     }
 `;
 
-const FilterBtnList = ({keywords, setKeywords, setFilter}) => {
+const FilterBtnList = ({ keywords, setKeywords, setFilter }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
     };
 
+    
+    const handlePlaceTypeFilter = (placeType) => {
+        setKeywords({
+            city:"",
+            cityDetail:"",
+            placeType,
+        });
+        setFilter(true);
+    };
+
     return (
         <>
             <Container>
                 <FilterBtn label="필터" icon={filterIcon} onClick={toggleModal} />
-                <FilterBtn label="카페" icon={cafeIcon} size="small" />
-                <FilterBtn label="숙소" icon={houseIcon} size="small" />
-                <FilterBtn label="공원" icon={parkIcon} size="small" />
-                <FilterBtn label="음식점" icon={restaurantIcon} size="small" />
+                <FilterBtn
+                    label="카페"
+                    icon={cafeIcon}
+                    size="small"
+                    onClick={() => handlePlaceTypeFilter('카페')}
+                />
+                <FilterBtn
+                    label="숙소"
+                    icon={houseIcon}
+                    size="small"
+                    onClick={() => handlePlaceTypeFilter('숙소')}
+                />
+                <FilterBtn
+                    label="공원"
+                    icon={parkIcon}
+                    size="small"
+                    onClick={() => handlePlaceTypeFilter('공원')}
+                />
+                <FilterBtn
+                    label="음식점"
+                    icon={restaurantIcon}
+                    size="small"
+                    onClick={() => handlePlaceTypeFilter('음식점')}
+                />
             </Container>
 
-            <FilterModal isOpen={isModalOpen} onClose={toggleModal} keywords={keywords} setKeywords={setKeywords} setFilter={setFilter}/>
+            <FilterModal
+                isOpen={isModalOpen}
+                onClose={toggleModal}
+                keywords={keywords}
+                setKeywords={setKeywords}
+                setFilter={setFilter}
+            />
         </>
     );
 };

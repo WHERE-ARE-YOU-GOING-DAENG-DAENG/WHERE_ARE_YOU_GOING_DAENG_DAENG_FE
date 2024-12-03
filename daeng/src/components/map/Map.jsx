@@ -6,8 +6,10 @@ import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
 import BookMarker from "../commons/BookMarker";
 import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
 import CustomOverlay from "./CustomOverlay";
+import AlertDialog from "../../components/commons/SweetAlert";
 import useLocationStore from "../../stores/useLocationStore";
 import Loading from "../commons/Loading";
+
 const MapContainer = styled.div`
   width: 100%;
   height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 172px)" : "485px")};
@@ -17,7 +19,7 @@ const MapContainer = styled.div`
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter }) => {
+const Map = ({ data, removeUi, externalCenter, isLoading }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const isLoaded = useGoogleMapsLoader();
@@ -82,7 +84,17 @@ const Map = ({ data, removeUi, externalCenter }) => {
             );
             setCurrentLocation(currentLocationMarker);
           },
-          (error) => console.error("Geolocation error:", error)
+          (error) => {
+            if (error.response) {
+              AlertDialog({
+                  mode: "alert",
+                  title: "위치 추적 실패",
+                  text: "현재 위치를 확인할 수 없습니다",
+                  confirmText: "확인",
+                  onConfirm: () => console.log("현재위치 마커표시 안됨"),
+              });
+            }
+          }
         );
       }
     };
@@ -119,11 +131,31 @@ const Map = ({ data, removeUi, externalCenter }) => {
   }
 }, [isLoaded, map, data]);
 
+useEffect(() => {
+  if (map && markers.length > 0 && data && data.length > 0) {
+    const firstLocation = data[0];
+    if (firstLocation.latitude && firstLocation.longitude) {
+      const firstMarkerPosition = {
+        lat: firstLocation.latitude,
+        lng: firstLocation.longitude,
+      };
+      setCenter(firstMarkerPosition);
+      map.setCenter(firstMarkerPosition);
+    } else {
+      console.warn("Invalid location data:", firstLocation);
+    }
+  }
+}, [map, markers, data]);
+
   return (
     <MapContainer ref={mapRef} $data={data} $removeUi={removeUi}>
-      {!isLoaded && <Loading label="지도 로딩 중.." />}
-      {currentLocation}
-      {markers}
+      {!isLoaded || isLoading ? (<Loading label={isLoaded ? "결과를 불러오는 중..." : "지도 로딩 중..."} />):(
+        <>
+          {currentLocation}
+          {markers}
+        </>
+      )}
+      
     </MapContainer>
   );
 };

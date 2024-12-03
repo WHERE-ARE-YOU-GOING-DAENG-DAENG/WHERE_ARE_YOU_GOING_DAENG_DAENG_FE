@@ -85,7 +85,7 @@ const PlaceTitle = ({ data, setData }) => {
                 <p>| 평점</p>
                 <img src={starIcon} alt="평점" />
                 <p>{data.score}</p>
-                <p className="detail-reviewcnt">({data.total})</p>
+                <p className="detail-reviewcnt" onClick={()=>navigate(`/total-review/${data.placeId}`)}>({data.total})</p>
                 <img
                     src={data.isFavorite ? filledbookmarkIcon : bookmarkIcon}
                     alt="Favorite"
