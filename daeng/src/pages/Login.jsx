@@ -82,19 +82,19 @@ const TitleContainer = styled.div`
 
 const MainTitle = styled.span`
     font-family: "RixInooAriDuri", sans-serif;
-    font-size: 50px;
+    font-size: 60px;
     color: #ff4b98;
     font-weight: normal;
     margin-right: 1px;
 
     @media (max-width: 554px) {
-        font-size: 8vw;
+        font-size: 10vw;
     }
 `;
 
 const SubTitle = styled.span`
     font-family: "Pretendard", sans-serif;
-    font-size: 23px;
+    font-size: 28px;
     font-weight: bold;
     color: #000000;
 
@@ -104,7 +104,7 @@ const SubTitle = styled.span`
 `;
 
 const Subtitle = styled.p`
-    font-size: 23px;
+    font-size: 28px;
     font-weight: bold;
     margin: 0px;
     margin-bottom: 30px;
@@ -153,7 +153,8 @@ const Line = styled.div`
 `;
 
 const DividerText = styled.p`
-    font-size: 15px;
+    font-size: 17px;
+    font-weight: 600;
     color: #b3b3b3;
 
     @media (max-width: 554px) {
@@ -186,8 +187,8 @@ const Button = styled.button`
 `;
 
 const FooterText = styled.p`
-    font-size: 13px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 600;
     color: #b3b3b3;
     margin-top: 30px;
     cursor: pointer;
