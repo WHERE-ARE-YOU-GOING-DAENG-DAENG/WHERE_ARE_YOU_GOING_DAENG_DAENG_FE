@@ -79,7 +79,7 @@ const Content = styled.div`
 
 const Message = styled.p`
   margin: 0;
-  font-size: 15px;
+  font-size: px;
   font-weight: bold;
   @media (max-width: 554px) {
     font-size: 11px;
