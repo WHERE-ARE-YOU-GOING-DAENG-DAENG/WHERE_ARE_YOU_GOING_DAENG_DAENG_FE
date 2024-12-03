@@ -10,17 +10,19 @@ import FilterBtnList from "../../components/search/FilterBtnList";
 import useLocationStore from "../../stores/useLocationStore";
 import { placeTypes } from "../../data/CommonCode";
 import AlertDialog from "../../components/commons/SweetAlert";
+import { useLocation } from "react-router-dom";
 
 const Search = () => {
+    const location = useLocation();
     const [query, setQuery] = useState("");
     const [places, setPlaces] = useState([]);
     const [sortIndex, setSortIndex] = useState(0);
     const [nearPlaces, setNearPlaces] = useState([]);
     const userLocation = useLocationStore((state) => state.userLocation);
     const [keywords, setKeywords] = useState({
-      city: "서울",
+      city: location.state? "": "서울",
       cityDetail: "",
-      placeType: "",
+      placeType: location.state?.placeType || "",
   });
     const [filter, setFilter] = useState(false);
 
@@ -43,6 +45,12 @@ const Search = () => {
         );
       }
     };
+
+    useEffect(() => {
+      if (location.state?.placeType) {
+        setFilter(true);
+      }
+    }, [location.state]);
 
     useEffect(() => {
         if (query && userLocation) {
