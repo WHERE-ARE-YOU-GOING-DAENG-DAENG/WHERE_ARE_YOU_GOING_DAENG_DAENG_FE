@@ -1,7 +1,20 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import HomeKeywordIcon from "../../assets/icons/home_keyword.svg";
 
+// 키워드 배열 (각 행에 해당하는 키워드를 중첩 배열로 관리)
+const keywordRows = [
+  ["음식점", "카페", "공원", "숙소", "미술관"],
+  ["놀이터", "여행지", "박물관", "문예회관", ""],
+];
+
 function HomeKeywordPlaces() {
+  const navigate = useNavigate();
+
+  const handleKeywordClick = (keyword) => {
+    navigate("/search", { state: { placeType: keyword } });
+  };
+
   return (
     <>
       <Divider />
@@ -11,20 +24,18 @@ function HomeKeywordPlaces() {
           <img src={HomeKeywordIcon} alt="Keyword Icon" />
         </KeywordTitle>
         <KeywordContainer>
-          <KeywordRow>
-            <KeywordItem>음식점</KeywordItem>
-            <KeywordItem>카페</KeywordItem>
-            <KeywordItem>공원</KeywordItem>
-            <KeywordItem>숙소</KeywordItem>
-            <KeywordItem>미술관</KeywordItem>
-          </KeywordRow>
-          <KeywordRow>
-            <KeywordItem>놀이터</KeywordItem>
-            <KeywordItem>여행지</KeywordItem>
-            <KeywordItem>박물관</KeywordItem>
-            <KeywordItem>문예회관</KeywordItem>
-            <KeywordItem />
-          </KeywordRow>
+          {keywordRows.map((row, rowIndex) => (
+            <KeywordRow key={rowIndex}>
+              {row.map((keyword, index) => (
+                <KeywordItem
+                  key={index}
+                  onClick={() => handleKeywordClick(keyword)}
+                >
+                  {keyword}
+                </KeywordItem>
+              ))}
+            </KeywordRow>
+          ))}
         </KeywordContainer>
       </KeywordPlacesWrapper>
     </>
