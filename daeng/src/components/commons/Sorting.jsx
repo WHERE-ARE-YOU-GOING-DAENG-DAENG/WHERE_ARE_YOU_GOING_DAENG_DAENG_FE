@@ -23,7 +23,7 @@ const Label = styled.div`
   .rating {
     display: flex;
     align-items: center;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: normal;
     @media (max-width: 554px) {
     font-size: 13px;
@@ -42,10 +42,10 @@ const Label = styled.div`
     .total {
       margin-top: 3px;
       color: #B3B3B3;
-      font-size: 11px;
+      font-size: 13px;
       @media (max-width: 554px) {
-    font-size: 10px;
-  }
+        font-size: 10px;
+      }
     }
   }
 `;
@@ -56,10 +56,10 @@ const SortingOptions = styled.div`
 
   span {
     color: #B3B3B3;
-    font-size: 11px;
+    font-size: 14px;
     cursor: pointer;
     @media (max-width: 554px) {
-    font-size: 8px;
+    font-size: 10px;
   }
 
     &:hover {
