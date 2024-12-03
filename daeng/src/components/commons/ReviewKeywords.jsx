@@ -11,7 +11,7 @@ const ReviewButton = styled.button`
   border-radius: 20px;
   color:white;
   border:none;
-  font-size: 10px;
+  font-size: 12px;
   margin-right: 2%;
   white-space: nowrap;
 
@@ -19,19 +19,30 @@ const ReviewButton = styled.button`
     margin-right: 5px;
   }
 
+  @media (max-width: 554px) {
+    height: 20px;
+    font-size: 10px;
+  }
+
   ${({ hasIcon }) =>
     hasIcon &&
     `
+    padding: 15px;
+    font-size: 15px;
+    img{
+     width: 25px;
+    }
     &:hover {
-      background-color: #FF99C8;
+      background-color: #FF77C0;
       font-weight: bold;
     }
-  `}
-
-  @media (max-width: 554px) {
-    height: 20px;
-    font-size: 9px;
+    @media (max-width: 554px) {
+    font-size: 13px;
+    img{
+     width: 22px;
+    }
   }
+  `}
 `
 function ReviewKeywords({label, icon, onClick}) {
   return (

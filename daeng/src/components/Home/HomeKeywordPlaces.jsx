@@ -55,13 +55,13 @@ const KeywordTitle = styled.h3`
   align-items: center;
   text-align: left;
   margin: 15px 30px;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 600;
   color: black;
 
   @media (max-width: 554px) {
     margin: 10px 20px;
-    font-size: 13px;
+    font-size: 15px;
   }
 
   img {
@@ -93,7 +93,7 @@ const KeywordRow = styled.div`
 `;
 
 const KeywordItem = styled.div`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: #ff69b4;
   text-align: center;
@@ -102,9 +102,11 @@ const KeywordItem = styled.div`
   height: 40px;
   margin-bottom: 10px;
   cursor: pointer;
+  word-break: keep-all;
+  white-space: nowrap;
 
   @media (max-width: 554px) {
-    font-size: 10px;
+    font-size: 14px;
     width: 80px;
     height: 35px;
   }

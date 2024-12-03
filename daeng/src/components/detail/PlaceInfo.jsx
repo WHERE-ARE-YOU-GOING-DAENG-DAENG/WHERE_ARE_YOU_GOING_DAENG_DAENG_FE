@@ -42,18 +42,25 @@ const InfoCard = styled.div`
     }
 
     span {
-      font-size: 11px;
+      font-size: 14px;
       padding: 10px;
       width: 60%;
       text-align:left;
       word-wrap: break-word;
+      @media(max-width:554px){
+        font-size: 12px;
+      }
     }
     a {
-      font-size: 11px;
+      font-size: 14px;
       padding: 10px;
       width: 60%;
       text-align: left;
       word-wrap: break-word;
+
+      @media(max-width:554px){
+        font-size: 12px;
+      }
     }
   }
     .dog-icon {

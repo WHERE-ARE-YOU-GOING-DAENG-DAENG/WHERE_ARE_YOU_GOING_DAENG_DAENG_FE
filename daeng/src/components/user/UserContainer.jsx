@@ -24,7 +24,6 @@ function UserContainer() {
   );
 }
 
-// 스타일 정의
 const Container = styled.div`
   display: flex;
   flex-direction: row;
@@ -39,7 +38,6 @@ const UserInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-weight: 500;
 `;
 
 const Username = styled.div`
@@ -48,7 +46,7 @@ const Username = styled.div`
 `;
 
 const UserEmail = styled.div`
-  font-size: 13px;
+  font-size: 15px;
   color: #818181;
   margin-top: 10px;
 `;

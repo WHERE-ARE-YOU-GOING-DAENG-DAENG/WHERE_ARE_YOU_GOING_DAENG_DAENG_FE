@@ -12,7 +12,7 @@ const AiCommentContainer = styled.div`
   background-color: rgba(247, 247, 247, 0.78);
   color: #ff69a9;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
   align-items: center;
   padding: 5px 10px; 

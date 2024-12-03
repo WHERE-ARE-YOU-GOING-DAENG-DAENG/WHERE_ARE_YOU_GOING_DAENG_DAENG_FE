@@ -45,7 +45,7 @@ const Icon = styled.img`
 `
 
 const RouteText = styled.span`
-  font-size: 13px;
+  font-size: 15px;
   margin-bottom: 40px;
   margin-left:10px;
   display : flex;
@@ -66,7 +66,7 @@ const StyledLink = styled(Link)`
 function RoutePage() {
   const list = ['즐겨찾기', '내가 작성한 리뷰', '키워드 수정', '방문 등록 리스트'];
   const icons = [mypageFavorite, mypageKeyword, mypageReview, visitList];
-  const routes = ['/bookmark', '/my-review', '/preference-edit', '/'];
+  const routes = ['/bookmark', '/my-review', '/preference-edit', '/visit-list'];
 
   return (
     <RoutePageContainer>

@@ -17,7 +17,7 @@ const DeleteUserBtn = styled.button`
   height: 44px;
   border: 0.5px solid #E4E4E4;
   background-color: white;
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 5px;
   color: #B3B3B3;
   cursor: pointer;
@@ -40,7 +40,7 @@ const LogoutBtn = styled.button`
   height: 44px;
   border: 0.5px solid #E4E4E4;
   background-color: white;
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 5px;
   color: #B3B3B3;
   cursor: pointer;
