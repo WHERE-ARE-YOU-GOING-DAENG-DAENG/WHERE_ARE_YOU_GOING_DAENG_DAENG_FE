@@ -71,7 +71,7 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 삭제
   removeFavorite: async (favoriteId) => {
     try {
-      await axios.axiosInstance.delete(`/api/v1/favorites/${favoriteId}`,{
+      await axiosInstance.delete(`/api/v1/favorites/${favoriteId}`,{
         withCredentials: true
       });
       // await get().fetchFavorites();
