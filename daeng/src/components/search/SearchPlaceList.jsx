@@ -6,11 +6,16 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import useLocationStore from "../../stores/useLocationStore";
 import useFavoriteStore from "../../stores/useFavoriteStore";
+import Loading from "../commons/Loading";
 
 const ListContainer = styled.div`
   padding-bottom: 81px;
   padding-left: 33px;
   padding-right: 33px;
+
+  p{
+    font-weight: bold;
+  }
 `;
 
 const PlaceItem = styled.div`
@@ -72,7 +77,7 @@ const PlaceItem = styled.div`
   }
 `;
 
-const SearchPlaceList = ({ places, setPlaces, setNearPlaces }) => {
+const SearchPlaceList = ({ places, setPlaces, setNearPlaces, isLoading }) => {
   // const [places, setPlaces] = useState(Array.isArray(list) ? list : []);
   const userLocation = useLocationStore((state) => state.userLocation);
   const navigate = useNavigate();
@@ -131,38 +136,53 @@ const SearchPlaceList = ({ places, setPlaces, setNearPlaces }) => {
 
   return (
     <ListContainer>
-      {places.map((place) => (
-        <PlaceItem key={place.placeId}>
-          <div onClick={() => handlePlaceClick(place.placeId)}>
-            <div className="header">
-              <div className="place-name">{place.name}</div>
-              <div className="facility-type">{place.placeType || "시설 정보 없음"}</div>
+      {isLoading ? (
+        <Loading label="장소 데이터를 불러오는 중입니다.." /> // 로딩 메시지 또는 스피너
+      ) : places.length > 0 ? (
+        places.map((place) => (
+          <PlaceItem key={place.placeId}>
+            <div onClick={() => handlePlaceClick(place.placeId)}>
+              <div className="header">
+                <div className="place-name">{place.name}</div>
+                <div className="facility-type">{place.placeType || "시설 정보 없음"}</div>
+              </div>
+              <div className="details">
+                <div className="status">
+                  {place.startTime && place.endTime
+                    ? `${place.startTime} - ${place.endTime}`
+                    : "24시간 운영"}
+                  {" | "}
+                </div>
+                <div className="address">{place.streetAddresses || "주소 정보 없음"}</div>
+              </div>
+              <div className="images">
+                {Array.isArray(place.img_path) && place.img_path.length > 0 ? (
+                  place.img_path.map((image, i) => (
+                    <img key={i} src={image} alt={`${place.name} 이미지`} />
+                  ))
+                ) : (
+                  <div
+                    style={{
+                      width: "108px",
+                      height: "130px",
+                      borderRadius: "10px",
+                      backgroundColor: "#b3b3b3",
+                    }}
+                  ></div>
+                )}
+              </div>
             </div>
-            <div className="details">
-              <div className="status">{place.startTime && place.endTime
-                  ? `${place.startTime} - ${place.endTime}`
-                  : "24시간 운영"}
-                {" | "}</div>
-              <div className="address">{place.streetAddresses || "주소 정보 없음"}</div>
-            </div>
-            <div className="images">
-              {Array.isArray(place.img_path) && place.img_path.length > 0 ? (
-                place.img_path.map((image, i) => (
-                  <img key={i} src={image} alt={`${place.name} 이미지`} />
-                ))
-              ) : (
-                <div style={{ width: "108px", height:"130px", borderRadius:"10px", backgroundColor:"#b3b3b3"}}></div>
-              )}
-            </div>
-          </div>
-          <img
-            src={place.isFavorite ? filledbookmarkIcon : bookmarkIcon}
-            className="favorite"
-            alt="즐겨찾기"
-            onClick={() => toggleBookmark(place.placeId, place.isFavorite)}
-          />
-        </PlaceItem>
-      ))}
+            <img
+              src={place.isFavorite ? filledbookmarkIcon : bookmarkIcon}
+              className="favorite"
+              alt="즐겨찾기"
+              onClick={() => toggleBookmark(place.placeId, place.isFavorite)}
+            />
+          </PlaceItem>
+        ))
+      ) : (
+        <p>검색 결과가 없습니다.</p>
+      )}
     </ListContainer>
   );
 };

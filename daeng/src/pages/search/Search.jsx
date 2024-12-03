@@ -25,6 +25,7 @@ const Search = () => {
       placeType: location.state?.placeType || "",
   });
     const [filter, setFilter] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSearch = (keyword) => {
         setQuery(keyword);
@@ -53,79 +54,86 @@ const Search = () => {
     }, [location.state]);
 
     useEffect(() => {
+      const fetchPlaces = async () => {
         if (query && userLocation) {
-          const fetchPlaces = async () => {
-            const payload = {
-                keyword: query,
-                latitude: userLocation.lat,
-                longitude: userLocation.lng,
-            }
-            console.log(payload,"실행") //로그없애기
-            try {
-              const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/search", payload,
-              {
-                withCredentials: true,
-              }
-              );
-              setPlaces(response.data.data);
-              setNearPlaces(response.data.data);
-              setQuery("");
-            } catch (error) {
-              if (error.response) {
-                AlertDialog({
-                    mode: "alert",
-                    title: "장소 검색 실패",
-                    text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
-                    confirmText: "확인",
-                    onConfirm: () => console.log("서버 응답 오류 확인됨"),
-                });
-              }
-            }
+          setIsLoading(true); // 로딩 시작
+          setPlaces([]); // 기존 데이터 초기화
+          const payload = {
+            keyword: query,
+            latitude: userLocation.lat,
+            longitude: userLocation.lng,
           };
-    
-          fetchPlaces();
-        }
-        if(filter && userLocation){
-          const fetchPlaces = async () => {
-            let matchedType = placeTypes.find((type) => type.name === keywords.placeType);
-            const payload = {
-              city: keywords.city || "",
-              cityDetail: keywords.cityDetail?.endsWith("전체") ? "" : keywords.cityDetail || "",
-              placeType: matchedType ? matchedType.codeId : "",
-              latitude: userLocation?.lat,
-              longitude: userLocation?.lng
-            }
-            console.log(payload); //로그없애기
-            try {
-              const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/filter", payload,
-              {
-                withCredentials: true, 
-              }
-              );
-              console.log(response.data.data); //로그없애기
-              setPlaces(response.data.data);
+  
+          try {
+            const response = await axios.post(
+              "https://www.daengdaeng-where.link/api/v1/places/search",
+              payload,
+              { withCredentials: true }
+            );
+            setPlaces(response.data.data || []);
+            setNearPlaces(response.data.data || []);
+            setQuery("");
           } catch (error) {
-              if (error.response) {
-                AlertDialog({
-                    mode: "alert",
-                    title: "장소 검색 실패",
-                    text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
-                    confirmText: "확인",
-                    onConfirm: () => console.log("서버 응답 오류 확인됨"),
-                });
-              }
+            if (error.response) {
+              AlertDialog({
+                mode: "alert",
+                title: "장소 검색 실패",
+                text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+                confirmText: "확인",
+              });
+            }
+          } finally {
+            setIsLoading(false); // 로딩 종료
           }
-          setFilter(false);
         }
-          fetchPlaces();
-        };
-      }, [query, filter, userLocation]);
+  
+        if (filter && userLocation) {
+          setIsLoading(true); // 로딩 시작
+          setPlaces([]); // 기존 데이터 초기화
+          const matchedType = placeTypes.find(
+            (type) => type.name === keywords.placeType
+          );
+          const payload = {
+            city: keywords.city || "",
+            cityDetail: keywords.cityDetail?.endsWith("전체")
+              ? ""
+              : keywords.cityDetail || "",
+            placeType: matchedType ? matchedType.codeId : "",
+            latitude: userLocation.lat,
+            longitude: userLocation.lng,
+          };
+  
+          try {
+            const response = await axios.post(
+              "https://www.daengdaeng-where.link/api/v1/places/filter",
+              payload,
+              { withCredentials: true }
+            );
+            setPlaces(response.data.data || []);
+          } catch (error) {
+            if (error.response) {
+              AlertDialog({
+                mode: "alert",
+                title: "장소 검색 실패",
+                text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+                confirmText: "확인",
+              });
+            }
+          } finally {
+            setIsLoading(false); // 로딩 종료
+            setFilter(false);
+          }
+        }
+      };
+  
+      fetchPlaces();
+    }, [query, filter, userLocation]);
 
     return (
         <>
           <Header label="장소검색"/>
           <SearchBar query={query} onSearch={handleSearch} />
-          <Map data={places} removeUi={false}/>
+          <Map data={places} removeUi={false} isLoading={isLoading}/>
           <FilterBtnList keywords={keywords} setKeywords={setKeywords} setFilter={setFilter}/>
           <Sorting 
             mode="list" 
@@ -134,7 +142,7 @@ const Search = () => {
             activeIndex={sortIndex}
             onSortChange={handleSortChange}
             />
-          <SearchPlaceList places={places} setPlaces={setPlaces} setNearPlaces={setNearPlaces}/>
+          <SearchPlaceList places={places} setPlaces={setPlaces} setNearPlaces={setNearPlaces} isLoading={isLoading}/>
           <Footer />
         </>
     );
