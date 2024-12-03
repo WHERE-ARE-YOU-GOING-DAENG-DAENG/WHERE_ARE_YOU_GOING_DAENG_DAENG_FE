@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-
+import AlarmList from './AlarmList';
 
 const AlarmContainer = styled.div`
   height: 100vh;
@@ -15,19 +15,12 @@ const Division = styled.div`
   margin-right:33px;
 `;
 
-const EmptySpace = styled.div`
-  font-weight: bold;
-  text-align: center;
-  margin-top: 250px; 
-  margin-bottom: 300px;
-`;
-
 
 function DivisionLine() {
   return (
     <AlarmContainer>
       <Division />
-      <EmptySpace>비었어요</EmptySpace>
+      <AlarmList />
     </AlarmContainer>
   );
 }

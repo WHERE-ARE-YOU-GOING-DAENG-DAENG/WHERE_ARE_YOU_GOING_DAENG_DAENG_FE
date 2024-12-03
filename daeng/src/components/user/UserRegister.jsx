@@ -9,9 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
+import { pushAgree } from '../../data/CommonCode';
+import { requestNotificationPermission } from '../../firebase/firebaseMessaging';
 
 function UserRegister() {
   const navigate = useNavigate();
+  const [selectedPushType] = useState(pushAgree[0].code);
+  const [fcmToken, setFcmToken] = useState(null); // FCM 토큰 상태 추가
 
   useEffect(() => {
     const queryString = new URLSearchParams(window.location.search);
@@ -30,11 +34,12 @@ function UserRegister() {
   const [userData, setUserData] = useState({
     email: '',
     nickname: '',
-    gender: '', 
+    gender: '',
     city: '',
     cityDetail: '',
-    alarmAgreement: '받을래요', 
+    alarmAgreement: '받을래요',
     oauthProvider: '',
+    isNicknameChecked: false,
   });
 
   const handleInputChange = (field, value) => {
@@ -60,6 +65,15 @@ function UserRegister() {
     }));
   };
 
+  const handleNotificationRequest = async () => {
+    try {
+      await requestNotificationPermission();
+      console.log("알림 권한이 성공적으로 설정되었습니다.");
+    } catch (error) {
+      console.error("알림 권한 설정 실패:", error);
+    }
+  };
+
   const validateFields = () => {
     if (!userData.nickname.trim()) {
       AlertDialog({
@@ -71,7 +85,7 @@ function UserRegister() {
       });
       return false;
     }
-  
+
     const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
     if (!userData.nickname || !nicknameRegex.test(userData.nickname)) {
       AlertDialog({
@@ -83,8 +97,25 @@ function UserRegister() {
       });
       return false;
     }
-  
-    if (!userData.nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.alarmAgreement) {
+
+    if (!userData.isNicknameChecked) {
+      AlertDialog({
+        mode: "alert",
+        title: "중복 확인 필요",
+        text: "닉네임 중복 확인을 완료해 주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 중복 확인 경고 확인됨"),
+      });
+      return false;
+    }
+
+    if (
+      !userData.nickname ||
+      !userData.gender ||
+      !userData.city ||
+      !userData.cityDetail ||
+      !userData.alarmAgreement
+    ) {
       AlertDialog({
         mode: "alert",
         title: "입력 필요",
@@ -94,9 +125,10 @@ function UserRegister() {
       });
       return false;
     }
-  
+
     return true;
   };
+
   const handleConfirm = async () => {
     if (!validateFields()) {
       return;
@@ -110,9 +142,9 @@ function UserRegister() {
       cityDetail: userData.cityDetail,
       oauthProvider: userData.oauthProvider,
     };
-  
+
     console.log("회원가입 데이터:", payload);
-  
+
     try {
       const { data, status } = await axios.post(
         "https://www.daengdaeng-where.link/api/v1/signup",
@@ -121,9 +153,18 @@ function UserRegister() {
           withCredentials: true,
         }
       );
-  
+
       if (status === 200 || status === 201) {
         console.log("응답 데이터:", data);
+
+        if (userData.alarmAgreement === '받을래요') {
+          const token = await requestNotificationPermission();
+          if (token) {
+            setFcmToken(token);
+            await sendTokenToServer(token);
+          }
+        }
+
         AlertDialog({
           mode: "alert",
           title: "회원가입 성공",
@@ -154,57 +195,77 @@ function UserRegister() {
       }
     }
   };
-  
+
+  const sendTokenToServer = async (token) => {
+    try {
+      const response = await axios.post(
+        "https://www.daengdaeng-where.link/api/v1/notifications/pushToken",
+        { token, pushType: selectedPushType },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        console.log('FCM 토큰 전송 성공:', response.data);
+      } else {
+        console.error('FCM 토큰 전송 실패:', response);
+      }
+    } catch (error) {
+      console.error('서버에 FCM 토큰 전송 중 오류:', error);
+    }
+  };
+
   const handleNicknameCheck = async () => {
     if (!userData.nickname.trim()) {
-        AlertDialog({
-            mode: "alert",
-            title: "닉네임 필요",
-            text: "닉네임을 입력해 주세요.",
-            confirmText: "확인",
-            onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
-        });
-        return;
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 필요",
+        text: "닉네임을 입력해 주세요.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
+      });
+      return;
     }
 
     try {
-        const { data } = await axios.get(
-            `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
-            {
-                params: { nickname: userData.nickname },
-                withCredentials: true,
-            }
-        );
+      const { data } = await axios.get(
+        `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
+        {
+          params: { nickname: userData.nickname },
+          withCredentials: true,
+        }
+      );
 
-        if (data.data.isDuplicate === false) {
-            AlertDialog({
-                mode: "alert",
-                title: "닉네임 사용 가능",
-                text: "사용 가능한 닉네임입니다.",
-                confirmText: "확인",
-                onConfirm: () => console.log("사용 가능한 닉네임 확인됨"),
-            });
-        } else if (data.data.isDuplicate === true) {
-            AlertDialog({
-                mode: "alert",
-                title: "닉네임 중복",
-                text: "사용 불가능한 닉네임입니다. 다른 닉네임을 입력해주세요.",
-                confirmText: "확인",
-                onConfirm: () => console.log("닉네임 중복 확인됨"),
-            });
-        }
+      if (data.data.isDuplicate === false) {
+        setUserData((prev) => ({ ...prev, isNicknameChecked: true }));
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 사용 가능",
+          text: "사용 가능한 닉네임입니다.",
+          confirmText: "확인",
+          onConfirm: () => console.log("사용 가능한 닉네임 확인됨"),
+        });
+      } else if (data.data.isDuplicate === true) {
+        setUserData((prev) => ({ ...prev, isNicknameChecked: false }));
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 중복",
+          text: "사용 불가능한 닉네임입니다. 다른 닉네임을 입력해주세요.",
+          confirmText: "확인",
+          onConfirm: () => console.log("닉네임 중복 확인됨"),
+        });
+      }
     } catch (error) {
-        if (error.response) {
-            AlertDialog({
-                mode: "alert",
-                title: "닉네임 확인 실패",
-                text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
-                confirmText: "확인",
-                onConfirm: () => console.log("서버 응답 오류 확인됨"),
-            });
-        }
+      if (error.response) {
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 확인 실패",
+          text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+          confirmText: "확인",
+          onConfirm: () => console.log("서버 응답 오류 확인됨"),
+        });
+      }
     }
-};
+  };
 
   return (
     <UserContainer>
@@ -360,6 +421,13 @@ const DuplicateBtn = styled.button`
   cursor: pointer;
   background-color: #ff69a9;
   color: white;
+
+  @media (max-width: 554px) {
+    width:18%;
+    height: 20px;
+    font-size:10px;
+    height: auto;
+  }
 
   &:hover {
     background-color: #f9a9d4;

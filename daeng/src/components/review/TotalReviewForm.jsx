@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import star from '../../assets/icons/star.svg';
-import DeleteBtn from "../commons/DeleteBtn";
-
-
+import notfillstar from "../../assets/icons/notfillstar.svg";
+import ReviewKeywords from '../../components/commons/ReviewKeywords';
+import Sorting from '../../components/commons/Sorting';
+import useTotalReviewStore from '../../stores/UseTotalReviewStore';
+import AiReviewSummary from './AIReview';
+import axios from 'axios';
+//리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
   display: block;
   padding:3%;
@@ -13,6 +18,59 @@ const TotalReviewContainer = styled.div`
     padding:4%;
     margin-left:1%;
   }
+`
+
+const ReviewPlaceTitle = styled.span`
+  font-size:25px;
+  font-weight:bold;
+  display: block;
+  text-align: left;
+
+  @media (max-width: 554px) {
+    font-size:20px;
+  }
+`
+const PreferenceContainer = styled.div`
+  display: flex;
+  margin-top: 3%;
+  flex-direction: row;
+  margin-bottom:3%;
+`
+
+const ReviewSummaryContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center; 
+`;
+
+const TotalStarPoint = styled.span`
+  font-size:15px;
+  font-weight: bold;
+  display: block;
+  margin-left: 2%;
+  margin-right: 3%;
+
+  @media (max-width: 554px) {
+    font-size:13px;
+  }
+`
+
+const TotalReviewCount = styled.span`
+  color: #B3B3B3;
+  font-size:11px;
+  display: block;
+  margin-right: 165px;
+
+  @media (max-width: 554px) {
+    font-size: 11px;
+    margin-right:54px;
+  }
+`
+
+const StarImg = styled.img`
+  width: 15px; 
+  height: 15px; 
+  border-radius:100px;
 `
 
 const DivisionLine = styled.div`
@@ -33,7 +91,6 @@ const UserStarImg = styled.img`
   height:10px;
   display: flex;
   margin-top: 5px;
-  margin-right: 84%;
 `
 
 const ReviewUserContainer = styled.div`
@@ -45,7 +102,7 @@ const ReviewUserContainer = styled.div`
   }
 `
 
-const UserPhoto = styled.div`
+const UserPhoto = styled.img`
   width: 60px;
   height: 60px;
   background-color: #FF69A9;
@@ -68,7 +125,7 @@ const CommentContainer = styled.div`
   margin-top: 5px;
 
   @media (max-width: 554px) {
-    margin-top: -10px;
+    margin-top: -2px;
   }
 `
 
@@ -92,7 +149,6 @@ const PetType = styled.span`
   @media (max-width: 554px) {
     font-size: 9px;
     margin-top:13px;
-    margin-right:120px;
   }
 `
 
@@ -106,7 +162,7 @@ const PostDate = styled.span`
   @media (max-width: 554px) {
     font-size: 11px;
     margin-bottom:10px;
-    margin-left:130px;
+    margin-left:80px;
   }
 `
 
@@ -156,10 +212,10 @@ const ReviewPictureContainer = styled.div`
   }
 `
 
-const ReviewPicture = styled.div`
+const ReviewPicture = styled.img`
   display: block;
-  width: 100px;
-  height:103px;
+  width: 120px;
+  height:120px;
   background-color: #D9D9D9;
   border-radius:5px;
   margin-left: 10px; 
@@ -183,48 +239,174 @@ const ReadMoreButton = styled.button`
   }
 `;
 
-function TotalReviewForm() {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const text = "강아지와 함께하는 첫 펜션 여행, 정말 즐거웠어요! 🐾펜션이 너무 깔끔하고, 강아지를 위한 편의시설도 잘 갖춰져 있어서 걱정 없이 머물 수 있었어요. 넓은 정원에서 강아지가 자유롭게 뛰어놀 수 있었고, 바닥도 미끄럽지 않아 안전하게 놀 수 있었습니다. 주인분도 친절하게 강아지용 식사와 편안한 침구도 준비해주셔서 정말 감사했어요. 강아지가 너무 편안해 보였고, 우리도 마음 놓고 힐링할 수 있었답니다.강아지와 함께 여행 가기에 정말 좋은 곳이었어요. 다음에도 꼭 다시 오고 싶어요! 🐕💖"; //더미데이터 일단 넣어둠
+const TotalReviewForm = () => {
+  const { placeId } = useParams();
+  const {
+    reviews,
+    total,
+    bestKeywords,
+    score,
+    fetchReviews,
+    setSortedType,
+    isLoading,
+    isLast,
+    sortedType,
+  } = useTotalReviewStore();
 
-  const maxLength = 200;
-  const displayedText = isExpanded ? text : text.slice(0, maxLength);
+  const [placeName, setPlaceName] = useState("장소 정보가 없습니다.");
+  const [isExpanded, setIsExpanded] = useState({});
+  const observerRef = useRef(null);
 
-  const toggleText = () => {
-    setIsExpanded(!isExpanded);
+  useEffect(() => {
+    if (placeId) {
+      axios
+        .get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`)
+        .then((response) => {
+          const name = response.data?.data?.name;
+          setPlaceName(name || "장소 정보가 없습니다.");
+        })
+        .catch((error) => {
+          console.error("Failed to fetch placeName:", error);
+          setPlaceName("장소 정보가 없습니다.");
+        });
+    }
+  }, [placeId]);
+
+  useEffect(() => {
+    if (placeId) {
+      fetchReviews(placeId); 
+    }
+  }, [placeId, fetchReviews]);
+
+  const handleSortChange = (index) => {
+    const sortTypes = ['LATEST', 'HIGH_SCORE', 'LOW_SCORE'];
+    setSortedType(sortTypes[index]);
+    if (placeId) {
+      fetchReviews(placeId); // 정렬 변경 시 첫 페이지부터 다시 로드
+    }
   };
+
+  const toggleText = (reviewId) => {
+    setIsExpanded((prev) => ({
+      ...prev,
+      [reviewId]: !prev[reviewId],
+    }));
+  };
+
+  // Intersection Observer로 무한 스크롤 구현
+  const observeLastItem = useCallback(
+    (node) => {
+      if (isLoading || isLast) return; // 로딩 중이거나 마지막 페이지라면 요청하지 않음
+
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && placeId) {
+          fetchReviews(placeId); // 마지막 아이템에 도달하면 데이터 요청
+        }
+      });
+
+      if (node) observerRef.current.observe(node);
+    },
+    [isLoading, isLast, fetchReviews, placeId]
+  );
+
+  if (isLoading && reviews.length === 0) return <div>로딩 중...</div>;
+  if (!placeId) return <div>장소 정보를 가져올 수 없습니다.</div>;
 
   return (
     <TotalReviewContainer>
+      <ReviewPlaceTitle>{placeName}</ReviewPlaceTitle>
+      <PreferenceContainer>
+        {bestKeywords.map((keyword, index) => (
+          <ReviewKeywords key={index} label={keyword} />
+        ))}
+      </PreferenceContainer>
       <DivisionLine />
-        <ReviewUserContainer>
-          <UserPhoto />
-          <TotalUserInfoContainer>
-          <CommentContainer>
-            <UserId>내가 진짜</UserId>
-            <PetType>시츄</PetType>
-            <PostDate>2024.10.11</PostDate>
-          </CommentContainer>
-          <UserSecondInfoContainer>
-            <UserStarImg src={star} alt='유저별 장소에 남긴 별점' />
-            <DeleteBtn label='삭제' />
-          </UserSecondInfoContainer>
-          </TotalUserInfoContainer>
-        </ReviewUserContainer>
-        <VisitDate>방문날짜 2024.05.29</VisitDate>
-        <ReviewContent>
-          {displayedText}
-          {text.length > maxLength && (
-          <ReadMoreButton onClick={toggleText}>
-          {isExpanded ? '접기' : '더보기'}
-        </ReadMoreButton>
-          )}
-        </ReviewContent>
-        <ReviewPictureContainer>
-          <ReviewPicture /><ReviewPicture /><ReviewPicture />
-        </ReviewPictureContainer>
-      </TotalReviewContainer>
-  )
-}
+
+      <AiReviewSummary placeId={placeId} />
+
+      <ReviewSummaryContainer>
+        <div>
+          <StarImg src={star} />
+        </div>
+        <TotalStarPoint>
+          {score}/5
+        </TotalStarPoint>
+        <TotalReviewCount>총 {total}개</TotalReviewCount>
+        <Sorting
+          mode="list"
+          sortingOptions={['최신순', '평점 높은순', '평점 낮은순']}
+          activeIndex={['LATEST', 'HIGH_SCORE', 'LOW_SCORE'].indexOf(sortedType)}
+          onSortChange={handleSortChange}
+        />
+      </ReviewSummaryContainer>
+      <DivisionLine />
+
+      {Array.isArray(reviews) && reviews.length > 0 ? (
+        reviews.map((review, index) => {
+          const maxLength = 200;
+          const isExpandedForReview = isExpanded[review.reviewId] || false;
+          const displayedText = isExpandedForReview
+            ? review.content
+            : review.content.slice(0, maxLength);
+
+          return (
+            <div
+              key={review.reviewId}
+              ref={index === reviews.length - 1 ? observeLastItem : null} 
+            >
+              <ReviewUserContainer>
+                <UserPhoto
+                  src={review.petImg || "default-user.jpg"}
+                  alt="반려동물 이미지"
+                />
+                <TotalUserInfoContainer>
+                  <CommentContainer>
+                    <UserId>{review.nickname}</UserId>
+                    <PetType>{review.pets?.join(", ") || "등록된 반려동물이 없습니다."}</PetType>
+                    <PostDate>
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </PostDate>
+                  </CommentContainer>
+                  <UserSecondInfoContainer>
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <UserStarImg
+                        key={idx}
+                        src={idx < review.score ? star : notfillstar}
+                        alt={idx < review.score ? `별점 ${idx + 1}` : "빈 별"}
+                      />
+                    ))}
+                  </UserSecondInfoContainer>
+                </TotalUserInfoContainer>
+              </ReviewUserContainer>
+              <VisitDate>
+                방문날짜 {new Date(review.visitedAt).toLocaleDateString()}
+              </VisitDate>
+              <ReviewContent>
+                {displayedText}
+                {review.content.length > maxLength && (
+                  <ReadMoreButton onClick={() => toggleText(review.reviewId)}>
+                    {isExpandedForReview ? "접기" : "더보기"}
+                  </ReadMoreButton>
+                )}
+              </ReviewContent>
+              <ReviewPictureContainer>
+                {Array.isArray(review.media) &&
+                  review.media.map((mediaUrl, idx) => (
+                    <ReviewPicture key={idx} src={mediaUrl} alt={`리뷰 이미지 ${idx + 1}`} />
+                  ))}
+              </ReviewPictureContainer>
+            </div>
+          );
+        })
+      ) : (
+        <div>리뷰가 없습니다.</div>
+      )}
+      {isLoading && <div>로딩 중...</div>}
+      {isLast && <div>더이상 리뷰가 없습니다.</div>}
+    </TotalReviewContainer>
+  );
+};
 
 export default TotalReviewForm;

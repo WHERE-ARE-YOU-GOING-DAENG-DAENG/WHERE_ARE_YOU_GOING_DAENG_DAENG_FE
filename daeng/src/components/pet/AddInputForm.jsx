@@ -14,10 +14,6 @@ const Container = styled.div`
   flex-direction: column;
   padding: 3%;
   margin-left: 4%;  
-  
-  @media (max-width: 554px) {
-    margin-top:3%;
-  }
 `;
 
 const FirstInputContainer = styled.div`
@@ -25,7 +21,7 @@ const FirstInputContainer = styled.div`
   flex-direction: row;
 
   @media (max-width: 554px) {
-    margin-bottom:5%;
+    margin-left:10%;
   }
 `;
 
@@ -39,6 +35,14 @@ const PetImg = styled.div`
   background-size: cover;
   background-position: center;
   cursor: pointer;
+
+
+  @media (max-width: 554px) {
+    width: 100px;
+    height: 100px;
+    margin-left:10%;
+    margin-top:10px;
+  }
 `;
 
 const HiddenInput = styled.input`
@@ -49,6 +53,11 @@ const PetNameInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 15px;
+
+  @media (max-width: 554px) {
+    margin-top: 0px;
+
+  }
 `;
 
 const PetNameInput = styled.input`
@@ -63,6 +72,7 @@ const PetNameInput = styled.input`
   @media (max-width: 554px) {
     width: 185%;
     font-size: 14px;
+    width: 140%;
     height: 48px;
   }
     &:focus {
@@ -103,12 +113,6 @@ const PetTypeOption = styled.select`
     border-color: #FF69A9;  
     outline: none;  
   }
-
-
-  &:focus {
-    outline: none;
-    border-color: #ff69a9; 
-  }
 `;
 
 const BirthInput = styled.input`
@@ -121,6 +125,7 @@ const BirthInput = styled.input`
   font-size: 13px;
   color: #000; 
   cursor: pointer;
+  
 
   &::placeholder {
     color: #b3b3b3; 
@@ -137,15 +142,33 @@ const PetTypeContainer = styled.div`
   flex-direction: column;
   margin-top: 20px;
   margin-bottom: 20px;
+
+  @media (max-width: 554px) {
+    margin-left:15%;
+    font-size: 14px;
+    width:70%;
+  }
 `;
 
 const BirthContainer = styled.div`
   margin-bottom: 20px;
+
+  @media (max-width: 554px) {
+    margin-left:15%;
+    font-size: 14px;
+    width:70%;
+  }
 `    
 const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
+
+  @media (max-width: 554px) {
+    margin-left:15%;
+    font-size: 14px;
+    width:70%;
+  }
 `
 
 const SelectWeight = styled.button`
@@ -176,25 +199,6 @@ const SelectWeight = styled.button`
     `}
 `;
 
-const NextRegisterBtn = styled.button`
-  background-color: white;
-  color:#B3B3B3;
-  font-size:14px;
-  border:none;
-  cursor: pointer;
-  text-align: center;
-  margin-right:20px;
-  margin-bottom: 20px;
-
-  @media (max-width: 554px) {
-    margin-top:1%;
-    margin-right:5%;
-  }
-
-  &:hover{
-    font-weight: bold;
-  }
-`
 //퍼블리싱 
 
 function RegisterInputForm() {
@@ -323,7 +327,7 @@ function RegisterInputForm() {
 // Presigned URL 조회
   if (imageFile) {
     try {
-      const presignResponse = await axios.get(
+      const presignResponse = await axios.post(
         `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
       );
       const presignedUrl = presignResponse.data.url; 
@@ -384,10 +388,6 @@ function RegisterInputForm() {
       }
     } catch (error) {
       console.log('에러 전체 정보:', error);
-      console.log('에러 메시지:', error.message);
-      console.log('에러 응답:', error.response?.data);
-      console.log('에러 상태 코드:', error.response?.status);
-      console.log('에러 헤더:', error.response?.headers);
       alert("서버와 통신 중 오류가 발생했습니다.");
     }
   };
