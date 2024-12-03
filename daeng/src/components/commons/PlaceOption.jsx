@@ -21,7 +21,7 @@ const PlaceOptionContainer = styled.div`
 `;
 
 const PlaceList = styled.p`
-  font-size: 13px;
+  font-size: 14px;
   text-align: center;
   word-break: keep-all;
   display: flex;
