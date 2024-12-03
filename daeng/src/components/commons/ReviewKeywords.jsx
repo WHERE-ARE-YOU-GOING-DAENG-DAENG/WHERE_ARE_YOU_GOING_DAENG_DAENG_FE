@@ -30,7 +30,7 @@ const ReviewButton = styled.button`
     padding: 15px;
     font-size: 15px;
     img{
-    width: 25px;
+     width: 25px;
     }
     &:hover {
       background-color: #FF77C0;
@@ -39,7 +39,7 @@ const ReviewButton = styled.button`
     @media (max-width: 554px) {
     font-size: 13px;
     img{
-    width: 22px;
+     width: 22px;
     }
   }
   `}
