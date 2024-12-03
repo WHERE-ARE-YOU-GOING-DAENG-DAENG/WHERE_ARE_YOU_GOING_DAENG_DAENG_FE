@@ -6,6 +6,7 @@ import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import axios from 'axios';
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 
@@ -35,7 +36,6 @@ const PetImg = styled.div`
   height: 135px;
   margin-right: 20px;
   border-radius: 100px;
-  background-color: #fbc9e4;
   background-image: url(${(props) => props.src || "none"});
   background-size: cover;
   background-position: center;
@@ -78,9 +78,9 @@ const PetNameInput = styled.input`
 
 const InputAlert = styled.p`
   color: #ff69a9;
-  font-size: 10px;
+  font-size: 12px;
   margin-top: -1px;
-  margin-right: 23%;
+  margin-right: 15%;
   margin-bottom: 4%;
 `;
 
@@ -113,7 +113,7 @@ const BirthInput = styled.input`
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
-  font-size: 13px;
+  font-size: 14px;
   color: #000; 
   cursor: pointer;
 
@@ -144,13 +144,13 @@ const SelectContainer = styled.div`
 `
 
 const SelectWeight = styled.button`
-  width: 90px;
+  width: 92px;
   height : 44px;
   margin-right: 12px;
   background-color: white;
   border : 0.5px solid #E4E4E4;
   border-radius: 5px;
-  font-size: 10px;
+  font-size: 11px;
   cursor: pointer;
   color:  #B3B3B3;
 
@@ -371,34 +371,43 @@ function RegisterInputForm() {
     );
 
     if (response.status === 200) {
-      console.log('성공');
-      console.log('응답 데이터:', response.data);
-      alert("댕댕어디가 회원이 되신걸 축하드려요!");
+      console.log('성공! 응답 데이터',response.data );
+      AlertDialog({
+        mode: "alert", 
+        title: "성공",
+        text: "댕댕어디가 회원이 되신걸 축하드려요",
+        confirmText: "닫기"
+      });
 
     } else {
       console.log('응답 상태:', response.status);
       console.log('응답 데이터:', response.data);
-      alert("등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+      AlertDialog({
+        mode: "alert", 
+        title: "실패",
+        text: "등록 중 오류가 발생했습니다. 다시 시도해주세요",
+        confirmText: "닫기"
+      });
     }
   } catch (error) {
     console.log('에러 전체 정보:', error);
-    console.log('에러 메시지:', error.message);
-    console.log('에러 응답:', error.response?.data);
-    console.log('에러 상태 코드:', error.response?.status);
-    console.log('에러 헤더:', error.response?.headers);
-    alert("서버와 통신 중 오류가 발생했습니다.");
+    AlertDialog({
+      mode: "alert", 
+      title: "실패",
+      text: "등록 중 오류가 발생했습니다. 다시 시도해주세요",
+      confirmText: "닫기"
+    });
   }
 };
 
   const handleNextRegisterClick = () => {
     navigate("/"); 
   };
-
   return (
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-          <PetImg src={preview} />
+          <PetImg src={reviewDefaultImg} />
         </label>
         <HiddenInput
           id="file-input"
