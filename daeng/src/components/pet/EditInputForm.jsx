@@ -214,6 +214,11 @@ function EditInputForm() {
     return `${year}-${month}-${day}`;
   }; // 오늘 이후는 선택 불가하게
 
+  const handleFocus = (e) => {
+    e.target.showPicker();
+  };
+
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -442,6 +447,7 @@ function EditInputForm() {
         max={getTodayDate()} 
         placeholder="우리 댕댕일 생일을 알려주세요!"
         value={petBirth || ""} 
+        onFocus={handleFocus}  
         onChange={handlePetBirthChange} 
       />
       </BirthContainer>

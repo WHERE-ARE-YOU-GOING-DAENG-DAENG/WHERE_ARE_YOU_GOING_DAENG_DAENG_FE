@@ -218,6 +218,12 @@ function RegisterInputForm() {
     setSelectedSize(sizeCode); 
   }; //사이즈 
 
+  const handleFocus = (e) => {
+    // input focus로 날짜 선택 UI를 트리거
+    e.target.showPicker();
+  };
+
+
   //오늘 이후로는 날짜 선택 못하게
   const getTodayDate = () => {
     const today = new Date();
@@ -415,6 +421,7 @@ if (imageFile) {
           type="date"
           value={selectedPetBirth}
           max={getTodayDate()} 
+          onFocus={handleFocus}  
           onChange={handlePetBirthChange}
           placeholder="우리 댕댕일 생일을 알려주세요!"
         />

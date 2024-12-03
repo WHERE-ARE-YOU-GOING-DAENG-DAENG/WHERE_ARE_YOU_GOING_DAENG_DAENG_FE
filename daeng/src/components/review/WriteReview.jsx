@@ -34,7 +34,7 @@ const PlaceTitle = styled.span`
 
   @media (max-width: 554px) {
     font-size: 20px;
-    margin-right: 10%;
+    margin-right: 5%;
     margin-left:10px;
     margin-bottom: 15px;
   }
@@ -45,7 +45,8 @@ const WriteReviewDate = styled.span`
   font-size: 18px;
   
   @media (max-width: 554px) {
-    margin-left: 20%;
+    margin-left: 18%;
+    font-size: 15px;
   }
 `;
 
@@ -59,7 +60,7 @@ const SelectPlaceOptionContainer = styled.div`
 
   @media (max-width: 554px) {
     padding:5%;
-    height: 320px;
+    height: 330px;
   }
 `;
 
