@@ -6,9 +6,12 @@ import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
-import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import axios from 'axios';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
+
 
 
 const Container = styled.div`
@@ -36,7 +39,7 @@ const PetImg = styled.div`
   height: 135px;
   margin-right: 20px;
   border-radius: 100px;
-  background-image: url(${(props) => props.src || "none"});
+  background-image: url(${(props) => props.src || reviewDefaultImg});
   background-size: cover;
   background-position: center;
   cursor: pointer;
@@ -106,24 +109,53 @@ const PetTypeOption = styled.select`
   }
 `;
 
-const BirthInput = styled.input`
+const BirthInputContainer = styled.div`
   width: 96%;
   height: 44px;
-  margin-right:10%;
+  margin-right: 10%;
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
   font-size: 14px;
-  color: #000; 
+  color: #000;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   &::placeholder {
-    color: #b3b3b3; 
+    color: #b3b3b3;
   }
 
-  &:focus {
+  &:focus-within {
     outline: none;
-    border-color: #ff69a9; 
+    border-color: #ff69a9;
+  }
+`;
+
+
+const BirthInput = styled.input`
+  display: block;
+  width: 96%;
+  height: 44px;
+  margin-right: 10%;
+  border: 0.5px solid #e4e4e4;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &::placeholder {
+    color: #b3b3b3;
+  }
+
+  &:focus-within {
+    outline: none;
+    border-color: #ff69a9;
   }
 `;
 
@@ -137,6 +169,7 @@ const PetTypeContainer = styled.div`
 const BirthContainer = styled.div`
   margin-bottom: 20px;
 `    
+
 const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -209,12 +242,15 @@ function RegisterInputForm() {
   const [preview, setPreview] = useState(null); // 이미지 미리보기 
   const [imageFile, setImageFile] = useState(null); //이미지 
   const [petName, setPetName] = useState(""); //반려동물 이름
-  const [selectedPetBirth, setSelectedPetBirth] = useState(""); //반려동물 생일
+  const [selectedPetBirth, setSelectedPetBirth] = useState(null); //반려동물 생일
   const [selectedPetType, setSelectedPetType] = useState(""); //반려동물 종
   const [selectedSize, setSelectedSize] = useState(""); // 반려동물 사이즈
   const [selectedGender, setSelectedGender] = useState(""); //성별
   const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화 
 
+  const handleDateChange = (date) => {
+    setSelectedPetBirth(date);
+  };
   
   const handlePetNameChange = (e) => {
     setPetName(e.target.value);
@@ -320,8 +356,19 @@ function RegisterInputForm() {
   if (imageFile) {
     try {
       const presignResponse = await axios.post(
-        `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
+        'https://www.daengdaeng-where.link/api/v1/S3',
+        {
+          prefix: 'PET',
+          fileNames: [imageFile.name]
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        }
       );
+      
       const presignedUrl = presignResponse.data.url; 
       console.log("Presigned URL:", presignedUrl); 
 
@@ -403,11 +450,12 @@ function RegisterInputForm() {
   const handleNextRegisterClick = () => {
     navigate("/"); 
   };
+
   return (
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-          <PetImg src={reviewDefaultImg} />
+          <PetImg src={preview} />
         </label>
         <HiddenInput
           id="file-input"
@@ -440,13 +488,14 @@ function RegisterInputForm() {
       </PetTypeContainer>
       <BirthContainer>
         <SelectLabel label="생년월일" />
-        <BirthInput
-          type="date"
-          value={selectedPetBirth}
-          max={getTodayDate()} 
-          onChange={handlePetBirthChange}
-          placeholder="우리 댕댕일 생일을 알려주세요!"
-        />
+          <DatePicker
+            selected={selectedPetBirth}
+            onChange={handleDateChange}
+            dateFormat="yyyy-MM-dd"
+            maxDate={new Date()}
+            placeholderText="우리 댕댕이의 생일을 알려주세요!"
+            customInput={<BirthInput />}
+          />
       </BirthContainer>
       <SelectLabel label="성별" />
       <SelectContainer>

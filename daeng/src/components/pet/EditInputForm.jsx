@@ -38,8 +38,7 @@ const PetImg = styled.div`
   height: 135px;
   margin-right: 20px;
   border-radius: 100px;
-  background-color: #fbc9e4;
-  background-image: url(${(props) => props.src || "none"});
+  background-image: url(${(props) => props.src || reviewDefaultImg});
   background-size: cover;
   background-position: center;
   cursor: pointer;
@@ -321,12 +320,21 @@ function EditInputForm() {
     let imageUrl = petPicture;
   
     // 새 이미지가 있을 경우에만 S3에 업로드 처리
-  if (imageFile) {
-    try {
-      const presignResponse = await axios.post(
-        `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
-      );
-
+    if (imageFile) {
+      try {
+        const presignResponse = await axios.post(
+          'https://www.daengdaeng-where.link/api/v1/S3',
+          {
+            prefix: 'PET',
+            fileNames: [imageFile.name]
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true
+          }
+        );
       console.log('Presigned URL:', presignResponse.data.url);
 
       const presignedUrl = presignResponse.data.url; 
@@ -397,7 +405,7 @@ function EditInputForm() {
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-          <PetImg src={reviewDefaultImg || petPicture} />
+          <PetImg src={preview} />
         </label>
         <HiddenInput
           id="file-input"

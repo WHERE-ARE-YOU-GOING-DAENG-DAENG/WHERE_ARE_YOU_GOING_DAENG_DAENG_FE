@@ -35,7 +35,7 @@ const PetImg = styled.div`
   height: 135px;
   margin-right: 20px;
   border-radius: 100px;
-  background-image: url(${(props) => props.src || "none"});
+  background-image: url(${(props) => props.src || reviewDefaultImg});
   background-size: cover;
   background-position: center;
   cursor: pointer;
@@ -179,15 +179,15 @@ function RegisterInputForm() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImageFile(file); 
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result); 
+        setPreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
-
+  
   const [preview, setPreview] = useState(null); // 이미지 미리보기 
   const [imageFile, setImageFile] = useState(null); //이미지 
   const [petName, setPetName] = useState(""); //반려동물 이름
@@ -296,11 +296,21 @@ function RegisterInputForm() {
     let imageUrl = ''; // 이미지 URL을 저장할 변수
 
 // Presigned URL 조회
-  if (imageFile) {
-    try {
-      const presignResponse = await axios.post(
-        `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
-      );
+if (imageFile) {
+  try {
+    const presignResponse = await axios.post(
+      'https://www.daengdaeng-where.link/api/v1/S3',
+      {
+        prefix: 'PET',
+        fileNames: [imageFile.name]
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      }
+    );
       const presignedUrl = presignResponse.data.url; 
       console.log("Presigned URL:", presignedUrl); 
 
@@ -368,7 +378,7 @@ function RegisterInputForm() {
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-        <PetImg src={reviewDefaultImg} />
+        <PetImg src={preview} />
         </label>
         <HiddenInput
           id="file-input"
