@@ -118,6 +118,10 @@ const PlaceItem = styled.div`
       font-size: 18px;
       font-weight: bold;
       color: #ff4b98;
+
+      @media(max-width:554px){
+      font-size: 15px;
+    }
     }
 
     .facility-type {
@@ -125,12 +129,20 @@ const PlaceItem = styled.div`
       margin-left: 6px;
       font-size: 13px;
       color: #b3b3b3;
+
+      @media(max-width:554px){
+      font-size: 12px;
+    }
     }
   }
 
   .details {
     display: flex;
     font-size: 14px;
+
+    @media(max-width:554px){
+      font-size: 12px;
+    }
 
     .address {
       margin-left: 3px;
