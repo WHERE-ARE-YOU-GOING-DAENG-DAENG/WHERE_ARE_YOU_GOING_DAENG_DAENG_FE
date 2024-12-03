@@ -345,7 +345,7 @@ const PlaceReviewList = ({ data, placeName}) => {
           );
         })
       ) : (
-        <div>리뷰가 없습니다.</div>
+        <p style={{fontWeight: "bold"}}>리뷰가 없습니다.</p>
       )}
       </ReviewsSection>
     </>
