@@ -1,39 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import PushAlerts from "../../components/commons/PushAlerts";
 
 const ListContainer = styled.div`
-  margin: 20px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-`;
+  padding-left: 30px;
 
-const NotificationItem = styled.div`
-  padding: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-
-  &:last-child {
-    border-bottom: none;
+  @media (max-width: 554px) {
+    margin: 10px;
+    padding: 10px;
   }
-`;
-
-const EventType = styled.div`
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 5px;
-`;
-
-const Content = styled.div`
-  font-size: 14px;
-  color: #333;
-`;
-
-const CreatedDateTime = styled.div`
-  font-size: 12px;
-  color: #888;
 `;
 
 function AlarmList() {
@@ -41,19 +17,30 @@ function AlarmList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const handleNotificationClose = (notificationId) => {
+    setNotifications((prev) =>
+      prev.filter((notification) => notification.notificationId !== notificationId)
+    );
+  };
+
   useEffect(() => {
     const fetchNotifications = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://www.daengdaeng-where.link/api/v1/notifications"
+          "https://www.daengdaeng-where.link/api/v1/notifications",
+          {
+            withCredentials: true,
+          }
         );
         if (response.status === 200) {
+          console.log("알림 데이터:", response.data.data);
           setNotifications(response.data.data);
         } else {
           throw new Error("알림 데이터를 불러오는 데 실패했습니다.");
         }
       } catch (err) {
+        console.error("오류 발생:", err.message);
         setError(err.message || "알림 데이터를 가져오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
@@ -77,13 +64,13 @@ function AlarmList() {
         <div>알림이 없습니다.</div>
       ) : (
         notifications.map((notification) => (
-          <NotificationItem key={notification.notificationId}>
-            <EventType>{notification.eventType}</EventType>
-            <Content>{notification.content}</Content>
-            <CreatedDateTime>
-              {notification.createdDate} {notification.createdTime}
-            </CreatedDateTime>
-          </NotificationItem>
+          <PushAlerts
+            key={notification.notificationId}
+            message={notification.content}
+            dateTime={`${notification.createdDate} ${notification.createdTime}`}
+            notificationId={notification.notificationId}
+            onNotificationClose={handleNotificationClose} 
+          />
         ))
       )}
     </ListContainer>
