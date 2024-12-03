@@ -130,14 +130,21 @@ function PreferenceRegister() {
         },
       });
     } catch (error) {
-      if (error.response) {
+      if (error.response?.status === 409) {
+        AlertDialog({
+          mode: "alert",
+          title: "등록 실패",
+          text: "이미 등록된 선호도입니다.",
+          confirmText: "확인",
+          onConfirm: () => navigate("/main"),
+        });
+      } else if (error.response) {
         console.error("등록 실패:", error.response.data);
         AlertDialog({
           mode: "alert",
           title: "등록 실패",
           text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
           confirmText: "확인",
-          onConfirm: () => console.log("등록 실패 확인됨"),
         });
       }
     }
