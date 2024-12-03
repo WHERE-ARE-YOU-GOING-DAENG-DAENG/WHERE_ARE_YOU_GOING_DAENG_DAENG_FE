@@ -115,7 +115,7 @@ const PlaceItem = styled.div`
     cursor: pointer;
 
     .place-name {
-      font-size: 15px;
+      font-size: 18px;
       font-weight: bold;
       color: #ff4b98;
     }
@@ -123,14 +123,14 @@ const PlaceItem = styled.div`
     .facility-type {
       margin-top: 3px;
       margin-left: 6px;
-      font-size: 10px;
+      font-size: 13px;
       color: #b3b3b3;
     }
   }
 
   .details {
     display: flex;
-    font-size: 9px;
+    font-size: 14px;
 
     .address {
       margin-left: 3px;
