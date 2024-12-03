@@ -45,7 +45,7 @@ const Icon = styled.img`
 `
 
 const RouteText = styled.span`
-  font-size: 13px;
+  font-size: 15px;
   margin-bottom: 40px;
   margin-left:10px;
   display : flex;

@@ -338,7 +338,7 @@ const handlePetSelection = (selectedOptions) => {
   setSelectPet(selectedOptions);
 
   if (selectedOptions.length > 0) {
-    setSelectedPetImage(selectedOptions[0].image); // 첫 번째 선택된 펫 이미지 설정
+    setSelectedPetImage(selectedOptions[0].image); 
   } else {
     setSelectedPetImage(""); 
   }
