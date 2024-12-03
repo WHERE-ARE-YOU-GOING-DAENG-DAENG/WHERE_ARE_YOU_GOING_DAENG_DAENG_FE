@@ -4,6 +4,7 @@ import arrow from '../../assets/icons/arrow.svg';
 import addImg from '../../assets/icons/addImg.svg';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import AlertDialog from "../../components/commons/SweetAlert";
 
 const PetTotalContainer = styled.div`
@@ -36,6 +37,9 @@ const PetCarouselContainer = styled.div`
 const ArrowButton = styled.img`
   width: 24px;
   height: 24px;
+  margin-right:30px;
+  margin-top:10px;
+  margin-bottom: 30px;
   cursor: pointer;
   opacity: ${(props) => (props.disabled ? "0.5" : "1")};
   pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
@@ -61,9 +65,9 @@ const PetListContainer = styled.div`
 `;
 
 const PetAdd = styled.span`
-  font-size: 11px;
+  font-size: 15px;
   display: flex;
-  margin-top: 19px;
+  margin-top: 17px;
   margin-left:5px;
   color: #B3B3B3;
   cursor: pointer;
@@ -128,7 +132,6 @@ const PetName = styled.span`
   justify-content: flex-start;
 `;
 
-
 const PetTypeContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -137,14 +140,14 @@ const PetTypeContainer = styled.div`
 `;
 
 const PetWeight = styled.span`
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   margin-top: 5px;
   font-weight: 300;
 `
 
 const PetType = styled.span`
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   margin-top: 5px;
   font-weight: 300;
@@ -258,7 +261,7 @@ if (!petData) {
         <PetListContainer>
           {visiblePets.map((pet) => (
             <PetInfoContainer key={pet.petId}>
-              <PetImage src={pet.image || "default-image.jpg"} alt="펫 이미지" />
+              <PetImage src={pet.image || reviewDefaultImg} alt="펫 이미지" />
               <PetDetailInfoContainer>
                 <PetFirstContainer>
                 <PetName>{pet.name}</PetName>
