@@ -26,13 +26,38 @@ const Search = () => {
   });
     const [filter, setFilter] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isFetchingNearPlaces, setIsFetchingNearPlaces] = useState(false);
+
+    useEffect(()=>{
+        fetchNearestPlaces();
+    },[])
+  
+  
+    //가까운순 추천장소 30개
+    const fetchNearestPlaces = async () => {
+      if (!userLocation) return;
+      setIsFetchingNearPlaces(true);
+      const payload = {
+        latitude: userLocation.lat,
+        longitude: userLocation.lng
+      }
+      try{
+        const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/nearest",payload,{
+          withCredentials: true,
+        });
+        setPlaces(response.data.data);
+        setNearPlaces(response.data.data)
+      }catch (error){
+        console.error("Error fetching nearest places:", error);
+      }
+    }
 
     const handleSearch = (keyword) => {
         setQuery(keyword);
     };
     const handleSortChange = (index) => {
-      setSortIndex(index); // 정렬 방식 변경
-      sortPlaces(index); // 정렬 함수 호출
+      setSortIndex(index); 
+      sortPlaces(index); 
     };
   
     const sortPlaces = (index) => {
@@ -56,8 +81,9 @@ const Search = () => {
     useEffect(() => {
       const fetchPlaces = async () => {
         if (query && userLocation) {
-          setIsLoading(true); // 로딩 시작
-          setPlaces([]); // 기존 데이터 초기화
+          setIsFetchingNearPlaces(false);
+          setIsLoading(true); 
+          setPlaces([]); 
           const payload = {
             keyword: query,
             latitude: userLocation.lat,
@@ -83,13 +109,14 @@ const Search = () => {
               });
             }
           } finally {
-            setIsLoading(false); // 로딩 종료
+            setIsLoading(false); 
           }
         }
   
         if (filter && userLocation) {
-          setIsLoading(true); // 로딩 시작
-          setPlaces([]); // 기존 데이터 초기화
+          setIsFetchingNearPlaces(false);
+          setIsLoading(true); 
+          setPlaces([]);
           const matchedType = placeTypes.find(
             (type) => type.name === keywords.placeType
           );
@@ -110,6 +137,7 @@ const Search = () => {
               { withCredentials: true }
             );
             setPlaces(response.data.data || []);
+            setNearPlaces(response.data.data || []);
           } catch (error) {
             if (error.response) {
               AlertDialog({
@@ -120,7 +148,7 @@ const Search = () => {
               });
             }
           } finally {
-            setIsLoading(false); // 로딩 종료
+            setIsLoading(false); 
             setFilter(false);
           }
         }
@@ -137,12 +165,12 @@ const Search = () => {
           <FilterBtnList keywords={keywords} setKeywords={setKeywords} setFilter={setFilter}/>
           <Sorting 
             mode="list" 
-            label={places ? "검색결과" : "보호자님께 추천하는 장소!"} 
+            label={isFetchingNearPlaces ? "보호자님께 추천하는 장소!" : "검색결과"} 
             sortingOptions={['가까운순', '별점 높은순']} 
             activeIndex={sortIndex}
             onSortChange={handleSortChange}
             />
-          <SearchPlaceList places={places} setPlaces={setPlaces} setNearPlaces={setNearPlaces} isLoading={isLoading}/>
+          <SearchPlaceList places={places} setPlaces={setPlaces} isLoading={isLoading}/>
           <Footer />
         </>
     );
