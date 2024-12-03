@@ -15,13 +15,16 @@ const Container = styled.div`
 const TitleSection = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-end;
   margin-top: 20px;
 
   h1 {
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: 0px;
+    margin-bottom: 3px;
+
+    @media(max-width: 554px){
+    font-size: 20px;
   }
 
 `;
@@ -29,7 +32,7 @@ const TitleSection = styled.div`
 const SubTitleSection = styled.div`
   display: flex;
   font-weight: bold;
-  font-size: 10px;
+  font-size: 12px;
 
   .detail-category{
     color: #FF69A9;
