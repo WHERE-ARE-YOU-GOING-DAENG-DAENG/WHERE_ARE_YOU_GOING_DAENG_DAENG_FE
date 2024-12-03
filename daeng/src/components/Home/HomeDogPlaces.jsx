@@ -18,7 +18,7 @@ function HomeDogPlaces() {
   useEffect(() => {
     const fetchDogPlaces = async () => {
       try {
-        const locationToUse = userLocation.latitude && userLocation.longitude
+        const locationToUse = userLocation.lat && userLocation.lng
           ? userLocation
           : defaultLocation;
 
