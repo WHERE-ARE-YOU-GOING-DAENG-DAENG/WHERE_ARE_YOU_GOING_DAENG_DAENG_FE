@@ -1,12 +1,95 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg"
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import useLocationStore from "../../stores/useLocationStore";
 import useFavoriteStore from "../../stores/useFavoriteStore";
 import Loading from "../commons/Loading";
+
+const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
+  const navigate = useNavigate();
+
+  
+  //즐겨찾기 토글
+  const toggleBookmark = async (placeId, isFavorite) => {
+    const favoriteStore = useFavoriteStore.getState();
+    
+    try {
+      if (isFavorite) {
+        const favoriteId = favoriteStore.getFavoriteId(placeId);
+        if (favoriteId) {
+          await favoriteStore.removeFavorite(favoriteId);
+        } else {
+          console.warn(`Favorite ID not found for placeId: ${placeId}`);
+        }
+      } else {
+        await favoriteStore.addFavorite(placeId);
+      }
+      setPlaces((prevPlaces) =>
+        prevPlaces.map((p) =>
+          p.placeId === placeId ? { ...p, isFavorite: !isFavorite } : p
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
+
+  const handlePlaceClick = (placeId) => {
+    navigate(`/search/${placeId}`);
+  };
+
+  return (
+    <ListContainer>
+      {isLoading ? (
+        <Loading label="장소 데이터를 불러오는 중입니다.." />
+      ) : places.length > 0 ? (
+        places.map((place) => (
+          <PlaceItem key={place.placeId}>
+            <div onClick={() => handlePlaceClick(place.placeId)}>
+              <div className="header">
+                <div className="place-name">{place.name}</div>
+                <div className="facility-type">{place.placeType || "시설 정보 없음"}</div>
+              </div>
+              <div className="details">
+                <div className="status">
+                  {place.startTime && place.endTime
+                    ? `${place.startTime} - ${place.endTime}`
+                    : "24시간 운영"}
+                  {" | "}
+                </div>
+                <div className="address">{place.streetAddresses || "주소 정보 없음"}</div>
+              </div>
+              <div className="images">
+                {Array.isArray(place.img_path) && place.img_path.length > 0 ? (
+                  place.img_path.map((image, i) => (
+                    <img key={i} src={image} alt={`${place.name} 이미지`} />
+                  ))
+                ) : (
+                  <div
+                    style={{
+                      width: "108px",
+                      height: "130px",
+                      borderRadius: "10px",
+                      backgroundColor: "#b3b3b3",
+                    }}
+                  ></div>
+                )}
+              </div>
+            </div>
+            <img
+              src={place.isFavorite ? filledbookmarkIcon : bookmarkIcon}
+              className="favorite"
+              alt="즐겨찾기"
+              onClick={() => toggleBookmark(place.placeId, place.isFavorite)}
+            />
+          </PlaceItem>
+        ))
+      ) : (
+        <p>검색 결과가 없습니다.</p>
+      )}
+    </ListContainer>
+  );
+};
 
 const ListContainer = styled.div`
   padding-bottom: 81px;
@@ -76,116 +159,6 @@ const PlaceItem = styled.div`
     cursor: pointer;
   }
 `;
-
-const SearchPlaceList = ({ places, setPlaces, setNearPlaces, isLoading }) => {
-  // const [places, setPlaces] = useState(Array.isArray(list) ? list : []);
-  const userLocation = useLocationStore((state) => state.userLocation);
-  const navigate = useNavigate();
-
-  useEffect(()=>{
-    if (!Array.isArray(places) || places.length === 0) { //추천리스트
-      //fetchNearestPlaces();
-      setPlaces(mockData);
-      setNearPlaces(mockData);
-    } 
-  },[places])
-
-
-  //가까운순 추천장소 30개
-  const fetchNearestPlaces = async () => {
-    try{
-      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/nearest",userLocation,{
-        withCredentials: true,
-      });
-      console.log(response.data.data); //로그 삭제
-      setPlaces(response.data.data);
-      setNearPlaces(response.data.data)
-    }catch (error){
-      console.error("Error fetching nearest places:", error);
-    }
-  }
-
-  //즐겨찾기 토글
-  const toggleBookmark = async (placeId, isFavorite) => {
-    const favoriteStore = useFavoriteStore.getState();
-    
-    try {
-      if (isFavorite) {
-        const favoriteId = favoriteStore.getFavoriteId(placeId);
-        if (favoriteId) {
-          await favoriteStore.removeFavorite(favoriteId);
-        } else {
-          console.warn(`Favorite ID not found for placeId: ${placeId}`);
-        }
-      } else {
-        await favoriteStore.addFavorite(placeId);
-      }
-      setPlaces((prevPlaces) =>
-        prevPlaces.map((p) =>
-          p.placeId === placeId ? { ...p, isFavorite: !isFavorite } : p
-        )
-      );
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-    }
-  };
-
-  const handlePlaceClick = (placeId) => {
-    navigate(`/search/${placeId}`);
-  };
-
-  return (
-    <ListContainer>
-      {isLoading ? (
-        <Loading label="장소 데이터를 불러오는 중입니다.." /> // 로딩 메시지 또는 스피너
-      ) : places.length > 0 ? (
-        places.map((place) => (
-          <PlaceItem key={place.placeId}>
-            <div onClick={() => handlePlaceClick(place.placeId)}>
-              <div className="header">
-                <div className="place-name">{place.name}</div>
-                <div className="facility-type">{place.placeType || "시설 정보 없음"}</div>
-              </div>
-              <div className="details">
-                <div className="status">
-                  {place.startTime && place.endTime
-                    ? `${place.startTime} - ${place.endTime}`
-                    : "24시간 운영"}
-                  {" | "}
-                </div>
-                <div className="address">{place.streetAddresses || "주소 정보 없음"}</div>
-              </div>
-              <div className="images">
-                {Array.isArray(place.img_path) && place.img_path.length > 0 ? (
-                  place.img_path.map((image, i) => (
-                    <img key={i} src={image} alt={`${place.name} 이미지`} />
-                  ))
-                ) : (
-                  <div
-                    style={{
-                      width: "108px",
-                      height: "130px",
-                      borderRadius: "10px",
-                      backgroundColor: "#b3b3b3",
-                    }}
-                  ></div>
-                )}
-              </div>
-            </div>
-            <img
-              src={place.isFavorite ? filledbookmarkIcon : bookmarkIcon}
-              className="favorite"
-              alt="즐겨찾기"
-              onClick={() => toggleBookmark(place.placeId, place.isFavorite)}
-            />
-          </PlaceItem>
-        ))
-      ) : (
-        <p>검색 결과가 없습니다.</p>
-      )}
-    </ListContainer>
-  );
-};
 
 const mockData = [
   {
