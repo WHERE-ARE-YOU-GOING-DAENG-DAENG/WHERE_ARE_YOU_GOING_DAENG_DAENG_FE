@@ -394,6 +394,13 @@ const DuplicateBtn = styled.button`
   background-color: #ff69a9;
   color: white;
 
+  @media (max-width: 554px) {
+    width:18%;
+    height: 20px;
+    font-size:10px;
+    height: auto;
+  }
+
   &:hover {
     background-color: #f9a9d4;
   }

@@ -3,31 +3,11 @@ import styled from 'styled-components';
 import arrow from '../../assets/icons/arrow.svg';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '../../stores/userStore';
-import axios from 'axios';
 
 function UserContainer() {
   const navigate = useNavigate();
 
-  // zustand 스토어에서 상태와 설정 함수 가져오기
-  const { email, nickname, setEmail, setNickname } = useUserStore();
-
-  // 유저 정보 API 호출 및 zustand 스토어에 저장
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await axios.get('https://api.example.com/user', {
-          withCredentials: true, // 인증 쿠키 포함
-        });
-        const { email, nickname } = response.data; // API에서 email과 nickname 추출
-        setEmail(email);
-        setNickname(nickname);
-      } catch (error) {
-        console.error('유저 정보 가져오기 실패:', error);
-      }
-    };
-
-    fetchUserInfo();
-  }, [setEmail, setNickname]);
+  const { email, nickname } = useUserStore();
 
   const handleToEditUser = () => {
     navigate('/user-edit');

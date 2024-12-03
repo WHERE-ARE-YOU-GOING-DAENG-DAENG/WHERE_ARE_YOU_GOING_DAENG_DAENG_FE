@@ -1,14 +1,26 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import axios from "axios";
 import alarm from "../../assets/icons/alarm.svg";
 import x from "../../assets/icons/x.svg";
 
-const PushAlerts = ({ message, dateTime }) => {
+const PushAlerts = ({ message, dateTime, notificationId, onNotificationClose }) => {
   const [isVisible, setIsVisible] = useState(true);
 
-  const handleClose = () => {
-    setIsVisible(false);
+  const handleClose = async () => {
+    try {
+      await axios.put(
+        `https://www.daengdaeng-where.link/api/v1/notifications/${notificationId}`,
+        {},
+        { withCredentials: true }
+      );
+      setIsVisible(false); 
+      onNotificationClose(notificationId); 
+    } catch (error) {
+      console.error("알림 삭제 요청 실패:", error);
+      alert("알림 삭제에 실패했습니다.");
+    }
   };
 
   if (!isVisible) return null;
@@ -32,6 +44,8 @@ const PushAlerts = ({ message, dateTime }) => {
 PushAlerts.propTypes = {
   message: PropTypes.string.isRequired,
   dateTime: PropTypes.string.isRequired,
+  notificationId: PropTypes.number.isRequired,
+  onNotificationClose: PropTypes.func.isRequired,
 };
 
 export default PushAlerts;
@@ -66,8 +80,8 @@ const Icon = styled.div`
     width: 50px;
     height: 50px;
 
-    img{
-    width: 25px;
+    img {
+      width: 25px;
     }
   }
 `;
@@ -89,7 +103,7 @@ const Message = styled.p`
 const DateTime = styled.p`
   margin: 0;
   font-size: 13px;
-  color: #FF69A9;
+  color: #ff69a9;
   font-weight: bold;
   @media (max-width: 554px) {
     font-size: 9px;
