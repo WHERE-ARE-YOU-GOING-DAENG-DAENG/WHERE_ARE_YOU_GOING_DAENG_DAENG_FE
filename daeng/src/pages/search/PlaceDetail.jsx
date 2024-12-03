@@ -13,10 +13,12 @@ import axios from "axios";
 
 const AiReview = styled.div`
   max-width: 554px;
-  margin-left: 5%;
+  margin-left: 8%;
+  margin-right: 3%;
 
   @media(max-width: 554px){
     margin-left: 8%
+    margin-right: 0;
   }
 `
 const HeaderImage = styled.img`
