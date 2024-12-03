@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import PushAlerts from '../../components/commons/PushAlerts';
+import PushAlerts from "../../components/commons/PushAlerts";
 
 const ListContainer = styled.div`
-  padding-left:30px;
+  padding-left: 30px;
 
   @media (max-width: 554px) {
     margin: 10px;
@@ -16,6 +16,12 @@ function AlarmList() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const handleNotificationClose = (notificationId) => {
+    setNotifications((prev) =>
+      prev.filter((notification) => notification.notificationId !== notificationId)
+    );
+  };
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -62,6 +68,8 @@ function AlarmList() {
             key={notification.notificationId}
             message={notification.content}
             dateTime={`${notification.createdDate} ${notification.createdTime}`}
+            notificationId={notification.notificationId}
+            onNotificationClose={handleNotificationClose} 
           />
         ))
       )}
