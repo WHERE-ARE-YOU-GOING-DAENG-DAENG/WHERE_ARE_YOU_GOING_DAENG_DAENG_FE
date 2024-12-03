@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Spinner from '../../assets/icons/loading.gif'
+import Spinner from '../../assets/icons/spinner.gif'
 
 const Background = styled.div`
     width: 100%;
