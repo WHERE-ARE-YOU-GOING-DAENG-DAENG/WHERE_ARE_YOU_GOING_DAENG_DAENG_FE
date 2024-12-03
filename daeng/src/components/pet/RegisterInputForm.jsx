@@ -319,7 +319,7 @@ function RegisterInputForm() {
   // Presigned URL 조회
   if (imageFile) {
     try {
-      const presignResponse = await axios.get(
+      const presignResponse = await axios.post(
         `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
       );
       const presignedUrl = presignResponse.data.url; 

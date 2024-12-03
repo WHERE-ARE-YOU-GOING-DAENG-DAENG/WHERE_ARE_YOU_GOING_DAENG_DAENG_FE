@@ -114,7 +114,7 @@ function UserEdit() {
       return false;
     }
   
-    if (!nickname || !userData.gender || !userData.city || !userData.cityDetail || !userData.pushAgreement) {
+    if (!nickname || !userData.gender || !userData.city || !userData.cityDetail || userData.pushAgreement === null) {
       AlertDialog({
         mode: "alert",
         title: "입력 필요",
