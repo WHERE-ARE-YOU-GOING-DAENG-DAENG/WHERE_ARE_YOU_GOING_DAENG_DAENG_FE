@@ -62,13 +62,13 @@ const TrendingTitle = styled.h3`
   align-items: center;
   text-align: left;
   margin: 20px 30px;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 600;
   color: black;
 
   @media (max-width: 554px) {
     margin: 10px 20px;
-    font-size: 13px;
+    font-size: 15px;
   }
 
   img {

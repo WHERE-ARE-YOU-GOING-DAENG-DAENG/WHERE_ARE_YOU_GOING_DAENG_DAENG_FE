@@ -234,17 +234,17 @@ const Section = styled.div`
 const Title = styled.h3`
   text-align: left;
   margin-left: 10px;
-  font-size: 16px;
+  font-size: 18px;
   margin-bottom: 10px;
 
   @media (max-width: 554px) {
-    font-size: 14px;
+    font-size: 15px;
     margin-left: 20px;
   }
 `;
 
 const StyledParagraph = styled.p`
-  font-size: 9px;
+  font-size: 12px;
   color: #ff69a9;
   font-weight: bold;
   margin-top: 9px;
@@ -252,7 +252,7 @@ const StyledParagraph = styled.p`
   display: flex;
 
   @media (max-width: 554px) {
-    font-size: 8px;
+    font-size: 10px;
     margin-left: 20px;
   }
 `;
@@ -271,17 +271,16 @@ const OptionContainer = styled.div`
 `;
 
 const StyledParagraph2 = styled.p`
-  font-size: 8px;
+  font-size: 14px;
   color: red;
   font-weight: bold;
   margin-top: 80px;
-  margin-left: 30px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
 
   @media (max-width: 554px) {
-    font-size: 7px;
+    font-size: 10px;
     margin-left: 10px;
     text-align: center;
   }

@@ -14,7 +14,7 @@ const Container = styled.div`
     justify-content: space-between;
     padding: 34px 40px;
     @media (max-width: 554px) {
-        padding: 28px;
+        padding: 20px;
     }
 `;
 
