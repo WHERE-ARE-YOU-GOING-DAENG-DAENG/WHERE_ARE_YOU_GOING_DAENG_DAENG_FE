@@ -33,7 +33,7 @@ const ReviewsSection = styled.div`
 const ReviewHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   margin-bottom: 10px;
 
   h2 {
@@ -72,7 +72,7 @@ const KeywordsContainer = styled.div`
   justify-content: space-between;
   flex-direction: column;
   .title {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: semi-bold;
     margin-bottom: 12px;
   }
@@ -180,7 +180,7 @@ const PostDate = styled.span`
 `
 
 const ReviewContent = styled.span`
-  font-size: 13px;
+  font-size: 15px;
   display: block; 
   padding-left: 3%;
   padding-right: 9%;
@@ -245,7 +245,7 @@ const ReadMoreButton = styled.button`
   border: none;
   cursor: pointer;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
 
   @media (max-width: 554px) {
     font-size: 10px; 
