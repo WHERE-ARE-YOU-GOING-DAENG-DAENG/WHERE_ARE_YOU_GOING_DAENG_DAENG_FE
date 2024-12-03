@@ -9,9 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
+import { pushAgree } from '../../data/CommonCode';
+import { requestNotificationPermission } from '../../firebase/firebaseMessaging';
 
 function UserRegister() {
   const navigate = useNavigate();
+  const [selectedPushType] = useState(pushAgree[0].code);
+  const [fcmToken, setFcmToken] = useState(null); // FCM 토큰 상태 추가
 
   useEffect(() => {
     const queryString = new URLSearchParams(window.location.search);
@@ -59,6 +63,15 @@ function UserRegister() {
       city: selectedCity,
       cityDetail: '',
     }));
+  };
+
+  const handleNotificationRequest = async () => {
+    try {
+      await requestNotificationPermission();
+      console.log("알림 권한이 성공적으로 설정되었습니다.");
+    } catch (error) {
+      console.error("알림 권한 설정 실패:", error);
+    }
   };
 
   const validateFields = () => {
@@ -143,6 +156,15 @@ function UserRegister() {
 
       if (status === 200 || status === 201) {
         console.log("응답 데이터:", data);
+
+        if (userData.alarmAgreement === '받을래요') {
+          const token = await requestNotificationPermission();
+          if (token) {
+            setFcmToken(token);
+            await sendTokenToServer(token);
+          }
+        }
+
         AlertDialog({
           mode: "alert",
           title: "회원가입 성공",
@@ -171,6 +193,24 @@ function UserRegister() {
           onConfirm: () => console.log("서버 오류 확인됨"),
         });
       }
+    }
+  };
+
+  const sendTokenToServer = async (token) => {
+    try {
+      const response = await axios.post(
+        "https://www.daengdaeng-where.link/api/v1/notifications/pushToken",
+        { token, pushType: selectedPushType },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        console.log('FCM 토큰 전송 성공:', response.data);
+      } else {
+        console.error('FCM 토큰 전송 실패:', response);
+      }
+    } catch (error) {
+      console.error('서버에 FCM 토큰 전송 중 오류:', error);
     }
   };
 
@@ -381,6 +421,13 @@ const DuplicateBtn = styled.button`
   cursor: pointer;
   background-color: #ff69a9;
   color: white;
+
+  @media (max-width: 554px) {
+    width:18%;
+    height: 20px;
+    font-size:10px;
+    height: auto;
+  }
 
   &:hover {
     background-color: #f9a9d4;

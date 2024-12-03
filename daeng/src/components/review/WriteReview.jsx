@@ -10,7 +10,7 @@ import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import useUserStore from "../../stores/userStore";
 import Select from "react-select";
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 
@@ -23,6 +23,7 @@ const WriteReviewAllContainer = styled.div`
 const WriteReviewContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 10px;
 `;
 
 const PlaceTitle = styled.span`
@@ -34,8 +35,9 @@ const PlaceTitle = styled.span`
 
   @media (max-width: 554px) {
     font-size: 20px;
-    margin-right: 50%;
+    margin-right: 10%;
     margin-left:10px;
+    margin-bottom: 15px;
   }
 `;
 
@@ -58,6 +60,7 @@ const SelectPlaceOptionContainer = styled.div`
 
   @media (max-width: 554px) {
     padding:5%;
+    height: 320px;
   }
 `;
 
@@ -69,7 +72,7 @@ const WhatPointLike = styled.span`
   @media (max-width: 554px) {
     display: flex;
     margin-left: 10px;
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: -1px;
   }
 `;
@@ -146,21 +149,14 @@ const Question = styled.span`
     color: #d9d9d9;
     margin-left: 5px;
   }
-`;
 
-const PetSelection = styled.select`
-  width: 40%;
-  height: 30px;
-  font-size: 15px;
-  padding-left: 10px;
-  border: 0.5px solid #d9d9d9;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:focus {
-    border-color: #ff69a9;
-    outline: none;
-  }
+  @media (max-width: 554px) {
+      font-size: 14px; 
+      margin-left: 0; 
+      margin-right: 4px;
+      display: block;
+      text-wrap:nowrap;
+    }
 `;
 
 const DateSelection = styled.input`
@@ -293,13 +289,21 @@ const getCurrentDate = () => {
 
 function WriteReview({ review = {} }) {
   const { placeId } = useParams();
-  const location = useLocation();
-  const placeName = location.state?.placeName || "장소 이름 없음"; 
-
-  console.log("Debugging WriteReview Component:");
-  console.log("placeId from URL:", placeId);
-  console.log("location.state:", location.state);
-  console.log("Resolved placeName:", placeName);
+  const [placeName, setPlaceName] = useState("장소 이름 없음");
+  useEffect(() => {
+    if (placeId) {
+      axios
+        .get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`)
+        .then((response) => {
+          const name = response.data?.data?.name; 
+          setPlaceName(name || "장소 이름 없음"); 
+        })
+        .catch((error) => {
+          console.error("Failed to fetch place name:", error);
+          setPlaceName("장소 이름 없음");
+        });
+    }
+  }, [placeId]);
 
   const placeIdValue = review?.placeId || placeId;
 
@@ -307,17 +311,18 @@ function WriteReview({ review = {} }) {
     return <div>장소 정보를 가져올 수 없습니다.</div>;
   }
 
+  const { nickname } = useUserStore();
   const navigate = useNavigate();
   const { pets, fetchPetList } = usePetStore();
   const [selectPet, setSelectPet] = useState([]); // 선택된 펫 목록들
   const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
   const [previews, setPreviews] = useState([]); //이미지 미리보기
   const [placeImgs, setPlaceImgs] = useState([]); // 업로드할 이미지 파일
-  const [userNickname, setUserNickname] = useState('내가 진짜'); //zustand 처리
   const [selectKeywords, setSelectKeywords] = useState([]); 
   const [text, setText] = useState(""); // 리뷰 내용 상태
   const [visitedAt, setVisitedAt] = useState(""); // 초기값을 빈 문자열로 설정
   const [selectedPetImage, setSelectedPetImage] = useState(""); //첫번째 펫 이미지
+
   
   useEffect(() => {
     fetchPetList(); 
@@ -449,7 +454,7 @@ const handlePetSelection = (selectedOptions) => {
   const uploadedUrls = [];
   for (const file of files) {
     try {
-      const presignResponse = await axios.get(
+      const presignResponse = await axios.post(
         `https://www.daengdaeng-where.link/api/v1/S3?prefix=review&fileName=${encodeURIComponent(file.name)}`
       );
 
@@ -514,6 +519,7 @@ const handlePetSelection = (selectedOptions) => {
         confirmText: "닫기" ,
         onConfirm: () => navigate("/my-page"), 
       });
+      
       console.log("리뷰 등록 성공:", response.data);
     } catch (error) {
       AlertDialog({
@@ -545,17 +551,17 @@ const handlePetSelection = (selectedOptions) => {
           src={selectedPetImage || reviewDefaultImg}
           alt="선택된 펫 이미지" 
         />
-          <UserNickname>{userNickname || "내가 진짜"}</UserNickname>
+          <UserNickname>{nickname || '닉네임을 가져오는 중...'}</UserNickname>
         </UserInfoContainer>
         <UserQuestionContainer>
-        <Question>함께한 댕댕이를 선택해주세요</Question>
+        <Question>댕댕이를 선택해주세요</Question>
         <Select
-        isMulti
-        options={petOptions} 
-        value={selectPet} 
-        onChange={handlePetSelection} 
-        placeholder="댕댕이를 선택해주세요"
-      />
+          isMulti
+          options={petOptions}
+          value={selectPet}
+          onChange={handlePetSelection}
+          placeholder="댕댕이를 선택해주세요"
+        />
         </UserQuestionContainer>
 
         <UserQuestionContainer>

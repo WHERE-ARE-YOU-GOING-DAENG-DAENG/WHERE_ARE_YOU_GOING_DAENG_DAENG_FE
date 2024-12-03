@@ -3,14 +3,14 @@ import axios from "axios";
 
 const useTotalReviewStore = create((set, get) => ({
   reviews: [],
-  total: 0, // 총 리뷰 개수
-  bestKeywords: [], // 많이 언급된 키워드
-  score: 0, // 평균 별점
+  total: 0,
+  bestKeywords: [], 
+  score: 0, 
   page: 0, // 현재 페이지
   isLast: false, // 마지막 페이지 여부
   isLoading: false, // 로딩 상태
   placeName: "",
-  error: null, // 에러 상태
+  error: null, 
   sortedType: "LATEST", // 기본 정렬 타입
 
   setSortedType: (type) =>
@@ -23,8 +23,7 @@ const useTotalReviewStore = create((set, get) => ({
 
   fetchReviews: async (placeId) => {
     const { page, sortedType, isLoading, isLast } = get();
-    const size = 15; // 고정된 페이지 크기
-    
+    const size = 15; 
 
     if (isLoading || isLast) return; // 중복 요청 방지 및 마지막 페이지 처리
 
@@ -33,6 +32,7 @@ const useTotalReviewStore = create((set, get) => ({
     try {
       const response = await axios.get(
         `https://www.daengdaeng-where.link/api/v1/reviews/place/${placeId}/${sortedType}?page=${page}&size=${size}`,
+        
         {
           headers: {
             "Content-Type": "application/json",
@@ -41,19 +41,19 @@ const useTotalReviewStore = create((set, get) => ({
         }
       );
 
+      
       const data = response.data.data;
-      const firstReview = data.reviews.length > 0 ? data.reviews[0] : null;
-
+    
       set((state) => ({
         reviews: page === 0 ? data.reviews : [...state.reviews, ...data.reviews],
         total: data.total,
         bestKeywords: data.bestKeywords,
-        score: data.score,
-        page: state.page + 1, // 다음 페이지를 위해 증가
-        placeName: firstReview?.placeName || state.placeName, 
+        score: parseFloat(data.score) || 0,
+        page: state.page + 1,
         isLast: data.isLast,
         isLoading: false,
       }));
+
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "리뷰 데이터를 가져오는 데 실패했습니다.";
