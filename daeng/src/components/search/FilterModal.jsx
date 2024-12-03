@@ -177,6 +177,7 @@ const slideDown = keyframes`
 `;
 
 const Modal = styled.div`
+    color: black;
     position: fixed;
     bottom: 76px;
     width: 555px;

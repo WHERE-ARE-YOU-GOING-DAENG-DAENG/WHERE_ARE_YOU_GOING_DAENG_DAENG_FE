@@ -10,7 +10,6 @@ import FilterBtnList from "../../components/search/FilterBtnList";
 import useLocationStore from "../../stores/useLocationStore";
 import { placeTypes } from "../../data/CommonCode";
 import AlertDialog from "../../components/commons/SweetAlert";
-// import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const Search = () => {
     const [query, setQuery] = useState("");
@@ -24,7 +23,6 @@ const Search = () => {
       placeType: "",
   });
     const [filter, setFilter] = useState(false);
-    // const { fetchFavorites } = useFavoriteStore();
 
     const handleSearch = (keyword) => {
         setQuery(keyword);
@@ -85,7 +83,7 @@ const Search = () => {
             const payload = {
               city: keywords.city || "",
               cityDetail: keywords.cityDetail?.endsWith("전체") ? "" : keywords.cityDetail || "",
-              placeType: matchedType ? matchedType.code : "",
+              placeType: matchedType ? matchedType.codeId : "",
               latitude: userLocation?.lat,
               longitude: userLocation?.lng
             }
