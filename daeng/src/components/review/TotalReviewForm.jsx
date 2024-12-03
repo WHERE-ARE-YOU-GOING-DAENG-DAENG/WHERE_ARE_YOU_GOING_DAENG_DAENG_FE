@@ -28,7 +28,7 @@ const ReviewPlaceTitle = styled.span`
   text-align: left;
 
   @media (max-width: 554px) {
-    font-size:20px;
+    font-size:18px;
   }
 `
 const PreferenceContainer = styled.div`
@@ -64,7 +64,7 @@ const TotalReviewCount = styled.span`
 
   @media (max-width: 554px) {
     font-size: 11px;
-    margin-right:54px;
+    margin-right:50px;
   }
 `
 
@@ -210,6 +210,13 @@ const ReviewPictureContainer = styled.div`
   @media (max-width: 554px) {
     margin-left:-2%;
   }
+`
+
+const NoReview = styled.div`
+  font-size: 13px;
+  margin-top: 10px;
+  font-weight: bold;
+
 `
 
 const ReviewPicture = styled.img`
@@ -401,7 +408,7 @@ const TotalReviewForm = () => {
           );
         })
       ) : (
-        <div>리뷰가 없습니다.</div>
+        <NoReview>리뷰가 없습니다.</NoReview>
       )}
       {isLoading && <div>로딩 중...</div>}
       {isLast && <div>더이상 리뷰가 없습니다.</div>}

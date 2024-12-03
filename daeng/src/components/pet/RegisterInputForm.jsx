@@ -12,8 +12,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 
-
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -87,6 +85,28 @@ const InputAlert = styled.p`
   margin-bottom: 4%;
 `;
 
+const BirthInput = styled.input`
+  width: 96%;
+  height: 44px;
+  margin-right:10%;
+  border: 0.5px solid #e4e4e4;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  color: #000; 
+  cursor: pointer;
+
+  &::placeholder {
+    color: #b3b3b3; 
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #ff69a9; 
+  }
+`;
+
+
 const PetTypeOption = styled.select`
   width: 96%;
   height: 44px;
@@ -133,27 +153,19 @@ const BirthInputContainer = styled.div`
   }
 `;
 
-
-const BirthInput = styled.input`
-  display: block;
-  width: 96%;
-  height: 44px;
-  margin-right: 10%;
-  border: 0.5px solid #e4e4e4;
-  border-radius: 5px;
-  padding: 10px;
+const BirthDatePicker = styled(DatePicker)`
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent;
   font-size: 14px;
   color: #000;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
   &::placeholder {
     color: #b3b3b3;
   }
 
-  &:focus-within {
+  &:focus {
     outline: none;
     border-color: #ff69a9;
   }
@@ -281,6 +293,10 @@ function RegisterInputForm() {
     return `${year}-${month}-${day}`;
   }; 
 
+  const handleFocus = (e) => {
+    e.target.showPicker();
+  };
+
   //유효성 검사
   const validateForm = () => {
     const nameRegex = /^[가-힣a-zA-Z\s]+$/;
@@ -352,9 +368,9 @@ function RegisterInputForm() {
 
   let imageUrl = ''; // 이미지 URL을 저장할 변수
 
-  // Presigned URL 조회
   if (imageFile) {
     try {
+      // Presigned URL 요청
       const presignResponse = await axios.post(
         'https://www.daengdaeng-where.link/api/v1/S3',
         {
@@ -368,31 +384,49 @@ function RegisterInputForm() {
           withCredentials: true
         }
       );
-      
-      const presignedUrl = presignResponse.data.url; 
-      console.log("Presigned URL:", presignedUrl); 
+  
+      // 응답 상태와 데이터 확인
+      console.log('Presign Response Status:', presignResponse.status);
+      console.log('Presign Response Status Text:', presignResponse.statusText);
+      console.log('Presign Response Data:', presignResponse.data);
+      console.log('Presign Response:', presignResponse); // 응답 전체 출력
 
+  
+      // presignResponse.data.url 확인
+      if (!presignResponse.data || !presignResponse.data.url) {
+        console.error('Presigned URL이 없습니다. 응답 데이터 확인이 필요합니다.');
+        throw new Error('Presigned URL이 없습니다. 응답 데이터 확인이 필요합니다.');
+      }
+  
+      const presignedUrl = presignResponse.data.url;
+      console.log("Presigned URL:", presignedUrl);
+  
+      // 이미지 업로드
       const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
         headers: {
-          'Content-Type': imageFile.type, 
+          'Content-Type': imageFile.type,
         },
         withCredentials: true,
       });
-      console.log("응답:", imageUploadResponse); 
-
+  
+      console.log("Image Upload Response:", imageUploadResponse);
+  
+      // 업로드 성공 시 처리
       if (imageUploadResponse.status === 200) {
         console.log('성공');
-        imageUrl = presignedUrl.split('?')[0];
+        const imageUrl = presignedUrl.split('?')[0];
+        console.log('최종 이미지 URL:', imageUrl);
+        return imageUrl; // imageUrl 반환
       } else {
-        console.error('이미지 업로드 실패:', error);
-        return;
+        console.error('이미지 업로드 실패:', imageUploadResponse);
+        return null; // 실패 시 null 반환
       }
     } catch (error) {
       console.error('Presigned URL 조회 또는 이미지 업로드 실패:', error);
-      return;
+      return null; // 실패 시 null 반환
     }
   }
-
+  
   const petData = {
     name: petName, // 반려동물 이름
     image: imageUrl,  // 업로드한 이미지 URL
@@ -488,14 +522,14 @@ function RegisterInputForm() {
       </PetTypeContainer>
       <BirthContainer>
         <SelectLabel label="생년월일" />
-          <DatePicker
-            selected={selectedPetBirth}
-            onChange={handleDateChange}
-            dateFormat="yyyy-MM-dd"
-            maxDate={new Date()}
-            placeholderText="우리 댕댕이의 생일을 알려주세요!"
-            customInput={<BirthInput />}
-          />
+        <BirthInput
+          type="date"
+          value={selectedPetBirth}
+          max={getTodayDate()} 
+          onChange={handlePetBirthChange}
+          onFocus={handleFocus}  
+          placeholder="우리 댕댕일 생일을 알려주세요!"
+        />
       </BirthContainer>
       <SelectLabel label="성별" />
       <SelectContainer>
