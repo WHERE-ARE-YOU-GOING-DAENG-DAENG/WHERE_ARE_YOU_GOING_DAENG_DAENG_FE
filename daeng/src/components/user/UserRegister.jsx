@@ -434,7 +434,7 @@ const SelectBox = styled.select`
   }
 
   @media (max-width: 554px) {
-    font-size: 12px;
+    font-size: 11px;
   }
 `;
 

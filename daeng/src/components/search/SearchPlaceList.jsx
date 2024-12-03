@@ -115,22 +115,34 @@ const PlaceItem = styled.div`
     cursor: pointer;
 
     .place-name {
-      font-size: 15px;
+      font-size: 18px;
       font-weight: bold;
       color: #ff4b98;
+
+      @media(max-width:554px){
+      font-size: 15px;
+    }
     }
 
     .facility-type {
       margin-top: 3px;
       margin-left: 6px;
-      font-size: 10px;
+      font-size: 13px;
       color: #b3b3b3;
+
+      @media(max-width:554px){
+      font-size: 12px;
+    }
     }
   }
 
   .details {
     display: flex;
-    font-size: 9px;
+    font-size: 14px;
+
+    @media(max-width:554px){
+      font-size: 12px;
+    }
 
     .address {
       margin-left: 3px;
