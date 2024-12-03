@@ -6,6 +6,7 @@ import styled from "styled-components";
 import AlertDialog from "../../components/commons/SweetAlert";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import banner from "../../assets/icons/visitbanner.jpg"
 
 const VisitBanner = styled.img`
     width: 100%;
@@ -44,7 +45,7 @@ const PlaceVisitList = () => {
     return (
         <>
             <Header label="방문예정목록" />
-            <VisitBanner src="https://via.placeholder.com/554x242" alt="배너" />
+            <VisitBanner src={banner} alt="배너" />
             <VisitScheduleList data={list} placeId={id} setReloadTrigger={setReloadTrigger}/>
             <Footer />
         </>

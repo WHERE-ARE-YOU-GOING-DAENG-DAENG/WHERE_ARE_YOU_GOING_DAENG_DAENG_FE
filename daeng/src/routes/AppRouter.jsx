@@ -19,6 +19,7 @@ import UserRegisterPage from '../pages/user/UserRegisterPage';
 import UserEditPage from '../pages/user/UserEditPage';
 import MyVisitList from '../pages/visit/MyVisitList';
 import PlaceVisitList from '../pages/visit/PlaceVisitList';
+import Error from "../pages/Error";
 
 const AppRouter = () => {
   return (
@@ -40,10 +41,12 @@ const AppRouter = () => {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/alarm" element={<AlarmPage/>} />
         <Route path="/my-review" element={<MyReviewPage />} />
-        <Route path="/total-review" element={<TotalReviewPage />} />
-        <Route path="/write-review" element={<WriteReviewPage />} />
+        <Route path="/total-review/:placeId" element={<TotalReviewPage />} />
+        <Route path="/write-review/:placeId" element={<WriteReviewPage />} />
         <Route path="/visit-list" element={<MyVisitList />} />
         <Route path="/visit-list/:id" element={<PlaceVisitList />} />
+        <Route path="/error" element={<Error />} />
+        <Route path="*" element={<Error/>} />
       </Routes>
     </Router>
   );

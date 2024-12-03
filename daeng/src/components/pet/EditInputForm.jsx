@@ -322,7 +322,7 @@ function EditInputForm() {
     // 새 이미지가 있을 경우에만 S3에 업로드 처리
   if (imageFile) {
     try {
-      const presignResponse = await axios.get(
+      const presignResponse = await axios.post(
         `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
       );
 
