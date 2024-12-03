@@ -19,7 +19,7 @@ const MapContainer = styled.div`
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter }) => {
+const Map = ({ data, removeUi, externalCenter, isLoading }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const isLoaded = useGoogleMapsLoader();
@@ -132,21 +132,30 @@ const Map = ({ data, removeUi, externalCenter }) => {
 }, [isLoaded, map, data]);
 
 useEffect(() => {
-  if (map && markers.length > 0) {
-    const firstMarkerPosition = {
-      lat: data[0].latitude,
-      lng: data[0].longitude,
-    };
-    setCenter(firstMarkerPosition);
-    map.setCenter(firstMarkerPosition);
+  if (map && markers.length > 0 && data && data.length > 0) {
+    const firstLocation = data[0];
+    if (firstLocation.latitude && firstLocation.longitude) {
+      const firstMarkerPosition = {
+        lat: firstLocation.latitude,
+        lng: firstLocation.longitude,
+      };
+      setCenter(firstMarkerPosition);
+      map.setCenter(firstMarkerPosition);
+    } else {
+      console.warn("Invalid location data:", firstLocation);
+    }
   }
 }, [map, markers, data]);
 
   return (
     <MapContainer ref={mapRef} $data={data} $removeUi={removeUi}>
-      {!isLoaded && <Loading label="지도 로딩 중.." />}
-      {currentLocation}
-      {markers}
+      {!isLoaded || isLoading ? (<Loading label={isLoaded ? "결과를 불러오는 중..." : "지도 로딩 중..."} />):(
+        <>
+          {currentLocation}
+          {markers}
+        </>
+      )}
+      
     </MapContainer>
   );
 };
