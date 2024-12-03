@@ -32,7 +32,7 @@ const PetServiceImg = styled.img`
 `
 
 const Page = styled.div`
-  font-size: 13px;
+  font-size: 15px;
   display: flex;
 
   &:hover{
