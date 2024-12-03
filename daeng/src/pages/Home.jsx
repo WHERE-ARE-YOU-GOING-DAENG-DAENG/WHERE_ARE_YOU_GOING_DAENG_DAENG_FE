@@ -31,20 +31,21 @@ function Home() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const newLocation = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
           };
 
           if (
-            userLocation.latitude !== newLocation.latitude ||
-            userLocation.longitude !== newLocation.longitude
+            userLocation.lat !== newLocation.lat ||
+            userLocation.lng !== newLocation.lng
           ) {
             setUserLocation(newLocation);
             console.log("Location updated:", newLocation);
           }
         },
         (error) => {
-          if (!userLocation.latitude && !userLocation.longitude) {
+          // console.error("Geolocation error:", error); 위치동의안한것도 에러로 받음
+          if (!userLocation.lat && !userLocation.lng) {
             AlertDialog({
               mode: "alert",
               title: "위치 접근 동의",
