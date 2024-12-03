@@ -10,13 +10,23 @@ import Wrapper from "../components/Home/HomeWrapper";
 import Footer from "../components/commons/Footer";
 import useLocationStore from "../stores/useLocationStore";
 import AlertDialog from "../components/commons/SweetAlert";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Home() {
   const userLocation = useLocationStore((state) => state.userLocation);
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
+  const [hasToken, setHasToken] = useState(false); 
+
+  const checkTokensInCookie = () => {
+    const cookies = document.cookie.split("; "); 
+    const authorizationToken = cookies.find((cookie) => cookie.startsWith("Authorization="));
+    const refreshToken = cookies.find((cookie) => cookie.startsWith("RefreshToken="));
+    return authorizationToken && refreshToken; 
+  };
 
   useEffect(() => {
+    setHasToken(checkTokensInCookie());
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -24,8 +34,7 @@ function Home() {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           };
-  
-          // 위치가 변경된 경우에만 상태 업데이트
+
           if (
             userLocation.latitude !== newLocation.latitude ||
             userLocation.longitude !== newLocation.longitude
@@ -35,7 +44,6 @@ function Home() {
           }
         },
         (error) => {
-          // console.error("Geolocation error:", error); 위치동의안한것도 에러로 받음
           if (!userLocation.latitude && !userLocation.longitude) {
             AlertDialog({
               mode: "alert",
@@ -43,19 +51,18 @@ function Home() {
               text: "위치 접근이 제한되었습니다.",
               confirmText: "확인",
               onConfirm: () => console.log("위치정보 비동의, 기본값:", userLocation),
-          });
+            });
           }
         }
       );
     }
-  }, [userLocation.lat, userLocation.lng]);
+  }, [userLocation.latitude, userLocation.longitude, setUserLocation]);
 
   return (
     <Wrapper>
       <HomeHeader />
       <HomeSlider />
-      <HomeDogPlaces />
-      <HomeLogout />
+      {hasToken ? <HomeDogPlaces /> : <HomeLogout />}
       <HomeTrendingPlaces />
       <HomeSanta />
       <HomeRecommendPlaces />

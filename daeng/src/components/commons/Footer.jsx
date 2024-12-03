@@ -79,7 +79,6 @@ const Footer = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-
     const [activeIndex, setActiveIndex] = useState(null);
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
@@ -87,7 +86,28 @@ const Footer = () => {
     useEffect(() => {
         const currentIndex = items.findIndex((item) => item.path === location.pathname);
         setActiveIndex(currentIndex);
-    }, [location.pathname, items]);
+    }, [location.pathname]);
+
+    // 토큰 확인 함수
+    const checkTokensInCookie = () => {
+        const cookies = document.cookie.split("; ");
+        const authorizationToken = cookies.find((cookie) => cookie.startsWith("Authorization="));
+        const refreshToken = cookies.find((cookie) => cookie.startsWith("RefreshToken="));
+        return authorizationToken && refreshToken; 
+    };
+
+    const handleNavigation = (path, index) => {
+        if (path === "/my-page") {
+            if (checkTokensInCookie()) {
+                navigate("/my-page");
+            } else {
+                navigate("/login");
+            }
+        } else {
+            navigate(path);
+        }
+        setActiveIndex(index);
+    };
 
     return (
         <FooterContainer>
@@ -98,10 +118,7 @@ const Footer = () => {
                     isHovered={hoveredIndex === index}
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
-                    onClick={() => {
-                        setActiveIndex(index);
-                        navigate(item.path);
-                    }}
+                    onClick={() => handleNavigation(item.path, index)}
                 >
                     <img
                         src={
