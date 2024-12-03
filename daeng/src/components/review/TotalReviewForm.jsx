@@ -8,6 +8,7 @@ import Sorting from '../../components/commons/Sorting';
 import useTotalReviewStore from '../../stores/UseTotalReviewStore';
 import AiReviewSummary from './AIReview';
 import axios from 'axios';
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 //리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
   display: block;
@@ -44,7 +45,7 @@ const ReviewSummaryContainer = styled.div`
 `;
 
 const TotalStarPoint = styled.span`
-  font-size:15px;
+  font-size:18px;
   font-weight: bold;
   display: block;
   margin-left: 2%;
@@ -105,7 +106,6 @@ const ReviewUserContainer = styled.div`
 const UserPhoto = styled.img`
   width: 60px;
   height: 60px;
-  background-color: #FF69A9;
   border-radius: 50%;
   margin-left: 2%;
   margin-top: 20px;
@@ -153,9 +153,9 @@ const PetType = styled.span`
 `
 
 const PostDate = styled.span`
-  font-size: 13px;
+  font-size: 15px;
   color: #B3B3B3;
-  margin-left:200px;
+  margin-left:130px;
   margin-top: 8px;
   margin-bottom: 3px;
 
@@ -167,7 +167,7 @@ const PostDate = styled.span`
 `
 
 const ReviewContent = styled.span`
-  font-size: 13px;
+  font-size: 15px;
   display: block; 
   padding-left: 3%;
   padding-right: 9%;
@@ -188,7 +188,7 @@ const UserSecondInfoContainer = styled.div`
 `
 
 const VisitDate = styled.span`
-  font-size: 13px;
+  font-size: 15px;
   color: #B3B3B3;
   display: flex;
   flex-direction: flex-start;
@@ -232,7 +232,7 @@ const ReadMoreButton = styled.button`
   border: none;
   cursor: pointer;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 15px;
 
   @media (max-width: 554px) {
     font-size: 10px; 
@@ -358,7 +358,7 @@ const TotalReviewForm = () => {
             >
               <ReviewUserContainer>
                 <UserPhoto
-                  src={review.petImg || "default-user.jpg"}
+                  src={review.petImg ||reviewDefaultImg}
                   alt="반려동물 이미지"
                 />
                 <TotalUserInfoContainer>

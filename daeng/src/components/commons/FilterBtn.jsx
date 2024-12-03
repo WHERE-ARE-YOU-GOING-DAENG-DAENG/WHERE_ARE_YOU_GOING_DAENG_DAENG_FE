@@ -10,7 +10,7 @@ const FilterButton = styled.button`
   height: ${({ size }) => (size === 'small' ? '28px' : '43px')};
   background-color: #fdf2f8;
   color: #db2877;
-  font-size: ${({ size }) => (size === 'small' ? '15px' : '18px')};
+  font-size: ${({ size }) => (size === 'small' ? '13px' : '18px')};
   border-radius: 20px;
   border: none;
   font-weight: bold;
