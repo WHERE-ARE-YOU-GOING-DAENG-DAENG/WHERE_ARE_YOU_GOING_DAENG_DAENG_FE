@@ -362,6 +362,9 @@ const handlePetSelection = (selectedOptions) => {
   }
 };
 
+const handleFocus = (e) => {
+  e.target.showPicker();
+};
 
   useEffect(() => {
     console.log("useParams placeId:", placeId);
@@ -613,6 +616,7 @@ const handlePetSelection = (selectedOptions) => {
             type="date"
             max={getCurrentDate()}
             value={visitedAt} 
+            onFocus={handleFocus}  
             onChange={(e) => setVisitedAt(e.target.value)} 
           />
         </UserQuestionContainer>
