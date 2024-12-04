@@ -365,7 +365,6 @@ function EditInputForm() {
       }
     } catch (error) {
       console.error('Presigned URL 조회 또는 이미지 업로드 실패:', error);
-      alert('이미지 업로드 중 오류가 발생했습니다.');
       return;
     }
   }
@@ -405,14 +404,21 @@ function EditInputForm() {
         selectedSize
       }); 
       AlertDialog({
-        mode: "alert", 
+        mode: "alert",
         title: "성공",
-        text: "펫 정보가 성공적으로 수정되었습니다",
-        confirmText: "닫기"
+        text: "모든 작업이 성공적으로 처리되었습니다.",
+        confirmText: "확인",
+        icon: "success", 
       });
       navigate("/my-page");
     }
     } catch (error) {
+      AlertDialog({
+        mode: "alert",
+        title: "실패",
+        text: "알 수 없는 문제가 발생했습니다. 관리자에게 문의해주세요.",
+        confirmText: "확인",
+      });
       console.error("수정 실패:", error);
     }
   };

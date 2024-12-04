@@ -84,6 +84,7 @@ function UserEdit() {
             title: "알림 동의 완료",
             text: "알림 받기가 성공적으로 등록되었습니다.",
             confirmText: "확인",
+            icon: "success",
           });
         }
       } else if (value === "괜찮아요") {
@@ -99,6 +100,7 @@ function UserEdit() {
             title: "알림 취소 완료",
             text: "알림 받기가 성공적으로 취소되었습니다.",
             confirmText: "확인",
+            icon: "success"
           });
         }
       }
@@ -264,6 +266,7 @@ function UserEdit() {
         title: '회원정보 수정 성공',
         text: '회원 정보가 성공적으로 수정되었습니다!',
         confirmText: '확인',
+        icon: "success",
         onConfirm: () => {
           navigate("/my-page");
         },

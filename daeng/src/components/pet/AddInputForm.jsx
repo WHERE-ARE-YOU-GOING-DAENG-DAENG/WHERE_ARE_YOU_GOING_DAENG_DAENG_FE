@@ -385,13 +385,19 @@ function RegisterInputForm() {
           mode: "alert", 
           title: "성공",
           text: "댕댕어디가 회원이 되신걸 축하드려요",
-          confirmText: "닫기"
+          confirmText: "닫기",
+          icon: "success", 
         });
         navigate("/my-page");
       } else {
         console.log('응답 상태:', response.status);
         console.log('응답 데이터:', response.data);
-        alert("등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+        AlertDialog({
+          mode: "alert", 
+          title: "오류",
+          text: "등록중 오류가 발생했습니다.",
+          confirmText: "확인"
+        })
       }
     } catch (error) {
       console.log('에러 전체 정보:', error);

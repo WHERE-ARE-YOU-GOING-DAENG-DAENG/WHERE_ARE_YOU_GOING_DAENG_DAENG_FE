@@ -8,7 +8,9 @@ const StyledConfirmButton = css`
   border-radius: 5px;
   padding: 10px 20px;
   font-size: 16px;
+  font-family: "Pretendard-Regular", sans-serif;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 
   &:hover {
     background-color: #FF4796;
@@ -23,7 +25,9 @@ const StyledCancelButton = css`
   padding: 10px 20px;
   color: #FF69A9;
   font-size: 16px;
+  font-family: "Pretendard-Regular", sans-serif;
   cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease;
 
   &:hover {
     color: #FF4796;
@@ -45,17 +49,36 @@ const injectStyles = () => {
       display: flex;
       flex-direction: row-reverse;  
     }
-    
-    /* 핑크색 아이콘 변경 */
+    .swal2-container {
+      animation: fadeIn 0.3s ease-in-out;
+      background-color: rgba(0, 0, 0, 0.4); /* 배경 투명도 추가 */
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    /* 아이콘 색상 */
     .swal2-icon {
-      fill: #FF69A9 !important; /* 아이콘 색상 변경 */
+      fill: #FF69A9 !important; /* 아이콘 색상 */
     }
     .swal2-icon.swal2-success .swal2-icon-file,
     .swal2-icon.swal2-error .swal2-icon-file,
     .swal2-icon.swal2-warning .swal2-icon-file,
     .swal2-icon.swal2-info .swal2-icon-file,
     .swal2-icon.swal2-question .swal2-icon-file {
-      fill: #FF69A9 !important; /* 모든 아이콘 배경을 핑크로 */
+      fill: #FF69A9 !important; /* 모든 아이콘 배경 */
+    }
+    .swal2-title {
+      font-family: "Pretendard-Regular", sans-serif;
+      color: #333; /* 제목 색상 */
+    }
+    .swal2-content {
+      font-family: "Pretendard-Regular", sans-serif;
+      color: #555; /* 내용 색상 */
     }
   `;
   document.head.appendChild(styleSheet);
@@ -69,19 +92,19 @@ const AlertDialog = ({
   cancelText,
   onConfirm,
   onCancel,
-  icon = "warning"
+  icon = "warning",
 }) => {
-  injectStyles(); // SweetAlert 스타일 동적 추가 부분
+  injectStyles(); 
 
   const iconOptions = {
-    success: "success",
-    error: "error",
-    warning: "warning",
-    info: "info",
-    question: "question"
+    success: "success", 
+    error: "error",     
+    warning: "warning", 
+    info: "info",       
+    question: "question", 
   };
 
-  const selectedIcon = iconOptions[icon] || "warning"; 
+  const selectedIcon = iconOptions[icon] || "warning";
 
   if (mode === "alert") {
     Swal.fire({
