@@ -13,50 +13,40 @@ import { useNavigate } from 'react-router-dom';
 
 function UserEdit() {
   const navigate = useNavigate();
-  const { userId, email, nickname, setUserId, setEmail, setNickname } = useUserStore();
+  const {
+    userId,
+    email,
+    nickname : storeNickname,
+    city: storeCity,
+    cityDetail: storeCityDetail,
+    pushAgreement: storePushAgreement,
+    gender: storeGender,
+    oauthProvider,
+    setLoginData,
+  } = useUserStore.getState();
+  const [nickname, setNickname] = useState(storeNickname || '');
   const [userData, setUserData] = useState({
-    gender: '',
-    city: '',
-    cityDetail: '',
-    pushAgreement: '',
-    oauthProvider: '',
-  });
+    userId,
+    email,
+    gender: storeGender || '',
+    city: storeCity || '',
+    cityDetail: storeCityDetail || '',
+    pushAgreement: storePushAgreement,
+    oauthProvider,
+  })
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('https://www.daengdaeng-where.link/api/v1/user/adjust', {
-          withCredentials: true,
-        });
-        const { user } = response.data.data;
-  
-        setUserId(user.userId || '');
-        setEmail(user.email || '');
-        setNickname(user.nickname || '');
-
-        setUserData({
-          gender: user.gender || '',
-          city: user.city || '도',
-          cityDetail: user.cityDetail || '시/군/구',
-          pushAgreement: user.pushAgreement,
-          oauthProvider: user.oauthProvider || '',
-        });
-  
-        console.log('Fetched User Data:', user);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        AlertDialog({
-          mode: 'alert',
-          title: '데이터 불러오기 실패',
-          text: '사용자 정보를 불러오는 데 문제가 발생했습니다.',
-          confirmText: '확인',
-          onConfirm: () => console.log('데이터 불러오기 실패 확인됨'),
-        });
-      }
-    };
-  
-    fetchUserData();
-  }, [setUserId, setEmail, setNickname]);
+    console.log('Zustand State:', {
+      userId,
+      email,
+      storeNickname,
+      storeCity,
+      storeCityDetail,
+      storePushAgreement,
+      storeGender,
+      oauthProvider,
+    });
+  }, []);
 
   const handleInputChange = (field, value) => {
     setUserData((prev) => {
@@ -199,7 +189,7 @@ const handleUpdate = async () => {
     city: userData.city,
     cityDetail: userData.cityDetail,
     pushAgreement: userData.pushAgreement,
-    oauthProvider:userData.oauthProvider,
+    oauthProvider,
     email,
   };
 
@@ -254,6 +244,17 @@ const handleUpdate = async () => {
       }
     }
     
+    setLoginData({
+      userId,
+      nickname,
+      gender: userData.gender, 
+      city: userData.city,
+      cityDetail: userData.cityDetail,
+      pushAgreement: userData.pushAgreement,
+      oauthProvider,
+      email,
+    });
+
     AlertDialog({
       mode: 'alert',
       title: '회원정보 수정 성공',
