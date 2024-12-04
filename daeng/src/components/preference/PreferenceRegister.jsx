@@ -124,6 +124,7 @@ function PreferenceRegister() {
         title: "등록 성공",
         text: "선호 정보가 성공적으로 등록되었습니다!",
         confirmText: "확인",
+        icon: "success",
         onConfirm: () => {
           console.log("등록 성공 확인됨");
           navigate("/");

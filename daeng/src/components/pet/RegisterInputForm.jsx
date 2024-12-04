@@ -406,7 +406,8 @@ function RegisterInputForm() {
         mode: "alert", 
         title: "성공",
         text: "댕댕어디가 회원이 되신걸 축하드려요",
-        confirmText: "닫기"
+        confirmText: "닫기",
+        icon: "success"
       });
 
     } else {
