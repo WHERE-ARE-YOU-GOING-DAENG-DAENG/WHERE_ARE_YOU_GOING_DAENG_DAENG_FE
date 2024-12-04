@@ -516,7 +516,7 @@ function RegisterInputForm() {
           max={getTodayDate()} 
           onChange={handlePetBirthChange}
           onFocus={handleFocus}  
-          placeholder="우리 댕댕일 생일을 알려주세요!"
+          placeholder="우리 댕댕이 생일을 알려주세요!"
         />
       </BirthContainer>
       <SelectLabel label="성별" />
