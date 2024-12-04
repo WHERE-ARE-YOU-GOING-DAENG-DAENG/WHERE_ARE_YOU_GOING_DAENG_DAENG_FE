@@ -286,6 +286,9 @@ const Reset = styled.button`
     width: 40px;
     height: 38px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
     &:hover{
         background-color: #d9d9d9;

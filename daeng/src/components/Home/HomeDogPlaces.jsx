@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useLocationStore from "../../stores/useLocationStore"; 
 import axios from "axios";
 import HomeDogLoveIcon from "../../assets/icons/home_doglove.svg";
+import HomeNoImage from "../../assets/icons/home_noimage.svg";
 
 function HomeDogPlaces() {
   const [dogPlaces, setDogPlaces] = useState([]); 
@@ -11,8 +12,8 @@ function HomeDogPlaces() {
   const navigate = useNavigate();
 
   const defaultLocation = {
-    latitude: 0.0, // 실시간 위치를 허용하지 않았을 경우
-    longitude: 0.0, //위도, 경도 모두 0.0
+    lat: 0.0, // 실시간 위치를 허용하지 않았을 경우
+    lng: 0.0, //위도, 경도 모두 0.0
   };
 
   useEffect(() => {
@@ -55,7 +56,8 @@ function HomeDogPlaces() {
         {dogPlaces.slice(0, 3).map((place) => (
           <DogPlaceWrapper key={place.placeId}>
             <DogLinkBox onClick={() => handleDogPlaceClick(place.placeId)}>
-              <DogImage src={place.imageurl || "default-image-path.jpg"} alt={place.name} />
+              <DogImage src={place.imageurl ? place.imageurl : HomeNoImage} 
+              alt={place.name || "이미지 없음"} />
             </DogLinkBox>
             <PlaceName>{place.name}</PlaceName>
           </DogPlaceWrapper>
@@ -112,12 +114,16 @@ const DogPlaceWrapper = styled.div`
 
 const DogLinkBox = styled.div`
   width: 100%;
-  height: 152px;
+  height: 174px;
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
+
+  @media (max-width: 554px) {
+    height: 140px;
+  }
 `;
 
 const DogImage = styled.img`

@@ -9,6 +9,8 @@ import useTotalReviewStore from '../../stores/UseTotalReviewStore';
 import AiReviewSummary from './AIReview';
 import axios from 'axios';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
+import ReviewSlideshow from './ReviewSlideshow';
+
 //리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
   display: block;
@@ -60,7 +62,7 @@ const TotalReviewCount = styled.span`
   color: #B3B3B3;
   font-size:11px;
   display: block;
-  margin-right: 165px;
+  margin-right: 24%;
 
   @media (max-width: 554px) {
     font-size: 11px;
@@ -155,7 +157,7 @@ const PetType = styled.span`
 const PostDate = styled.span`
   font-size: 15px;
   color: #B3B3B3;
-  margin-left:130px;
+  margin-left:210px;
   margin-top: 8px;
   margin-bottom: 3px;
 
@@ -204,35 +206,46 @@ const VisitDate = styled.span`
 `
 
 const ReviewPictureContainer = styled.div`
+  position: relative;
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
 
   @media (max-width: 554px) {
     margin-left:-2%;
   }
-`
+`;
+
+const ReviewPictureWrapper = styled.div`
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  transform: ${({ currentIndex }) => `translateX(-${currentIndex * 25}%)`}; /* 한 이미지가 25% 차지 */
+  width: fit-content;
+`;
 
 const NoReview = styled.div`
   font-size: 13px;
   margin-top: 10px;
   font-weight: bold;
-
 `
 
 const ReviewPicture = styled.img`
-  display: block;
-  width: 120px;
-  height:120px;
+  width: 25%; 
+  height: 120px;
   background-color: #D9D9D9;
-  border-radius:5px;
-  margin-left: 10px; 
-  margin-top: 3%;
+  border-radius: 5px;
+  margin: 0 10px;
+  object-fit: cover;
 
   @media (max-width: 554px) {
     width: 80px;
     height:90px;
   }
-`
+`;
+
+
 const ReadMoreButton = styled.button`
   color: #FF69A9;
   background: none;
@@ -246,6 +259,27 @@ const ReadMoreButton = styled.button`
   }
 `;
 
+const ArrowButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+
+  ${({ direction }) => (direction === 'left' ? 'left: 10px;' : 'right: 10px;')}
+`;
+
+const LastReview = styled.span`
+  display: block;
+  font-size: 13px;
+  margin-top: 30px;
+  font-weight: bold;
+`
 const TotalReviewForm = () => {
   const { placeId } = useParams();
   const {
@@ -263,6 +297,8 @@ const TotalReviewForm = () => {
   const [placeName, setPlaceName] = useState("장소 정보가 없습니다.");
   const [isExpanded, setIsExpanded] = useState({});
   const observerRef = useRef(null);
+  const [slideIndexes, setSlideIndexes] = useState({});
+
 
   useEffect(() => {
     if (placeId) {
@@ -289,8 +325,22 @@ const TotalReviewForm = () => {
     const sortTypes = ['LATEST', 'HIGH_SCORE', 'LOW_SCORE'];
     setSortedType(sortTypes[index]);
     if (placeId) {
-      fetchReviews(placeId); // 정렬 변경 시 첫 페이지부터 다시 로드
+      fetchReviews(placeId); 
     }
+  };
+
+  const handlePrevSlide = (reviewId, mediaLength) => {
+    setSlideIndexes((prev) => ({
+      ...prev,
+      [reviewId]: prev[reviewId] > 0 ? prev[reviewId] - 1 : mediaLength - 1,
+    }));
+  };
+  
+  const handleNextSlide = (reviewId, mediaLength) => {
+    setSlideIndexes((prev) => ({
+      ...prev,
+      [reviewId]: prev[reviewId] < mediaLength - 1 ? prev[reviewId] + 1 : 0,
+    }));
   };
 
   const toggleText = (reviewId) => {
@@ -330,9 +380,9 @@ const TotalReviewForm = () => {
         ))}
       </PreferenceContainer>
       <DivisionLine />
-
+  
       <AiReviewSummary placeId={placeId} />
-
+  
       <ReviewSummaryContainer>
         <div>
           <StarImg src={star} />
@@ -349,7 +399,7 @@ const TotalReviewForm = () => {
         />
       </ReviewSummaryContainer>
       <DivisionLine />
-
+  
       {Array.isArray(reviews) && reviews.length > 0 ? (
         reviews.map((review, index) => {
           const maxLength = 200;
@@ -357,21 +407,23 @@ const TotalReviewForm = () => {
           const displayedText = isExpandedForReview
             ? review.content
             : review.content.slice(0, maxLength);
-
+  
           return (
             <div
               key={review.reviewId}
-              ref={index === reviews.length - 1 ? observeLastItem : null} 
+              ref={index === reviews.length - 1 ? observeLastItem : null}
             >
               <ReviewUserContainer>
                 <UserPhoto
-                  src={review.petImg ||reviewDefaultImg}
+                  src={review.petImg || reviewDefaultImg}
                   alt="반려동물 이미지"
                 />
                 <TotalUserInfoContainer>
                   <CommentContainer>
                     <UserId>{review.nickname}</UserId>
-                    <PetType>{review.pets?.join(", ") || "등록된 반려동물이 없습니다."}</PetType>
+                    <PetType>
+                      {review.pets?.join(", ") || "등록된 반려동물이 없습니다."}
+                    </PetType>
                     <PostDate>
                       {new Date(review.createdAt).toLocaleDateString()}
                     </PostDate>
@@ -387,7 +439,7 @@ const TotalReviewForm = () => {
                   </UserSecondInfoContainer>
                 </TotalUserInfoContainer>
               </ReviewUserContainer>
-              <VisitDate>
+              <VisitDate > 
                 방문날짜 {new Date(review.visitedAt).toLocaleDateString()}
               </VisitDate>
               <ReviewContent>
@@ -398,22 +450,21 @@ const TotalReviewForm = () => {
                   </ReadMoreButton>
                 )}
               </ReviewContent>
-              <ReviewPictureContainer>
-                {Array.isArray(review.media) &&
-                  review.media.map((mediaUrl, idx) => (
-                    <ReviewPicture key={idx} src={mediaUrl} alt={`리뷰 이미지 ${idx + 1}`} />
-                  ))}
-              </ReviewPictureContainer>
+              {review.media && review.media.length > 0 && (
+                <ReviewSlideshow images={review.media} />
+              )}
             </div>
           );
         })
-      ) : (
+      ) : !isLoading ? (
         <NoReview>리뷰가 없습니다.</NoReview>
-      )}
+      ) : null}
+  
       {isLoading && <div>로딩 중...</div>}
-      {isLast && <div>더이상 리뷰가 없습니다.</div>}
+      {!isLoading && isLast && reviews.length > 0 && <LastReview>더이상 리뷰가 없습니다.</LastReview>}
     </TotalReviewContainer>
   );
-};
-
-export default TotalReviewForm;
+  };
+  
+  export default TotalReviewForm;
+  

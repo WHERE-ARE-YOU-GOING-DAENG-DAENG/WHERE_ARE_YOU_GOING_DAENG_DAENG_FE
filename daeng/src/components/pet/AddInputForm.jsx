@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
+import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import footerSearch from "../../assets/icons/footer_search.svg"; 
-import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
-import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ const Container = styled.div`
   margin-left: 4%;  
   
   @media (max-width: 554px) {
-    margin-top:3%;
+    margin-top: 3%;
   }
 `;
 
@@ -26,7 +26,7 @@ const FirstInputContainer = styled.div`
   flex-direction: row;
 
   @media (max-width: 554px) {
-    margin-bottom:5%;
+    margin-bottom: 5%;
   }
 `;
 
@@ -61,17 +61,13 @@ const PetNameInput = styled.input`
   padding: 10px;
 
   @media (max-width: 554px) {
-    width: 170%;
-    font-size: 14px;
+    width: 120%;
+    font-size: 11px;
     height: 48px;
   }
-    &:focus {
-      outline: none;
-      border-color: #ff69a9; 
-      
-    &::placeholder {
-      color: #b3b3b3; 
-    }
+  &:focus {
+    outline: none;
+    border-color: #ff69a9; 
   }
 `;
 
@@ -81,6 +77,12 @@ const InputAlert = styled.p`
   margin-top: -1px;
   margin-right: 15%;
   margin-bottom: 4%;
+
+  @media (max-width: 554px) {
+    width: 100%;
+    font-size: 10px;
+    height: 48px;
+  }
 `;
 
 const PetTypeOption = styled.select`
@@ -108,7 +110,7 @@ const PetTypeOption = styled.select`
 const BirthInput = styled.input`
   width: 96%;
   height: 44px;
-  margin-right:10%;
+  margin-right: 10%;
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
@@ -135,26 +137,28 @@ const PetTypeContainer = styled.div`
 
 const BirthContainer = styled.div`
   margin-bottom: 20px;
-`    
+`;
+
 const SelectContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
-`
+`;
 
 const SelectWeight = styled.button`
-  width: 92px;
-  height : 44px;
+  width: 90px;
+  height: 44px;
   margin-right: 12px;
   background-color: white;
-  border : 0.5px solid #E4E4E4;
+  border: 0.5px solid #E4E4E4;
   border-radius: 5px;
-  font-size: 11px;
+  font-size: 12px;
   cursor: pointer;
-  color:  #B3B3B3;
-
+  color: #B3B3B3;
+  
   @media (max-width: 554px) {
-    margin-bottom:3%;
+    margin-bottom: 3%;
+    font-size: 10px;
   }
   
   &:hover {
@@ -164,10 +168,10 @@ const SelectWeight = styled.button`
   }
 
   ${(props) => props.selected && `
-        background-color: #FF69A9;
-        font-weight: bold;
-        color: #ffffff;
-    `}
+    background-color: #FF69A9;
+    font-weight: bold;
+    color: #ffffff;
+  `}
 `;
 
 //퍼블리싱 
@@ -219,7 +223,6 @@ function RegisterInputForm() {
   }; //사이즈 
 
   const handleFocus = (e) => {
-    // input focus로 날짜 선택 UI를 트리거
     e.target.showPicker();
   };
 
