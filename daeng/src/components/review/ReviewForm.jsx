@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
-import arrow from '../../assets/icons/arrow.svg';
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 
@@ -161,7 +160,6 @@ function ReviewForm({ review }) {
       <HeaderContainer>
         <TitleSection>
           <PlaceTitle>{review.placeName || "장소 불러오는 중"}</PlaceTitle>
-          <StyledArrow src={arrow} alt="이동" />
         </TitleSection>
         <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>
       </HeaderContainer>

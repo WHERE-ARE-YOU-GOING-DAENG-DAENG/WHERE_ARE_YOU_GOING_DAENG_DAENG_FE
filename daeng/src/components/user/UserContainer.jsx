@@ -1,13 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import arrow from '../../assets/icons/arrow.svg';
 import { useNavigate } from 'react-router-dom';
-import useUserStore from '../../stores/userStore';
-
+import axios from 'axios';
 function UserContainer() {
+  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const { email, nickname } = useUserStore();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('https://www.daengdaeng-where.link/api/v1/user/adjust', {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        });
+        
+        const { nickname, email } = response.data.data.user; 
+        setNickname(nickname);
+        setEmail(email);
+        setLoading(false);
+      } catch (error) {
+        console.error('유저 정보를 가져오는 중 오류 발생:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleToEditUser = () => {
     navigate('/user-edit');
@@ -16,8 +37,8 @@ function UserContainer() {
   return (
     <Container>
       <UserInfo>
-        <Username>{nickname || '닉네임을 가져오는 중...'}</Username>
-        <UserEmail>{email || '이메일을 가져오는 중...'}</UserEmail>
+      <Username>{loading ? '닉네임을 가져오는 중...' : nickname || '닉네임 없음'}</Username>
+      <UserEmail>{loading ? '이메일을 가져오는 중...' : email || '이메일 없음'}</UserEmail>
       </UserInfo>
       <ArrowImg src={arrow} alt="유저 정보 자세히 보기 화살표" onClick={handleToEditUser} />
     </Container>

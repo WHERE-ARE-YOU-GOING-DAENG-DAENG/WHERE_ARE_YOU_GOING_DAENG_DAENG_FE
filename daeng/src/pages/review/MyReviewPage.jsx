@@ -22,7 +22,7 @@ const StyledTotalReview = styled.span`
 
   @media (max-width: 554px) {
     font-size: 18px;
-    margin-right: 50%;
+    margin-right: 65%;
   }
 `;
 
