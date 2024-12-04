@@ -4,6 +4,7 @@ import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg"
 import { useNavigate } from "react-router-dom";
 import useFavoriteStore from "../../stores/useFavoriteStore";
 import Loading from "../commons/Loading";
+import SearchNoImage from "../../assets/icons/search_noimage.svg";
 
 const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
               {place.imageurl ? (
                 <img src={place.imageurl} alt={`${place.name} 이미지`} />
               ) : (
-                <Placeholder />
+                <img src={SearchNoImage} alt="이미지 없음" />
               )}
               </div>
             </div>
@@ -161,13 +162,6 @@ const PlaceItem = styled.div`
     font-size: 20px;
     cursor: pointer;
   }
-`;
-
-const Placeholder = styled.div`
-  width: 108px;
-  height: 130px;
-  border-radius: 10px;
-  background-color: #b3b3b3;
 `;
 
 export default SearchPlaceList;
