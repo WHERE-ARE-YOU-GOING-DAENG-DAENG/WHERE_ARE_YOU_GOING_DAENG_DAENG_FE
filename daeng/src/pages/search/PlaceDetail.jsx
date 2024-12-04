@@ -24,7 +24,8 @@ const AiReview = styled.div`
 `
 const HeaderImage = styled.img`
   width: 100%;
-  height: 375px; 
+  max-width: 554px;
+  height: 375px;
   object-fit: cover;
 `;
 
