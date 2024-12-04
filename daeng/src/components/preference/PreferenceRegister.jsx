@@ -202,6 +202,12 @@ function PreferenceRegister() {
 
 const Wrap = styled.div`
   padding: 20px;
+
+  @media (max-width: 554px) {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 0px;
+  }
 `;
 
 const Section = styled.div`
@@ -211,7 +217,7 @@ const Section = styled.div`
 const Title = styled.h3`
   text-align: left;
   margin-left: 10px;
-  font-size: 16px;
+  font-size: 17px;
   margin-bottom: 10px;
 
   @media (max-width: 554px) {
@@ -260,6 +266,7 @@ const StyledParagraph2 = styled.p`
     font-size: 10px;
     margin-left: 10px;
     text-align: center;
+    margin-top: 60px;
   }
 `;
 
