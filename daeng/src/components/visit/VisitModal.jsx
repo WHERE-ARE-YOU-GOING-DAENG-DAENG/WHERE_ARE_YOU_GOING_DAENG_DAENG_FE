@@ -179,14 +179,28 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
 
     const generateTimeOptions = (startTime, endTime) => {
         const options = [];
-        let currentTime = dayjs(startTime, "HH:mm");
+        const start = dayjs(startTime, "HH:mm");
         const end = dayjs(endTime, "HH:mm");
-        while (currentTime.isBefore(end) || currentTime.isSame(end)) {
-            options.push({
-                value: currentTime.format("HH:mm"),
-                label: currentTime.format("HH:mm"),
-            });
-            currentTime = currentTime.add(30, "minute");
+    
+        if (start.isAfter(end)) {
+            let currentTime = dayjs("00:00", "HH:mm");
+            const nextDay = dayjs("23:59", "HH:mm"); // 하루의 마지막 시간을 설정
+            while (currentTime.isBefore(nextDay) || currentTime.isSame(nextDay)) {
+                options.push({
+                    value: currentTime.format("HH:mm"),
+                    label: currentTime.format("HH:mm"),
+                });
+                currentTime = currentTime.add(30, "minute");
+            }
+        } else {
+            let currentTime = start;
+            while (currentTime.isBefore(end) || currentTime.isSame(end)) {
+                options.push({
+                    value: currentTime.format("HH:mm"),
+                    label: currentTime.format("HH:mm"),
+                });
+                currentTime = currentTime.add(30, "minute");
+            }
         }
     
         return options;

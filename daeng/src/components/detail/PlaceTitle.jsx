@@ -10,6 +10,9 @@ import useFavoriteStore from "../../stores/useFavoriteStore";
 
 const Container = styled.div`
   padding: 0px 44px;
+  @media(max-width: 554px){
+    padding: 0px 8%;
+  }
 `
 
 const TitleSection = styled.div`
