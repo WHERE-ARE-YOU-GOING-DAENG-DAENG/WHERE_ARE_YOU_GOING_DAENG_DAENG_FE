@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import AlertDialog from "../commons/SweetAlert";
+import useUserStore from '../../stores/userStore';
 
 
 const Container = styled.div`
@@ -51,6 +51,8 @@ const LogoutBtn = styled.button`
 `;
 
 function LastContainer() {
+  const { clearStorige } = useUserStore();
+
   const handleDeleteUser = async () => {
     AlertDialog({
       mode: 'alert',
@@ -62,6 +64,7 @@ function LastContainer() {
           await axios.delete('https://www.daengdaeng-where.link/api/v1/user/delete', {
             withCredentials: true,
           });
+          clearStorige();
           AlertDialog({
             mode: 'alert',
             title: '회원탈퇴 성공',
@@ -71,7 +74,7 @@ function LastContainer() {
               console.log('회원탈퇴 성공 확인 클릭됨');
             },
           });
-        } catch (error) {
+        } catch {
           AlertDialog({
             mode: 'alert',
             title: '회원탈퇴 실패',
@@ -89,6 +92,7 @@ function LastContainer() {
       await axios.post('https://www.daengdaeng-where.link/api/v1/logout', null, {
         withCredentials: true,
       });
+      clearStorige();
       AlertDialog({
         mode: 'alert',
         title: '로그아웃 성공',
@@ -96,7 +100,7 @@ function LastContainer() {
         confirmText: '확인',
         onConfirm: () => console.log('로그아웃 성공 확인 클릭됨'),
       });
-    } catch (error) {
+    } catch {
       AlertDialog({
         mode: 'alert',
         title: '로그아웃 실패',
