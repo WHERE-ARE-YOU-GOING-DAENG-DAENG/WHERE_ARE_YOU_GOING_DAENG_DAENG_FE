@@ -45,7 +45,8 @@ const SliderWrapper = styled.div`
   overflow: hidden;
 
   @media (max-width: 554px) {
-    height: 120px;
+    height: 140px;
+    margin-bottom: 0px;
   }
 `;
 
