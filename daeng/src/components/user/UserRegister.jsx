@@ -11,6 +11,7 @@ import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
 import { requestNotificationPermission } from '../../firebase/firebaseMessaging';
 import { pushAgree } from '../../data/CommonCode';
+
 function UserRegister() { 
   const navigate = useNavigate();
   const [selectedPushType] = useState(pushAgree[0].code);
@@ -45,21 +46,13 @@ function UserRegister() {
 
   const handleInputChange = async (field, value) => {
 
-    if (field === "alarmAgreement" && value === "받을래요" && isLoading) {
-      return; // 중복 요청 방지
-    }
-
-    setUserData((prev) => ({
-      ...prev,
-      [field]: prev[field] === value ? '' : value,
-    }));
-  
-    // "받을래요"를 선택하면 FCM 토큰 발급 시작 ~
     if (field === "alarmAgreement" && value === "받을래요") {
+      setIsLoading(true); // 요청 시작 플래그 설정
       try {
+        console.log("알림 권한 요청을 시작합니다.");
         const token = await requestNotificationPermission(); 
+        console.log("FCM 토큰 발급 성공:", token);
         if (token) {
-          console.log("FCM 토큰 발급 성공:", token);
           setFcmToken(token); // FCM 토큰 상태에 저장
         }
       } catch (error) {
@@ -72,6 +65,11 @@ function UserRegister() {
         });
       }
     }
+
+    setUserData((prev) => ({
+      ...prev,
+      [field]: prev[field] === value ? '' : value,
+    }));
   };
   
   const handleGenderChange = (genderCode) => {
@@ -90,6 +88,7 @@ function UserRegister() {
     }));
   };
 
+  //유효성 검사
   const validateFields = () => {
     if (!userData.nickname.trim()) {
       AlertDialog({
@@ -147,8 +146,22 @@ function UserRegister() {
 
   const handleConfirm = async () => {
     if (!validateFields()) {
-      return; // 함수 내부에서 조건에 따라 종료
+      return; // 유효성 검사가 실패하면 종료
     }
+  
+    let token = null;
+    if (userData.alarmAgreement === "받을래요") {
+      if (!fcmToken) {
+        AlertDialog({
+          mode: "alert",
+          title: "FCM 토큰 필요",
+          text: "알림 권한 요청이 완료되지 않았습니다. 다시 시도해주세요.",
+          confirmText: "확인",
+        });
+        return;
+      }
+    }
+  
   
     const payload = {
       nickname: userData.nickname,
