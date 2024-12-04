@@ -57,12 +57,12 @@ const Container = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     height: 100vh;
-    padding: 30px 20px 20px 20px;
+    padding: 50px 20px 20px 20px;
     box-sizing: border-box;
     overflow-y: auto;
 
     @media (max-width: 554px) {
-        width: 80%;
+        width: 90%;
         height: 75vh;
         padding: 10px;
     }
@@ -88,7 +88,7 @@ const MainTitle = styled.span`
     margin-right: 1px;
 
     @media (max-width: 554px) {
-        font-size: 10vw;
+        font-size: 11vw;
     }
 `;
 
@@ -99,7 +99,7 @@ const SubTitle = styled.span`
     color: #000000;
 
     @media (max-width: 554px) {
-        font-size: 5vw;
+        font-size: 5.9vw;
     }
 `;
 
@@ -110,7 +110,7 @@ const Subtitle = styled.p`
     margin-bottom: 30px;
 
     @media (max-width: 554px) {
-        font-size: 5vw;
+        font-size: 5.9vw;
         margin-bottom: 20px;
     }
 `;
