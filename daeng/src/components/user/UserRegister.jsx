@@ -4,7 +4,7 @@ import SelectBtn from '../../components/commons/SelectBtn';
 import kakaoBtn from '../../assets/icons/kakaoBtn.svg';
 import googleBtn from '../../assets/icons/GoogleBtn.svg';
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
@@ -13,30 +13,30 @@ import AlertDialog from "../commons/SweetAlert";
 function UserRegister() { 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const queryString = new URLSearchParams(window.location.search);
-    let email = queryString.get('email');
-    let provider = queryString.get('provider');
-    if (email) {
-      email = email.trim();
-      setUserData((prev) => ({
-        ...prev,
-        email: decodeURIComponent(email),
-        oauthProvider: decodeURIComponent(provider),
-      }));
-    }
-  }, []);
+  const getCookieValue = (key) => {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split('; ').reduce((acc, cookie) => {
+      const [cookieKey, cookieValue] = cookie.split('=');
+      acc[cookieKey] = decodeURIComponent(cookieValue);
+      return acc;
+    }, {});
+    return cookies[key];
+  };
+
+  const emailFromCookie = getCookieValue('email');
+  const providerFromCookie = getCookieValue('provider');
 
   const [userData, setUserData] = useState({
-    email: '',
+    email: emailFromCookie || '',
     nickname: '',
     gender: '',
     city: '',
     cityDetail: '',
     alarmAgreement: '받을래요',
-    oauthProvider: '',
+    oauthProvider: providerFromCookie || '',
     isNicknameChecked: false,
   });
+
 
   const handleInputChange = (field, value) => {
     setUserData((prev) => ({
