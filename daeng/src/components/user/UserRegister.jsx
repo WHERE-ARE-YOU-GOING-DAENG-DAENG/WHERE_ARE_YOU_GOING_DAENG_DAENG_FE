@@ -4,7 +4,7 @@ import SelectBtn from '../../components/commons/SelectBtn';
 import kakaoBtn from '../../assets/icons/kakaoBtn.svg';
 import googleBtn from '../../assets/icons/GoogleBtn.svg';
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
@@ -17,29 +17,28 @@ function UserRegister() {
   const [fcmToken, setFcmToken] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // 중복 요청 방지 부분
 
-  useEffect(() => {
-    const queryString = new URLSearchParams(window.location.search);
-    let email = queryString.get('email');
-    let provider = queryString.get('provider');
-    if (email) {
-      email = email.trim();
-      setUserData((prev) => ({
-        ...prev,
-        email: decodeURIComponent(email),
-        oauthProvider: decodeURIComponent(provider),
-      }));
-    }
-  }, []);
+  const getCookieValue = (key) => {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split('; ').reduce((acc, cookie) => {
+      const [cookieKey, cookieValue] = cookie.split('=');
+      acc[cookieKey] = decodeURIComponent(cookieValue);
+      return acc;
+    }, {});
+    return cookies[key];
+  };
+
+  const emailFromCookie = getCookieValue('email');
+  const providerFromCookie = getCookieValue('provider');
 
 
   const [userData, setUserData] = useState({
-    email: '',
+    email: emailFromCookie || '',
     nickname: '',
     gender: '',
     city: '',
     cityDetail: '',
     alarmAgreement: '',
-    oauthProvider: '',
+    oauthProvider: providerFromCookie || '',
     isNicknameChecked: false,
   });
 
@@ -74,7 +73,6 @@ function UserRegister() {
       }
     }
   };
-
   
   const handleGenderChange = (genderCode) => {
     setUserData((prev) => ({
@@ -132,7 +130,7 @@ function UserRegister() {
       !userData.gender ||
       !userData.city ||
       !userData.cityDetail ||
-      userData.pushAgreement === null
+      userData.alarmAgreement === null
     ) {
       AlertDialog({
         mode: "alert",
@@ -154,7 +152,7 @@ function UserRegister() {
   
     const payload = {
       nickname: userData.nickname,
-      PushAgreement: userData.alarmAgreement,
+      pushAgreement: userData.alarmAgreement,
       email: userData.email,
       gender: userData.gender,
       city: userData.city,
