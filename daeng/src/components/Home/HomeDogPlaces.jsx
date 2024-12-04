@@ -112,7 +112,7 @@ const DogPlaceWrapper = styled.div`
 
 const DogLinkBox = styled.div`
   width: 100%;
-  height: 152px;
+  height: 174px;
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
