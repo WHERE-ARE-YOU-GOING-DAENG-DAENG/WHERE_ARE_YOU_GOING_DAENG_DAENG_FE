@@ -36,7 +36,7 @@ const usePetStore = create((set) => ({
       );
 
       const petData = response.data.data;
-
+      console.log("API로부터 가져온 펫 데이터:", petData); 
       const speciesOption = petTypeOptions.find((option) => option.name === petData.species);
       const genderOption = genderOptions.find((option) => option.name === petData.gender);
       const sizeOption = petSizeOptions.find((option) => option.name === petData.size);

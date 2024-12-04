@@ -28,7 +28,7 @@ const ReviewPlaceTitle = styled.span`
   text-align: left;
 
   @media (max-width: 554px) {
-    font-size:20px;
+    font-size:18px;
   }
 `
 const PreferenceContainer = styled.div`
@@ -60,11 +60,11 @@ const TotalReviewCount = styled.span`
   color: #B3B3B3;
   font-size:11px;
   display: block;
-  margin-right: 165px;
+  margin-right: 24%;
 
   @media (max-width: 554px) {
     font-size: 11px;
-    margin-right:54px;
+    margin-right:50px;
   }
 `
 
@@ -212,6 +212,13 @@ const ReviewPictureContainer = styled.div`
   }
 `
 
+const NoReview = styled.div`
+  font-size: 13px;
+  margin-top: 10px;
+  font-weight: bold;
+
+`
+
 const ReviewPicture = styled.img`
   display: block;
   width: 120px;
@@ -239,6 +246,12 @@ const ReadMoreButton = styled.button`
   }
 `;
 
+const LastReview = styled.span`
+  display: block;
+  font-size: 13px;
+  margin-top: 30px;
+  font-weight: bold;
+`
 const TotalReviewForm = () => {
   const { placeId } = useParams();
   const {
@@ -323,9 +336,9 @@ const TotalReviewForm = () => {
         ))}
       </PreferenceContainer>
       <DivisionLine />
-
+  
       <AiReviewSummary placeId={placeId} />
-
+  
       <ReviewSummaryContainer>
         <div>
           <StarImg src={star} />
@@ -342,7 +355,7 @@ const TotalReviewForm = () => {
         />
       </ReviewSummaryContainer>
       <DivisionLine />
-
+  
       {Array.isArray(reviews) && reviews.length > 0 ? (
         reviews.map((review, index) => {
           const maxLength = 200;
@@ -350,21 +363,23 @@ const TotalReviewForm = () => {
           const displayedText = isExpandedForReview
             ? review.content
             : review.content.slice(0, maxLength);
-
+  
           return (
             <div
               key={review.reviewId}
-              ref={index === reviews.length - 1 ? observeLastItem : null} 
+              ref={index === reviews.length - 1 ? observeLastItem : null}
             >
               <ReviewUserContainer>
                 <UserPhoto
-                  src={review.petImg ||reviewDefaultImg}
+                  src={review.petImg || reviewDefaultImg}
                   alt="반려동물 이미지"
                 />
                 <TotalUserInfoContainer>
                   <CommentContainer>
                     <UserId>{review.nickname}</UserId>
-                    <PetType>{review.pets?.join(", ") || "등록된 반려동물이 없습니다."}</PetType>
+                    <PetType>
+                      {review.pets?.join(", ") || "등록된 반려동물이 없습니다."}
+                    </PetType>
                     <PostDate>
                       {new Date(review.createdAt).toLocaleDateString()}
                     </PostDate>
@@ -380,7 +395,7 @@ const TotalReviewForm = () => {
                   </UserSecondInfoContainer>
                 </TotalUserInfoContainer>
               </ReviewUserContainer>
-              <VisitDate>
+              <VisitDate > 
                 방문날짜 {new Date(review.visitedAt).toLocaleDateString()}
               </VisitDate>
               <ReviewContent>
@@ -400,13 +415,15 @@ const TotalReviewForm = () => {
             </div>
           );
         })
-      ) : (
-        <div>리뷰가 없습니다.</div>
-      )}
+      ) : !isLoading ? (
+        <NoReview>리뷰가 없습니다.</NoReview>
+      ) : null}
+  
       {isLoading && <div>로딩 중...</div>}
-      {isLast && <div>더이상 리뷰가 없습니다.</div>}
+      {!isLoading && isLast && reviews.length > 0 && <LastReview>더이상 리뷰가 없습니다.</LastReview>}
     </TotalReviewContainer>
   );
-};
-
-export default TotalReviewForm;
+  };
+  
+  export default TotalReviewForm;
+  

@@ -38,8 +38,7 @@ const PetImg = styled.div`
   height: 135px;
   margin-right: 20px;
   border-radius: 100px;
-  background-color: #fbc9e4;
-  background-image: url(${(props) => props.src || "none"});
+  background-image: url(${(props) => props.src || reviewDefaultImg});
   background-size: cover;
   background-position: center;
   cursor: pointer;
@@ -215,6 +214,11 @@ function EditInputForm() {
     return `${year}-${month}-${day}`;
   }; // 오늘 이후는 선택 불가하게
 
+  const handleFocus = (e) => {
+    e.target.showPicker();
+  };
+
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -321,15 +325,29 @@ function EditInputForm() {
     let imageUrl = petPicture;
   
     // 새 이미지가 있을 경우에만 S3에 업로드 처리
-  if (imageFile) {
-    try {
-      const presignResponse = await axios.post(
-        `https://www.daengdaeng-where.link/api/v1/S3?prefix=pet&fileName=${encodeURIComponent(imageFile.name)}`
-      );
+    if (imageFile) {
+      try {
+        const presignResponse = await axios.post(
+          'https://www.daengdaeng-where.link/api/v1/S3',
+          {
+            prefix: 'PET',
+            fileNames: [imageFile.name]
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            withCredentials: true
+          }
+        );
+      
+        const presignedUrl = presignResponse.data?.data?.[imageFile.name];
+        if (!presignedUrl) {
+          console.error('Presigned URL이 없습니다. 응답 데이터를 확인하세요.');
+          throw new Error('Presigned URL이 없습니다.');
+        }
+        console.log('Extracted Presigned URL:', presignedUrl);
 
-      console.log('Presigned URL:', presignResponse.data.url);
-
-      const presignedUrl = presignResponse.data.url; 
       // 이미지 업로드
       const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
         headers: {
@@ -385,7 +403,12 @@ function EditInputForm() {
         selectedNeutering,
         selectedSize
       }); 
-      alert("펫 정보가 성공적으로 수정되었습니다!");
+      AlertDialog({
+        mode: "alert", 
+        title: "성공",
+        text: "펫 정보가 성공적으로 수정되었습니다",
+        confirmText: "닫기"
+      });
       navigate("/my-page");
     }
     } catch (error) {
@@ -397,7 +420,7 @@ function EditInputForm() {
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-          <PetImg src={reviewDefaultImg || petPicture} />
+        <PetImg src={preview || petPicture || reviewDefaultImg} />
         </label>
         <HiddenInput
           id="file-input"
@@ -432,8 +455,9 @@ function EditInputForm() {
       <BirthInput
         type="date"
         max={getTodayDate()} 
-        placeholder="우리 댕댕일 생일을 알려주세요!"
+        placeholder="우리 댕댕이 생일을 알려주세요!"
         value={petBirth || ""} 
+        onFocus={handleFocus}  
         onChange={handlePetBirthChange} 
       />
       </BirthContainer>

@@ -31,7 +31,7 @@ const Search = () => {
 
     useEffect(()=>{
         fetchNearestPlaces();
-    },[])
+    },[userLocation])
   
   
     //가까운순 추천장소 30개
@@ -80,11 +80,16 @@ const Search = () => {
       }
     };
 
-    useEffect(() => {
-      if (location.state?.placeType) {
-        setFilter(true);
-      }
-    }, [location.state]);
+    // useEffect(() => {  
+    //   if (location.state?.placeType) {
+    //     console.log(location.state.placeType)
+    //     setKeywords((prevKeywords) => ({
+    //       ...prevKeywords,
+    //       placeType: location.state.placeType,
+    //     }));
+    //     setFilter(true);
+    //   }
+    // }, [location.state]);
 
     useEffect(() => {
       const fetchPlaces = async () => {
@@ -137,7 +142,7 @@ const Search = () => {
             latitude: userLocation.lat,
             longitude: userLocation.lng,
           };
-  
+          console.log(payload)
           try {
             const response = await axiosInstance.post(
               "https://www.daengdaeng-where.link/api/v1/places/filter",
