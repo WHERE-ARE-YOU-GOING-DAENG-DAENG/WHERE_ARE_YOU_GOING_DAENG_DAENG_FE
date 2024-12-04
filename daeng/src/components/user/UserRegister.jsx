@@ -170,7 +170,6 @@ function UserRegister() {
       city: userData.city,
       cityDetail: userData.cityDetail,
       oauthProvider: userData.oauthProvider,
-        fcmToken: userData.alarmAgreement === "받을래요" ? fcmToken : null,
     };
   
     try {
