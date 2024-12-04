@@ -149,7 +149,6 @@ function UserRegister() {
       return; // 유효성 검사가 실패하면 종료
     }
   
-    let token = null;
     if (userData.alarmAgreement === "받을래요") {
       if (!fcmToken) {
         AlertDialog({
@@ -171,7 +170,7 @@ function UserRegister() {
       city: userData.city,
       cityDetail: userData.cityDetail,
       oauthProvider: userData.oauthProvider,
-      fcmToken: userData.alarmAgreement === "받을래요" ? fcmToken : null,
+        fcmToken: userData.alarmAgreement === "받을래요" ? fcmToken : null,
     };
   
     try {

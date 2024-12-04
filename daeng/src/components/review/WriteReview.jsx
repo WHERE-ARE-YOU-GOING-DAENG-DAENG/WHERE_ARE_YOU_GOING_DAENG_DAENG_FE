@@ -34,7 +34,7 @@ const PlaceTitle = styled.span`
 
   @media (max-width: 554px) {
     font-size: 20px;
-    margin-right: 21%;
+    margin-right: 8%;
     margin-left:10px;
     margin-bottom: 15px;
   }
