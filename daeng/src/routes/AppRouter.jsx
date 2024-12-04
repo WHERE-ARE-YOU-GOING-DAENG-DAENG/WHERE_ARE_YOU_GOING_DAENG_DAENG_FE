@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Search from '../pages/search/Search';
@@ -20,10 +21,18 @@ import UserEditPage from '../pages/user/UserEditPage';
 import MyVisitList from '../pages/visit/MyVisitList';
 import PlaceVisitList from '../pages/visit/PlaceVisitList';
 import Error from "../pages/Error";
+import { setupAxiosInterceptors } from '../services/axiosInstance';
 
-const AppRouter = () => {
+const AppRoutes = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Axios 인터셉터 설정
+    setupAxiosInterceptors(navigate);
+  }, [navigate]);
+
   return (
-    <Router>
+    <>
       <ScrollTop />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -39,18 +48,25 @@ const AppRouter = () => {
         <Route path="/pet-add" element={<AddPetPage />} />
         <Route path="/pet-edit/:petId" element={<PetEditPage />} />
         <Route path="/my-page" element={<MyPage />} />
-        <Route path="/alarm" element={<AlarmPage/>} />
+        <Route path="/alarm" element={<AlarmPage />} />
         <Route path="/my-review" element={<MyReviewPage />} />
         <Route path="/total-review/:placeId" element={<TotalReviewPage />} />
         <Route path="/write-review/:placeId" element={<WriteReviewPage />} />
         <Route path="/visit-list" element={<MyVisitList />} />
         <Route path="/visit-list/:id" element={<PlaceVisitList />} />
         <Route path="/error" element={<Error />} />
-        <Route path="*" element={<Error/>} />
+        <Route path="*" element={<Error />} />
       </Routes>
+    </>
+  );
+};
+
+const AppRouter = () => {
+  return (
+    <Router>
+      <AppRoutes />
     </Router>
   );
 };
 
 export default AppRouter;
-

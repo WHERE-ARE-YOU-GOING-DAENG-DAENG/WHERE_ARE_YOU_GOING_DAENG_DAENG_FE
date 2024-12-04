@@ -7,6 +7,7 @@ import AlertDialog from "../../components/commons/SweetAlert";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import banner from "../../assets/icons/visitbanner.jpg"
+import axiosInstance from "../../services/axiosInstance";
 
 const VisitBanner = styled.img`
     width: 100%;
@@ -22,7 +23,7 @@ const PlaceVisitList = () => {
     useEffect(()=>{
         const fetchPlaceVisit = async() => {
             try{
-                const response = await axios.get(`https://www.daengdaeng-where.link/api/v1/visit/place/${id}`,{
+                const response = await axiosInstance.get(`https://www.daengdaeng-where.link/api/v1/visit/place/${id}`,{
                     withCredentials: true
                 })
                 console.log(response.data.data) //로그삭제
