@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useLocationStore from "../../stores/useLocationStore"; 
 import axios from "axios";
 import HomeDogLoveIcon from "../../assets/icons/home_doglove.svg";
+import HomeNoImage from "../../assets/icons/home_noimage.svg";
 
 function HomeDogPlaces() {
   const [dogPlaces, setDogPlaces] = useState([]); 
@@ -55,7 +56,8 @@ function HomeDogPlaces() {
         {dogPlaces.slice(0, 3).map((place) => (
           <DogPlaceWrapper key={place.placeId}>
             <DogLinkBox onClick={() => handleDogPlaceClick(place.placeId)}>
-              <DogImage src={place.imageurl || "default-image-path.jpg"} alt={place.name} />
+              <DogImage src={place.imageurl ? place.imageurl : HomeNoImage} 
+              alt={place.name || "이미지 없음"} />
             </DogLinkBox>
             <PlaceName>{place.name}</PlaceName>
           </DogPlaceWrapper>
