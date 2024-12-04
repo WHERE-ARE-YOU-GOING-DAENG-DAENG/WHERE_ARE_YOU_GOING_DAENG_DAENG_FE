@@ -22,8 +22,8 @@ const AiReview = styled.div`
   }
 `
 const HeaderImage = styled.img`
-  width: 100%;
-  height: 50%;
+  width: 554px;
+  height: 375px; 
   object-fit: cover;
 `;
 
@@ -98,7 +98,7 @@ const PlaceDetail = () => {
     return(
         <>
           <Header label="시설 상세페이지" />
-          <HeaderImage src={ data.img_path ? data.img_path : "https://via.placeholder.com/552x375"} alt="시설이미지" />
+          <HeaderImage src={ data.imageurl ? data.imageurl : "https://via.placeholder.com/552x375"} alt="시설이미지" />
           <PlaceTitle data={data} setData={setData}/>
           <PlaceInfo data={data} />
           <Division />
