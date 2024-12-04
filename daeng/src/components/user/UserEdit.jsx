@@ -199,6 +199,7 @@ const handleUpdate = async () => {
     city: userData.city,
     cityDetail: userData.cityDetail,
     pushAgreement: userData.pushAgreement,
+    oauthProvider:userData.oauthProvider,
     email,
   };
 
@@ -222,7 +223,9 @@ const handleUpdate = async () => {
       confirmText: '확인',
       onConfirm: () => {
         console.log("수정 성공 확인됨");
-        navigate("/my-page"); 
+        console.log('Updated User Data:', response.data);
+
+        //navigate("/my-page"); 
       },
     });
   } catch (error) {
