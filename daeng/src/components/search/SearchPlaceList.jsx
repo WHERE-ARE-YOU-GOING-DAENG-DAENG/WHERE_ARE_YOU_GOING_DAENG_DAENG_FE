@@ -60,20 +60,11 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
                 <div className="address">{place.streetAddresses || "주소 정보 없음"}</div>
               </div>
               <div className="images">
-                {Array.isArray(place.img_path) && place.img_path.length > 0 ? (
-                  place.img_path.map((image, i) => (
-                    <img key={i} src={image} alt={`${place.name} 이미지`} />
-                  ))
-                ) : (
-                  <div
-                    style={{
-                      width: "108px",
-                      height: "130px",
-                      borderRadius: "10px",
-                      backgroundColor: "#b3b3b3",
-                    }}
-                  ></div>
-                )}
+              {place.imageurl ? (
+                <img src={place.imageurl} alt={`${place.name} 이미지`} />
+              ) : (
+                <Placeholder />
+              )}
               </div>
             </div>
             <img
@@ -172,74 +163,11 @@ const PlaceItem = styled.div`
   }
 `;
 
-const mockData = [
-  {
-      "placeId": 185,
-      "name": "경성대학교박물관",
-      "city": "부산",
-      "cityDetail": "남구",
-      "township": "대연동",
-      "latitude": 35.13843836,
-      "longitude": 129.100099,
-      "streetAddresses": "부산광역시 남구 수영로 309",
-      "telNumber": "051-663-4114",
-      "url": "http://www.ks.ac.kr/ksmuseum",
-      "placeType": "박물관",
-      "description": "해당없음 박물관",
-      "parking": true,
-      "indoor": true,
-      "outdoor": false,
-      "distance": 0.2761599773174494,
-      "isFavorite": true,
-      "startTime": "9:00",
-      "endTime": "18:00",
-      "favoriteCount": 0,
-      "placeScore": 4.7
-  },
-  {
-      "placeId": 184,
-      "name": "경성대학교 미술관",
-      "city": "부산",
-      "cityDetail": "남구",
-      "township": "대연동",
-      "latitude": 35.13843836,
-      "longitude": 129.100099,
-      "streetAddresses": "부산광역시 남구 수영로 309",
-      "telNumber": "051-663-5361",
-      "url": "https://cms1.ks.ac.kr/culture",
-      "placeType": "미술관",
-      "description": "해당없음 미술관",
-      "parking": true,
-      "indoor": true,
-      "outdoor": true,
-      "distance": 0.2761599773174494,
-      "isFavorite": false,
-      "startTime": "10:00",
-      "endTime": "18:00",
-      "favoriteCount": 0,
-      "placeScore": 4.7
-  },
-  {
-      "placeId": 1278,
-      "name": "부경대학교박물관",
-      "city": "부산",
-      "cityDetail": "남구",
-      "township": "대연동",
-      "latitude": 35.13117521,
-      "longitude": 129.104866,
-      "streetAddresses": "부산광역시 남구 용소로 45",
-      "telNumber": "051-629-6771",
-      "url": "http://cms.pknu.ac.kr/museum",
-      "placeType": "박물관",
-      "description": "해당없음 박물관",
-      "parking": true,
-      "indoor": true,
-      "outdoor": false,
-      "distance": 0.7868715140598589,
-      "isFavorite": false,
-      "startTime": "10:00",
-      "endTime": "17:00",
-      "favoriteCount": 0,
-      "placeScore": 5
-  },]
+const Placeholder = styled.div`
+  width: 108px;
+  height: 130px;
+  border-radius: 10px;
+  background-color: #b3b3b3;
+`;
+
 export default SearchPlaceList;
