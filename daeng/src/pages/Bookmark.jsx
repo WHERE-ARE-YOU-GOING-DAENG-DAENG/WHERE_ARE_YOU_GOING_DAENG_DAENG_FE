@@ -7,6 +7,7 @@ import styled from "styled-components";
 import pinIcon from "../assets/icons/pin.svg";
 import useFavoriteStore from "../stores/useFavoriteStore";
 
+
 const OpenModalButton = styled.button`
 	color: black;
     position: fixed;

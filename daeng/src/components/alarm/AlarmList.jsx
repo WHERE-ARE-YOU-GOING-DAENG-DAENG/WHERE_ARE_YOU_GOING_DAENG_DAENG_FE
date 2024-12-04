@@ -12,6 +12,16 @@ const ListContainer = styled.div`
   }
 `;
 
+const NoNotification = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-right:30px;
+`
+
 function AlarmList() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +71,7 @@ function AlarmList() {
   return (
     <ListContainer>
       {notifications.length === 0 ? (
-        <div>알림이 없습니다.</div>
+        <NoNotification>알림이 없습니다.</NoNotification>
       ) : (
         notifications.map((notification) => (
           <PushAlerts

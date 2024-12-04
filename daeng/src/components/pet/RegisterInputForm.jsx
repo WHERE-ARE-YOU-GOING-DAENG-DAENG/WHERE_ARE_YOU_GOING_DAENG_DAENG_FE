@@ -7,8 +7,6 @@ import footerSearch from "../../assets/icons/footer_search.svg";
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 
@@ -53,6 +51,7 @@ const PetNameInfoContainer = styled.div`
   margin-top: 15px;
 `;
 
+
 const PetNameInput = styled.input`
   width: 191%;
   height: 44px;
@@ -63,17 +62,13 @@ const PetNameInput = styled.input`
   padding: 10px;
 
   @media (max-width: 554px) {
-    width: 170%;
-    font-size: 14px;
+    width: 120%;
+    font-size: 11px;
     height: 48px;
   }
-    &:focus {
-      outline: none;
-      border-color: #ff69a9; 
-      
-    &::placeholder {
-      color: #b3b3b3; 
-    }
+  &:focus {
+    outline: none;
+    border-color: #ff69a9; 
   }
 `;
 
@@ -83,6 +78,12 @@ const InputAlert = styled.p`
   margin-top: -1px;
   margin-right: 15%;
   margin-bottom: 4%;
+
+  @media (max-width: 554px) {
+    width: 100%;
+    font-size: 10px;
+    height: 48px;
+  }
 `;
 
 const BirthInput = styled.input`
@@ -129,47 +130,6 @@ const PetTypeOption = styled.select`
   }
 `;
 
-const BirthInputContainer = styled.div`
-  width: 96%;
-  height: 44px;
-  margin-right: 10%;
-  border: 0.5px solid #e4e4e4;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 14px;
-  color: #000;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  &::placeholder {
-    color: #b3b3b3;
-  }
-
-  &:focus-within {
-    outline: none;
-    border-color: #ff69a9;
-  }
-`;
-
-const BirthDatePicker = styled(DatePicker)`
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: transparent;
-  font-size: 14px;
-  color: #000;
-
-  &::placeholder {
-    color: #b3b3b3;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #ff69a9;
-  }
-`;
 
 const PetTypeContainer = styled.div`
   display: flex;
@@ -200,7 +160,8 @@ const SelectWeight = styled.button`
   color:  #B3B3B3;
 
   @media (max-width: 554px) {
-    margin-bottom:3%;
+    margin-bottom: 3%;
+    font-size: 10px;
   }
   
   &:hover {
