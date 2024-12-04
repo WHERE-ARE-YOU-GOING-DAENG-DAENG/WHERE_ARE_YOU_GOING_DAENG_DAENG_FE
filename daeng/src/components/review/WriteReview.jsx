@@ -10,7 +10,6 @@ import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import useUserStore from "../../stores/userStore";
 import Select from "react-select";
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 
@@ -35,7 +34,7 @@ const PlaceTitle = styled.span`
 
   @media (max-width: 554px) {
     font-size: 20px;
-    margin-right: 10%;
+    margin-right: 5%;
     margin-left:10px;
     margin-bottom: 15px;
   }
@@ -46,7 +45,8 @@ const WriteReviewDate = styled.span`
   font-size: 18px;
   
   @media (max-width: 554px) {
-    margin-left: 20%;
+    margin-left: 18%;
+    font-size: 15px;
   }
 `;
 
@@ -60,7 +60,7 @@ const SelectPlaceOptionContainer = styled.div`
 
   @media (max-width: 554px) {
     padding:5%;
-    height: 320px;
+    height: 330px;
   }
 `;
 
@@ -288,7 +288,27 @@ const getCurrentDate = () => {
 
 function WriteReview({ review = {} }) {
   const { placeId } = useParams();
+  const [nickname, setNickname] = useState("");
   const [placeName, setPlaceName] = useState("장소 이름 없음");
+
+  useEffect(() => {
+    const fetchUserNickname = async () => {
+      try {
+        const response = await axios.get("https://www.daengdaeng-where.link/api/v1/user/adjust", {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        });
+        const userNickname = response.data?.data?.user?.nickname || "닉네임 없음";
+        setNickname(userNickname);
+      } catch (error) {
+        console.error("Failed to fetch user nickname:", error);
+        setNickname("닉네임 없음");
+      }
+    };
+
+    fetchUserNickname();
+  }, []);
+
   useEffect(() => {
     if (placeId) {
       axios
@@ -310,7 +330,6 @@ function WriteReview({ review = {} }) {
     return <div>장소 정보를 가져올 수 없습니다.</div>;
   }
 
-  const { nickname } = useUserStore();
   const navigate = useNavigate();
   const { pets, fetchPetList } = usePetStore();
   const [selectPet, setSelectPet] = useState([]); // 선택된 펫 목록들
@@ -343,6 +362,7 @@ const handlePetSelection = (selectedOptions) => {
   }
 };
 
+
   useEffect(() => {
     console.log("useParams placeId:", placeId);
   }, [placeId]);
@@ -353,6 +373,18 @@ const handlePetSelection = (selectedOptions) => {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
+    const totalImages = previews.length + files.length;
+
+    if (totalImages > 5) {
+      AlertDialog({
+        mode: "alert",
+        title: "이미지 업로드 제한",
+        text: "최대 5개의 이미지만 업로드할 수 있습니다.",
+        confirmText: "확인",
+      });
+      return;
+    }
+    
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -454,12 +486,22 @@ const handlePetSelection = (selectedOptions) => {
   for (const file of files) {
     try {
       const presignResponse = await axios.post(
-        `https://www.daengdaeng-where.link/api/v1/S3?prefix=review&fileName=${encodeURIComponent(file.name)}`
+        'https://www.daengdaeng-where.link/api/v1/S3',
+        {
+          prefix: 'REVIEW',
+          fileNames: [file.name]
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        }
       );
 
-      const presignedUrl = presignResponse.data.url;
+      const presignedUrl = presignResponse.data?.data?.[file.name];
       if (!presignedUrl) {
-        throw new Error("서버에서 응답 안 줌");
+        throw new Error("Presigned URL을 받지 못했습니다");
       }
 
       const uploadResponse = await axios.put(presignedUrl, file, {
@@ -472,10 +514,11 @@ const handlePetSelection = (selectedOptions) => {
       if (uploadResponse.status === 200) {
         const uploadedUrl = presignedUrl.split("?")[0]; 
         uploadedUrls.push(uploadedUrl); 
-      } else {
+        console.log(`업로드 성공: ${uploadedUrl}`);
       }
-    } catch (error) {
-    }
+    }catch(error) {
+        console.error(`파일 업로드 실패: ${file.name}`, error);
+      }
   }
     return uploadedUrls;
   };
@@ -491,7 +534,7 @@ const handlePetSelection = (selectedOptions) => {
       console.log("Uploaded media URLs:", media);
     }
   
-    const pets = selectPet.map((pet) => pet.value); 
+    const pets = selectPet.map((pet) => pet.value);
 
     const reviewData = {
       placeId,
@@ -511,6 +554,7 @@ const handlePetSelection = (selectedOptions) => {
           },
           withCredentials: true,
       });
+
       AlertDialog({
         mode: "alert",
         title: "성공",
@@ -550,7 +594,7 @@ const handlePetSelection = (selectedOptions) => {
           src={selectedPetImage || reviewDefaultImg}
           alt="선택된 펫 이미지" 
         />
-          <UserNickname>{nickname || '닉네임을 가져오는 중...'}</UserNickname>
+        <UserNickname>{nickname || '닉네임을 가져오는 중...'}</UserNickname>
         </UserInfoContainer>
         <UserQuestionContainer>
         <Question>댕댕이를 선택해주세요</Question>
