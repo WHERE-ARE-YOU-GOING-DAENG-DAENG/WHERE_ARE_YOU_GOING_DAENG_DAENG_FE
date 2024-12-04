@@ -16,49 +16,42 @@ import { pushAgree } from '../../data/CommonCode';
 function UserEdit() {
   const navigate = useNavigate();
   const [selectedPushType] = useState(pushAgree[0].code);
-  const { userId, email, nickname, setUserId, setEmail, setNickname } = useUserStore();
+  const {
+    userId,
+    email,
+    nickname: storeNickname,
+    city: storeCity,
+    cityDetail: storeCityDetail,
+    pushAgreement: storePushAgreement,
+    gender: storeGender,
+    oauthProvider,
+    setLoginData,
+  } = useUserStore.getState();
+  const [nickname, setNickname] = useState(storeNickname || '');
   const [userData, setUserData] = useState({
-    gender: "",
-    city: "",
-    cityDetail: "",
-    pushAgreement: "",
-    oauthProvider: "",
+    userId,
+    email,
+    gender: storeGender || '',
+    city: storeCity || '',
+    cityDetail: storeCityDetail || '',
+    pushAgreement: storePushAgreement,
+    oauthProvider,
   });
+
   const [fcmToken, setFcmToken] = useState(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          "https://www.daengdaeng-where.link/api/v1/user/adjust",
-          { withCredentials: true }
-        );
-        const { user } = response.data.data;
-
-        setUserId(user.userId || "");
-        setEmail(user.email || "");
-        setNickname(user.nickname || "");
-
-        setUserData({
-          gender: user.gender || "",
-          city: user.city || "도",
-          cityDetail: user.cityDetail || "시/군/구",
-          pushAgreement: user.pushAgreement,
-          oauthProvider: user.oauthProvider || "",
-        });
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        AlertDialog({
-          mode: "alert",
-          title: "데이터 불러오기 실패",
-          text: "사용자 정보를 불러오는 데 문제가 발생했습니다.",
-          confirmText: "확인",
-        });
-      }
-    };
-
-    fetchUserData();
-  }, [setUserId, setEmail, setNickname]);
+    console.log('Zustand State:', {
+      userId,
+      email,
+      storeNickname,
+      storeCity,
+      storeCityDetail,
+      storePushAgreement,
+      storeGender,
+      oauthProvider,
+    });
+  }, []);
 
   const handlePushAgreementChange = async (value) => {
     try {
@@ -73,18 +66,18 @@ function UserEdit() {
           });
           return;
         }
-
+  
         setFcmToken(token);
-
+  
         const response = await axios.post(
           'https://www.daengdaeng-where.link/api/v1/notifications/pushToken',
-          {           
+          {
             token,
-            pushType: selectedPushType
+            pushType: selectedPushType,
           },
           { withCredentials: true }
         );
-
+  
         if (response.status === 200) {
           AlertDialog({
             mode: "alert",
@@ -98,7 +91,7 @@ function UserEdit() {
           "https://www.daengdaeng-where.link/api/v1/notifications",
           { withCredentials: true }
         );
-
+  
         if (response.status === 200) {
           setFcmToken(null);
           AlertDialog({
@@ -109,7 +102,7 @@ function UserEdit() {
           });
         }
       }
-
+  
       setUserData((prev) => ({
         ...prev,
         pushAgreement: value === "받을래요",
@@ -124,61 +117,17 @@ function UserEdit() {
       });
     }
   };
-
+  
   const handleInputChange = (field, value) => {
     if (field === "pushAgreement") {
       handlePushAgreementChange(value);
       return;
     }
-
+  
     setUserData((prev) => ({
       ...prev,
       [field]: prev[field] === value ? "" : value,
     }));
-  };
-
-  const handleUpdate = async () => {
-    if (!validateFields()) return;
-
-    const genderCode = userData.gender === "남자" ? "GND_01" : userData.gender === "여자" ? "GND_02" : "";
-
-    const payload = {
-      userId,
-      nickname,
-      gender: genderCode,
-      city: userData.city,
-      cityDetail: userData.cityDetail,
-      pushAgreement: userData.pushAgreement,
-      oauthProvider: userData.oauthProvider,
-      email,
-    };
-
-    try {
-      const response = await axios.put(
-        "https://www.daengdaeng-where.link/api/v1/user/adjust",
-        payload,
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-
-      AlertDialog({
-        mode: "alert",
-        title: "회원정보 수정 성공",
-        text: "회원 정보가 성공적으로 수정되었습니다!",
-        confirmText: "확인",
-        onConfirm: () => navigate("/my-page"),
-      });
-    } catch (error) {
-      console.error("회원정보 수정 실패:", error);
-      AlertDialog({
-        mode: "alert",
-        title: "회원정보 수정 실패",
-        text: error.response?.data?.message || "알 수 없는 오류가 발생했습니다.",
-        confirmText: "확인",
-      });
-    }
   };
 
   const validateFields = () => {
@@ -222,6 +171,115 @@ function UserEdit() {
     return null;
   };
 
+  const handleNicknameCheck = async () => {
+    if (!nickname.trim()) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 필요",
+        text: "닉네임을 입력해 주세요.",
+        confirmText: "확인",
+      });
+      return;
+    }
+
+    try {
+      const { data } = await axios.get(
+        `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
+        {
+          params: { nickname },
+          withCredentials: true,
+        }
+      );
+
+      if (data.data.isDuplicate === false) {
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 사용 가능",
+          text: "사용 가능한 닉네임입니다.",
+          confirmText: "확인",
+        });
+      } else if (data.data.isDuplicate === true) {
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 중복",
+          text: "사용 불가능한 닉네임입니다. 다른 닉네임을 입력해주세요.",
+          confirmText: "확인",
+        });
+      }
+    } catch (error) {
+      if (error.response) {
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 확인 실패",
+          text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
+          confirmText: "확인",
+        });
+      }
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (!validateFields()) return;
+
+    const genderCode = userData.gender === '남자' ? 'GND_01' : userData.gender === '여자' ? 'GND_02' : '';
+
+    const payload = {
+      userId,
+      nickname,
+      gender: genderCode,
+      city: userData.city,
+      cityDetail: userData.cityDetail,
+      pushAgreement: userData.pushAgreement,
+      oauthProvider,
+      email,
+    };
+
+    try {
+      const response = await axios.put(
+        'https://www.daengdaeng-where.link/api/v1/user/adjust',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log('Updated User Data:', response.data);
+
+      setLoginData({
+        userId,
+        nickname,
+        gender: userData.gender,
+        city: userData.city,
+        cityDetail: userData.cityDetail,
+        pushAgreement: userData.pushAgreement,
+        oauthProvider,
+        email,
+      });
+
+      AlertDialog({
+        mode: 'alert',
+        title: '회원정보 수정 성공',
+        text: '회원 정보가 성공적으로 수정되었습니다!',
+        confirmText: '확인',
+        onConfirm: () => {
+          navigate("/my-page");
+        },
+      });
+    } catch (error) {
+      if (error.response) {
+        AlertDialog({
+          mode: 'alert',
+          title: '회원정보 수정 실패',
+          text: error.response.data.message || '알 수 없는 오류가 발생했습니다.',
+          confirmText: '확인',
+        });
+      }
+    }
+  };
+
   return (
     <UserContainer>
       <SelectLabel label="이메일" />
@@ -238,6 +296,7 @@ function UserEdit() {
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
         />
+        <DuplicateBtn onClick={handleNicknameCheck}>중복확인</DuplicateBtn>
       </InputBox>
       <InputAlert>*닉네임은 최소 1자 이상 작성해 주세요. 특수문자는 사용할 수 없습니다.</InputAlert>
 
@@ -402,6 +461,24 @@ const SelectBox = styled.select`
 
   @media (max-width: 554px) {
     font-size: 11px;
+  }
+`;
+const DuplicateBtn = styled.button`
+  width: 15%;
+  height: 23px;
+  border-radius: 10px;
+  border: none;
+  font-size: 11px;
+  cursor: pointer;
+  background-color: #ff69a9;
+  color: white;
+
+  &:hover {
+    background-color: #f9a9d4;
+  }
+
+  @media (max-width: 554px) {
+    font-size: 8px;
   }
 `;
 
