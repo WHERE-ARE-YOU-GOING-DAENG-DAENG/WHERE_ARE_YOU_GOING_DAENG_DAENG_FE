@@ -17,7 +17,7 @@ const AiReview = styled.div`
   margin-right: 3%;
 
   @media(max-width: 554px){
-    margin-left: 8%
+    margin-left: 8%;
     margin-right: 0;
   }
 `
