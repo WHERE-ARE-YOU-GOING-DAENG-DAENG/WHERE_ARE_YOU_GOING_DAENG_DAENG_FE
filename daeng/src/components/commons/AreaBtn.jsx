@@ -32,6 +32,7 @@ const StyledButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   white-space: nowrap;
+  color: black;
 
   &:hover {
     background-color: #FDF2F8;

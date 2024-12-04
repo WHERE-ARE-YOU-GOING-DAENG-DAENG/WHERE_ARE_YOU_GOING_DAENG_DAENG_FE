@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useLocationStore from "../../stores/useLocationStore"; 
 import axios from "axios";
 import HomeRecommendIcon from "../../assets/icons/home_recommend.svg";
+import HomeNoImage from "../../assets/icons/home_noimage.svg";
 
 function HomeRecommendPlaces() {
   const [recommendedPlaces, setRecommendedPlaces] = useState([]); 
@@ -11,8 +12,8 @@ function HomeRecommendPlaces() {
   const navigate = useNavigate();
 
   const defaultLocation = {
-    latitude: 37.5666, //실시간 위치를 허용하지 않았을 경우
-    longitude: 126.9782, //서울시청 위도 경도
+    lat: 37.5666, //실시간 위치를 허용하지 않았을 경우
+    lng: 126.9782, //서울시청 위도 경도
   };
 
   useEffect(() => {
@@ -57,7 +58,8 @@ function HomeRecommendPlaces() {
             <RecommendLinkBox
               onClick={() => handleRecommendPlaceClick(place.placeId)}
             >
-              <RecommendImage src={place.imageurl || "default-image-path.jpg"} alt={place.name} />
+              <RecommendImage src={place.imageurl ? place.imageurl : HomeNoImage} 
+              alt={place.name || "이미지 없음"} />
             </RecommendLinkBox>
             <PlaceName>{place.name}</PlaceName>
           </RecommendPlaceWrapper>
@@ -120,12 +122,16 @@ const RecommendPlaceWrapper = styled.div`
 
 const RecommendLinkBox = styled.div`
   width: 100%;
-  height: 152px;
+  height: 174px;
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
+
+  @media (max-width: 554px) {
+    height: 140px;
+  }
 `;
 
 const RecommendImage = styled.img`

@@ -52,11 +52,7 @@ const TextContainer = styled.div`
       margin-left: 25px;
 
       @media (max-width: 554px) {
-        font-size: 25px;
-        margin-left: 10px;
-      }
-      @media (max-width: 375px) {
-        font-size: 20px;
+        font-size: 27px;
         margin-left: 10px;
       }
     }
@@ -95,7 +91,7 @@ const Description = styled.div`
     }
 
     @media (max-width: 554px) {
-      font-size: 15px;
+      font-size: 16px;
     }
   }
 `;

@@ -28,13 +28,13 @@ const WriteReviewContainer = styled.div`
 const PlaceTitle = styled.span`
   font-size: 25px;
   font-weight: bold;
-  margin-right: 43%;
+  margin-right: 30%;
   margin-bottom: 27px;
   margin-left: 3%;
 
   @media (max-width: 554px) {
     font-size: 20px;
-    margin-right: 5%;
+    margin-right: 8%;
     margin-left:10px;
     margin-bottom: 15px;
   }
@@ -103,7 +103,7 @@ const UserImg = styled.img`
 
 
   @media (max-width: 554px) {
-    margin-top: 4%;
+    margin-top: 20%;
   }
 `;
 
@@ -113,7 +113,7 @@ const UserNickname = styled.span`
   font-weight: bold;
 
   @media (max-width: 554px) {
-    margin-top: 4%;
+    margin-top: 20%;
   }
 `;
 
@@ -362,6 +362,9 @@ const handlePetSelection = (selectedOptions) => {
   }
 };
 
+const handleFocus = (e) => {
+  e.target.showPicker();
+};
 
   useEffect(() => {
     console.log("useParams placeId:", placeId);
@@ -613,6 +616,7 @@ const handlePetSelection = (selectedOptions) => {
             type="date"
             max={getCurrentDate()}
             value={visitedAt} 
+            onFocus={handleFocus}  
             onChange={(e) => setVisitedAt(e.target.value)} 
           />
         </UserQuestionContainer>

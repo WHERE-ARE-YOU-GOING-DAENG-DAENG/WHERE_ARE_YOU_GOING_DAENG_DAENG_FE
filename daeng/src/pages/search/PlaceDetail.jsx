@@ -10,6 +10,7 @@ import PlaceReviewList from "../../components/detail/PlaceReviewList";
 import AlertDialog from "../../components/commons/SweetAlert";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import PlaceDetailNoImage from "../../assets/icons/placeDetail_noimage.svg";
 
 const AiReview = styled.div`
   max-width: 554px;
@@ -22,8 +23,9 @@ const AiReview = styled.div`
   }
 `
 const HeaderImage = styled.img`
-  width: 554px;
-  height: 375px; 
+  width: 100%;
+  max-width: 554px;
+  height: 375px;
   object-fit: cover;
 `;
 
@@ -98,7 +100,7 @@ const PlaceDetail = () => {
     return(
         <>
           <Header label="시설 상세페이지" />
-          <HeaderImage src={ data.imageurl ? data.imageurl : "https://via.placeholder.com/552x375"} alt="시설이미지" />
+          <HeaderImage src={ data.imageurl ? data.imageurl : PlaceDetailNoImage} alt="시설이미지" />
           <PlaceTitle data={data} setData={setData}/>
           <PlaceInfo data={data} />
           <Division />
