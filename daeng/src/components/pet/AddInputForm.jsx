@@ -219,7 +219,6 @@ function RegisterInputForm() {
   }; //사이즈 
 
   const handleFocus = (e) => {
-    // input focus로 날짜 선택 UI를 트리거
     e.target.showPicker();
   };
 
