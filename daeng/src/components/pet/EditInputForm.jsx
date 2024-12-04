@@ -340,9 +340,14 @@ function EditInputForm() {
             withCredentials: true
           }
         );
-      console.log('Presigned URL:', presignResponse.data.url);
+      
+        const presignedUrl = presignResponse.data?.data?.[imageFile.name];
+        if (!presignedUrl) {
+          console.error('Presigned URL이 없습니다. 응답 데이터를 확인하세요.');
+          throw new Error('Presigned URL이 없습니다.');
+        }
+        console.log('Extracted Presigned URL:', presignedUrl);
 
-      const presignedUrl = presignResponse.data.url; 
       // 이미지 업로드
       const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
         headers: {
@@ -398,7 +403,12 @@ function EditInputForm() {
         selectedNeutering,
         selectedSize
       }); 
-      alert("펫 정보가 성공적으로 수정되었습니다!");
+      AlertDialog({
+        mode: "alert", 
+        title: "성공",
+        text: "펫 정보가 성공적으로 수정되었습니다",
+        confirmText: "닫기"
+      });
       navigate("/my-page");
     }
     } catch (error) {
@@ -410,7 +420,7 @@ function EditInputForm() {
     <Container>
       <FirstInputContainer>
         <label htmlFor="file-input">
-          <PetImg src={preview} />
+        <PetImg src={preview || petPicture || reviewDefaultImg} />
         </label>
         <HiddenInput
           id="file-input"

@@ -17,7 +17,7 @@ function UserContainer() {
           withCredentials: true,
         });
         
-        const { nickname, email } = response.data.data.user; // API 응답에서 user 객체를 추출
+        const { nickname, email } = response.data.data.user; 
         setNickname(nickname);
         setEmail(email);
         setLoading(false);

@@ -174,7 +174,6 @@ function PetContainer() {
   const [startIndex, setStartIndex] = useState(0); 
 
   const isMobile = window.innerWidth <= 554; 
-  const petsPerPage = isMobile ? 1 : 2; 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -225,17 +224,16 @@ const handleToPetEdit = (petId) => {
 
 const handlePrev = () => {
   if (startIndex > 0) {
-    setStartIndex((prevIndex) => prevIndex - petsPerPage);
+    setStartIndex((prevIndex) => prevIndex - 1); // 1씩 이동
   }
 };
 
 const handleNext = () => {
-  if (startIndex + petsPerPage < petData.length) {
-    setStartIndex((prevIndex) => prevIndex + petsPerPage);
+  if (startIndex + 1 < petData.length) {
+    setStartIndex((prevIndex) => prevIndex + 1); // 1씩 이동
   }
 };
-
-const visiblePets = petData.slice(startIndex, startIndex + petsPerPage);
+const visiblePets = petData.slice(startIndex, startIndex + 1);
 
 if (!petData) {
   return <div>펫 정보 불러오는중</div>;
