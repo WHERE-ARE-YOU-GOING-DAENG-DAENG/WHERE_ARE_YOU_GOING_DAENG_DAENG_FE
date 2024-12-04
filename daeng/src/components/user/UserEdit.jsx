@@ -216,6 +216,44 @@ const handleUpdate = async () => {
     );
 
     console.log('Updated User Data:', response.data);
+
+    if (userData.pushAgreement === false) {
+      // 사용자가 "괜찮아요"를 선택했을 때 알림 취소 요청
+      try {
+        const deleteResponse = await axios.delete(
+          "https://www.daengdaeng-where.link/api/v1/notifications",
+          { withCredentials: true }
+        );
+
+        if (deleteResponse.status === 200) {
+          console.log("알림 토큰 삭제 성공:", deleteResponse.data);
+          AlertDialog({
+            mode: 'alert',
+            title: '알림 취소 완료',
+            text: '알림 받기가 성공적으로 취소되었습니다.',
+            confirmText: '확인',
+          });
+        } else {
+          console.error("알림 토큰 삭제 실패:", deleteResponse);
+          AlertDialog({
+            mode: 'alert',
+            title: '알림 취소 실패',
+            text: '알림 취소 요청에 문제가 발생했습니다.',
+            confirmText: '확인',
+          });
+        }
+      } catch (error) {
+        console.error("알림 삭제 요청 중 오류:", error);
+        AlertDialog({
+          mode: 'alert',
+          title: '알림 취소 실패',
+          text: '알림 취소 요청 중 문제가 발생했습니다.',
+          confirmText: '확인',
+        });
+        return;
+      }
+    }
+    
     AlertDialog({
       mode: 'alert',
       title: '회원정보 수정 성공',
@@ -225,7 +263,7 @@ const handleUpdate = async () => {
         console.log("수정 성공 확인됨");
         console.log('Updated User Data:', response.data);
 
-        //navigate("/my-page"); 
+        navigate("/my-page"); 
       },
     });
   } catch (error) {

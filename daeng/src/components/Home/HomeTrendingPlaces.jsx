@@ -38,11 +38,14 @@ function HomeTrendingPlaces() {
       </TrendingTitle>
       <TrendingLinkContainer>
         {trendingPlaces.slice(0, 3).map((place) => (
-          <TrendingLinkBox
-            key={place.placeId} 
-            onClick={() => handleTrendingPlaceClick(place.placeId)}
-          >
-          </TrendingLinkBox>
+          <TrendingPlaceWrapper key={place.placeId}>
+            <TrendingLinkBox
+              onClick={() => handleTrendingPlaceClick(place.placeId)}
+            >
+              <TrendingImage src={place.imageurl || "default-image-path.jpg"} alt={place.name} />
+            </TrendingLinkBox>
+            <PlaceName>{place.name}</PlaceName>
+          </TrendingPlaceWrapper>
         ))}
       </TrendingLinkContainer>
     </TrendingPlacesWrapper>
@@ -89,17 +92,42 @@ const TrendingLinkContainer = styled.div`
   }
 `;
 
-const TrendingLinkBox = styled.div`
+const TrendingPlaceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 152px;
-  height: 174px;
+
+  @media (max-width: 554px) {
+    width: 100%;
+  }
+`;
+
+const TrendingLinkBox = styled.div`
+  width: 100%;
+  height: 152px;
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
+  overflow: hidden;
   cursor: pointer;
+`;
+
+const TrendingImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const PlaceName = styled.div`
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
 
   @media (max-width: 554px) {
-    width: 90%;
-    height: 140px;
+    font-size: 12px;
   }
 `;
 

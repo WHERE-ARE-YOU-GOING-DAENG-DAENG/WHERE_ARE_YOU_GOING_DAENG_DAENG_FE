@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import axiosInstance from "../services/axiosInstance";
 import AlertDialog from "../components/commons/SweetAlert";
 
 const useVisitStore = create((set) => ({
@@ -7,7 +8,7 @@ const useVisitStore = create((set) => ({
   // 내방문예정목록 조회
   fetchVisits: async () => {
     try {
-      const response = await axios.get("https://www.daengdaeng-where.link/api/v1/visit/user",{
+      const response = await axiosInstance.get("https://www.daengdaeng-where.link/api/v1/visit/user",{
         withCredentials: true,
     });
       
@@ -27,7 +28,7 @@ const useVisitStore = create((set) => ({
   // 방문예정 삭제
   removeVisit: async (visitId) => {
     try {
-      await axios.delete(`https://www.daengdaeng-where.link/api/v1/visit/${visitId}`,{
+      await axiosInstance.delete(`https://www.daengdaeng-where.link/api/v1/visit/${visitId}`,{
         withCredentials: true,
     });
       set((state) => ({
