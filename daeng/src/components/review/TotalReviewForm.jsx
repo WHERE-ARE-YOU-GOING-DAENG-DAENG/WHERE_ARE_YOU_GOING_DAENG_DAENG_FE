@@ -204,13 +204,24 @@ const VisitDate = styled.span`
 `
 
 const ReviewPictureContainer = styled.div`
+  position: relative;
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
 
   @media (max-width: 554px) {
     margin-left:-2%;
   }
-`
+`;
+
+const ReviewPictureWrapper = styled.div`
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  transform: ${({ slideIndex }) => `translateX(-${slideIndex * 100}%)`};
+  width: fit-content;
+`;
 
 const NoReview = styled.div`
   font-size: 13px;
@@ -220,19 +231,20 @@ const NoReview = styled.div`
 `
 
 const ReviewPicture = styled.img`
-  display: block;
   width: 120px;
-  height:120px;
+  height: 120px;
   background-color: #D9D9D9;
-  border-radius:5px;
-  margin-left: 10px; 
-  margin-top: 3%;
+  border-radius: 5px;
+  margin: 0 10px;
+  object-fit: cover;
 
   @media (max-width: 554px) {
     width: 80px;
     height:90px;
   }
-`
+`;
+
+
 const ReadMoreButton = styled.button`
   color: #FF69A9;
   background: none;
@@ -245,6 +257,23 @@ const ReadMoreButton = styled.button`
     font-size: 10px; 
   }
 `;
+
+// 슬라이드 화살표 버튼
+const ArrowButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+
+  ${({ direction }) => (direction === 'left' ? 'left: 10px;' : 'right: 10px;')}
+`;
+
 
 const LastReview = styled.span`
   display: block;
