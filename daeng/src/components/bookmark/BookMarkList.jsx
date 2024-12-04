@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import useFavoriteStore from "../../stores/useFavoriteStore";
 import AlertDialog from "../commons/SweetAlert";
 import Loading from "../commons/Loading";
+import SearchNoImage from "../../assets/icons/search_noimage.svg";
+
 const slideUp = keyframes`
     from {
         transform: translateY(80%);
@@ -164,6 +166,7 @@ const BookMarkList = ({ isOpen, onClose , data, onPlaceClick, fetchNextPage, pag
                             {data.map((location)=>(
                                 <FavoriteList
                                     key={location.favoriteId}
+                                    imgUrl={location.placeImage? location.placeImage : SearchNoImage}
                                     icon={houseIcon}
                                     title={location.name}
                                     place={location.streetAddresses}
