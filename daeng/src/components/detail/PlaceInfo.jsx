@@ -82,6 +82,9 @@ const OptionCard = styled.div`
 `
 const Container = styled.div`
   padding: 0px 44px;
+  @media(max-width: 554px){
+    padding: 0px 8%;
+  }
 `
 
 const PlaceInfo = ({data}) => {
@@ -113,16 +116,20 @@ const PlaceInfo = ({data}) => {
                   </div>
                   <div className="info-item">
                     <img src={hourIcon} alt="운영시간" />
-                    <span>{data.startTime} - {data.endTime}</span>
+                    {data.placeType === "숙소"? (
+                      <span>체크인 - {data.startTime} | 체크아웃 - {data.endTime}</span>
+                    ):(<span>{data.startTime} - {data.endTime}</span>)}
+                    
                   </div>
                   <div className="info-item">
                     <img src={callnumberIcon} alt="전화번호" />
                     <span>{data.telNumber}</span>
                   </div>
-                  <div className="info-item">
+                  {data.url !== "정보없음" ? (<div className="info-item">
                     <img src={websiteIcon} alt="웹사이트" />
                     <a href={data.url} target="_blank" rel="noopener noreferrer">{data.url}</a>
-                  </div>
+                  </div>):
+                  (<></>)}
                   <img src={dogIcon} alt="강아지아이콘" className="dog-icon"/>
                 </InfoCard>
                 <OptionCard>

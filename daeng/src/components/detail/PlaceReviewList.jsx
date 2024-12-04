@@ -4,6 +4,8 @@ import star from '../../assets/icons/star.svg';
 import notfillstar from "../../assets/icons/notfillstar.svg";
 import writeIcon from "../../assets/icons/pen.svg";
 import ReviewKeywords from "../commons/ReviewKeywords";
+import AlertDialog from "../commons/SweetAlert";
+import useUserStore from "../../stores/userStore";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
@@ -256,11 +258,27 @@ const PlaceReviewList = ({ data }) => {
   const navigate = useNavigate();
   const { id: placeId } = useParams();
   const [isExpanded, setIsExpanded] = useState({});
+  const { userId } = useUserStore.getState();
+  
   const toggleText = (reviewId) => {
     setIsExpanded((prev) => ({
       ...prev,
       [reviewId]: !prev[reviewId],
     }));
+  };
+
+  const handleWriteReviewClick = () => {
+    console.log(userId)
+    if (userId) {
+      navigate(`/write-review/${placeId}`);
+    } else {
+      AlertDialog({
+        mode: "alert",
+        title: "로그인 필요",
+        text: "리뷰를 작성하려면 로그인이 필요합니다.",
+        confirmText: "확인",
+      });
+    }
   };
 
   return (
@@ -269,7 +287,7 @@ const PlaceReviewList = ({ data }) => {
         <ReviewHeader>
           <h2>보호자님들의 리뷰</h2>
           <div className="actions">
-            <button className="action" onClick={()=> navigate(`/write-review/${placeId}`)}>
+            <button className="action" onClick={handleWriteReviewClick}>
               리뷰 작성
               <img src={writeIcon} alt="리뷰 작성" />
             </button>
