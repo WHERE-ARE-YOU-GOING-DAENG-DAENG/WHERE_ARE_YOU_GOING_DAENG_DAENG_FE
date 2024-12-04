@@ -9,9 +9,13 @@ import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
-
+import { requestNotificationPermission } from '../../firebase/firebaseMessaging';
+import { pushAgree } from '../../data/CommonCode';
 function UserRegister() { 
   const navigate = useNavigate();
+  const [selectedPushType] = useState(pushAgree[0].code);
+  const [fcmToken, setFcmToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // 중복 요청 방지 부분
 
   useEffect(() => {
     const queryString = new URLSearchParams(window.location.search);
@@ -27,6 +31,7 @@ function UserRegister() {
     }
   }, []);
 
+
   const [userData, setUserData] = useState({
     email: '',
     nickname: '',
@@ -38,13 +43,39 @@ function UserRegister() {
     isNicknameChecked: false,
   });
 
-  const handleInputChange = (field, value) => {
+
+  const handleInputChange = async (field, value) => {
+
+    if (field === "alarmAgreement" && value === "받을래요" && isLoading) {
+      return; // 중복 요청 방지
+    }
+
     setUserData((prev) => ({
       ...prev,
       [field]: prev[field] === value ? '' : value,
     }));
+  
+    // "받을래요"를 선택하면 FCM 토큰 발급 시작 ~
+    if (field === "alarmAgreement" && value === "받을래요") {
+      try {
+        const token = await requestNotificationPermission(); 
+        if (token) {
+          console.log("FCM 토큰 발급 성공:", token);
+          setFcmToken(token); // FCM 토큰 상태에 저장
+        }
+      } catch (error) {
+        console.error("FCM 토큰 요청 실패:", error);
+        AlertDialog({
+          mode: "alert",
+          title: "알림 권한 요청 실패",
+          text: "알림 권한을 활성화할 수 없습니다.",
+          confirmText: "확인",
+        });
+      }
+    }
   };
 
+  
   const handleGenderChange = (genderCode) => {
     setUserData((prev) => ({
       ...prev,
@@ -101,7 +132,7 @@ function UserRegister() {
       !userData.gender ||
       !userData.city ||
       !userData.cityDetail ||
-      !userData.alarmAgreement
+      userData.pushAgreement === null
     ) {
       AlertDialog({
         mode: "alert",
@@ -118,8 +149,9 @@ function UserRegister() {
 
   const handleConfirm = async () => {
     if (!validateFields()) {
-      return;
+      return; // 함수 내부에서 조건에 따라 종료
     }
+  
     const payload = {
       nickname: userData.nickname,
       PushAgreement: userData.alarmAgreement === "받을래요",
@@ -128,49 +160,55 @@ function UserRegister() {
       city: userData.city,
       cityDetail: userData.cityDetail,
       oauthProvider: userData.oauthProvider,
+      fcmToken: userData.alarmAgreement === "받을래요" ? fcmToken : null,
     };
-
-    console.log("회원가입 데이터:", payload);
-
+  
     try {
-      const { data, status } = await axios.post(
-        "https://www.daengdaeng-where.link/api/v1/signup",
-        payload,
+      const response = await axios.post(
+        "https://www.daengdaeng-where.link/api/v1/notifications/pushToken",
+        {
+          token: fcmToken,
+          pushType: selectedPushType,
+        },
         {
           withCredentials: true,
         }
       );
-
-      if (status === 200 || status === 201) {
-        console.log("응답 데이터:", data);
-        AlertDialog({
-          mode: "alert",
-          title: "회원가입 성공",
-          text: "회원가입이 성공적으로 완료되었습니다. 선호도 등록페이지로 이동합니다.",
-          confirmText: "확인",
-          onConfirm: () => navigate("/preference-register"),
-        });
+  
+      if (response.status === 200) {
+        console.log("서버에 FCM 토큰 전송 성공:", response.data);
+  
+        // 회원가입 요청
+        const { data, status } = await axios.post(
+          "https://www.daengdaeng-where.link/api/v1/signup",
+          payload,
+          {
+            withCredentials: true,
+          }
+        );
+  
+        if (status === 200 || status === 201) {
+          AlertDialog({
+            mode: "alert",
+            title: "회원가입 성공",
+            text: "회원가입이 성공적으로 완료되었습니다.",
+            confirmText: "확인",
+            onConfirm: () => navigate("/preference-register"),
+          });
+        } else {
+          console.error(`회원가입 실패 - 상태 코드: ${status}`);
+        }
       } else {
-        console.error(`Unexpected status code: ${status}`);
-        AlertDialog({
-          mode: "alert",
-          title: "회원가입 실패",
-          text: "회원가입 중 문제가 발생했습니다. 다시 시도해주세요.",
-          confirmText: "확인",
-          onConfirm: () => console.log("회원가입 실패 확인됨"),
-        });
+        console.error("FCM 토큰 전송 실패:", response);
       }
     } catch (error) {
-      if (error.response) {
-        console.error("회원가입 실패 - 서버 응답:", error.response.data);
-        AlertDialog({
-          mode: "alert",
-          title: "회원가입 실패",
-          text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
-          confirmText: "확인",
-          onConfirm: () => console.log("서버 오류 확인됨"),
-        });
-      }
+      console.error("요청 실패:", error.response?.data || error.message);
+      AlertDialog({
+        mode: "alert",
+        title: "오류",
+        text: "서버와 통신 중 문제가 발생했습니다.",
+        confirmText: "확인",
+      });
     }
   };
 
