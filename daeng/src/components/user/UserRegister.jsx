@@ -38,7 +38,7 @@ function UserRegister() {
     gender: '',
     city: '',
     cityDetail: '',
-    alarmAgreement: '받을래요',
+    alarmAgreement: '',
     oauthProvider: '',
     isNicknameChecked: false,
   });
@@ -154,7 +154,7 @@ function UserRegister() {
   
     const payload = {
       nickname: userData.nickname,
-      PushAgreement: userData.alarmAgreement === "받을래요",
+      PushAgreement: userData.alarmAgreement,
       email: userData.email,
       gender: userData.gender,
       city: userData.city,
