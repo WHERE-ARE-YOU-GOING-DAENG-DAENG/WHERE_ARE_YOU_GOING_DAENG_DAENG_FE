@@ -17,6 +17,5 @@ server: {
   cert: fs.readFileSync(path.resolve(__dirname, 'localhost+2.pem')),
   },
 },
-
   plugins: [react()],
 })
