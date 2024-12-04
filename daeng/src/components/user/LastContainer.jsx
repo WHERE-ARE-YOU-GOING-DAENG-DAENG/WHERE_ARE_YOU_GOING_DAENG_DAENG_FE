@@ -51,7 +51,7 @@ const LogoutBtn = styled.button`
 `;
 
 function LastContainer() {
-  const { clearStorige } = useUserStore();
+  const { clearStorage } = useUserStore();
 
   const handleDeleteUser = async () => {
     AlertDialog({
@@ -64,7 +64,7 @@ function LastContainer() {
           await axios.delete('https://www.daengdaeng-where.link/api/v1/user/delete', {
             withCredentials: true,
           });
-          clearStorige();
+          clearStorage();
           AlertDialog({
             mode: 'alert',
             title: '회원탈퇴 성공',
@@ -92,7 +92,7 @@ function LastContainer() {
       await axios.post('https://www.daengdaeng-where.link/api/v1/logout', null, {
         withCredentials: true,
       });
-      clearStorige();
+      clearStorage();
       AlertDialog({
         mode: 'alert',
         title: '로그아웃 성공',
