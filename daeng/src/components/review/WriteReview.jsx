@@ -362,6 +362,7 @@ const handlePetSelection = (selectedOptions) => {
   }
 };
 
+
   useEffect(() => {
     console.log("useParams placeId:", placeId);
   }, [placeId]);
@@ -498,9 +499,9 @@ const handlePetSelection = (selectedOptions) => {
         }
       );
 
-      const presignedUrl = presignResponse.data.url;
+      const presignedUrl = presignResponse.data?.data?.[file.name];
       if (!presignedUrl) {
-        throw new Error("서버에서 응답 안 줌");
+        throw new Error("Presigned URL을 받지 못했습니다");
       }
 
       const uploadResponse = await axios.put(presignedUrl, file, {
@@ -513,10 +514,11 @@ const handlePetSelection = (selectedOptions) => {
       if (uploadResponse.status === 200) {
         const uploadedUrl = presignedUrl.split("?")[0]; 
         uploadedUrls.push(uploadedUrl); 
-      } else {
+        console.log(`업로드 성공: ${uploadedUrl}`);
       }
-    } catch (error) {
-    }
+    }catch(error) {
+        console.error(`파일 업로드 실패: ${file.name}`, error);
+      }
   }
     return uploadedUrls;
   };
@@ -532,7 +534,7 @@ const handlePetSelection = (selectedOptions) => {
       console.log("Uploaded media URLs:", media);
     }
   
-    const pets = selectPet.map((pet) => pet.value); 
+    const pets = selectPet.map((pet) => pet.value);
 
     const reviewData = {
       placeId,
