@@ -9,7 +9,7 @@ import ConfirmBtn from "../../components/commons/ConfirmBtn";
 import ReactSelect from "react-select" // 다중선택 select라이브러리
 import AlertDialog from "../commons/SweetAlert";
 import axios from "axios";
-
+import axiosInstance from "../../services/axiosInstance";
 dayjs.extend(isBetween);
 dayjs.extend(customParseFormat);
 const slideUp = keyframes`
@@ -284,9 +284,9 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
             petIds: selectedPets,
             visitAt: `${selectedDate}T${selectedTime}:00`,
         }
-        console.log(payload)
+        console.log(payload) //로그 삭제
         try{
-          await axios.post("https://www.daengdaeng-where.link/api/v1/visit", payload,{
+          await axiosInstance.post("https://www.daengdaeng-where.link/api/v1/visit", payload,{
           withCredentials: true
         })
         setReloadTrigger((prev) => !prev);
