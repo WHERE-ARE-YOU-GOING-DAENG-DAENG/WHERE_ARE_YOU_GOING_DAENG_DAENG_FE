@@ -9,6 +9,8 @@ import useTotalReviewStore from '../../stores/UseTotalReviewStore';
 import AiReviewSummary from './AIReview';
 import axios from 'axios';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
+import ReviewSlideshow from './ReviewSlideshow';
+
 //리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
   display: block;
@@ -155,7 +157,7 @@ const PetType = styled.span`
 const PostDate = styled.span`
   font-size: 15px;
   color: #B3B3B3;
-  margin-left:130px;
+  margin-left:210px;
   margin-top: 8px;
   margin-bottom: 3px;
 
@@ -219,7 +221,7 @@ const ReviewPictureContainer = styled.div`
 const ReviewPictureWrapper = styled.div`
   display: flex;
   transition: transform 0.5s ease-in-out;
-  transform: ${({ slideIndex }) => `translateX(-${slideIndex * 100}%)`};
+  transform: ${({ currentIndex }) => `translateX(-${currentIndex * 25}%)`}; /* 한 이미지가 25% 차지 */
   width: fit-content;
 `;
 
@@ -227,11 +229,10 @@ const NoReview = styled.div`
   font-size: 13px;
   margin-top: 10px;
   font-weight: bold;
-
 `
 
 const ReviewPicture = styled.img`
-  width: 120px;
+  width: 25%; 
   height: 120px;
   background-color: #D9D9D9;
   border-radius: 5px;
@@ -258,7 +259,6 @@ const ReadMoreButton = styled.button`
   }
 `;
 
-// 슬라이드 화살표 버튼
 const ArrowButton = styled.button`
   position: absolute;
   top: 50%;
@@ -273,7 +273,6 @@ const ArrowButton = styled.button`
 
   ${({ direction }) => (direction === 'left' ? 'left: 10px;' : 'right: 10px;')}
 `;
-
 
 const LastReview = styled.span`
   display: block;
@@ -298,6 +297,8 @@ const TotalReviewForm = () => {
   const [placeName, setPlaceName] = useState("장소 정보가 없습니다.");
   const [isExpanded, setIsExpanded] = useState({});
   const observerRef = useRef(null);
+  const [slideIndexes, setSlideIndexes] = useState({});
+
 
   useEffect(() => {
     if (placeId) {
@@ -324,8 +325,22 @@ const TotalReviewForm = () => {
     const sortTypes = ['LATEST', 'HIGH_SCORE', 'LOW_SCORE'];
     setSortedType(sortTypes[index]);
     if (placeId) {
-      fetchReviews(placeId); // 정렬 변경 시 첫 페이지부터 다시 로드
+      fetchReviews(placeId); 
     }
+  };
+
+  const handlePrevSlide = (reviewId, mediaLength) => {
+    setSlideIndexes((prev) => ({
+      ...prev,
+      [reviewId]: prev[reviewId] > 0 ? prev[reviewId] - 1 : mediaLength - 1,
+    }));
+  };
+  
+  const handleNextSlide = (reviewId, mediaLength) => {
+    setSlideIndexes((prev) => ({
+      ...prev,
+      [reviewId]: prev[reviewId] < mediaLength - 1 ? prev[reviewId] + 1 : 0,
+    }));
   };
 
   const toggleText = (reviewId) => {
@@ -435,12 +450,9 @@ const TotalReviewForm = () => {
                   </ReadMoreButton>
                 )}
               </ReviewContent>
-              <ReviewPictureContainer>
-                {Array.isArray(review.media) &&
-                  review.media.map((mediaUrl, idx) => (
-                    <ReviewPicture key={idx} src={mediaUrl} alt={`리뷰 이미지 ${idx + 1}`} />
-                  ))}
-              </ReviewPictureContainer>
+              {review.media && review.media.length > 0 && (
+                <ReviewSlideshow images={review.media} />
+              )}
             </div>
           );
         })

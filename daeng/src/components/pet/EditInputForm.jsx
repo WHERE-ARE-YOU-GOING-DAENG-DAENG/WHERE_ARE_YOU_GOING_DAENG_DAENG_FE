@@ -64,7 +64,7 @@ const PetNameInput = styled.input`
   padding: 10px;
 
   @media (max-width: 554px) {
-    width: 185%;
+    width: 100%;
     font-size: 14px;
     height: 48px;
   }
@@ -155,6 +155,7 @@ const SelectWeight = styled.button`
   
   @media (max-width: 554px) {
     margin-bottom: 3%;
+    font-size: 10px;
   }
   
   &:hover {
