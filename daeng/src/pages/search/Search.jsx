@@ -11,6 +11,7 @@ import useLocationStore from "../../stores/useLocationStore";
 import { placeTypes } from "../../data/CommonCode";
 import AlertDialog from "../../components/commons/SweetAlert";
 import { useLocation } from "react-router-dom";
+import axiosInstance from "../../services/axiosInstance"
 
 const Search = () => {
     const location = useLocation();
@@ -42,13 +43,20 @@ const Search = () => {
         longitude: userLocation.lng
       }
       try{
-        const response = await axios.post("https://www.daengdaeng-where.link/api/v1/places/nearest",payload,{
+        const response = await axiosInstance.post("https://www.daengdaeng-where.link/api/v1/places/nearest",payload,{
           withCredentials: true,
         });
         setPlaces(response.data.data);
         setNearPlaces(response.data.data)
       }catch (error){
-        console.error("Error fetching nearest places:", error);
+        if (error.response) {
+          AlertDialog({
+            mode: "alert",
+            title: "조회 실패",
+            text: error.response.data.message || "추천 장소를 불러올 수 없습니다",
+            confirmText: "확인",
+          });
+        }
       }
     }
 
@@ -91,7 +99,7 @@ const Search = () => {
           };
   
           try {
-            const response = await axios.post(
+            const response = await axiosInstance.post(
               "https://www.daengdaeng-where.link/api/v1/places/search",
               payload,
               { withCredentials: true }
@@ -131,7 +139,7 @@ const Search = () => {
           };
   
           try {
-            const response = await axios.post(
+            const response = await axiosInstance.post(
               "https://www.daengdaeng-where.link/api/v1/places/filter",
               payload,
               { withCredentials: true }
