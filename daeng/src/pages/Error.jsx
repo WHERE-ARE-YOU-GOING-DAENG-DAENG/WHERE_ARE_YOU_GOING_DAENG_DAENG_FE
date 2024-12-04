@@ -94,7 +94,7 @@ const Error = () => {
             };
         } else if (status === 401) {
             return {
-                title: "권한이 없는 페이지입니다.",
+                title: "권한이 없는 요청입니다.",
                 content: "권한이 없거나, 사용할 수 없는 페이지입니다.\n로그인 정보를 다시 한 번 확인해주세요.",
             };
         } else {
@@ -118,7 +118,7 @@ const Error = () => {
             <ErrorContent>{content}</ErrorContent>
             <ButtonContainer>
                 <Button primary onClick={() => navigate("/")}>홈으로</Button>
-                <Button onClick={() => navigate(-1)}>뒤로가기</Button>
+                {/* <Button onClick={() => navigate(-1)}>뒤로가기</Button> */}
             </ButtonContainer>
         </Container>
     );
