@@ -36,8 +36,8 @@ const useUserStore = create(
       }),
     }),
     {
-      name: 'user-storage', // localStorage에 저장될 키 이름
-      getStorage: () => localStorage, // localStorage를 사용 (기본값)
+      name: 'user-session-storage',
+      getStorage: () => sessionStorage,
     }
   )
 );
