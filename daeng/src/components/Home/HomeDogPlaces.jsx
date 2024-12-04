@@ -25,8 +25,8 @@ function HomeDogPlaces() {
         const response = await axios.post(
           "https://www.daengdaeng-where.link/api/v1/places/recommend",
           {
-            latitude: locationToUse.latitude,
-            longitude: locationToUse.longitude,
+            latitude: locationToUse.lat,
+            longitude: locationToUse.lng,
           },
           {
             withCredentials: true,
@@ -53,11 +53,12 @@ function HomeDogPlaces() {
       </DogTitle>
       <DogLinkContainer>
         {dogPlaces.slice(0, 3).map((place) => (
-          <DogLinkBox
-            key={place.placeId}
-            onClick={() => handleDogPlaceClick(place.placeId)}
-          >
-          </DogLinkBox>
+          <DogPlaceWrapper key={place.placeId}>
+            <DogLinkBox onClick={() => handleDogPlaceClick(place.placeId)}>
+              <DogImage src={place.imageurl || "default-image-path.jpg"} alt={place.name} />
+            </DogLinkBox>
+            <PlaceName>{place.name}</PlaceName>
+          </DogPlaceWrapper>
         ))}
       </DogLinkContainer>
     </DogPlacesWrapper>
@@ -85,12 +86,6 @@ const DogTitle = styled.h2`
     margin: 10px 20px;
     font-size: 15px;
   }
-
-  img {
-    margin-left: 3px; 
-    width: 20px;
-    height: 20px;
-  }
 `;
 
 const DogLinkContainer = styled.div`
@@ -104,17 +99,42 @@ const DogLinkContainer = styled.div`
   }
 `;
 
-const DogLinkBox = styled.div`
+const DogPlaceWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 152px;
-  height: 174px;
+
+  @media (max-width: 554px) {
+    width: 100%;
+  }
+`;
+
+const DogLinkBox = styled.div`
+  width: 100%;
+  height: 152px;
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
+  overflow: hidden;
   cursor: pointer;
+`;
+
+const DogImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const PlaceName = styled.div`
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
 
   @media (max-width: 554px) {
-    width: 90%;
-    height: 140px;
+    font-size: 12px;
   }
 `;
 
