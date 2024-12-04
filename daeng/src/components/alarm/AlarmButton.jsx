@@ -4,7 +4,6 @@ import { requestNotificationPermission } from '../../firebase/firebaseMessaging'
 import axios from 'axios';
 import { pushAgree } from '../../data/CommonCode';
 import AlertDialog from "../commons/SweetAlert";
-import AlarmDelete from "./AlarmDelete";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -58,7 +57,7 @@ function AlarmButton() {
       AlertDialog({
         mode: "alert",
         title: "오류",
-        text: "알림 권한 요청 중 오류가 발생하였습니다",
+        text: "이미 알림을 활성화 했어요",
         confirmText: "닫기",
       });
     }
@@ -67,7 +66,6 @@ function AlarmButton() {
   return (
     <ButtonContainer>
       <AgreeButton onClick={handleNotificationRequest}>알림 받기</AgreeButton>
-      <AlarmDelete />
     </ButtonContainer>
   );
 }
