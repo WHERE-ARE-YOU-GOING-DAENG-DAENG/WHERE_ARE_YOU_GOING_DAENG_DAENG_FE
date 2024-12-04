@@ -3,6 +3,7 @@ import HomeHotIcon from "../../assets/icons/home_hot.svg";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import HomeNoImage from "../../assets/icons/home_noimage.svg";
 
 function HomeTrendingPlaces() {
   const [trendingPlaces, setTrendingPlaces] = useState([]); 
@@ -42,7 +43,8 @@ function HomeTrendingPlaces() {
             <TrendingLinkBox
               onClick={() => handleTrendingPlaceClick(place.placeId)}
             >
-              <TrendingImage src={place.imageurl || "default-image-path.jpg"} alt={place.name} />
+              <TrendingImage src={place.imageurl ? place.imageurl : HomeNoImage} 
+              alt={place.name || "이미지 없음"} />
             </TrendingLinkBox>
             <PlaceName>{place.name}</PlaceName>
           </TrendingPlaceWrapper>

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useLocationStore from "../../stores/useLocationStore"; 
 import axios from "axios";
 import HomeRecommendIcon from "../../assets/icons/home_recommend.svg";
+import HomeNoImage from "../../assets/icons/home_noimage.svg";
 
 function HomeRecommendPlaces() {
   const [recommendedPlaces, setRecommendedPlaces] = useState([]); 
@@ -57,7 +58,8 @@ function HomeRecommendPlaces() {
             <RecommendLinkBox
               onClick={() => handleRecommendPlaceClick(place.placeId)}
             >
-              <RecommendImage src={place.imageurl || "default-image-path.jpg"} alt={place.name} />
+              <RecommendImage src={place.imageurl ? place.imageurl : HomeNoImage} 
+              alt={place.name || "이미지 없음"} />
             </RecommendLinkBox>
             <PlaceName>{place.name}</PlaceName>
           </RecommendPlaceWrapper>
