@@ -23,6 +23,7 @@ const SearchBarContainer = styled.div`
 
   @media (max-width: 554px) {
     width: 80%;
+    height: 50px;
   }
   
 `;

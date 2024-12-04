@@ -30,7 +30,8 @@ function Home() {
   };
 
   useEffect(() => {
-    setHasToken(checkTokensInCookie());
+    const tokenExists = checkTokensInCookie()
+    setHasToken(tokenExists);
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -62,11 +63,16 @@ function Home() {
         }
       );
     }
-  }, [setUserLocation]);
+  }, [userLocation]);
   
-  //이거 나중에 쿠키 있을 때에 실행되도록 위로 옮기기
+  //쿠키가 있으면 유저 정보 받아오기
   useEffect(() => {
-    const fetchUserData = async () => {
+    if(hasToken){
+      fetchUserData();
+    }
+  }, [hasToken]);
+
+  const fetchUserData = async () => {
       try {
         const response = await axios.get('https://www.daengdaeng-where.link/api/v1/user/adjust', {
           withCredentials: true,
@@ -87,9 +93,6 @@ function Home() {
         });
       }
     };
-  
-    fetchUserData();
-  }, []);
 
   return (
     <Wrapper>
