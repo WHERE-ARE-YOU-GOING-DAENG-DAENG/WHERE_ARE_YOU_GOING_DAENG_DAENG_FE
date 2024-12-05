@@ -136,8 +136,8 @@ const PictureContainer = styled.div`
 `;
 
 const Picture = styled.div`
-  width: 80px;
-  height: 80px;
+  width: 110px;
+  height: 110px;
   border-radius: 8px;
   background-size: cover;
   background-position: center;
@@ -145,8 +145,8 @@ const Picture = styled.div`
 `;
 
 const Video = styled.video`
-  width: 80px;
-  height: 80px;
+  width: 110px;
+  height: 110px;
   background-color: #d9d9d9;
   border-radius: 8px;
   object-fit: cover;
