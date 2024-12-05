@@ -21,7 +21,6 @@ function UserEdit() {
     nickname: storeNickname,
     city: storeCity,
     cityDetail: storeCityDetail,
-    pushAgreement: storePushAgreement,
     gender: storeGender,
     oauthProvider,
     setLoginData,
@@ -33,7 +32,6 @@ function UserEdit() {
     gender: storeGender || '',
     city: storeCity || '',
     cityDetail: storeCityDetail || '',
-    pushAgreement: storePushAgreement,
     oauthProvider,
   });
 
@@ -44,7 +42,6 @@ function UserEdit() {
       storeNickname,
       storeCity,
       storeCityDetail,
-      storePushAgreement,
       storeGender,
       oauthProvider,
     });
@@ -79,7 +76,11 @@ function UserEdit() {
       return false;
     }
 
-    if (!userData.gender || !userData.city || !userData.cityDetail || userData.pushAgreement === null) {
+    if (
+      !userData.gender || 
+      !userData.city || 
+      !userData.cityDetail
+    ) {
       AlertDialog({
         mode: "alert",
         title: "입력 필요",
@@ -156,7 +157,6 @@ function UserEdit() {
       gender: genderCode,
       city: userData.city,
       cityDetail: userData.cityDetail,
-      pushAgreement: userData.pushAgreement,
       oauthProvider,
       email,
     };
@@ -181,7 +181,6 @@ function UserEdit() {
         gender: userData.gender,
         city: userData.city,
         cityDetail: userData.cityDetail,
-        pushAgreement: userData.pushAgreement,
         oauthProvider,
         email,
       });
@@ -245,7 +244,7 @@ function UserEdit() {
       <SelectLabel label="주소" />
       <SelectionContainer>
         <SelectBox onChange={(e) => handleInputChange("city", e.target.value)} value={userData.city}>
-          <option value="도" disabled>
+          <option value="" disabled>
             도 선택
           </option>
           {Object.keys(AreaField).map((cityName, index) => (
@@ -259,7 +258,7 @@ function UserEdit() {
           value={userData.cityDetail}
           disabled={!userData.city || !AreaField[userData.city]?.length}
         >
-          <option value="시/군/구" disabled>
+          <option value="" disabled >
             시/군/구 선택
           </option>
           {(AreaField[userData.city] || []).slice(1).map((districtName, index) => (
@@ -270,21 +269,6 @@ function UserEdit() {
         </SelectBox>
       </SelectionContainer>
       <InputAlert>*보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</InputAlert>
-
-      <SelectLabel label="알림 동의" />
-      <SelectionContainer>
-        <SelectBtn
-          label="받을래요"
-          selected={userData.pushAgreement === true}
-          onClick={() => handleInputChange("pushAgreement", "받을래요")}
-        />
-        <SelectBtn
-          label="괜찮아요"
-          selected={userData.pushAgreement === false}
-          onClick={() => handleInputChange("pushAgreement", "괜찮아요")}
-        />
-      </SelectionContainer>
-      <InputAlert>*장소에 함께하는 댕댕이를 알려드려요</InputAlert>
 
       <ConfirmContainer>
         <ConfirmBtn label="수정 완료" onClick={handleUpdate} />
