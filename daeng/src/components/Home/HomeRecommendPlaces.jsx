@@ -129,8 +129,10 @@ const RecommendLinkBox = styled.div`
   overflow: hidden;
   cursor: pointer;
 
+  aspect-ratio: 150 / 173;
+
   @media (max-width: 554px) {
-    height: 140px;
+    aspect-ratio: 150 / 173;
   }
 `;
 
