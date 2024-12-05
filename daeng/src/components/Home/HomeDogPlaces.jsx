@@ -56,7 +56,7 @@ function HomeDogPlaces() {
         {dogPlaces.map((place) => (
           <DogPlaceWrapper key={place.placeId}>
             <DogLinkBox onClick={() => handleDogPlaceClick(place.placeId)}>
-              <DogImage src={place.imageurl ? place.imageurl : HomeNoImage} 
+              <DogImage src={place.imageUrl ? place.imageUrl : HomeNoImage} 
               alt={place.name || "이미지 없음"} />
             </DogLinkBox>
             <PlaceName>{place.name}</PlaceName>
@@ -69,6 +69,7 @@ function HomeDogPlaces() {
 
 const DogPlacesWrapper = styled.div`
   margin-top: 20px;
+  margin-bottom: 20px;
 
   @media (max-width: 554px) {
     margin-top: 10px;
