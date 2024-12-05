@@ -159,7 +159,7 @@ function ReviewForm({ review }) {
     <ReviewWrapper>
       <HeaderContainer>
         <TitleSection>
-          <PlaceTitle>{review.placeName || "장소 불러오는 중"}</PlaceTitle>
+          <PlaceTitle>{review.placeName}</PlaceTitle>
         </TitleSection>
         <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>
       </HeaderContainer>
