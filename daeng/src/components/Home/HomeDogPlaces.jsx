@@ -33,7 +33,7 @@ function HomeDogPlaces() {
             withCredentials: true,
           }
         );
-        setDogPlaces(response.data.data);
+        setDogPlaces(response.data.data.placeRcommendDto);
       } catch (error) {
         console.error("추천 장소 데이터 가져오기 실패:", error);
       }
@@ -114,15 +114,16 @@ const DogPlaceWrapper = styled.div`
 
 const DogLinkBox = styled.div`
   width: 100%;
-  height: 174px;
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
 
+  aspect-ratio: 150 / 173;
+
   @media (max-width: 554px) {
-    height: 140px;
+    aspect-ratio: 150 / 173;
   }
 `;
 
