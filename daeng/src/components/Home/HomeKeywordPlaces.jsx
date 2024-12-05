@@ -43,8 +43,6 @@ function HomeKeywordPlaces() {
 }
 
 const KeywordPlacesWrapper = styled.div`
-  margin-top: 20px;
-
   @media (max-width: 554px) {
     margin-top: 10px;
   }
