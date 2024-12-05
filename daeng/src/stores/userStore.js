@@ -9,7 +9,6 @@ const useUserStore = create(
       nickname: '',
       city: '',
       cityDetail: '',
-      pushAgreement: false,
       gender: '',
       oauthProvider: '',
       setLoginData: (userData) =>
@@ -19,7 +18,6 @@ const useUserStore = create(
           nickname: userData.nickname || '',
           city: userData.city || '',
           cityDetail: userData.cityDetail || '',
-          pushAgreement: userData.pushAgreement || false,
           gender: userData.gender || '',
           oauthProvider: userData.oauthProvider || '',
         }),
@@ -30,7 +28,6 @@ const useUserStore = create(
         nickname: '',
         city: '',
         cityDetail: '',
-        pushAgreement: false,
         gender: '',
         oauthProvider: '',
       }),

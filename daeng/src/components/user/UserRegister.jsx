@@ -34,7 +34,6 @@ function UserRegister() {
     gender: '',
     city: '',
     cityDetail: '',
-    alarmAgreement: '',
     oauthProvider: providerFromCookie || '',
     isNicknameChecked: false,
   });
@@ -103,8 +102,7 @@ function UserRegister() {
       !userData.nickname ||
       !userData.gender ||
       !userData.city ||
-      !userData.cityDetail ||
-      userData.alarmAgreement === null
+      !userData.cityDetail
     ) {
       AlertDialog({
         mode: "alert",
@@ -127,7 +125,6 @@ function UserRegister() {
   
     const payload = {
       nickname: userData.nickname,
-      pushAgreement: userData.alarmAgreement,
       email: userData.email,
       gender: userData.gender,
       city: userData.city,
@@ -136,7 +133,7 @@ function UserRegister() {
     };
     try {
         // 회원가입 요청
-        const { data, status } = await axios.post(
+        const { status } = await axios.post(
           "https://www.daengdaeng-where.link/api/v1/signup",
           payload,
           {
@@ -157,7 +154,7 @@ function UserRegister() {
           console.error(`회원가입 실패 - 상태 코드: ${status}`);
         }
       }
-     catch (error) {
+    catch (error) {
       console.error("요청 실패:", error.response?.data || error.message);
       AlertDialog({
         mode: "alert",
@@ -290,20 +287,6 @@ function UserRegister() {
       </SelectionContainer>
       <InputAlert>*보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</InputAlert>
 
-      <SelectLabel label="알림 동의" />
-      <SelectionContainer>
-        <SelectBtn
-          label="받을래요"
-          selected={userData.alarmAgreement === '받을래요'}
-          onClick={() => handleInputChange('alarmAgreement', '받을래요')}
-        />
-        <SelectBtn
-          label="괜찮아요"
-          selected={userData.alarmAgreement === '괜찮아요'}
-          onClick={() => handleInputChange('alarmAgreement', '괜찮아요')}
-        />
-      </SelectionContainer>
-      <InputAlert>*장소에 함께하는 댕댕이를 알려드려요</InputAlert>
       <ConfirmContainer>
         <ConfirmBtn label="다음" onClick={handleConfirm} />
       </ConfirmContainer>
