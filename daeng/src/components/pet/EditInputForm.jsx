@@ -27,10 +27,6 @@ const Container = styled.div`
 const FirstInputContainer = styled.div`
   display: flex;
   flex-direction: row;
-
-  @media (max-width: 554px) {
-    margin-bottom: 5%;
-  }
 `;
 
 const PetImg = styled.div`
@@ -42,6 +38,11 @@ const PetImg = styled.div`
   background-size: cover;
   background-position: center;
   cursor: pointer;
+
+  @media (max-width: 554px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const HiddenInput = styled.input`
@@ -55,7 +56,7 @@ const PetNameInfoContainer = styled.div`
 `;
 
 const PetNameInput = styled.input`
-  width: 191%;
+  width: 320px;
   height: 44px;
   font-size: 14px;
   border-radius: 5px;
@@ -65,9 +66,9 @@ const PetNameInput = styled.input`
 
   @media (max-width: 554px) {
     width: 100%;
-    font-size: 14px;
-    height: 48px;
+    font-size: 12px;
   }
+
   &:focus {
     outline: none;
     border-color: #ff69a9; 
@@ -77,9 +78,13 @@ const PetNameInput = styled.input`
 const InputAlert = styled.p`
   color: #ff69a9;
   font-size: 12px;
+  display: flex;
   margin-top: -1px;
-  margin-right: 15%;
   margin-bottom: 4%;
+    
+  @media (max-width: 554px) {
+    margin-bottom:4%;
+  }
 `;
 
 const PetTypeOption = styled.select`
@@ -155,7 +160,7 @@ const SelectWeight = styled.button`
   
   @media (max-width: 554px) {
     margin-bottom: 3%;
-    font-size: 10px;
+    font-size: 9px;
   }
   
   &:hover {
