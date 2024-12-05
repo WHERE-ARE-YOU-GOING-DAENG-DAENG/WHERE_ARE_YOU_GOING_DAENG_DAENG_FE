@@ -21,6 +21,7 @@ const ReviewPicture = styled.img`
   height: auto;
   object-fit: cover;
   margin-right: 5px;
+  margin-left:15px;
 `;
 
 const Video = styled.video`

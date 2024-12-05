@@ -83,8 +83,8 @@ const StarImg = styled.img`
 const DivisionLine = styled.div`
   height: 1px;
   background-color: #E5E5E5;
-  margin-top:-2px;
   margin-right:40px;
+  margin-top:5px;
 `;
 
 const TotalUserInfoContainer = styled.div`
@@ -405,6 +405,7 @@ const TotalReviewForm = () => {
               {review.media && review.media.length > 0 && (
                 <ReviewSlideshow images={review.media} />
               )}
+              <DivisionLine /> 
             </div>
           );
         })
