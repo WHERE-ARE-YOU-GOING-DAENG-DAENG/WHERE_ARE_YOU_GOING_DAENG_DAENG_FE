@@ -391,11 +391,17 @@ const handleFocus = (e) => {
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviews((prev) => [...prev, reader.result]);
+        // 동영상 부분 
+        if (file.type.startsWith("video/")) {
+          setPreviews((prev) => [...prev, { type: "video", src: reader.result }]);
+        } else if (file.type.startsWith("image/")) {
+          // 이미지 부분
+          setPreviews((prev) => [...prev, { type: "image", src: reader.result }]);
+        }
       };
       reader.readAsDataURL(file);
   
-      setPlaceImgs((prev) => [...prev, file]); 
+      setPlaceImgs((prev) => [...prev, file]);
     });
   };
 
