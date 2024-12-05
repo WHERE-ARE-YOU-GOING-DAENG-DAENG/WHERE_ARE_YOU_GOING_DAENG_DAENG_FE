@@ -54,7 +54,7 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
               <div className="details">
                 <div className="status">
                   {place.startTime && place.endTime
-                    ? place.placeType === "숙소"? `체크인 ${place.startTime} / 체크아웃 ${place.endTime}` : `${place.startTime} - ${place.endTime}`
+                    ? place.placeType === "숙소"? `체크인 ${place.startTime} / 체크아웃 ${place.endTime}` : `${place.startTime} - ${place.endTime.slice(0,5)}`
                     : "24시간 운영"}
                   {" | "}
                 </div>
