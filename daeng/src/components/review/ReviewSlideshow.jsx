@@ -38,7 +38,7 @@ const ArrowButton = styled.button`
   ${({ direction }) => (direction === 'left' ? 'left: 10px;' : 'right: 10px;')}
 `;
 
-const ReviewSlideshow = ({ images }) => {
+const ReviewSlideshow = ({ media }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleCount = 4;
 
@@ -58,11 +58,27 @@ const ReviewSlideshow = ({ images }) => {
         </ArrowButton>
       )}
       <ReviewPictureWrapper currentIndex={currentIndex}>
-        {images.map((src, index) => (
-          <ReviewPicture key={index} src={src} alt={`리뷰 이미지 ${index + 1}`} />
-        ))}
+        {media.map((item, index) => {
+          // 동영상인지 확인
+          const isVideo = item.includes('.mp4') || item.includes('.mov') || item.includes('.avi');
+          
+          return (
+            <div key={index}>
+              {isVideo ? (
+                // 동영상 처리
+                <ReviewVideo controls>
+                  <source src={item} type="video/mp4" />
+                </ReviewVideo>
+              ) : (
+                // 이미지 처리
+                <ReviewPicture src={item} alt={`리뷰 이미지 ${index + 1}`} />
+              )}
+            </div>
+          );
+        })}
       </ReviewPictureWrapper>
-      {currentIndex < images.length - visibleCount && (
+      {/* 다음 화살표 버튼 */}
+      {currentIndex < media.length - visibleCount && (
         <ArrowButton direction="right" onClick={handleNext}>
           ▶
         </ArrowButton>
