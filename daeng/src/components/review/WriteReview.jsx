@@ -439,12 +439,12 @@ const handleFocus = (e) => {
       return false;
     }
 
-    if (!selectPet) {
+    if (selectPet.length === 0) { 
       AlertDialog({
         mode: "alert",
         title: "등록 실패",
         text: "함께한 펫을 선택해주세요.",
-        confirmText: "확인"
+        confirmText: "확인",
       });
       return false;
     }
