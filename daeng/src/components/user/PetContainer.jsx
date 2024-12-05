@@ -163,6 +163,7 @@ const PetType = styled.span`
 const PetFirstContainer = styled.div`
   display: flex;
   flex-direction: row;
+  position: relative;
 `
 const PetEditButton = styled.button`
   font-size:10px;
@@ -172,10 +173,8 @@ const PetEditButton = styled.button`
   border-radius: 30px;
   background-color: #D9D9D9;
   border: none;
-  margin-left: 40%;
-
-  @media (max-width: 554px) {
-  }
+  position: absolute;
+  margin-left: 75%;
 `
 
 function PetContainer() {
