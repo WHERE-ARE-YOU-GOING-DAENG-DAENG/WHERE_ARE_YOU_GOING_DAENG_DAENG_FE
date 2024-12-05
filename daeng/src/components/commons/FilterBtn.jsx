@@ -6,8 +6,8 @@ const FilterButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: ${({ size }) => (size === 'small' ? '3px' : '8px')};
-  width: ${({ size }) => (size === 'small' ? '77px' : '108px')};
-  height: ${({ size }) => (size === 'small' ? '28px' : '40px')};
+  padding: 0px 15px;
+  height: ${({ size }) => (size === 'small' ? '28px' : '35px')};
   background-color: #fdf2f8;
   color: #db2877;
   font-size: ${({ size }) => (size === 'small' ? '13px' : '16px')};
@@ -15,6 +15,18 @@ const FilterButton = styled.button`
   border: none;
   font-weight: bold;
   cursor: pointer;
+
+  @media (max-width: 554px) {
+    padding: 0px 13px;
+    height: ${({ size }) => (size === 'small' ? '26px' : '33px')};
+    font-size: ${({ size }) => (size === 'small' ? '11px' : '13px')};
+  }
+
+  @media (max-width: 410px) {
+    padding: 0px 10px;
+    height: ${({ size }) => (size === 'small' ? '25px' : '30px')};
+    font-size: ${({ size }) => (size === 'small' ? '11px' : '13px')};
+  }
 
   &:hover {
     background-color: #fbd1e6;
@@ -24,16 +36,12 @@ const FilterButton = styled.button`
     width: ${({ size }) => (size === 'small' ? '13px' : '20px')};
     height: ${({ size }) => (size === 'small' ? '13px' : '18px')};
     @media (max-width: 554px) {
-      width: ${({ size }) => (size === 'small' ? '13px' : '16px')};
+      width: ${({ size }) => (size === 'small' ? '10px' : '16px')};
       height: ${({ size }) => (size === 'small' ? '13px' : '16px')};
     }
   }
 
-  @media (max-width: 554px) {
-    width: ${({ size }) => (size === 'small' ? '60px' : '90px')};
-    height: ${({ size }) => (size === 'small' ? '25px' : '35px')};
-    font-size: ${({ size }) => (size === 'small' ? '12px' : '15px')};
-  }
+  
 `;
 
 function FilterBtn({ label, icon, size, onClick }) {
