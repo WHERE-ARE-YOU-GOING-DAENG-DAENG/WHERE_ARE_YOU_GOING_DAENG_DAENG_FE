@@ -6,6 +6,10 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
 
+  @media(max-width: 554px){
+    padding: 0px 8%;
+  }
+
   p{
     font-weight: bold;
     font-size: 20px;

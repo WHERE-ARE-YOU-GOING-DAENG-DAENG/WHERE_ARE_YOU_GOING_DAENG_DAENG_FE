@@ -54,7 +54,7 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
               <div className="details">
                 <div className="status">
                   {place.startTime && place.endTime
-                    ? `${place.startTime} - ${place.endTime}`
+                    ? place.placeType === "숙소"? `체크인 ${place.startTime} / 체크아웃 ${place.endTime}` : `${place.startTime} - ${place.endTime}`
                     : "24시간 운영"}
                   {" | "}
                 </div>
@@ -84,9 +84,13 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
 };
 
 const ListContainer = styled.div`
-  padding-bottom: 81px;
-  padding-left: 33px;
-  padding-right: 33px;
+  padding : 81px 33px;
+  padding-top: 0px;
+
+  @media(max-width: 554px){
+    padding: 81px 5%;
+    padding-top: 0px;
+  }
 
   p{
     font-weight: bold;
@@ -130,10 +134,18 @@ const PlaceItem = styled.div`
 
   .details {
     display: flex;
+    flex-wrap: wrap;
     font-size: 14px;
+    text-align: left;
+    word-break: break-word;
+    white-space: normal;
 
     @media(max-width:554px){
       font-size: 12px;
+    }
+    .status{
+      margin-left: 3px;
+      word-break: keep-all;
     }
 
     .address {

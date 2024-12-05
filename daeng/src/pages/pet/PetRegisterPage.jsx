@@ -8,7 +8,6 @@ const PetContainer = styled.div`
   flex-direction: column; 
   min-height: 100vh;  
   overflow: auto; 
-  align-items: center;
 `;
 
 function PetRegisterPage() {
