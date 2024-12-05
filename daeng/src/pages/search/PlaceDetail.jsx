@@ -23,8 +23,9 @@ const AiReview = styled.div`
   }
 `
 const HeaderImage = styled.img`
-  width: 554px;
-  height: 375px; 
+  width: 100%;
+  max-width: 554px;
+  height: 375px;
   object-fit: cover;
 `;
 

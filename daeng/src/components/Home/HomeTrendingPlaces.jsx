@@ -113,6 +113,10 @@ const TrendingLinkBox = styled.div`
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
+
+  @media (max-width: 554px) {
+    height: 140px;
+  }
 `;
 
 const TrendingImage = styled.img`

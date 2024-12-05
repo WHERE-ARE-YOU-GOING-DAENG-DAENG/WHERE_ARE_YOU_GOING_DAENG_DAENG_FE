@@ -11,7 +11,7 @@ const useTotalReviewStore = create((set, get) => ({
   isLoading: false, // 로딩 상태
   placeName: "",
   error: null, 
-  sortedType: "LATEST", // 기본 정렬 타입
+  sortedType: "LATEST", 
 
   setSortedType: (type) =>
     set({
@@ -41,7 +41,7 @@ const useTotalReviewStore = create((set, get) => ({
         }
       );
 
-      console.log(response.data);
+      console.log("응답 데이터:", response.data);
       const data = response.data.data;
     
       set((state) => ({
