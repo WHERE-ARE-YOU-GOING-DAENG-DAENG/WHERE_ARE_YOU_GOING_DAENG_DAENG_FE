@@ -39,14 +39,15 @@ function HomeSlider() {
 
 const SliderWrapper = styled.div`
   width: 100%;
-  height: 189px;
-  margin-bottom: 20px;
+  height: auto;
   position: relative;
   overflow: hidden;
 
+  /* 비율 유지 */
+  aspect-ratio: 554 / 189;
+
   @media (max-width: 554px) {
-    height: 140px;
-    margin-bottom: 0px;
+    aspect-ratio: 414 / 140;
   }
 `;
 
@@ -59,7 +60,7 @@ const SlidesContainer = styled.div`
 const Slide = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   flex-shrink: 0;
 `;
 
