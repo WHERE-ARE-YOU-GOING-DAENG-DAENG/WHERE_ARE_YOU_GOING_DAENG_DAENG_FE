@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import AlertDialog from "../commons/SweetAlert";
 
 const CancelButton = styled.button`
   width: 100px;
@@ -26,19 +27,19 @@ function AlarmDelete() {
     setLoading(true);
     try {
       const response = await axios.delete(
-        "https://www.daengdaeng-where.link/api/v1/notifications"
+        "https://www.daengdaeng-where.link/api/v1/notifications",
+        {
+          withCredentials: true,
+        }
       );
 
       if (response.status === 200) {
         AlertDialog({
           mode: "alert",
-          title: "성공",
-          text: "알림받기가 취소되었습니다.",
-          icon: "success",
+          title: "알림 취소",
+          text: "알림 취소가 완료되었습니다.",
           confirmText: "확인",
-          onConfirm: () => {
-            navigate(0); 
-          },
+          icon: "success", 
         });
       } else {
         alert("알림 받기 취소에 실패했습니다.");
