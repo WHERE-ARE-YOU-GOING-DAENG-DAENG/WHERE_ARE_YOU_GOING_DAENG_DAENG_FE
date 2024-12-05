@@ -70,8 +70,6 @@ function HomeRecommendPlaces() {
 }
 
 const RecommendPlacesWrapper = styled.div`
-  margin-top: 20px;
-
   @media (max-width: 554px) {
     margin-top: 10px;
   }
@@ -122,7 +120,6 @@ const RecommendPlaceWrapper = styled.div`
 
 const RecommendLinkBox = styled.div`
   width: 100%;
-  height: 174px;
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
