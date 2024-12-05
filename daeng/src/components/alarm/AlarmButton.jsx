@@ -15,13 +15,13 @@ const ButtonContainer = styled.div`
 `;
 
 const AgreeButton = styled.button`
-  width: 100px;
+  width: 130px;
   height: 54px;
   border-radius: 10px;
   background-color: #FF69A9;
   color: #FFFFFF;
   border: none;
-  margin-right: 20px;
+  margin-right: 20%;
   font-size: 20px;
   cursor: pointer;
 `;
