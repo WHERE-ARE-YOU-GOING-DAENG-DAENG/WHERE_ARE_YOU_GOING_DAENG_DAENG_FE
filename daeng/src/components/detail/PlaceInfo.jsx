@@ -118,7 +118,7 @@ const PlaceInfo = ({data}) => {
                     <img src={hourIcon} alt="운영시간" />
                     {data.placeType === "숙소"? (
                       <span>체크인 - {data.startTime} | 체크아웃 - {data.endTime}</span>
-                    ):(<span>{data.startTime} - {data.endTime}</span>)}
+                    ):(<span>{data.startTime} - {data.endTime.slice(0,5)}</span>)}
                     
                   </div>
                   <div className="info-item">
