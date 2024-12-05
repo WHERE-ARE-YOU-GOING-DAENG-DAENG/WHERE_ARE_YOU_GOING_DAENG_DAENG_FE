@@ -162,6 +162,7 @@ function PreferenceEdit() {
         title: "수정 성공",
         text: "선호 정보가 성공적으로 수정되었습니다!",
         confirmText: "확인",
+        icon: "success",
         onConfirm: () => navigate("/my-page"),
       });
     } catch (error) {

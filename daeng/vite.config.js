@@ -11,7 +11,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-// server: {
+//   server: {
 //   https: {
 //   key: fs.readFileSync(path.resolve(__dirname, 'localhost+2-key.pem')),
 //   cert: fs.readFileSync(path.resolve(__dirname, 'localhost+2.pem')),

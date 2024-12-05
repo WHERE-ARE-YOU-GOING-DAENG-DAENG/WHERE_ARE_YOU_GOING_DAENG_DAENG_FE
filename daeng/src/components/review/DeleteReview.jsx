@@ -18,12 +18,21 @@ function DeleteReview({ reviewId }) {
 
       onConfirm: async () => {
         try {
-          const response = await axios.delete(`https://www.daengdaeng-where.link/api/v1/review/${reviewId}`);
+          const response = await axios.delete(
+            `https://www.daengdaeng-where.link/api/v1/review/${reviewId}`,
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              withCredentials: true
+            }
+          );
           if (response.status === 200) {
             AlertDialog({
               mode: "alert",
               title: "성공",
               text: "성공적으로 삭제되었습니다.",
+              icon: "success",
               confirmText: "확인",
               onConfirm: () => {
                 navigate(0); 

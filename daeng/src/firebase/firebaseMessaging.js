@@ -1,7 +1,6 @@
 import { messaging } from "./firebase";
 import { getToken, onMessage } from "firebase/messaging";
 
-// 알림 권한 요청 및 토큰 가져오기
 export const requestNotificationPermission = async () => {
   try {
     const permission = await Notification.requestPermission();
@@ -41,7 +40,7 @@ export const setupOnMessageHandler = () => {
     const notification = new Notification(notificationTitle, notificationOptions);
 
     notification.onclick = function (event) {
-      event.preventDefault(); // 알림 클릭 시 기본 동작 방지
+      event.preventDefault(); 
       console.log("notification clicked!");
       notification.close(); // 클릭 후 알림 닫기
     };
