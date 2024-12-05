@@ -127,7 +127,7 @@ function PreferenceRegister() {
         icon: "success",
         onConfirm: () => {
           console.log("등록 성공 확인됨");
-          navigate("/");
+          navigate("/pet-register");
         },
       });
     } catch (error) {
