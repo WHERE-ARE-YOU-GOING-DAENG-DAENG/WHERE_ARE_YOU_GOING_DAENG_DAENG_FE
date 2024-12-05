@@ -13,6 +13,13 @@ const FavoriteListContainer = styled.div`
   background-color: #f9f9f9;
   border-radius: 10px;
   position: relative;
+  @media (max-width: 554px) {
+    height: 130px;
+  }
+  @media (max-width: 450px) {
+    height: 120px;
+    padding: 8px;
+  }
 `;
 
 const FavoriteInfoContainer = styled.div`
@@ -21,7 +28,6 @@ const FavoriteInfoContainer = styled.div`
   justify-content: center;
   margin-left: 15px;
   text-align: left;
-  margin-top:10px;
   margin-bottom: 10px;
 `;
 
@@ -103,8 +109,15 @@ const FavoritePlaceTime = styled.p`
 const DeleteButtonWrapper = styled.div`
   position: absolute; /* 부모 요소를 기준으로 위치 조정 */
   padding-right: 40px;
-  bottom: 10px; /* 아래에서 10px */
-  right: 25%; /* 오른쪽에서 10px */
+  bottom: 25px; 
+  right: 95px;
+  @media (max-width: 554px) {
+    bottom: 20px;
+    right: 81px;
+  }
+  @media (max-width: 450px) {
+    bottom: 20px;
+    right: 68px;
 `;
 
 function FavoriteList({ title, icon, place, time, imgUrl, onTitleClick, onPlaceClick, onDelete }) {
