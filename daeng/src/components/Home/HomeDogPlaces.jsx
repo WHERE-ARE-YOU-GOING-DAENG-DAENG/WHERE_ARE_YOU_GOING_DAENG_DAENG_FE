@@ -33,7 +33,7 @@ function HomeDogPlaces() {
             withCredentials: true,
           }
         );
-        setDogPlaces(response.data.data);
+        setDogPlaces(response.data.data.placeRcommendDto);
       } catch (error) {
         console.error("추천 장소 데이터 가져오기 실패:", error);
       }
