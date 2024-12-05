@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 const CancelButton = styled.button`
-  width: 153px;
+  width: 90%;
   height: 54px;
   border-radius: 10px;
   background-color: #FF6347; 
@@ -30,7 +30,16 @@ function AlarmDelete() {
       );
 
       if (response.status === 200) {
-        alert("알림 받기가 성공적으로 취소되었습니다.");
+        AlertDialog({
+          mode: "alert",
+          title: "성공",
+          text: "알림받기가 취소되었습니다.",
+          icon: "success",
+          confirmText: "확인",
+          onConfirm: () => {
+            navigate(0); 
+          },
+        });
       } else {
         alert("알림 받기 취소에 실패했습니다.");
       }

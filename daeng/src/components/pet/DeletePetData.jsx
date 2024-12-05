@@ -38,7 +38,15 @@ function DeletePetData({ petId }) {
 
       onConfirm: async () => {
         try {
-          const response = await axios.delete(`https://www.daengdaeng-where.link/api/v1/pets/${petId}`);
+          const response = await axios.delete(
+            `https://www.daengdaeng-where.link/api/v1/pets/${petId}`,
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              withCredentials: true
+            }
+          );
           if (response.status === 200) {
             AlertDialog({
               mode: "alert",

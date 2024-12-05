@@ -10,6 +10,7 @@ import AiReviewSummary from './AIReview';
 import axios from 'axios';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import ReviewSlideshow from './ReviewSlideshow';
+import spinner from '../../assets/icons/spinner.gif';
 
 //리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
@@ -60,13 +61,13 @@ const TotalStarPoint = styled.span`
 
 const TotalReviewCount = styled.span`
   color: #B3B3B3;
-  font-size:11px;
+  font-size:13px;
   display: block;
-  margin-right: 24%;
+  margin-right: 25%;
 
   @media (max-width: 554px) {
     font-size: 11px;
-    margin-right:50px;
+    margin-right:10%;
   }
 `
 
@@ -218,13 +219,6 @@ const ReviewPictureContainer = styled.div`
   }
 `;
 
-const ReviewPictureWrapper = styled.div`
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-  transform: ${({ currentIndex }) => `translateX(-${currentIndex * 25}%)`}; /* 한 이미지가 25% 차지 */
-  width: fit-content;
-`;
-
 const NoReview = styled.div`
   font-size: 13px;
   margin-top: 10px;
@@ -368,7 +362,14 @@ const TotalReviewForm = () => {
     [isLoading, isLast, fetchReviews, placeId]
   );
 
-  if (isLoading && reviews.length === 0) return <div>로딩 중...</div>;
+  if (isLoading && reviews.length === 0) {
+    return (
+      <div>
+        <img src="/assets/spinner.gif" alt="로딩 중..." />
+        <p>로딩 중...</p>
+      </div>
+    );
+  }
   if (!placeId) return <div>장소 정보를 가져올 수 없습니다.</div>;
 
   return (
