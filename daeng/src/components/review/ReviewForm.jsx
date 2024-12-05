@@ -144,6 +144,14 @@ const Picture = styled.div`
   background-color: #d9d9d9;
 `;
 
+const Video = styled.video`
+  width: 80px;
+  height: 80px;
+  background-color: #d9d9d9;
+  border-radius: 8px;
+  object-fit: cover;
+`;
+
 function ReviewForm({ review }) {
   return (
     <ReviewWrapper>
@@ -181,12 +189,22 @@ function ReviewForm({ review }) {
       <ReviewContent>{review.content}</ReviewContent>
 
       <PictureContainer>
-        {review.media.map((mediaUrl, index) => (
-          <Picture
-            key={index}
-            style={{ backgroundImage: `url(${mediaUrl})` }}
-          />
-        ))}
+        {review.media.map((mediaUrl, index) => {
+          if (mediaUrl.endsWith(".mp4") || mediaUrl.endsWith(".mov")) {
+            return (
+              <Video key={index} controls>
+                <source src={mediaUrl} type="video/mp4" />
+              </Video>
+            );
+          } else {
+            return (
+              <Picture
+                key={index}
+                style={{ backgroundImage: `url(${mediaUrl})` }}
+              />
+            );
+          }
+        })}
       </PictureContainer>
     </ReviewWrapper>
   );
