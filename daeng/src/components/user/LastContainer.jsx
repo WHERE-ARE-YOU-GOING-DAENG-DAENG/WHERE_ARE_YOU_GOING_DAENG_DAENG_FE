@@ -72,6 +72,7 @@ function LastContainer() {
             title: '회원탈퇴 성공',
             text: '회원탈퇴가 완료되었습니다.',
             confirmText: '확인',
+            icon: "success",
             onConfirm: () => {
               console.log('회원탈퇴 성공 확인 클릭됨');
               navigate('/');

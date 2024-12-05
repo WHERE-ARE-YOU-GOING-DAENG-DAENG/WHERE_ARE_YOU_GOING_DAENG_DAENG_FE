@@ -563,6 +563,7 @@ const handleFocus = (e) => {
         title: "성공",
         text: `리뷰가 성공적으로 등록되었습니다.`,
         confirmText: "닫기" ,
+        icon: "success",
         onConfirm: () => navigate("/my-page"), 
       });
       

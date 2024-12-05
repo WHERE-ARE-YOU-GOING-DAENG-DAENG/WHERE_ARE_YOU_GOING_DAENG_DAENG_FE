@@ -24,6 +24,7 @@ function DeleteReview({ reviewId }) {
               mode: "alert",
               title: "성공",
               text: "성공적으로 삭제되었습니다.",
+              icon: "success",
               confirmText: "확인",
               onConfirm: () => {
                 navigate(0); 

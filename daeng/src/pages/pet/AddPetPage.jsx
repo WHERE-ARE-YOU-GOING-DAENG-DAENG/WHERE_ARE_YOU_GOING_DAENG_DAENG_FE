@@ -5,9 +5,7 @@ import AddInputForm from '../../components/pet/AddInputForm';
 
 const PetContainer = styled.div`
   display: flex;
-  flex-direction: column; 
-  min-height: 100vh;  
-  overflow: auto; 
+  flex-direction: column;
 `;
 
 function AddPetPage() {

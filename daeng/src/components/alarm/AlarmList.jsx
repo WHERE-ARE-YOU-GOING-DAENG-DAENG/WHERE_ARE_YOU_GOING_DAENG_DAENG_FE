@@ -12,6 +12,14 @@ const ListContainer = styled.div`
   }
 `;
 
+const NoAlarm = styled.span`
+  font-size: 16px;
+  display: flex;
+  margin-left: 40%;
+  margin-top: 10%;
+  font-weight: bold;
+`
+
 const NoNotification = styled.span`
   display: flex;
   justify-content: center;
@@ -65,7 +73,7 @@ function AlarmList() {
   }
 
   if (error) {
-    return <div>오류가 발생했습니다: {error}</div>;
+    return <NoAlarm>알림이 없습니다</NoAlarm>;
   }
 
   return (
