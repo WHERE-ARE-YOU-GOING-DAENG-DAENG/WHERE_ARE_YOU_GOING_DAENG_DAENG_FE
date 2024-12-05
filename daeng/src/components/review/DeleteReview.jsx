@@ -18,7 +18,15 @@ function DeleteReview({ reviewId }) {
 
       onConfirm: async () => {
         try {
-          const response = await axios.delete(`https://www.daengdaeng-where.link/api/v1/review/${reviewId}`);
+          const response = await axios.delete(
+            `https://www.daengdaeng-where.link/api/v1/review/${reviewId}`,
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              withCredentials: true
+            }
+          );
           if (response.status === 200) {
             AlertDialog({
               mode: "alert",
