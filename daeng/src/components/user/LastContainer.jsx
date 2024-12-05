@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
 import useUserStore from '../../stores/userStore';
+import { useNavigate } from 'react-router-dom';
 
 
 const Container = styled.div`
@@ -51,6 +52,7 @@ const LogoutBtn = styled.button`
 `;
 
 function LastContainer() {
+  const navigate = useNavigate();
   const { clearStorage } = useUserStore();
 
   const handleDeleteUser = async () => {
@@ -70,8 +72,10 @@ function LastContainer() {
             title: '회원탈퇴 성공',
             text: '회원탈퇴가 완료되었습니다.',
             confirmText: '확인',
+            icon: "success",
             onConfirm: () => {
               console.log('회원탈퇴 성공 확인 클릭됨');
+              navigate('/');
             },
           });
         } catch {
@@ -98,7 +102,10 @@ function LastContainer() {
         title: '로그아웃 성공',
         text: '로그아웃이 완료되었습니다.',
         confirmText: '확인',
-        onConfirm: () => console.log('로그아웃 성공 확인 클릭됨'),
+        onConfirm: () => {
+          console.log('로그아웃 성공 확인 클릭됨');
+          navigate('/');
+        },
       });
     } catch {
       AlertDialog({

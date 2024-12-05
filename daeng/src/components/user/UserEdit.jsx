@@ -10,12 +10,11 @@ import axios from "axios";
 import AlertDialog from "../commons/SweetAlert";
 import useUserStore from "../../stores/userStore";
 import { useNavigate } from "react-router-dom";
-import { requestNotificationPermission } from "../../firebase/firebaseMessaging";
-import { pushAgree } from '../../data/CommonCode';
+
 
 function UserEdit() {
   const navigate = useNavigate();
-  const [selectedPushType] = useState(pushAgree[0].code);
+
   const {
     userId,
     email,
@@ -38,8 +37,6 @@ function UserEdit() {
     oauthProvider,
   });
 
-  const [fcmToken, setFcmToken] = useState(null);
-
   useEffect(() => {
     console.log('Zustand State:', {
       userId,
@@ -53,77 +50,7 @@ function UserEdit() {
     });
   }, []);
 
-  const handlePushAgreementChange = async (value) => {
-    try {
-      if (value === "받을래요") {
-        const token = await requestNotificationPermission();
-        if (!token) {
-          AlertDialog({
-            mode: "alert",
-            title: "알림 권한 필요",
-            text: "알림 권한을 허용해주세요.",
-            confirmText: "확인",
-          });
-          return;
-        }
-  
-        setFcmToken(token);
-  
-        const response = await axios.post(
-          'https://www.daengdaeng-where.link/api/v1/notifications/pushToken',
-          {
-            token,
-            pushType: selectedPushType,
-          },
-          { withCredentials: true }
-        );
-  
-        if (response.status === 200) {
-          AlertDialog({
-            mode: "alert",
-            title: "알림 동의 완료",
-            text: "알림 받기가 성공적으로 등록되었습니다.",
-            confirmText: "확인",
-          });
-        }
-      } else if (value === "괜찮아요") {
-        const response = await axios.delete(
-          "https://www.daengdaeng-where.link/api/v1/notifications",
-          { withCredentials: true }
-        );
-  
-        if (response.status === 200) {
-          setFcmToken(null);
-          AlertDialog({
-            mode: "alert",
-            title: "알림 취소 완료",
-            text: "알림 받기가 성공적으로 취소되었습니다.",
-            confirmText: "확인",
-          });
-        }
-      }
-  
-      setUserData((prev) => ({
-        ...prev,
-        pushAgreement: value === "받을래요",
-      }));
-    } catch (error) {
-      console.error("알림 상태 변경 실패:", error);
-      AlertDialog({
-        mode: "alert",
-        title: "알림 상태 변경 실패",
-        text: "알림 상태 변경 중 문제가 발생했습니다.",
-        confirmText: "확인",
-      });
-    }
-  };
-  
   const handleInputChange = (field, value) => {
-    if (field === "pushAgreement") {
-      handlePushAgreementChange(value);
-      return;
-    }
-  
     setUserData((prev) => ({
       ...prev,
       [field]: prev[field] === value ? "" : value,
@@ -264,6 +191,7 @@ function UserEdit() {
         title: '회원정보 수정 성공',
         text: '회원 정보가 성공적으로 수정되었습니다!',
         confirmText: '확인',
+        icon: "success",
         onConfirm: () => {
           navigate("/my-page");
         },

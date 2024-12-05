@@ -37,6 +37,7 @@ function AlarmButton() {
           title: "알림 허용",
           text: "알림 허용이 완료되었습니다.",
           confirmText: "확인",
+          icon: "success", 
         });
 
         const response = await axios.post('https://www.daengdaeng-where.link/api/v1/notifications/pushToken', {

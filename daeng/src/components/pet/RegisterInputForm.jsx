@@ -17,17 +17,13 @@ const Container = styled.div`
   margin-left: 4%;  
   
   @media (max-width: 554px) {
-    margin-top:3%;
+    margin-top: 3%;
   }
 `;
 
 const FirstInputContainer = styled.div`
   display: flex;
   flex-direction: row;
-
-  @media (max-width: 554px) {
-    margin-bottom:5%;
-  }
 `;
 
 const PetImg = styled.div`
@@ -39,6 +35,11 @@ const PetImg = styled.div`
   background-size: cover;
   background-position: center;
   cursor: pointer;
+
+  @media (max-width: 554px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const HiddenInput = styled.input`
@@ -51,9 +52,8 @@ const PetNameInfoContainer = styled.div`
   margin-top: 15px;
 `;
 
-
 const PetNameInput = styled.input`
-  width: 191%;
+  width: 320px;
   height: 44px;
   font-size: 14px;
   border-radius: 5px;
@@ -62,10 +62,10 @@ const PetNameInput = styled.input`
   padding: 10px;
 
   @media (max-width: 554px) {
-    width: 120%;
-    font-size: 11px;
-    height: 48px;
+    width: 100%;
+    font-size: 12px;
   }
+
   &:focus {
     outline: none;
     border-color: #ff69a9; 
@@ -75,14 +75,12 @@ const PetNameInput = styled.input`
 const InputAlert = styled.p`
   color: #ff69a9;
   font-size: 12px;
+  display: flex;
   margin-top: -1px;
-  margin-right: 15%;
   margin-bottom: 4%;
-
+    
   @media (max-width: 554px) {
-    width: 100%;
-    font-size: 10px;
-    height: 48px;
+    margin-bottom:4%;
   }
 `;
 
@@ -406,11 +404,14 @@ function RegisterInputForm() {
         mode: "alert", 
         title: "성공",
         text: "댕댕어디가 회원이 되신걸 축하드려요",
-        confirmText: "닫기"
+        confirmText: "닫기",
+        icon: "success",
+        onConfirm: () => {
+          navigate("/"); 
+        }
       });
 
     } else {
-      console.log('응답 상태:', response.status);
       console.log('응답 데이터:', response.data);
       AlertDialog({
         mode: "alert", 
@@ -451,7 +452,7 @@ function RegisterInputForm() {
           <PetNameInput
             value={petName}
             onChange={handlePetNameChange}
-            placeholder="반려동물 이름을 입력해주세요"
+            placeholder="댕댕이 이름을 입력해주세요"
             required />
           <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
         </PetNameInfoContainer>
