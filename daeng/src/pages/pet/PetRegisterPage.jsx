@@ -5,9 +5,7 @@ import styled from "styled-components";
 
 const PetContainer = styled.div`
   display: flex;
-  flex-direction: column; 
-  min-height: 100vh;  
-  overflow: auto; 
+  flex-direction: column;  
 `;
 
 function PetRegisterPage() {

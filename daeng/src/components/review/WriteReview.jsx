@@ -439,12 +439,12 @@ const handleFocus = (e) => {
       return false;
     }
 
-    if (!selectPet) {
+    if (selectPet.length === 0) { 
       AlertDialog({
         mode: "alert",
         title: "등록 실패",
         text: "함께한 펫을 선택해주세요.",
-        confirmText: "확인"
+        confirmText: "확인",
       });
       return false;
     }
@@ -563,6 +563,7 @@ const handleFocus = (e) => {
         title: "성공",
         text: `리뷰가 성공적으로 등록되었습니다.`,
         confirmText: "닫기" ,
+        icon: "success",
         onConfirm: () => navigate("/my-page"), 
       });
       

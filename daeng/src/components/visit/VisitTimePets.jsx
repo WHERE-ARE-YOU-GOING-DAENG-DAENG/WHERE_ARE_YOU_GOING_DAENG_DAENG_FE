@@ -4,6 +4,7 @@ import leftArrow from "../../assets/icons/reversearrow.svg";
 import rightArrow from "../../assets/icons/arrow.svg";
 import joinIcon from "../../assets/icons/join.svg";
 import ReviewKeywords from "../../components/commons/ReviewKeywords";
+import noImage from "../../assets/icons/reviewDefaultImg.svg"
 
 const TimeContainer = styled.div`
   margin-bottom: 16px;
@@ -151,7 +152,7 @@ const VisitTimePets = ({ visitAt, pets, onVisitClick }) => {
         <PetsContainer ref={sliderRef}>
           {pets.map((pet) => (
             <PetCard key={pet.petId}>
-              <PetImage src={pet.petImg} alt={pet.petName} />
+              <PetImage src={pet.petImg? pet.petImg : noImage} alt={pet.petName} />
               <PetName>{pet.petName}</PetName>
             </PetCard>
           ))}
