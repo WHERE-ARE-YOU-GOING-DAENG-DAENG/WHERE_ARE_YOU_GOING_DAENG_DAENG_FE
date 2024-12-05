@@ -25,7 +25,6 @@ function Home() {
     const authorizationToken = cookies.find((cookie) => cookie.startsWith("Authorization="));
     const refreshToken = cookies.find((cookie) => cookie.startsWith("RefreshToken="));
 
-    // 원래는 이 안에서 사용자 정보 가져와야함
     return authorizationToken && refreshToken; 
   };
 
@@ -52,13 +51,7 @@ function Home() {
         (error) => {
           // console.error("Geolocation error:", error); 위치동의안한것도 에러로 받음
           if (!userLocation.lat && !userLocation.lng) {
-            AlertDialog({
-              mode: "alert",
-              title: "위치 접근 동의",
-              text: "위치 접근이 제한되었습니다.",
-              confirmText: "확인",
-              onConfirm: () => console.log("위치정보 비동의, 기본값:", userLocation),
-            });
+            console.log("위치접근 비동의, 기본값:",userLocation)
           }
         }
       );
