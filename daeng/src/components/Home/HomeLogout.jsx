@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom";
 import logoutImage from "../../assets/icons/home_logout.svg";
 
 const LogoutImage = styled.img`
-  width: 90%;
+  width: 100%;
   height: 148px;
   margin-top: 30px;
-  margin-left: 30px;
-  margin-right: 30px;
-  cursor: pointer;
+  cursor: pointer; 
 
   @media (max-width: 554px) {
     height: 50%;
     margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 `;
 
