@@ -70,8 +70,6 @@ function HomeRecommendPlaces() {
 }
 
 const RecommendPlacesWrapper = styled.div`
-  margin-top: 20px;
-
   @media (max-width: 554px) {
     margin-top: 10px;
   }
