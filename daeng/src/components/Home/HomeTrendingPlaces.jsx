@@ -107,15 +107,16 @@ const TrendingPlaceWrapper = styled.div`
 
 const TrendingLinkBox = styled.div`
   width: 100%;
-  height: 174px;
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
 
+  aspect-ratio: 150 / 173;
+
   @media (max-width: 554px) {
-    height: 140px;
+    aspect-ratio: 150 / 173;
   }
 `;
 
