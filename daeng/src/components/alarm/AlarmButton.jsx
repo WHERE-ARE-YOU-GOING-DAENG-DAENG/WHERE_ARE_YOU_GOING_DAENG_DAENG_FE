@@ -43,10 +43,16 @@ function AlarmButton() {
           icon: "success", 
         });
 
-        const response = await axios.post('https://www.daengdaeng-where.link/api/v1/notifications/pushToken', {
-          token,
-          pushType: selectedPushType, 
-        });
+        const response = await axios.post(
+          'https://www.daengdaeng-where.link/api/v1/notifications/pushToken',
+          {
+            token,
+            pushType: selectedPushType,
+          },
+          {
+            withCredentials: true,  
+          }
+        );
 
         if (response.status === 200) {
           console.log('서버에 FCM 토큰 전송 성공:', response.data);
