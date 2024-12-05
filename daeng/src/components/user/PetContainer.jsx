@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import AlertDialog from "../../components/commons/SweetAlert";
+import genderW from '../../assets/icons/genderW.svg'
+import genderM from '../../assets/icons/genderM.svg'
 
 const PetTotalContainer = styled.div`
   display: flex;
@@ -38,7 +40,7 @@ const ArrowButton = styled.img`
   width: 24px;
   height: 24px;
   margin-right:30px;
-  margin-top:10px;
+  margin-top:30px;
   margin-bottom: 30px;
   cursor: pointer;
   opacity: ${(props) => (props.disabled ? "0.5" : "1")};
@@ -93,8 +95,8 @@ const PetInfoContainer = styled.div`
 `
 
 const PetImage = styled.img`
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   margin-top: 6%;
   border-radius:100%;
   background-color: #FBC9E4;
@@ -112,10 +114,10 @@ const PetDetailInfoContainer = styled.div`
   margin-left: 10px;  
   margin-top:5%;
   background-color: #FDF2F8;
-  width:139px;
+  width:310px;
   padding:6%;
   padding-right:2%;
-  height: 77px;
+
   border-radius: 10px;
 
   @media (max-width: 554px) {
@@ -126,7 +128,7 @@ const PetDetailInfoContainer = styled.div`
 `;
 
 const PetName = styled.span`
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 500;
   display: flex;
   justify-content: flex-start;
@@ -159,21 +161,22 @@ const PetFirstContainer = styled.div`
 `
 const PetEditButton = styled.button`
   font-size:10px;
+  width: 50px;
+  height: 20px;
   cursor: pointer;
   border-radius: 30px;
-  border: solid 1px #D9D9D9;
-  margin-left: 35%;
+  background-color: #D9D9D9;
+  border: none;
+  margin-left: 55%;
 
   @media (max-width: 554px) {
-  margin-left: 50%;
+  margin-left: 35%;
   }
 `
 
 function PetContainer() {
   const [petData, setPetData] = useState([]); 
   const [startIndex, setStartIndex] = useState(0); 
-
-  const isMobile = window.innerWidth <= 554; 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -191,7 +194,7 @@ function PetContainer() {
           ...pet,
           gender: pet.gender,  
           size: pet.size,     
-          species: pet.species 
+          species: pet.species,
         })));
       } catch (error) {
         console.error("펫 정보 불러오기 실패:", error);
@@ -263,10 +266,14 @@ if (!petData) {
               <PetDetailInfoContainer>
                 <PetFirstContainer>
                 <PetName>{pet.name}</PetName>
+                <img
+                  src={pet.gender === "여자" ? genderW : genderM} 
+                  alt={pet.gender}
+                />
                 <PetEditButton onClick={() => handleToPetEdit(pet.petId)}>수정</PetEditButton>
                 </PetFirstContainer>
                 <PetTypeContainer>
-                  <PetWeight>{pet.size}</PetWeight>
+                  <PetWeight>{pet.size} | </PetWeight>
                   <PetType>{pet.species}</PetType>
                 </PetTypeContainer>
               </PetDetailInfoContainer>
