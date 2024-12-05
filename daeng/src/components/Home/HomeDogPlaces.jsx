@@ -33,7 +33,7 @@ function HomeDogPlaces() {
             withCredentials: true,
           }
         );
-        setDogPlaces(response.data.data.placeRcommendDto);
+        setDogPlaces(response.data.data.map((item) => item.placeRcommendDto));
       } catch (error) {
         console.error("추천 장소 데이터 가져오기 실패:", error);
       }
@@ -53,7 +53,7 @@ function HomeDogPlaces() {
         <img src={HomeDogLoveIcon} alt="Dog Love Icon" />
       </DogTitle>
       <DogLinkContainer>
-        {dogPlaces.slice(0, 3).map((place) => (
+        {dogPlaces.map((place) => (
           <DogPlaceWrapper key={place.placeId}>
             <DogLinkBox onClick={() => handleDogPlaceClick(place.placeId)}>
               <DogImage src={place.imageurl ? place.imageurl : HomeNoImage} 
