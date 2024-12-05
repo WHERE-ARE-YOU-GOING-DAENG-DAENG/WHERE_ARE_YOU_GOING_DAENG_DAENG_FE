@@ -9,14 +9,10 @@ import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
-import { requestNotificationPermission } from '../../firebase/firebaseMessaging';
-import { pushAgree } from '../../data/CommonCode';
+
 
 function UserRegister() { 
   const navigate = useNavigate();
-  const [selectedPushType] = useState(pushAgree[0].code);
-  const [fcmToken, setFcmToken] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // 중복 요청 방지 부분
 
   const getCookieValue = (key) => {
     const cookieString = document.cookie;
@@ -45,27 +41,6 @@ function UserRegister() {
 
 
   const handleInputChange = async (field, value) => {
-
-    if (field === "alarmAgreement" && value === "받을래요") {
-      setIsLoading(true); // 요청 시작 플래그 설정
-      try {
-        console.log("알림 권한 요청을 시작합니다.");
-        const token = await requestNotificationPermission(); 
-        console.log("FCM 토큰 발급 성공:", token);
-        if (token) {
-          setFcmToken(token); // FCM 토큰 상태에 저장
-        }
-      } catch (error) {
-        console.error("FCM 토큰 요청 실패:", error);
-        AlertDialog({
-          mode: "alert",
-          title: "알림 권한 요청 실패",
-          text: "알림 권한을 활성화할 수 없습니다.",
-          confirmText: "확인",
-        });
-      }
-    }
-
     setUserData((prev) => ({
       ...prev,
       [field]: prev[field] === value ? '' : value,
@@ -148,19 +123,7 @@ function UserRegister() {
     if (!validateFields()) {
       return; // 유효성 검사가 실패하면 종료
     }
-  
-    if (userData.alarmAgreement === "받을래요") {
-      if (!fcmToken) {
-        AlertDialog({
-          mode: "alert",
-          title: "FCM 토큰 필요",
-          text: "알림 권한 요청이 완료되지 않았습니다. 다시 시도해주세요.",
-          confirmText: "확인",
-        });
-        return;
-      }
-    }
-  
+
   
     const payload = {
       nickname: userData.nickname,
@@ -171,22 +134,7 @@ function UserRegister() {
       cityDetail: userData.cityDetail,
       oauthProvider: userData.oauthProvider,
     };
-  
     try {
-      const response = await axios.post(
-        "https://www.daengdaeng-where.link/api/v1/notifications/pushToken",
-        {
-          token: fcmToken,
-          pushType: selectedPushType,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-  
-      if (response.status === 200) {
-        console.log("서버에 FCM 토큰 전송 성공:", response.data);
-  
         // 회원가입 요청
         const { data, status } = await axios.post(
           "https://www.daengdaeng-where.link/api/v1/signup",
@@ -208,10 +156,8 @@ function UserRegister() {
         } else {
           console.error(`회원가입 실패 - 상태 코드: ${status}`);
         }
-      } else {
-        console.error("FCM 토큰 전송 실패:", response);
       }
-    } catch (error) {
+     catch (error) {
       console.error("요청 실패:", error.response?.data || error.message);
       AlertDialog({
         mode: "alert",
