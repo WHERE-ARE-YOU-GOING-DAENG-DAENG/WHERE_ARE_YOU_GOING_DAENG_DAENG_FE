@@ -10,7 +10,7 @@ import useUserStore from "../../stores/userStore";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-
+import defaultImage from "../../assets/icons/reviewDefaultImg.svg"
 
 const Container = styled.div`
   margin: 10px 0px;
@@ -55,8 +55,13 @@ const ReviewHeader = styled.div`
 
     .action {
       margin-left: 10px;
-      font-size: 11px;
+      font-size: 15px;
       cursor: pointer;
+
+      @media(max-width:554px){
+        font-size: 13px;
+        margin-left: 1px;
+      }
 
       &:hover {
         color: #666;
@@ -67,6 +72,12 @@ const ReviewHeader = styled.div`
       }
     }
   }
+    @media (max-width: 554px) {
+      h2 {
+        font-size: 18px;
+        font-weight: bold;
+      }
+  }
 `;
 
 const KeywordsContainer = styled.div`
@@ -75,9 +86,12 @@ const KeywordsContainer = styled.div`
   justify-content: space-between;
   flex-direction: column;
   .title {
-    font-size: 12px;
+    font-size: 15px;
     font-weight: semi-bold;
     margin-bottom: 12px;
+    @media(max-width:554px){
+      font-size: 13px;
+    }
   }
 
   .keywords {
@@ -92,8 +106,6 @@ const KeywordsContainer = styled.div`
   }
   
 `
-
-
 const TotalUserInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -101,10 +113,14 @@ const TotalUserInfoContainer = styled.div`
 `
 
 const UserStarImg = styled.img`
-  width:10px;
-  height:10px;
+  width:15px;
+  height:15px;
   display: flex;
   margin-top: 5px;
+  @media (max-width: 554px) {
+    width: 13px;
+    margin-top: 0px;
+  }
 `
 
 const ReviewUserContainer = styled.div`
@@ -152,12 +168,12 @@ const UserId = styled.span`
   margin-top: 5px;
 
   @media (max-width: 554px) {
-    font-size: 13px;
+    font-size: 15px;
     margin-top: 10px;
   }
 `
 const PetType = styled.span`
-  font-size: 13px;
+  font-size: 15px;
   margin-left: 5px;
   color:#B3B3B3;
   margin-top:8px;
@@ -194,7 +210,7 @@ const ReviewContent = styled.span`
 
   @media (max-width: 554px) {
     padding-left: 1%;
-    font-size: 11px;
+    font-size: 13px;
   }
 `;
 
@@ -227,21 +243,6 @@ const ReviewPictureContainer = styled.div`
     margin-left:-2%;
   }
 `
-
-const ReviewPicture = styled.img`
-  display: block;
-  width: 120px;
-  height:120px;
-  background-color: #D9D9D9;
-  border-radius:5px;
-  margin-left: 10px; 
-  margin-top: 3%;
-
-  @media (max-width: 554px) {
-    width: 80px;
-    height:90px;
-  }
-`
 const ReadMoreButton = styled.button`
   color: #FF69A9;
   background: none;
@@ -251,7 +252,7 @@ const ReadMoreButton = styled.button`
   font-size: 14px;
 
   @media (max-width: 554px) {
-    font-size: 10px; 
+    font-size: 12px; 
   }
 `;
 
@@ -319,7 +320,7 @@ const PlaceReviewList = ({ data }) => {
             <div key={review.reviewId} >
               <ReviewUserContainer>
                 <UserPhoto
-                  src={review.petImg || "default-user.jpg"}
+                  src={review.petImg? review.petImg : defaultImage}
                   alt="반려동물 이미지"
                 />
                 <TotalUserInfoContainer>
