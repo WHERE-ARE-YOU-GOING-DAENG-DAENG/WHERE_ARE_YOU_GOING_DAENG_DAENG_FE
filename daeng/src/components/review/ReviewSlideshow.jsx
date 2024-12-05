@@ -23,6 +23,16 @@ const ReviewPicture = styled.img`
   margin-right: 5px;
 `;
 
+const Video = styled.video`
+  width: 20%;
+  height: 25%;
+  height: auto;
+  object-fit: cover;
+  margin-right: 5px;
+  background-color: #d9d9d9;
+  border-radius: 8px;
+`;
+
 const ArrowButton = styled.button`
   position: absolute;
   top: 50%;
@@ -38,7 +48,7 @@ const ArrowButton = styled.button`
   ${({ direction }) => (direction === 'left' ? 'left: 10px;' : 'right: 10px;')}
 `;
 
-const ReviewSlideshow = ({ media }) => {
+const ReviewSlideshow = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleCount = 4;
 
@@ -58,27 +68,21 @@ const ReviewSlideshow = ({ media }) => {
         </ArrowButton>
       )}
       <ReviewPictureWrapper currentIndex={currentIndex}>
-        {media.map((item, index) => {
-          // 동영상인지 확인
-          const isVideo = item.includes('.mp4') || item.includes('.mov') || item.includes('.avi');
-          
-          return (
-            <div key={index}>
-              {isVideo ? (
-                // 동영상 처리
-                <ReviewVideo controls>
-                  <source src={item} type="video/mp4" />
-                </ReviewVideo>
-              ) : (
-                // 이미지 처리
-                <ReviewPicture src={item} alt={`리뷰 이미지 ${index + 1}`} />
-              )}
-            </div>
-          );
+        {images.map((src, index) => {
+          if (src.endsWith(".mp4") || src.endsWith(".mov")) {
+            return (
+              <Video key={index} controls>
+                <source src={src} type="video/mp4" />
+              </Video>
+            );
+          } else {
+            return (
+              <ReviewPicture key={index} src={src} alt={`리뷰 이미지 ${index + 1}`} />
+            );
+          }
         })}
       </ReviewPictureWrapper>
-      {/* 다음 화살표 버튼 */}
-      {currentIndex < media.length - visibleCount && (
+      {currentIndex < images.length - visibleCount && (
         <ArrowButton direction="right" onClick={handleNext}>
           ▶
         </ArrowButton>
