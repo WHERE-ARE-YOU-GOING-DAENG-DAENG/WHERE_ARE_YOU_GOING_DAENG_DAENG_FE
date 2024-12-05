@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 const CancelButton = styled.button`
-  width: 90%;
+  width: 100px;
   height: 54px;
   border-radius: 10px;
   background-color: #FF6347; 
@@ -11,7 +11,7 @@ const CancelButton = styled.button`
   border: none;
   font-size: 20px;
   cursor: pointer;
-  margin-top: 10px;
+
 
   &:disabled {
     background-color: #ccc;

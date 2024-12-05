@@ -8,18 +8,20 @@ import AlarmDelete from './AlarmDelete';
 
 const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
   margin-top: 43px;
 `;
 
 const AgreeButton = styled.button`
-  width: 90%;
+  width: 100px;
   height: 54px;
   border-radius: 10px;
   background-color: #FF69A9;
   color: #FFFFFF;
   border: none;
+  margin-right: 20px;
   font-size: 20px;
   cursor: pointer;
 `;
