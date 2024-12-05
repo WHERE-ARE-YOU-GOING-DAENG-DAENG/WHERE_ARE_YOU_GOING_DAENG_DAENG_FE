@@ -11,10 +11,15 @@ import restaurantIcon from '../../assets/icons/restaurant.svg';
 const Container = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 34px 40px;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 5%;
+    padding-bottom: 2%;
     @media (max-width: 554px) {
-        padding: 5%;
+        gap: 20px;
+    }
+    @media (max-width: 410px) {
+       gap: 10px;
     }
 `;
 

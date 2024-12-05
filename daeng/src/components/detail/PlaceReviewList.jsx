@@ -5,6 +5,7 @@ import notfillstar from "../../assets/icons/notfillstar.svg";
 import writeIcon from "../../assets/icons/pen.svg";
 import ReviewKeywords from "../commons/ReviewKeywords";
 import AlertDialog from "../commons/SweetAlert";
+import ReviewSlideshow from '../review/ReviewSlideshow';
 import useUserStore from "../../stores/userStore";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -21,12 +22,12 @@ const Container = styled.div`
   }
 
   @media (max-width: 554px) {
-  padding: 0px 10%;
+   padding: 0px 8%;
   }
 `;
 
 const ReviewsSection = styled.div`
-  margin-left: 25px;
+  margin: 0 25px;
   flex-direction: column;
   padding: 0px 3%;
   padding-bottom: 77px;
@@ -354,10 +355,9 @@ const PlaceReviewList = ({ data }) => {
                 )}
               </ReviewContent>
               <ReviewPictureContainer>
-                {Array.isArray(review.media) &&
-                  review.media.map((mediaUrl, idx) => (
-                    <ReviewPicture key={idx} src={mediaUrl} alt={`리뷰 이미지 ${idx + 1}`} />
-                  ))}
+                {review.media && review.media.length > 0 && (
+                  <ReviewSlideshow images={review.media} />
+                )}
               </ReviewPictureContainer>
             </div>
           );
