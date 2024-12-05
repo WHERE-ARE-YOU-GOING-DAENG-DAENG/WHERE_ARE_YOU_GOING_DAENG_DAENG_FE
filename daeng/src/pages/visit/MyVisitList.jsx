@@ -7,6 +7,7 @@ import ScheduleTable from "../../components/visit/ScheduleTable";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import useVisitStore from "../../stores/useVisitStore";
+import useUserStore from "../../stores/userStore";
 
 dayjs.extend(isBetween);
 
@@ -26,6 +27,9 @@ const Text = styled.div`
     span{
     color: #FF4B98;
 }
+    @media(max-width:554px){
+    margin-left: 8%;
+    }
 `
 
 const MyVisitList = () => {
@@ -33,7 +37,8 @@ const MyVisitList = () => {
   const [allSchedules, setAllSchedules] = useState([]);
   const myVisits = useVisitStore((state)=>state.myVisits);
   const fetchVisits = useVisitStore((state)=>state.fetchVisits);
-
+  const nickname = useUserStore((state)=> state.nickname);
+  const [name, setName] = useState(nickname || '')
   useEffect(()=>{
     const fetchmyVisits = async () => {
         await fetchVisits();
@@ -51,7 +56,7 @@ const MyVisitList = () => {
       <Header label="방문일정" />
       <Calendar dot={true}/>
       <Division />
-      <Text><span>내가진짜</span>님 방문일정 알려드려요</Text>
+      {name? (<Text><span>{name}</span>님 방문일정 알려드려요!</Text> ): (<Text>로그인 후 방문일정을 확인해보세요!</Text>)}
       <ScheduleTable />
       <Footer />
     </>
