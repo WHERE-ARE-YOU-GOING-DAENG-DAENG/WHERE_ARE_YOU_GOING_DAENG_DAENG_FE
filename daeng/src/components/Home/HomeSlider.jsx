@@ -43,7 +43,6 @@ const SliderWrapper = styled.div`
   position: relative;
   overflow: hidden;
 
-  /* 비율 유지 */
   aspect-ratio: 554 / 189;
 
   @media (max-width: 554px) {
