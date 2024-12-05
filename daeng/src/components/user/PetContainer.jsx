@@ -49,6 +49,8 @@ const ArrowButton = styled.img`
   @media (max-width: 554px) {
     position: relative;
     margin: 0 10px; 
+    margin-top: 3%;
+    margin-left:3%;
   }
 `;
 
@@ -99,12 +101,11 @@ const PetImage = styled.img`
   height: 80px;
   margin-top: 6%;
   border-radius:100%;
-  background-color: #FBC9E4;
 
   @media (max-width: 554px) {
     width: 80px;
     height: 80px;
-    margin-top: 4%;
+    margin-top: 6%;
   }
 `;
 
@@ -121,17 +122,21 @@ const PetDetailInfoContainer = styled.div`
   border-radius: 10px;
 
   @media (max-width: 554px) {
-    width:200px;
+    width:300px;
     padding:5%;
-    margin-left: 10px; 
+    margin-left: 20px; 
   }
 `;
 
 const PetName = styled.span`
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 500;
   display: flex;
   justify-content: flex-start;
+
+  @media (max-width: 554px) {
+  font-size:13px;
+  }
 `;
 
 const PetTypeContainer = styled.div`
@@ -167,10 +172,9 @@ const PetEditButton = styled.button`
   border-radius: 30px;
   background-color: #D9D9D9;
   border: none;
-  margin-left: 55%;
+  margin-left: 40%;
 
   @media (max-width: 554px) {
-  margin-left: 35%;
   }
 `
 
