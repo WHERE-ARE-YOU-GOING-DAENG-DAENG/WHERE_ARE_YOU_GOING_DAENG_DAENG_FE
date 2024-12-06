@@ -13,22 +13,22 @@ const ReviewPictureContainer = styled.div`
 const ReviewPictureWrapper = styled.div`
   display: flex;
   transition: transform 0.5s ease-in-out;
-  transform: ${({ currentIndex }) => `translateX(-${currentIndex * 25}%)`};
+  transform: ${({ currentIndex }) => `translateX(-${currentIndex * 120 + currentIndex * 5}px)`}; /* 이미지 간격을 포함하여 이동 */
 `;
 
 const ReviewPicture = styled.img`
-  width: 25%;
-  height: auto;
+  width: 120px;  
+  height: 120px;
   object-fit: cover;
   margin-right: 5px;
-  margin-left:15px;
+  margin-left: 15px;
+  border-radius: 8px;
 `;
 
 const Video = styled.video`
-  width: 20%;
-  height: 25%;
-  height: auto;
-  object-fit: cover;
+  width: 120px;  
+  height: 120px;  
+  object-fit: cover;  
   margin-right: 5px;
   background-color: #d9d9d9;
   border-radius: 8px;
@@ -51,14 +51,15 @@ const ArrowButton = styled.button`
 
 const ReviewSlideshow = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const visibleCount = 4;
+  const totalImages = images.length;
+  const visibleCount = 3;
 
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => Math.min(prev + 1, images.length - visibleCount));
+    setCurrentIndex((prev) => Math.min(prev + 1, totalImages - visibleCount));
   };
 
   return (
@@ -83,7 +84,7 @@ const ReviewSlideshow = ({ images }) => {
           }
         })}
       </ReviewPictureWrapper>
-      {currentIndex < images.length - visibleCount && (
+      {currentIndex < totalImages - visibleCount && (
         <ArrowButton direction="right" onClick={handleNext}>
           ▶
         </ArrowButton>
