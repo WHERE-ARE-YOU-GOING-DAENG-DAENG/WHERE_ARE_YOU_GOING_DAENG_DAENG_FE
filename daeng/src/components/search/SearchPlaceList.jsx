@@ -39,6 +39,11 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
     navigate(`/search/${placeId}`);
   };
 
+  const formatTime = (time) => {
+    if (!time) return "정보없음"; // Handle missing time
+    return time.length === 8 ? time.slice(0, 5) : time;
+  };
+
   return (
     <ListContainer>
       {isLoading ? (
@@ -54,7 +59,7 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
               <div className="details">
                 <div className="status">
                   {place.startTime && place.endTime
-                    ? place.placeType === "숙소"? `체크인 ${place.startTime} / 체크아웃 ${place.endTime}` : `${place.startTime} - ${place.endTime.slice(0,5)}`
+                    ? place.placeType === "숙소"? `체크인 ${formatTime(place.startTime)} / 체크아웃 ${formatTime(place.endTime)}` : `${formatTime(place.startTime)} - ${formatTime(place.endTime)}`
                     : "24시간 운영"}
                   {" | "}
                 </div>
