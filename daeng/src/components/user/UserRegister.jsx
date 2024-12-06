@@ -147,7 +147,7 @@ function UserRegister() {
             title: "회원가입 성공",
             text: "회원가입이 성공적으로 완료되었습니다.",
             confirmText: "확인",
-            icon: "success",
+            icon: "success", 
             onConfirm: () => navigate("/preference-register"),
           });
         } else {
@@ -193,6 +193,7 @@ function UserRegister() {
           title: "닉네임 사용 가능",
           text: "사용 가능한 닉네임입니다.",
           confirmText: "확인",
+          icon: "success",
           onConfirm: () => console.log("사용 가능한 닉네임 확인됨"),
         });
       } else if (data.data.isDuplicate === true) {

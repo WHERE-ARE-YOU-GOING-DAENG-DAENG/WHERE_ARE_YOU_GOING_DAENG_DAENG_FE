@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
@@ -40,18 +40,6 @@ const ReviewDate = styled.span`
   color: #818181;
 `;
 
-const StyledArrow = styled.img`
-  width: 16px;
-  margin-left: 5px;
-  cursor: pointer;
-
-  @media (max-width: 554px) {
-    width: 10px;
-    margin-left: 0px;
-    height: auto;
-  }
-`;
-
 const PetContainer = styled.div`
   display: flex;
   align-items: center;
@@ -80,7 +68,9 @@ const PetName = styled.h3`
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 10px;
-  margin-right: 43%;
+  margin-right: 30%;
+  display: flex;
+  text-align: left;
 
   @media (max-width: 554px) {
     font-size: 11px;
@@ -146,12 +136,20 @@ const PictureContainer = styled.div`
 `;
 
 const Picture = styled.div`
-  width: 80px;
-  height: 80px;
+  width: 110px;
+  height: 110px;
   border-radius: 8px;
   background-size: cover;
   background-position: center;
   background-color: #d9d9d9;
+`;
+
+const Video = styled.video`
+  width: 110px;
+  height: 110px;
+  background-color: #d9d9d9;
+  border-radius: 8px;
+  object-fit: cover;
 `;
 
 function ReviewForm({ review }) {
@@ -191,12 +189,22 @@ function ReviewForm({ review }) {
       <ReviewContent>{review.content}</ReviewContent>
 
       <PictureContainer>
-        {review.media.map((mediaUrl, index) => (
-          <Picture
-            key={index}
-            style={{ backgroundImage: `url(${mediaUrl})` }}
-          />
-        ))}
+        {review.media.map((mediaUrl, index) => {
+          if (mediaUrl.endsWith(".mp4") || mediaUrl.endsWith(".mov")) {
+            return (
+              <Video key={index} controls>
+                <source src={mediaUrl} type="video/mp4" />
+              </Video>
+            );
+          } else {
+            return (
+              <Picture
+                key={index}
+                style={{ backgroundImage: `url(${mediaUrl})` }}
+              />
+            );
+          }
+        })}
       </PictureContainer>
     </ReviewWrapper>
   );

@@ -11,8 +11,7 @@ const ReviewButton = styled.button`
   border-radius: 20px;
   color:white;
   border:none;
-  font-size: 12px;
-  margin-right: 2%;
+  font-size: 13px;
   white-space: nowrap;
 
   img{
@@ -21,7 +20,7 @@ const ReviewButton = styled.button`
 
   @media (max-width: 554px) {
     height: 20px;
-    font-size: 10px;
+    font-size: 11px;
   }
 
   ${({ hasIcon }) =>
