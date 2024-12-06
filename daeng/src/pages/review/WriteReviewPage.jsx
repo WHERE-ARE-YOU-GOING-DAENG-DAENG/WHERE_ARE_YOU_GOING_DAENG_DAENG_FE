@@ -9,12 +9,9 @@ const WriteReviewContainer = styled.div`
   flex-direction: column; 
   padding: 3px;
   overflow: auto; 
-  padding-bottom: 230%;
-  
 
   @media (max-width: 554px) {
     font-size: 10px;
-    padding-bottom: 125vh;
   }
 `
 function WriteReviewPage() {

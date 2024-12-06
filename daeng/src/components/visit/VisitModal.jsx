@@ -99,7 +99,7 @@ const Label = styled.label`
 
 const InputAlert = styled.p`
   color: #ff69a9;
-  font-size: 11px;
+  font-size: 12px;
   text-align: left;
   gap: 1px;
 `;

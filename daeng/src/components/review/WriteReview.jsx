@@ -22,13 +22,13 @@ const WriteReviewAllContainer = styled.div`
 const WriteReviewContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 10px;
+  margin-top: 10px;;
 `;
 
 const PlaceTitle = styled.span`
   font-size: 25px;
   font-weight: bold;
-  margin-right: 30%;
+  margin-right: 45%;
   margin-bottom: 27px;
   margin-left: 3%;
 
@@ -159,14 +159,15 @@ const Question = styled.span`
 `;
 
 const DateSelection = styled.input`
-  width: 40%;
-  height: 30px;
+  width: 50%;
+  height: 40px;
   padding: 10px;
   border: 0.5px solid #d9d9d9;
   border-radius: 5px;
   cursor: pointer;
   color: black;
   padding-right: 1%;
+  font-size: 15px;
   cursor: pointer;
 
   &:focus {
@@ -213,12 +214,25 @@ const AddImg = styled.div`
     display: none;
     cursor: pointer;
   }
-`;
+  
+  img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+  }
 
-const AddImgButton = styled.img`
-  width: 12px;
-  margin-bottom: 0px;
-  cursor: pointer;
+
+  label {
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+
+  .add-img-button {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
 `;
 
 const QuestionBox = styled.span`
@@ -276,6 +290,52 @@ const TextArea = styled.textarea`
     min-height: 50px;
   }
 `;
+
+const AddImgPlus = styled.span`
+  width:1px;
+`
+
+const selectStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    border: state.isFocused ? "0.5px solid #ff69a9" : "0.5px solid #d9d9d9",
+    borderRadius: "5px",
+    padding: "2px",
+    cursor: "pointer",
+    fontSize: "15px",
+    boxShadow: state.isFocused ? "none" : "none",
+    "&:hover": {
+      borderColor: "#ff69a9",
+    },
+  }),
+  multiValue: (provided) => ({
+    ...provided,
+    backgroundColor: "#ffcee1",
+    borderRadius: "3px",
+    padding: "2px",
+  }),
+  multiValueRemove: (provided) => ({
+    ...provided,
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "#ff4b98",
+      color: "white", 
+    },
+  }),
+  menu: (provided) => ({
+    ...provided,
+    borderRadius: "5px",
+    borderColor: "#ff69a9",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? "#f4f4f4" : "white",
+    color: "#333",
+    cursor: "pointer",
+  }),
+};
+
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -377,7 +437,7 @@ const handleFocus = (e) => {
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     const totalImages = previews.length + files.length;
-
+  
     if (totalImages > 5) {
       AlertDialog({
         mode: "alert",
@@ -391,12 +451,18 @@ const handleFocus = (e) => {
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        // 동영상 부분 
         if (file.type.startsWith("video/")) {
-          setPreviews((prev) => [...prev, { type: "video", src: reader.result }]);
+          // 동영상인 경우
+          setPreviews((prev) => [
+            ...prev,
+            { type: "video", src: reader.result, name: file.name },
+          ]);
         } else if (file.type.startsWith("image/")) {
-          // 이미지 부분
-          setPreviews((prev) => [...prev, { type: "image", src: reader.result }]);
+          // 이미지인 경우
+          setPreviews((prev) => [
+            ...prev,
+            { type: "image", src: reader.result, name: file.name },
+          ]);
         }
       };
       reader.readAsDataURL(file);
@@ -573,7 +639,7 @@ const handleFocus = (e) => {
         text: `리뷰가 성공적으로 등록되었습니다.`,
         confirmText: "닫기" ,
         icon: "success",
-        onConfirm: () => navigate("/my-page"), 
+        onConfirm: () => navigate(`/total-review/${placeId}`),
       });
       
       console.log("리뷰 등록 성공:", response.data);
@@ -616,6 +682,7 @@ const handleFocus = (e) => {
           options={petOptions}
           value={selectPet}
           onChange={handlePetSelection}
+          styles={selectStyles}  //select 라이브러리 스타일
           placeholder="댕댕이를 선택해주세요"
         />
         </UserQuestionContainer>
@@ -629,43 +696,50 @@ const handleFocus = (e) => {
             onFocus={handleFocus}  
             onChange={(e) => setVisitedAt(e.target.value)} 
           />
-        </UserQuestionContainer>
-        <UserQuestionContainer>
-          <Question>별점을 눌러 만족도를 공유해주세요</Question>
-          <StarContainer>
-            {[...Array(5)].map((_, index) => (
-              <StyleStar
-                key={index}
-                src={ratings[index] ? star : notfillstar}
-                alt="리뷰 작성하기 별점"
-                onClick={() => handleStarClick(index)}
-              />
-            ))}
-          </StarContainer>
-        </UserQuestionContainer>
-        <UserQuestionContainer>
-          <Question>사진 / 동영상 업로드 <p>(선택)</p></Question>
-        </UserQuestionContainer>
-        <AddImgContainer>
+          </UserQuestionContainer>
+          <UserQuestionContainer>
+            <Question>별점을 눌러 만족도를 공유해주세요</Question>
+              <StarContainer>
+                {[...Array(5)].map((_, index) => (
+                  <StyleStar
+                    key={index}
+                    src={ratings[index] ? star : notfillstar}
+                    alt="리뷰 작성하기 별점"
+                    onClick={() => handleStarClick(index)}
+                  />
+                ))}
+              </StarContainer>
+            </UserQuestionContainer>
+          <UserQuestionContainer>
+            <Question>사진 / 동영상 업로드 <p>(선택)</p></Question>
+          </UserQuestionContainer>
+          <AddImgContainer>
           {previews.map((preview, index) => (
-            <AddImg key={index} src={preview}>
+            <AddImg key={index} src={preview.src}>
+              {preview.type === "video" ? (
+                <video width="130" height="130" controls>
+                  <source src={preview.src} type="video/mp4" />
+                </video>
+              ) : (
+                <img src={preview.src} alt={`미리보기 이미지 ${index}`} />
+              )}
               <RemoveButton onClick={() => handleRemoveImage(index)}>X</RemoveButton>
-            </AddImg>
-          ))}
-          <AddImg>
-            <label htmlFor="file-upload">
-              <AddImgButton src={addImg} alt="이미지나 동영상 삽입" />
-              <br />
-              사진 / 동영상
-              <br /> 업로드
-            </label>
-            <input
-              id="file-upload"
-              type="file"
-              accept="image/*,video/*"
-              onChange={handleImageUpload}
-              multiple
-            />
+              </AddImg>
+            ))}
+            <AddImg>
+              <label htmlFor="file-upload">
+                <br />
+                <AddImgPlus src={addImg} alt="이미지 업로드"/>
+                사진 / 동영상
+                <br /> 업로드
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                accept="image/*,video/*"
+                onChange={handleImageUpload}
+                multiple
+              />
             </AddImg>
           </AddImgContainer>
           <TextDescriptionContainer>
@@ -675,7 +749,7 @@ const handleFocus = (e) => {
       <DivisionLine />
       <TextArea type='text' placeholder='경험을 공유해주세요' value={text} onChange={handleChange}/>
       <DivisionLine />
-      <ConfirmBtn onClick={handleSubmit} marginBottom="29px" label="작성 완료" />
+      <ConfirmBtn onClick={handleSubmit}  label="작성 완료" />
         </SelectPlaceOptionContainer>
       </WriteReviewAllContainer>
     );
