@@ -391,22 +391,31 @@ const handleFocus = (e) => {
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviews((prev) => [...prev, reader.result]);
+        // 동영상 부분 
+        if (file.type.startsWith("video/")) {
+          setPreviews((prev) => [...prev, { type: "video", src: reader.result }]);
+        } else if (file.type.startsWith("image/")) {
+          // 이미지 부분
+          setPreviews((prev) => [...prev, { type: "image", src: reader.result }]);
+        }
       };
       reader.readAsDataURL(file);
   
-      setPlaceImgs((prev) => [...prev, file]); 
+      setPlaceImgs((prev) => [...prev, file]);
     });
   };
 
   const handleStarClick = (index) => {
-    setRatings((prev) => {
-      const newRatings = [...prev];
-      newRatings[index] = !newRatings[index];
-      return newRatings;
-    });
-  };
+    const newRatings = [...ratings]; // 기존 별점 배열 복사
+    for (let i = 0; i <= index; i++) {
+      newRatings[i] = true;
+    }
 
+    for (let i = index + 1; i < newRatings.length; i++) {
+      newRatings[i] = false;
+    }
+    setRatings(newRatings); // 상태 업데이트
+  };
   const handleRemoveImage = (index) => {
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };

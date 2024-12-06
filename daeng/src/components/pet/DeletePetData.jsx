@@ -51,7 +51,7 @@ function DeletePetData({ petId }) {
             AlertDialog({
               mode: "alert",
               title: "성공",
-              text: "모든 작업이 성공적으로 처리되었습니다.",
+              text: "정상적으로 삭제되었습니다.",
               confirmText: "확인",
               icon: "success", 
               onConfirm: () => {
