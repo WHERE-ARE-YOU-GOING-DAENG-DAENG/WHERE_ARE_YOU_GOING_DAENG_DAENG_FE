@@ -621,7 +621,7 @@ const handleFocus = (e) => {
         text: `리뷰가 성공적으로 등록되었습니다.`,
         confirmText: "닫기" ,
         icon: "success",
-        onConfirm: () => navigate("/my-page"), 
+        onConfirm: () => navigate(`/total-review/${placeId}`),
       });
       
       console.log("리뷰 등록 성공:", response.data);
