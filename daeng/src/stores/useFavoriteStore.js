@@ -36,13 +36,23 @@ const useFavoriteStore = create((set, get) => ({
       }));
     } catch (error) {
       if (error.response) {
-        AlertDialog({
-          mode: "alert",
-          title: "즐겨찾기 조회",
-          text: "즐겨찾기 조회가 실패하였습니다.",
-          confirmText: "확인",
-          onConfirm: () => console.log("즐겨찾기 조회 실패"),
-        });
+        if (error.response.status === 401) {
+          AlertDialog({
+            mode: "alert",
+            title: "로그인 필요",
+            text: "로그인이 필요한 기능입니다.",
+            confirmText: "확인",
+            onConfirm: () => console.log("로그인이 필요합니다."),
+          });
+        } else {
+          AlertDialog({
+            mode: "alert",
+            title: "즐겨찾기 조회",
+            text: "즐겨찾기 조회가 실패하였습니다.",
+            confirmText: "확인",
+            onConfirm: () => console.log("즐겨찾기 조회 실패"),
+          });
+        }
       }
       set({ hasMore: false });
     } finally {
@@ -58,13 +68,23 @@ const useFavoriteStore = create((set, get) => ({
       // await get().fetchFavorites();
     } catch (error) {
       if(error.response){
-        AlertDialog({
-        mode: "alert",
-        title: "즐겨찾기 등록",
-        text: "즐겨찾기 등록이 실패하였습니다.",
-        confirmText: "확인",
-        onConfirm: () => console.log("즐겨찾기 등록 실패"),
-    });
+        if (error.response.status === 401) {
+          AlertDialog({
+            mode: "alert",
+            title: "로그인 필요",
+            text: "로그인이 필요한 기능입니다.",
+            confirmText: "확인",
+            onConfirm: () => console.log("로그인이 필요합니다."),
+          });
+        } else {
+          AlertDialog({
+            mode: "alert",
+            title: "즐겨찾기 등록",
+            text: "즐겨찾기 등록이 실패하였습니다.",
+            confirmText: "확인",
+            onConfirm: () => console.log("즐겨찾기 등록 실패"),
+          });
+        }
   }
     }
   },

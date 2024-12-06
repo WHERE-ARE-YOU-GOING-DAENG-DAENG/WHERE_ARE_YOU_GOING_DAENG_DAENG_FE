@@ -15,13 +15,23 @@ const useVisitStore = create((set) => ({
       set({ myVisits: response.data.data });
     } catch (error) {
       if(error.response){
-        AlertDialog({
-        mode: "alert",
-        title: "방문예정목록 조회",
-        text: "방문예정목록 조회에 실패하였습니다.",
-        confirmText: "확인",
-        onConfirm: () => console.log("방문예정 조회 실패"),
-    });
+        if(error.response.status === 401){
+          AlertDialog({
+            mode: "alert",
+            title: "로그인 필요",
+            text: "로그인이 필요한 기능입니다.",
+            confirmText: "확인",
+            onConfirm: () => console.log("로그인이 필요합니다."),
+          });
+        }else{
+          AlertDialog({
+            mode: "alert",
+            title: "방문예정목록 조회",
+            text: "방문예정목록 조회에 실패하였습니다.",
+            confirmText: "확인",
+            onConfirm: () => console.log("방문예정 조회 실패"),
+        });
+        }
   }
     }
   },

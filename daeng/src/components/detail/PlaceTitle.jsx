@@ -7,6 +7,8 @@ import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg";
 import starIcon from "../../assets/icons/star.svg"
 import { useNavigate } from "react-router-dom";
 import useFavoriteStore from "../../stores/useFavoriteStore";
+import useUserStore from "../../stores/userStore";
+import AlertDialog from "../commons/SweetAlert";
 
 const Container = styled.div`
   padding: 0px 44px;
@@ -55,6 +57,7 @@ const SubTitleSection = styled.div`
 
 const PlaceTitle = ({ data, setData }) => {
     const navigate = useNavigate();
+    const { userId } = useUserStore.getState();
     
     const toggleBookmark = async (placeId, isFavorite) => {
       const favoriteStore = useFavoriteStore.getState();
@@ -79,12 +82,26 @@ const PlaceTitle = ({ data, setData }) => {
         console.error("Error toggling favorite:", error);
       }
     };
+
+    const handleVisitListClick = (placeId) => {
+      console.log(userId)
+      if (userId) {
+        navigate(`/visit-list/${placeId}`);
+      } else {
+        AlertDialog({
+          mode: "alert",
+          title: "로그인 필요",
+          text: "방문등록을 하시려면 로그인이 필요합니다.",
+          confirmText: "확인",
+        });
+      }
+    }
   
     return(
         <Container>
             <TitleSection>
                 <h1>{data.name}</h1>
-                <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={()=> navigate(`/visit-list/${data.placeId}`)}/>
+                <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={() => handleVisitListClick(data.placeId)}/>
             </TitleSection>
             <SubTitleSection>
                 <p className="detail-category">{data.placeType}</p>
