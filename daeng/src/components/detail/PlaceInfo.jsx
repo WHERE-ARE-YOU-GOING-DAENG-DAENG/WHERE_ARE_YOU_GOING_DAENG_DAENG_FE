@@ -106,6 +106,11 @@ const PlaceInfo = ({data}) => {
 
     const weightLimit = "제한없음"; //일단 제한없음
 
+    const formatTime = (time) => {
+      if (!time) return "정보없음"; // Handle missing time
+      return time.length === 8 ? time.slice(0, 5) : time;
+    };
+    
     return(
         <Container>
         <InfoCard>
@@ -117,8 +122,8 @@ const PlaceInfo = ({data}) => {
                   <div className="info-item">
                     <img src={hourIcon} alt="운영시간" />
                     {data.placeType === "숙소"? (
-                      <span>체크인 - {data.startTime} | 체크아웃 - {data.endTime}</span>
-                    ):(<span>{data.startTime} - {data.endTime.slice(0,5)}</span>)}
+                      <span>체크인 - {formatTime(data.startTime)} | 체크아웃 - {formatTime(data.endTime)}</span>
+                    ):(<span>{formatTime(data.startTime)} - {formatTime(data.endTime)}</span>)}
                     
                   </div>
                   <div className="info-item">
