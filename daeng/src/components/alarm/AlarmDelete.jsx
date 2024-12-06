@@ -4,11 +4,12 @@ import axios from "axios";
 import AlertDialog from "../commons/SweetAlert";
 
 const CancelButton = styled.button`
-  width: 100px;
+  width: 130px;
   height: 54px;
   border-radius: 10px;
-  background-color: #FF6347; 
-  color: #FFFFFF;
+  background-color:  #FDF2F8;
+  border: solid 1px #FF69A9;
+  color: #FF69A9;;
   border: none;
   font-size: 20px;
   cursor: pointer;

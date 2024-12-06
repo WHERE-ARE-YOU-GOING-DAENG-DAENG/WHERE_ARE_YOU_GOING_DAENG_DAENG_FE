@@ -125,6 +125,7 @@ function UserEdit() {
           title: "닉네임 사용 가능",
           text: "사용 가능한 닉네임입니다.",
           confirmText: "확인",
+          icon: "success",
         });
       } else if (data.data.isDuplicate === true) {
         AlertDialog({
