@@ -28,7 +28,6 @@ export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
     console.log("알림 내용: ", payload);
 
-    // 알림 정보
     const notificationTitle = payload.notification.title;
     const notificationOptions = {
       body: payload.notification.body,
@@ -36,7 +35,6 @@ export const setupOnMessageHandler = () => {
       icon: payload.notification.icon,
     };
 
-    // 알림을 화면에 표시
     const notification = new Notification(notificationTitle, notificationOptions);
 
     notification.onclick = function (event) {
