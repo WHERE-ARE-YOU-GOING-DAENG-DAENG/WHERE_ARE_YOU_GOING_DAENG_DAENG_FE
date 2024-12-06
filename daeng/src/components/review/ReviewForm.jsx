@@ -169,7 +169,7 @@ function ReviewForm({ review }) {
         />
         <PetInfoContainer>
           <PetName>
-            [{review.pets.join(" | ")}]랑 함께 방문했어요
+            {review.pets.join(" | ")}(이)랑 함께 방문했어요
           </PetName>
           <StarSection>
             {[...Array(review.score)].map((_, index) => (

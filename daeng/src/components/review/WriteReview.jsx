@@ -277,6 +277,48 @@ const TextArea = styled.textarea`
   }
 `;
 
+const selectStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    border: state.isFocused ? "0.5px solid #ff69a9" : "0.5px solid #d9d9d9",
+    borderRadius: "5px",
+    padding: "2px",
+    cursor: "pointer",
+    fontSize: "15px",
+    boxShadow: state.isFocused ? "none" : "none",
+    "&:hover": {
+      borderColor: "#ff69a9",
+    },
+  }),
+  multiValue: (provided) => ({
+    ...provided,
+    backgroundColor: "#ffcee1",
+    borderRadius: "3px",
+    padding: "2px",
+  }),
+  multiValueRemove: (provided) => ({
+    ...provided,
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "#ff4b98",
+      color: "white", 
+    },
+  }),
+  menu: (provided) => ({
+    ...provided,
+    borderRadius: "5px",
+    borderColor: "#ff69a9",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? "#f4f4f4" : "white",
+    color: "#333",
+    cursor: "pointer",
+  }),
+};
+
+
 const getCurrentDate = () => {
   const today = new Date();
   const year = today.getFullYear();
@@ -377,7 +419,7 @@ const handleFocus = (e) => {
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     const totalImages = previews.length + files.length;
-
+  
     if (totalImages > 5) {
       AlertDialog({
         mode: "alert",
@@ -391,12 +433,18 @@ const handleFocus = (e) => {
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        // 동영상 부분 
         if (file.type.startsWith("video/")) {
-          setPreviews((prev) => [...prev, { type: "video", src: reader.result }]);
+          // 동영상인 경우
+          setPreviews((prev) => [
+            ...prev,
+            { type: "video", src: reader.result, name: file.name },
+          ]);
         } else if (file.type.startsWith("image/")) {
-          // 이미지 부분
-          setPreviews((prev) => [...prev, { type: "image", src: reader.result }]);
+          // 이미지인 경우
+          setPreviews((prev) => [
+            ...prev,
+            { type: "image", src: reader.result, name: file.name },
+          ]);
         }
       };
       reader.readAsDataURL(file);
@@ -616,6 +664,7 @@ const handleFocus = (e) => {
           options={petOptions}
           value={selectPet}
           onChange={handlePetSelection}
+          styles={selectStyles}  //select 라이브러리 스타일
           placeholder="댕댕이를 선택해주세요"
         />
         </UserQuestionContainer>
@@ -629,43 +678,50 @@ const handleFocus = (e) => {
             onFocus={handleFocus}  
             onChange={(e) => setVisitedAt(e.target.value)} 
           />
-        </UserQuestionContainer>
-        <UserQuestionContainer>
-          <Question>별점을 눌러 만족도를 공유해주세요</Question>
-          <StarContainer>
-            {[...Array(5)].map((_, index) => (
-              <StyleStar
-                key={index}
-                src={ratings[index] ? star : notfillstar}
-                alt="리뷰 작성하기 별점"
-                onClick={() => handleStarClick(index)}
-              />
-            ))}
-          </StarContainer>
-        </UserQuestionContainer>
-        <UserQuestionContainer>
-          <Question>사진 / 동영상 업로드 <p>(선택)</p></Question>
-        </UserQuestionContainer>
-        <AddImgContainer>
+          </UserQuestionContainer>
+          <UserQuestionContainer>
+            <Question>별점을 눌러 만족도를 공유해주세요</Question>
+              <StarContainer>
+                {[...Array(5)].map((_, index) => (
+                  <StyleStar
+                    key={index}
+                    src={ratings[index] ? star : notfillstar}
+                    alt="리뷰 작성하기 별점"
+                    onClick={() => handleStarClick(index)}
+                  />
+                ))}
+              </StarContainer>
+            </UserQuestionContainer>
+          <UserQuestionContainer>
+            <Question>사진 / 동영상 업로드 <p>(선택)</p></Question>
+          </UserQuestionContainer>
+          <AddImgContainer>
           {previews.map((preview, index) => (
-            <AddImg key={index} src={preview}>
+            <AddImg key={index} src={preview.src}>
+              {preview.type === "video" ? (
+                <video width="130" height="130" controls>
+                  <source src={preview.src} type="video/mp4" />
+                </video>
+              ) : (
+                <img src={preview.src} alt={`미리보기 이미지 ${index}`} />
+              )}
               <RemoveButton onClick={() => handleRemoveImage(index)}>X</RemoveButton>
-            </AddImg>
-          ))}
-          <AddImg>
-            <label htmlFor="file-upload">
-              <AddImgButton src={addImg} alt="이미지나 동영상 삽입" />
-              <br />
-              사진 / 동영상
-              <br /> 업로드
-            </label>
-            <input
-              id="file-upload"
-              type="file"
-              accept="image/*,video/*"
-              onChange={handleImageUpload}
-              multiple
-            />
+              </AddImg>
+            ))}
+            <AddImg>
+              <label htmlFor="file-upload">
+                <AddImgButton src={addImg} alt="이미지나 동영상 삽입" />
+                <br />
+                사진 / 동영상
+                <br /> 업로드
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                accept="image/*,video/*"
+                onChange={handleImageUpload}
+                multiple
+              />
             </AddImg>
           </AddImgContainer>
           <TextDescriptionContainer>
