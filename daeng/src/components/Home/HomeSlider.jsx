@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import festival_banner1 from "../../assets/icons/festival_banner1.svg";
+import AlertDialog from "../commons/SweetAlert";
 
 function HomeSlider() {
   const slides = [festival_banner1]; // 단일 배너
@@ -17,11 +18,20 @@ function HomeSlider() {
     setCurrentSlide(index);
   };
 
+  const handleLaterUpdate = () => {
+    AlertDialog({
+      mode: 'alert',
+      title: '펫 페스티벌 안내',
+      text: '추후 업데이트 될 예정입니다.',
+      confirmText: '확인',
+    });
+  }
+
   return (
     <SliderWrapper>
       <SlidesContainer currentSlide={currentSlide}>
         {slides.map((slide, index) => (
-          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} />
+          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} onClick={handleLaterUpdate} />
         ))}
       </SlidesContainer>
       <DotsWrapper>
