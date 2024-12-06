@@ -4,6 +4,9 @@ import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
+import arrow from '../../assets/icons/arrow.svg'
+import { useNavigate } from 'react-router-dom'; 
+
 
 const ReviewWrapper = styled.div`
   margin: 20px;
@@ -114,6 +117,18 @@ const VisitDate = styled.span`
   }
 `;
 
+const StyledArrow = styled.img`
+  font-size: 14px;
+  color: #818181;
+  margin-left: 10px;
+  display: flex;
+
+  @media (max-width: 554px) {
+    display: flex;
+    margin-left: 4px;
+  }
+`;
+
 const KeywordsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -153,11 +168,18 @@ const Video = styled.video`
 `;
 
 function ReviewForm({ review }) {
+  const navigate = useNavigate();
+
+  const navigateToPlace = () => {
+    navigate(`/search/${review.placeId}`);
+  };
+
   return (
     <ReviewWrapper>
       <HeaderContainer>
         <TitleSection>
           <PlaceTitle>{review.placeName}</PlaceTitle>
+          <StyledArrow src={arrow} onClick={navigateToPlace}/>
         </TitleSection>
         <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>
       </HeaderContainer>
