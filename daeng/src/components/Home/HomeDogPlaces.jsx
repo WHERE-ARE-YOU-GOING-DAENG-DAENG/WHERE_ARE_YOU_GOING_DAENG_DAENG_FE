@@ -68,8 +68,6 @@ function HomeDogPlaces() {
 }
 
 const DogPlacesWrapper = styled.div`
-  margin-top: 20px;
-  margin-bottom: 20px;
 
   @media (max-width: 554px) {
     margin-top: 10px;
@@ -80,7 +78,9 @@ const DogTitle = styled.h2`
   display: flex;
   align-items: center;
   text-align: left;
-  margin: 20px 30px;
+  margin-bottom: 20px;
+  margin-left: 30px;
+  margin-right: 30px;
   font-size: 20px;
   font-weight: 600;
   color: black;
@@ -88,6 +88,12 @@ const DogTitle = styled.h2`
   @media (max-width: 554px) {
     margin: 10px 20px;
     font-size: 15px;
+  }
+
+    img {
+    margin-left: 3px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
