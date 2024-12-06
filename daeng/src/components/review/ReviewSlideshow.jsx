@@ -21,6 +21,17 @@ const ReviewPicture = styled.img`
   height: auto;
   object-fit: cover;
   margin-right: 5px;
+  margin-left:15px;
+`;
+
+const Video = styled.video`
+  width: 20%;
+  height: 25%;
+  height: auto;
+  object-fit: cover;
+  margin-right: 5px;
+  background-color: #d9d9d9;
+  border-radius: 8px;
 `;
 
 const ArrowButton = styled.button`
@@ -58,9 +69,19 @@ const ReviewSlideshow = ({ images }) => {
         </ArrowButton>
       )}
       <ReviewPictureWrapper currentIndex={currentIndex}>
-        {images.map((src, index) => (
-          <ReviewPicture key={index} src={src} alt={`리뷰 이미지 ${index + 1}`} />
-        ))}
+        {images.map((src, index) => {
+          if (src.endsWith(".mp4") || src.endsWith(".mov")) {
+            return (
+              <Video key={index} controls>
+                <source src={src} type="video/mp4" />
+              </Video>
+            );
+          } else {
+            return (
+              <ReviewPicture key={index} src={src} alt={`리뷰 이미지 ${index + 1}`} />
+            );
+          }
+        })}
       </ReviewPictureWrapper>
       {currentIndex < images.length - visibleCount && (
         <ArrowButton direction="right" onClick={handleNext}>

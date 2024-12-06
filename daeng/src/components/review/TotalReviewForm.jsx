@@ -10,7 +10,6 @@ import AiReviewSummary from './AIReview';
 import axios from 'axios';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import ReviewSlideshow from './ReviewSlideshow';
-import spinner from '../../assets/icons/spinner.gif';
 
 //리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
@@ -45,6 +44,10 @@ const ReviewSummaryContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center; 
+
+  @media (max-width: 554px) {
+    margin-left:4%;
+  }
 `;
 
 const TotalStarPoint = styled.span`
@@ -67,7 +70,7 @@ const TotalReviewCount = styled.span`
 
   @media (max-width: 554px) {
     font-size: 11px;
-    margin-right:10%;
+    margin-right:23%;
   }
 `
 
@@ -80,8 +83,8 @@ const StarImg = styled.img`
 const DivisionLine = styled.div`
   height: 1px;
   background-color: #E5E5E5;
-  margin-top:-2px;
   margin-right:40px;
+  margin-top:5px;
 `;
 
 const TotalUserInfoContainer = styled.div`
@@ -94,7 +97,12 @@ const UserStarImg = styled.img`
   width:10px;
   height:10px;
   display: flex;
-  margin-top: 5px;
+  margin-top: 10px;
+  margin-left: 3%;
+
+  @media (max-width: 554px) {
+    margin-top: 13px;
+  }
 `
 
 const ReviewUserContainer = styled.div`
@@ -133,9 +141,9 @@ const CommentContainer = styled.div`
 `
 
 const UserId = styled.span`
-  font-size:20px;
+  font-size:18px;
   font-weight: bold;
-  margin-right: 10px;
+  margin-right: 3px;
   margin-top: 5px;
 
   @media (max-width: 554px) {
@@ -156,16 +164,16 @@ const PetType = styled.span`
 `
 
 const PostDate = styled.span`
-  font-size: 15px;
+  font-size: 14px;
   color: #B3B3B3;
-  margin-left:210px;
+  margin-left:10px;
   margin-top: 8px;
   margin-bottom: 3px;
 
   @media (max-width: 554px) {
     font-size: 11px;
     margin-bottom:10px;
-    margin-left:80px;
+    margin-top: 11px;
   }
 `
 
@@ -206,39 +214,11 @@ const VisitDate = styled.span`
   }
 `
 
-const ReviewPictureContainer = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  overflow: hidden;
-
-  @media (max-width: 554px) {
-    margin-left:-2%;
-  }
-`;
-
 const NoReview = styled.div`
   font-size: 13px;
   margin-top: 10px;
   font-weight: bold;
 `
-
-const ReviewPicture = styled.img`
-  width: 25%; 
-  height: 120px;
-  background-color: #D9D9D9;
-  border-radius: 5px;
-  margin: 0 10px;
-  object-fit: cover;
-
-  @media (max-width: 554px) {
-    width: 80px;
-    height:90px;
-  }
-`;
-
 
 const ReadMoreButton = styled.button`
   color: #FF69A9;
@@ -251,21 +231,6 @@ const ReadMoreButton = styled.button`
   @media (max-width: 554px) {
     font-size: 10px; 
   }
-`;
-
-const ArrowButton = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 2;
-
-  ${({ direction }) => (direction === 'left' ? 'left: 10px;' : 'right: 10px;')}
 `;
 
 const LastReview = styled.span`
@@ -321,20 +286,6 @@ const TotalReviewForm = () => {
     if (placeId) {
       fetchReviews(placeId); 
     }
-  };
-
-  const handlePrevSlide = (reviewId, mediaLength) => {
-    setSlideIndexes((prev) => ({
-      ...prev,
-      [reviewId]: prev[reviewId] > 0 ? prev[reviewId] - 1 : mediaLength - 1,
-    }));
-  };
-  
-  const handleNextSlide = (reviewId, mediaLength) => {
-    setSlideIndexes((prev) => ({
-      ...prev,
-      [reviewId]: prev[reviewId] < mediaLength - 1 ? prev[reviewId] + 1 : 0,
-    }));
   };
 
   const toggleText = (reviewId) => {
@@ -422,14 +373,14 @@ const TotalReviewForm = () => {
                 <TotalUserInfoContainer>
                   <CommentContainer>
                     <UserId>{review.nickname}</UserId>
-                    <PetType>
-                      {review.pets?.join(", ") || "등록된 반려동물이 없습니다."}
-                    </PetType>
                     <PostDate>
                       {new Date(review.createdAt).toLocaleDateString()}
                     </PostDate>
                   </CommentContainer>
                   <UserSecondInfoContainer>
+                  <PetType>
+                      {review.pets?.join(", ") || "등록된 반려동물이 없습니다."}
+                    </PetType>
                     {Array.from({ length: 5 }).map((_, idx) => (
                       <UserStarImg
                         key={idx}
@@ -454,6 +405,7 @@ const TotalReviewForm = () => {
               {review.media && review.media.length > 0 && (
                 <ReviewSlideshow images={review.media} />
               )}
+              <DivisionLine /> 
             </div>
           );
         })
