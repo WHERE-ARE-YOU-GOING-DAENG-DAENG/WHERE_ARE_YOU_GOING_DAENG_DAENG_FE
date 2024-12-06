@@ -22,13 +22,13 @@ const WriteReviewAllContainer = styled.div`
 const WriteReviewContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 10px;
+  margin-top: 10px;;
 `;
 
 const PlaceTitle = styled.span`
   font-size: 25px;
   font-weight: bold;
-  margin-right: 30%;
+  margin-right: 45%;
   margin-bottom: 27px;
   margin-left: 3%;
 
@@ -159,14 +159,15 @@ const Question = styled.span`
 `;
 
 const DateSelection = styled.input`
-  width: 40%;
-  height: 30px;
+  width: 50%;
+  height: 40px;
   padding: 10px;
   border: 0.5px solid #d9d9d9;
   border-radius: 5px;
   cursor: pointer;
   color: black;
   padding-right: 1%;
+  font-size: 15px;
   cursor: pointer;
 
   &:focus {
@@ -213,12 +214,25 @@ const AddImg = styled.div`
     display: none;
     cursor: pointer;
   }
-`;
+  
+  img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+  }
 
-const AddImgButton = styled.img`
-  width: 12px;
-  margin-bottom: 0px;
-  cursor: pointer;
+
+  label {
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+
+  .add-img-button {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
 `;
 
 const QuestionBox = styled.span`
@@ -276,6 +290,10 @@ const TextArea = styled.textarea`
     min-height: 50px;
   }
 `;
+
+const AddImgPlus = styled.span`
+  width:1px;
+`
 
 const selectStyles = {
   control: (provided, state) => ({
@@ -710,8 +728,8 @@ const handleFocus = (e) => {
             ))}
             <AddImg>
               <label htmlFor="file-upload">
-                <AddImgButton src={addImg} alt="이미지나 동영상 삽입" />
                 <br />
+                <AddImgPlus src={addImg} alt="이미지 업로드"/>
                 사진 / 동영상
                 <br /> 업로드
               </label>
@@ -731,7 +749,7 @@ const handleFocus = (e) => {
       <DivisionLine />
       <TextArea type='text' placeholder='경험을 공유해주세요' value={text} onChange={handleChange}/>
       <DivisionLine />
-      <ConfirmBtn onClick={handleSubmit} marginBottom="29px" label="작성 완료" />
+      <ConfirmBtn onClick={handleSubmit}  label="작성 완료" />
         </SelectPlaceOptionContainer>
       </WriteReviewAllContainer>
     );

@@ -96,6 +96,7 @@ const StyledStar = styled.img`
   width: 16px;
   height: 16px;
   margin-right: 2px;
+  cursor: pointer;
 
 
   @media (max-width: 554px) {
