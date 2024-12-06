@@ -147,7 +147,7 @@ function UserRegister() {
             title: "회원가입 성공",
             text: "회원가입이 성공적으로 완료되었습니다.",
             confirmText: "확인",
-            icon: "success",
+            icon: "success", 
             onConfirm: () => navigate("/preference-register"),
           });
         } else {

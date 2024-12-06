@@ -1,199 +1,28 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
-import footerSearch from "../../assets/icons/footer_search.svg"; 
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
-import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 3%;
-  margin-left: 4%;  
-  
-  @media (max-width: 554px) {
-    margin-top: 3%;
-  }
-`;
-
-const FirstInputContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const PetImg = styled.div`
-  width: 135px;
-  height: 135px;
-  margin-right: 20px;
-  border-radius: 100px;
-  background-image: url(${(props) => props.src || reviewDefaultImg});
-  background-size: cover;
-  background-position: center;
-  cursor: pointer;
-
-  @media (max-width: 554px) {
-    width: 100px;
-    height: 100px;
-  }
-`;
-
-const HiddenInput = styled.input`
-  display: none;
-`;
-
-const PetNameInfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 15px;
-`;
-
-const PetNameInput = styled.input`
-  width: 320px;
-  height: 44px;
-  font-size: 14px;
-  border-radius: 5px;
-  border: 0.5px solid #e4e4e4;
-  margin-bottom: 10px;
-  padding: 10px;
-
-  @media (max-width: 554px) {
-    width: 100%;
-    font-size: 12px;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #ff69a9; 
-  }
-`;
-
-const InputAlert = styled.p`
-  color: #ff69a9;
-  font-size: 12px;
-  display: flex;
-  margin-top: -1px;
-  margin-bottom: 4%;
-    
-  @media (max-width: 554px) {
-    margin-bottom:4%;
-  }
-`;
-
-const BirthInput = styled.input`
-  width: 96%;
-  height: 44px;
-  margin-right:10%;
-  border: 0.5px solid #e4e4e4;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 14px;
-  color: #000; 
-  cursor: pointer;
-
-  &::placeholder {
-    color: #b3b3b3; 
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #ff69a9; 
-  }
-`;
+import { 
+  Container, 
+  FirstInputContainer, 
+  PetImg, 
+  HiddenInput, 
+  PetNameInput, 
+  InputAlert, 
+  PetTypeOption, 
+  PetTypeContainer, 
+  BirthInput, 
+  BirthContainer, 
+  SelectContainer, 
+  SelectWeight, 
+  NextRegisterBtn 
+} from './CommonStyle';
 
 
-const PetTypeOption = styled.select`
-  width: 96%;
-  height: 44px;
-  border: 0.5px solid #e4e4e4;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 13px;
-  color: ${(props) => (props.value === "" ? "#b3b3b3" : "#000")};
-  box-sizing: border-box; 
-  appearance: none; 
-  -webkit-appearance: none; 
-  -moz-appearance: none; 
-
-  background: url(${footerSearch}) no-repeat right 10px center; 
-  background-size: 16px; 
-
-  &:focus {
-    border-color: #FF69A9;  
-    outline: none;  
-  }
-`;
-
-
-const PetTypeContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-  margin-bottom: 20px;
-`;
-
-const BirthContainer = styled.div`
-  margin-bottom: 20px;
-`    
-
-const SelectContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 20px;
-`
-
-const SelectWeight = styled.button`
-  width: 92px;
-  height : 44px;
-  margin-right: 12px;
-  background-color: white;
-  border : 0.5px solid #E4E4E4;
-  border-radius: 5px;
-  font-size: 11px;
-  cursor: pointer;
-  color:  #B3B3B3;
-
-  @media (max-width: 554px) {
-    margin-bottom: 3%;
-    font-size: 10px;
-  }
-  
-  &:hover {
-    background-color: #ff69a9;
-    font-weight: bold;
-    color: #ffffff;
-  }
-
-  ${(props) => props.selected && `
-        background-color: #FF69A9;
-        font-weight: bold;
-        color: #ffffff;
-    `}
-`;
-
-const NextRegisterBtn = styled.button`
-  background-color: white;
-  color:#B3B3B3;
-  font-size:14px;
-  border:none;
-  cursor: pointer;
-  text-align: center;
-  margin-right:20px;
-  margin-bottom: 20px;
-
-  @media (max-width: 554px) {
-    margin-top:1%;
-    margin-right:5%;
-  }
-
-  &:hover{
-    font-weight: bold;
-  }
-`
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
@@ -447,7 +276,8 @@ function RegisterInputForm() {
           accept="image/*"
           onChange={handleImageUpload}
         />
-        <PetNameInfoContainer>
+      </FirstInputContainer>
+      <PetTypeContainer>
           <SelectLabel label="댕댕이 이름" />
           <PetNameInput
             value={petName}
@@ -455,9 +285,6 @@ function RegisterInputForm() {
             placeholder="댕댕이 이름을 입력해주세요"
             required />
           <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
-        </PetNameInfoContainer>
-      </FirstInputContainer>
-      <PetTypeContainer>
         <SelectLabel label="견종" />
         <PetTypeOption value={selectedPetType} onChange={handlePetTypeChange}>
           <option value="" disabled>
