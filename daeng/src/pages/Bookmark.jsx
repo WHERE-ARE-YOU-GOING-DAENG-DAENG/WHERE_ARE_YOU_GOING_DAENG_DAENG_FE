@@ -58,6 +58,14 @@ const Bookmark = () => {
 		};
 	
 		fetchData();
+	  }, []);
+	
+	useEffect(() => {
+		const fetchData = async () => {
+		  await fetchFavorites(page);
+		};
+	
+		fetchData();
 	  }, [page]);
 
 	  const fetchNextPage = () => {
