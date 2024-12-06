@@ -406,13 +406,16 @@ const handleFocus = (e) => {
   };
 
   const handleStarClick = (index) => {
-    setRatings((prev) => {
-      const newRatings = [...prev];
-      newRatings[index] = !newRatings[index];
-      return newRatings;
-    });
-  };
+    const newRatings = [...ratings]; // 기존 별점 배열 복사
+    for (let i = 0; i <= index; i++) {
+      newRatings[i] = true;
+    }
 
+    for (let i = index + 1; i < newRatings.length; i++) {
+      newRatings[i] = false;
+    }
+    setRatings(newRatings); // 상태 업데이트
+  };
   const handleRemoveImage = (index) => {
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
