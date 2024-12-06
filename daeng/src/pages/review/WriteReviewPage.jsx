@@ -1,27 +1,23 @@
-import React from 'react'
-import Header from '../../components/commons/Header'
-import Footer from '../../components/commons/Footer'
+import React from "react";
+import Header from "../../components/commons/Header";
+import Footer from "../../components/commons/Footer";
 import styled from "styled-components";
-import WriteReview from '../../components/review/WriteReview';
+import WriteReview from "../../components/review/WriteReview";
 
-const WriteReviewContainer = styled.div`
+const PageWrapper = styled.div`
   display: flex;
-  flex-direction: column; 
-  padding: 3px;
-  overflow: auto; 
+  flex-direction: column;
+`;
 
-  @media (max-width: 554px) {
-    font-size: 10px;
-  }
-`
+
 function WriteReviewPage() {
   return (
-    <WriteReviewContainer>
+    <PageWrapper>
       <Header label="리뷰 작성" />
-      <WriteReview />
+        <WriteReview />
       <Footer />
-    </WriteReviewContainer>
-  )
+    </PageWrapper>
+  );
 }
 
-export default WriteReviewPage
+export default WriteReviewPage;

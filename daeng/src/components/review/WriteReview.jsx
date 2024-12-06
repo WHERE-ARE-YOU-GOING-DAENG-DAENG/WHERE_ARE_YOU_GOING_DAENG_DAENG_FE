@@ -13,54 +13,58 @@ import { useParams } from "react-router-dom";
 import Select from "react-select";
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 
-const WriteReviewAllContainer = styled.div`
-  display: block;
-  padding: 3%;
-  margin-left: 2%;
-`;
+
+const TotalReviewContainer = styled.div`
+  padding:3%;
+`
 
 const WriteReviewContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 10px;;
+  margin-top: 20px;
+  position: relative;
 `;
 
 const PlaceTitle = styled.span`
   font-size: 25px;
   font-weight: bold;
-  margin-right: 45%;
+  display: flex;
   margin-bottom: 27px;
-  margin-left: 3%;
+  margin-left:3%;
+
 
   @media (max-width: 554px) {
     font-size: 20px;
-    margin-right: 8%;
-    margin-left:10px;
+    margin-left:20px;
     margin-bottom: 15px;
   }
 `;
 
 const WriteReviewDate = styled.span`
+  position: absolute; 
+  right: 20px; 
+  top: 0; 
   color: #b3b3b3;
   font-size: 18px;
-  
+
   @media (max-width: 554px) {
-    margin-left: 18%;
     font-size: 15px;
+    top: 5px; 
   }
 `;
 
+
 const SelectPlaceOptionContainer = styled.div`
   width: auto;
-  height: 330px;
-  background-color: rgba(247, 247, 247, 0.78);
+  height: 90%;
   text-align: left;
   padding: 5%;
+  border-radius:10px;
   margin-right: 10px;
+  background-color: #F7F7F7;
 
   @media (max-width: 554px) {
-    padding:5%;
-    height: 330px;
+    padding:7%;
   }
 `;
 
@@ -70,10 +74,8 @@ const WhatPointLike = styled.span`
   font-weight: 600;
 
   @media (max-width: 554px) {
-    display: flex;
     margin-left: 10px;
-    font-size: 16px;
-    margin-bottom: -1px;
+    font-size: 18px;
   }
 `;
 
@@ -84,26 +86,27 @@ const SelectWarning = styled.span`
   @media (max-width: 554px) {
     width: 95%;
     margin-left: 10px;
+    font-size: 13px;
   }
 `;
 
 const UserInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 15%;
+  margin-top: 5%;
   align-items: center;
 `;
 
 const UserImg = styled.img`
-  width: 68px;
-  height: 68px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   margin-right: 10px;
   border: none;
 
 
   @media (max-width: 554px) {
-    margin-top: 20%;
+    margin-top: 2%;
   }
 `;
 
@@ -113,7 +116,7 @@ const UserNickname = styled.span`
   font-weight: bold;
 
   @media (max-width: 554px) {
-    margin-top: 20%;
+    margin-top: 2%;
   }
 `;
 
@@ -235,6 +238,19 @@ const AddImg = styled.div`
   }
 `;
 
+const SecondContainer = styled.div`
+  padding:3%;
+`
+const LastContainer = styled.div`
+  margin-bottom: 15%;
+  margin-left:1%;
+  align-items: center;
+
+  @media (max-width: 554px) {
+    margin-bottom: 25%;
+    align-items: center;
+  }
+`
 const QuestionBox = styled.span`
   font-size: 18px;
   display: inline; 
@@ -655,7 +671,7 @@ const handleFocus = (e) => {
   };
 
   return (
-    <WriteReviewAllContainer>
+    <TotalReviewContainer>
       <WriteReviewContainer>
       <PlaceTitle>{placeName}</PlaceTitle>
         <WriteReviewDate>{getCurrentDate()}</WriteReviewDate>
@@ -668,6 +684,8 @@ const handleFocus = (e) => {
         selectedOptions={selectKeywords}
         onSelectOptions={setSelectKeywords}
       />
+      </SelectPlaceOptionContainer>
+      <SecondContainer>
         <UserInfoContainer>
         <UserImg
           src={selectedPetImage || reviewDefaultImg}
@@ -749,9 +767,11 @@ const handleFocus = (e) => {
       <DivisionLine />
       <TextArea type='text' placeholder='경험을 공유해주세요' value={text} onChange={handleChange}/>
       <DivisionLine />
+      <LastContainer>
       <ConfirmBtn onClick={handleSubmit}  label="작성 완료" />
-        </SelectPlaceOptionContainer>
-      </WriteReviewAllContainer>
+      </LastContainer>
+      </SecondContainer>
+    </TotalReviewContainer>
     );
   }
 
