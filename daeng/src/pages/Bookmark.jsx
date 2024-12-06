@@ -51,14 +51,6 @@ const Bookmark = () => {
 	const favorites = useFavoriteStore((state) => state.favorites);
 	const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites);
 	const hasMore = useFavoriteStore((state) => state.hasMore);
-
-	useEffect(() => {
-		const fetchData = async () => {
-		  await fetchFavorites(page);
-		};
-	
-		fetchData();
-	  }, []);
 	
 	useEffect(() => {
 		const fetchData = async () => {

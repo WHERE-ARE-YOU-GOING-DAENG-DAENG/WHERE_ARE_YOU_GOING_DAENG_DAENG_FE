@@ -256,7 +256,6 @@ const TotalReviewForm = () => {
   const [placeName, setPlaceName] = useState("장소 정보가 없습니다.");
   const [isExpanded, setIsExpanded] = useState({});
   const observerRef = useRef(null);
-  const [slideIndexes, setSlideIndexes] = useState({});
 
 
   useEffect(() => {
