@@ -35,7 +35,7 @@ const TitleSection = styled.div`
 const SubTitleSection = styled.div`
   display: flex;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 15px;
 
   .detail-category{
     color: #FF69A9;
