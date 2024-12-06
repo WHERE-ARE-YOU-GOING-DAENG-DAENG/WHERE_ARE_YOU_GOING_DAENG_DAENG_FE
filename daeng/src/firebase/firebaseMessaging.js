@@ -40,7 +40,7 @@ export const setupOnMessageHandler = () => {
     notification.onclick = function (event) {
       event.preventDefault(); 
       console.log("notification clicked!");
-      notification.close(); // 클릭 후 알림 닫기
+      notification.close(); 
     };
   });
 };
