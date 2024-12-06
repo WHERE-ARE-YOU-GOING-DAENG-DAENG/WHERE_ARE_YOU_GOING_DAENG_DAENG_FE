@@ -62,7 +62,7 @@ const UserInfo = styled.div`
 `;
 
 const Username = styled.div`
-  font-size: 15px;
+  font-size: 18px;
   display: block;
 `;
 
