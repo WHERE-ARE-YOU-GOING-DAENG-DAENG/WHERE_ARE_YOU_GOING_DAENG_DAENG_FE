@@ -102,6 +102,7 @@ function LastContainer() {
         title: '로그아웃 성공',
         text: '로그아웃이 완료되었습니다.',
         confirmText: '확인',
+        icon: "success",
         onConfirm: () => {
           console.log('로그아웃 성공 확인 클릭됨');
           navigate('/');
