@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import top from "../../assets/icons/scrollup.svg";
-import list from "../../assets/icons/bookmarklist.svg";
+import land from "../../assets/icons/hopscotchbtn.svg";
 import { useNavigate } from 'react-router-dom';
 
 const ScrollTop = styled.button`
@@ -45,7 +45,7 @@ const BookmarkButton = styled.button`
 
   @media (max-width: 554px) {
     right: 10px;
-    bottom: 115px !important;
+    bottom: ${(props) => (props.visible ? '115px !important' : '65px!important')};
     transform: translateZ(0);
     img {
       width: 45px;
@@ -73,7 +73,7 @@ const ScrollBtn = () => {
   };
 
   const handleBookmarkClick = () => {
-    navigate("/bookmark");
+    navigate("/hopscotch");
   };
 
   useEffect(() => {
@@ -88,11 +88,11 @@ const ScrollBtn = () => {
       {/* 즐겨찾기 버튼 */}
       <BookmarkButton visible={isVisible}
         style={{
-          bottom: isVisible ? '150px' : '90px', // 맨위로 버튼 여부에 따라 위치 변경
+          bottom: isVisible ? '150px' : '90px',
         }}
         onClick={handleBookmarkClick}
       >
-        <img src={list} alt="즐겨찾기" />
+        <img src={land} alt="즐겨찾기" />
       </BookmarkButton>
 
       {/* 맨위로 버튼 */}
