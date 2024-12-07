@@ -46,13 +46,13 @@ const SubTitleSection = styled.div`
 
   img{
     margin: 0 5px;
-    cursor: pointer;
   }
 
   .detail-reviewcnt{
     margin-left: 2px;
     color: #808080;
     font-weight: normal;
+    cursor:pointer;
   }
 `
 
