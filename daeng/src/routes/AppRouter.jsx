@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Search from '../pages/search/Search';
@@ -23,6 +23,22 @@ import PlaceVisitList from '../pages/visit/PlaceVisitList';
 import Error from "../pages/Error";
 import { setupAxiosInterceptors } from '../services/axiosInstance';
 
+// 네이버 애널리틱스 페이지뷰 트래킹 함수
+const trackPageView = () => {
+  if (window.wcs) {
+    window.wcs_do(); // 네이버 애널리틱스 트래킹 호출
+  }
+};
+
+// 라우트 변경 감지 Hook
+const usePageTracking = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(); // 라우트 변경 시 페이지뷰 트래킹
+  }, [location]);
+};
+
 const AppRoutes = () => {
   const navigate = useNavigate();
 
@@ -30,6 +46,8 @@ const AppRoutes = () => {
     // Axios 인터셉터 설정
     setupAxiosInterceptors(navigate);
   }, [navigate]);
+
+  usePageTracking();
 
   return (
     <>
