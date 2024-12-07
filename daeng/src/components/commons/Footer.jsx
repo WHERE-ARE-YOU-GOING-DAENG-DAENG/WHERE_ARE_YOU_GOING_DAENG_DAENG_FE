@@ -5,8 +5,8 @@ import footerHome from "../../assets/icons/footer_home.svg";
 import footerHoverHome from "../../assets/icons/footer_hover_home.svg";
 import footerSearch from "../../assets/icons/footer_search.svg";
 import footerHoverSearch from "../../assets/icons/footer_hover_search.svg";
-import footerBookmark from "../../assets/icons/footer_bookmark.svg";
-import footerHoverBookmark from "../../assets/icons/footer_hover_bookmark.svg";
+import footerLand from "../../assets/icons/footer_land.svg";
+import footerHoverLand from "../../assets/icons/footer_hover_land.svg";
 import footerVisiting from "../../assets/icons/footer_visiting.svg";
 import footerHoverVisiting from "../../assets/icons/footer_hover_visiting.svg";
 import footerMypage from "../../assets/icons/footer_mypage.svg";
@@ -70,7 +70,7 @@ const FooterItem = styled.div`
 const items = [
     { icon: footerHome, hoverIcon: footerHoverHome, label: "홈", path: "/" },
     { icon: footerSearch, hoverIcon: footerHoverSearch, label: "검색", path: "/search" },
-    { icon: footerBookmark, hoverIcon: footerHoverBookmark, label: "즐겨찾기", path: "/bookmark" },
+    { icon: footerLand, hoverIcon: footerHoverLand, label: "땅따먹기", path: "/bookmark" },
     { icon: footerVisiting, hoverIcon: footerHoverVisiting, label: "방문 일정", path: "/visit-list" },
     { icon: footerMypage, hoverIcon: footerHoverMypage, label: "마이페이지", path: "/my-page" },
 ];
