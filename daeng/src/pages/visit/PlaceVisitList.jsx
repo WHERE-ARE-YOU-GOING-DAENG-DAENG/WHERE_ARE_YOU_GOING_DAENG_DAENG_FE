@@ -26,7 +26,6 @@ const PlaceVisitList = () => {
                 const response = await axiosInstance.get(`https://www.daengdaeng-where.link/api/v1/visit/place/${id}`,{
                     withCredentials: true
                 })
-                console.log(response.data.data) //로그삭제
                 setList(response.data.data);
             }catch(error){
                 if(error.response){
