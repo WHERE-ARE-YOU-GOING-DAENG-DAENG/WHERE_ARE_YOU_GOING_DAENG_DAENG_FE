@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import useFavoriteStore from "../../stores/useFavoriteStore";
 import useUserStore from "../../stores/userStore";
 import AlertDialog from "../commons/SweetAlert";
+import SquareBtn from "../commons/SquareBtn";
 
 const Container = styled.div`
   padding: 0px 44px;
@@ -20,8 +21,9 @@ const Container = styled.div`
 const TitleSection = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   margin-top: 20px;
+  text-align: left;
 
   h1 {
     font-size: 24px;
@@ -36,8 +38,15 @@ const TitleSection = styled.div`
 
 const SubTitleSection = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Info = styled.div`
+  display: flex;
   font-weight: bold;
   font-size: 15px;
+  aling-items: center;
 
   .detail-category{
     color: #FF69A9;
@@ -103,20 +112,24 @@ const PlaceTitle = ({ data, setData }) => {
         <Container>
             <TitleSection>
                 <h1>{data.name}</h1>
-                <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={() => handleVisitListClick(data.placeId)}/>
+                <SquareBtn mode="visit" />
+                {/* <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={() => handleVisitListClick(data.placeId)}/> */}
             </TitleSection>
             <SubTitleSection>
-                <p className="detail-category">{data.placeType}</p>
-                <p>| 평점</p>
-                <img src={starIcon} alt="평점" />
-                <p>{data.score}</p>
-                <p className="detail-reviewcnt" onClick={()=>navigate(`/total-review/${data.placeId}`)}>({data.total})</p>
-                <img
-                    src={data.isFavorite ? filledbookmarkIcon : bookmarkIcon}
-                    alt="Favorite"
-                    className="favorite-button"
-                    onClick={()=>toggleBookmark(data.placeId, data.isFavorite)}
-                />
+                <Info>
+                  <p className="detail-category">{data.placeType}</p>
+                  <p>| 평점</p>
+                  <img src={starIcon} alt="평점" />
+                  <p>{data.score}</p>
+                  <p className="detail-reviewcnt" onClick={()=>navigate(`/total-review/${data.placeId}`)}>({data.total})</p>
+                  <img
+                      src={data.isFavorite ? filledbookmarkIcon : bookmarkIcon}
+                      alt="Favorite"
+                      className="favorite-button"
+                      onClick={()=>toggleBookmark(data.placeId, data.isFavorite)}
+                  />
+                </Info>
+                <SquareBtn mode="review" />
             </SubTitleSection>
         </Container>
     )
