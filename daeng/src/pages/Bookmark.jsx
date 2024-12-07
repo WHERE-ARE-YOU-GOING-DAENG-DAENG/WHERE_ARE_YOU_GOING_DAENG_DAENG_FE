@@ -47,7 +47,7 @@ const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
 	const [center, setCenter] = useState(false);
 	const [page, setPage] = useState(0); //불러올 페이지 번호
-
+	const [isMapLoaded, setIsMapLoaded] = useState(false);
 	const favorites = useFavoriteStore((state) => state.favorites);
 	const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites);
 	const hasMore = useFavoriteStore((state) => state.hasMore);
@@ -81,7 +81,7 @@ const Bookmark = () => {
     return(
         <>  
             <Header label="즐겨찾기"/>
-            <Map data={favorites} removeUi={true} externalCenter={center}/>
+            <Map data={favorites} removeUi={true} externalCenter={center} onMapLoaded={setIsMapLoaded}/>
             <Footer/>
 			<OpenModalButton onClick={toggleModal}>
 				<img src={pinIcon} alt="즐겨찾기" />

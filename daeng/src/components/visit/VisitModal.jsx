@@ -161,7 +161,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
             });
             setStartTime(response.data.data.startTime);
             setEndTime(response.data.data.endTime);
-            console.log(response.data.data.startTime, response.data.data.endTime)
         }catch(error){
             if(error.response){
                 AlertDialog({
@@ -300,10 +299,20 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         }
         console.log(payload) //로그 삭제
         try{
-          await axiosInstance.post("https://www.daengdaeng-where.link/api/v1/visit", payload,{
+          const response = await axiosInstance.post("https://www.daengdaeng-where.link/api/v1/visit", payload,{
           withCredentials: true
         })
-        setReloadTrigger((prev) => !prev);
+          setReloadTrigger((prev) => !prev);
+        if(response.status === 200){
+            AlertDialog({
+              mode: "alert",
+              title: "방문일정등록",
+              text: "방문일정이 등록되었습니다.",
+              icon: "success",
+              confirmText: "확인",
+              onConfirm: () => console.log("방문일정 등록됨"),
+            });
+          }
         }catch(error){
             if (error.response && error.response.status === 409) {
                 AlertDialog({
@@ -379,7 +388,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
                         <ReactSelect id="pet-select" options={petOptions} onChange={handlePetChange} placeholder="댕댕이를 선택하세요" isMulti styles={selectStyles}/>
                     <InputAlert>*여러 마리 선택이 가능합니다.</InputAlert>
                     </SelectBox>
-                    <ConfirmBtn label="등록" onClick={handleSubmit}/>
+                    <ConfirmBtn label="추가" onClick={handleSubmit}/>
                 </Form>
             </Modal>
         </>
