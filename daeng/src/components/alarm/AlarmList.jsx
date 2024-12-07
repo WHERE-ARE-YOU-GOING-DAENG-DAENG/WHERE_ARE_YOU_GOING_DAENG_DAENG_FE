@@ -18,7 +18,7 @@ const NoAlarm = styled.span`
   margin-left: 40%;
   margin-top: 10%;
   font-weight: bold;
-`
+`;
 
 const NoNotification = styled.span`
   display: flex;
@@ -27,10 +27,10 @@ const NoNotification = styled.span`
   font-size: 15px;
   font-weight: bold;
   margin-top: 30px;
-  margin-right:30px;
-`
+  margin-right: 30px;
+`;
 
-function AlarmList() {
+function AlarmList({ activeTab }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,31 +42,37 @@ function AlarmList() {
   };
 
   useEffect(() => {
-    const fetchNotifications = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          "https://www.daengdaeng-where.link/api/v1/notifications",
-          {
-            withCredentials: true,
+    if (activeTab === "subscribe") {
+      const fetchNotifications = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(
+            "https://www.daengdaeng-where.link/api/v1/notifications",
+            {
+              withCredentials: true,
+            }
+          );
+          if (response.status === 200) {
+            console.log("알림 데이터:", response.data.data);
+            setNotifications(response.data.data);
+          } else {
+            throw new Error("알림 데이터를 불러오는 데 실패했습니다.");
           }
-        );
-        if (response.status === 200) {
-          console.log("알림 데이터:", response.data.data);
-          setNotifications(response.data.data);
-        } else {
-          throw new Error("알림 데이터를 불러오는 데 실패했습니다.");
+        } catch (err) {
+          console.error("오류 발생:", err.message);
+          setError(err.message || "알림 데이터를 가져오는 중 오류가 발생했습니다.");
+        } finally {
+          setLoading(false);
         }
-      } catch (err) {
-        console.error("오류 발생:", err.message);
-        setError(err.message || "알림 데이터를 가져오는 중 오류가 발생했습니다.");
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    fetchNotifications();
-  }, []);
+      fetchNotifications();
+    }
+  }, [activeTab]);
+
+  if (activeTab !== "subscribe") {
+    return null; 
+  }
 
   if (loading) {
     return <div>알림 데이터를 불러오는 중입니다...</div>;
@@ -87,7 +93,7 @@ function AlarmList() {
             message={notification.content}
             dateTime={`${notification.createdDate} ${notification.createdTime}`}
             notificationId={notification.notificationId}
-            onNotificationClose={handleNotificationClose} 
+            onNotificationClose={handleNotificationClose}
           />
         ))
       )}

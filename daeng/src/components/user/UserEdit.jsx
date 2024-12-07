@@ -26,6 +26,7 @@ function UserEdit() {
     setLoginData,
   } = useUserStore.getState();
   const [nickname, setNickname] = useState(storeNickname || '');
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false); 
   const [userData, setUserData] = useState({
     userId,
     email,
@@ -70,10 +71,10 @@ function UserEdit() {
       AlertDialog({
         mode: "alert",
         title: "닉네임 오류",
-        text: "특수문자와 자음/모음 단독 사용은 허용되지 않습니다.",
+        text: "닉네임에 특수문자나 자음/모음 단독 사용은 불가능합니다.",
         confirmText: "확인",
       });
-      return false;
+      return;
     }
 
     if (
@@ -115,12 +116,12 @@ function UserEdit() {
       AlertDialog({
         mode: "alert",
         title: "닉네임 오류",
-        text: "특수문자와 자음/모음 단독 사용은 허용되지 않습니다.",
+        text: "닉네임에 특수문자나 자음/모음 단독 사용은 불가능합니다.",
         confirmText: "확인",
       });
       return;
     }
-    
+
     try {
       const { data } = await axios.get(
         `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
@@ -130,7 +131,20 @@ function UserEdit() {
         }
       );
 
+      if (nickname === storeNickname) {
+        setIsNicknameChecked(true);
+        AlertDialog({
+          mode: "alert",
+          title: "닉네임 확인",
+          text: "현재 닉네임을 그대로 사용할 수 있습니다.",
+          confirmText: "확인",
+          icon: "success",
+        });
+        return;
+      }
+
       if (data.data.isDuplicate === false) {
+        setIsNicknameChecked(true);
         AlertDialog({
           mode: "alert",
           title: "닉네임 사용 가능",
@@ -139,6 +153,7 @@ function UserEdit() {
           icon: "success",
         });
       } else if (data.data.isDuplicate === true) {
+        setIsNicknameChecked(false);
         AlertDialog({
           mode: "alert",
           title: "닉네임 중복",
@@ -159,6 +174,17 @@ function UserEdit() {
   };
 
   const handleUpdate = async () => {
+
+    if (!isNicknameChecked) { 
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 중복 확인 필요",
+        text: "닉네임 중복 확인을 완료해 주세요.",
+        confirmText: "확인",
+      });
+      return ;
+    }
+
     if (!validateFields()) return;
 
     const genderCode = userData.gender === '남자' ? 'GND_01' : userData.gender === '여자' ? 'GND_02' : '';
@@ -233,7 +259,10 @@ function UserEdit() {
           type="text"
           placeholder="사용하실 닉네임을 입력해 주세요."
           value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
+          onChange={(e) => {
+            setNickname(e.target.value);
+            setIsNicknameChecked(false);
+          }}
         />
         <DuplicateBtn onClick={handleNicknameCheck}>중복확인</DuplicateBtn>
       </InputBox>

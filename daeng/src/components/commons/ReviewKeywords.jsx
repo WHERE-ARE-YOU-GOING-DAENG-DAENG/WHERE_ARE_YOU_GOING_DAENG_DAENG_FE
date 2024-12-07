@@ -26,13 +26,15 @@ const ReviewButton = styled.button`
   ${({ hasIcon }) =>
     hasIcon &&
     `
+    background-color: #FF69A9;
+    cursor:pointer;
     padding: 15px;
     font-size: 15px;
     img{
      width: 25px;
     }
     &:hover {
-      background-color: #FF77C0;
+      background-color: #FF8BBD;
       font-weight: bold;
     }
     @media (max-width: 554px) {
