@@ -22,7 +22,7 @@ Default.args = {
 // 반려동물이 없는 경우
 export const NoPets = Template.bind({});
 NoPets.args = {
-  area: '부산',
+  area: '부산 진구',
   nickname: '영희',
   pets: [],
 };
@@ -30,7 +30,7 @@ NoPets.args = {
 // 반려동물이 많은 경우
 export const ManyPets = Template.bind({});
 ManyPets.args = {
-  area: '대구',
+  area: '대구 중구',
   nickname: '민수',
   pets: [
     { id: 1, name: '강아지1', img: 'https://via.placeholder.com/50?text=Dog1' },

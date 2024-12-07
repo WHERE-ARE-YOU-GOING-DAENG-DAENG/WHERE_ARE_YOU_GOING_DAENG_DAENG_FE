@@ -18,14 +18,14 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 15px;
   &:hover {
-    opacity: 0.9;
+    opacity: 0.8;
   }
   img{
    width: 20px;
   }
   @media(max-width: 554px){
-    max-width: 165px;
-    font-size: 13px;
+    max-width: 150px;
+    font-size: 11.5px;
     padding: 8px 10px;
     img{
         width: 16px;
@@ -36,12 +36,12 @@ const SquareBtn = ({mode, onClick}) => {
     const modes = {
         visit: {
             label: "방문하고 싶어요!",
-            color: "#F9A9D4",
+            color: "#FF69A9",
             icon: visitIcon
         },
         review:{
             label: "땅따먹기 리뷰 작성하기",
-            color: "#FF4B98",
+            color: "#55D4FF",
             icon: reviewIcon
         }
     }

@@ -112,7 +112,7 @@ const PlaceTitle = ({ data, setData }) => {
         <Container>
             <TitleSection>
                 <h1>{data.name}</h1>
-                <SquareBtn mode="visit" />
+                <SquareBtn mode="visit" onClick={handleVisitListClick}/>
                 {/* <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={() => handleVisitListClick(data.placeId)}/> */}
             </TitleSection>
             <SubTitleSection>
