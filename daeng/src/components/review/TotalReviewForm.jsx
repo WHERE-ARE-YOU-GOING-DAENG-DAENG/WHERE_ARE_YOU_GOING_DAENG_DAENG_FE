@@ -10,6 +10,8 @@ import AiReviewSummary from './AIReview';
 import axios from 'axios';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import ReviewSlideshow from './ReviewSlideshow';
+import { useNavigate } from 'react-router-dom';
+import arrow from '../../assets/icons/arrow.svg'
 
 //리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
@@ -30,7 +32,8 @@ const ReviewPlaceTitle = styled.span`
   text-align: left;
 
   @media (max-width: 554px) {
-    font-size:18px;
+    font-size:23px;
+    margin-left:13px;
   }
 `
 const PreferenceContainer = styled.div`
@@ -49,7 +52,8 @@ const PreferenceContainer = styled.div`
 const ReviewSummaryContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center; 
+  align-items: center;
+  margin-top: 6%; 
 `;
 
 const TotalStarPoint = styled.span`
@@ -115,6 +119,7 @@ const UserStarImg = styled.img`
 const ReviewUserContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 5px;
 
   @media (max-width: 554px) {
   margin-top: 5px;
@@ -184,6 +189,12 @@ const PostDate = styled.span`
   }
 `
 
+const StyledArrow  = styled.img`
+  width: 15px;
+  margin-left: 10px;
+  cursor: pointer;
+`
+
 const ReviewContent = styled.span`
   font-size: 15px;
   display: block; 
@@ -203,6 +214,10 @@ const ReviewContent = styled.span`
 const UserSecondInfoContainer = styled.div`
   display: flex;
   flex-direction: row;  
+`
+const DescriptionContainer = styled.div`
+  display:flex;
+  flex-direction: row;
 `
 
 const VisitDate = styled.span`
@@ -248,6 +263,7 @@ const LastReview = styled.span`
 `
 const TotalReviewForm = () => {
   const { placeId } = useParams();
+  const navigate = useNavigate();
   const {
     reviews,
     total,
@@ -303,6 +319,13 @@ const TotalReviewForm = () => {
     }));
   };
 
+  const navigateToPlace = () => {
+    if (!placeId) {
+      return;
+    }
+    navigate(`/search/${placeId}`);
+  };
+
   // Intersection Observer로 무한 스크롤 구현
   const observeLastItem = useCallback(
     (node) => {
@@ -333,7 +356,10 @@ const TotalReviewForm = () => {
 
   return (
     <TotalReviewContainer>
-      <ReviewPlaceTitle>{placeName}</ReviewPlaceTitle>
+      <DescriptionContainer>
+        <ReviewPlaceTitle>{placeName}</ReviewPlaceTitle>
+        <StyledArrow src={arrow} onClick={navigateToPlace} />
+      </DescriptionContainer>
       <PreferenceContainer>
         {bestKeywords.map((keyword, index) => (
           <ReviewKeywords key={index} label={keyword} />
