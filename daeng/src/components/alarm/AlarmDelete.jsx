@@ -7,18 +7,10 @@ const CancelButton = styled.button`
   width: 130px;
   height: 54px;
   border-radius: 10px;
-  background-color:  #FDF2F8;
-  border: solid 1px #FF69A9;
   color: #FF69A9;;
   border: none;
   font-size: 20px;
   cursor: pointer;
-
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
 `;
 
 function AlarmDelete() {
@@ -35,6 +27,7 @@ function AlarmDelete() {
       );
 
       if (response.status === 200) {
+        console.log('성공적으로취소')
         AlertDialog({
           mode: "alert",
           title: "알림 취소",
