@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
+import useUserStore from "../../stores/userStore";
 import footerHome from "../../assets/icons/footer_home.svg";
 import footerHoverHome from "../../assets/icons/footer_hover_home.svg";
 import footerSearch from "../../assets/icons/footer_search.svg";
@@ -78,6 +79,7 @@ const items = [
 const Footer = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { userId } = useUserStore.getState();
 
     const [activeIndex, setActiveIndex] = useState(null);
     const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -88,17 +90,9 @@ const Footer = () => {
         setActiveIndex(currentIndex);
     }, [location.pathname]);
 
-    // 토큰 확인 함수
-    const checkTokensInCookie = () => {
-        const cookies = document.cookie.split("; ");
-        const authorizationToken = cookies.find((cookie) => cookie.startsWith("Authorization="));
-        const refreshToken = cookies.find((cookie) => cookie.startsWith("RefreshToken="));
-        return authorizationToken && refreshToken; 
-    };
-
     const handleNavigation = (path, index) => {
         if (path === "/my-page") {
-            if (checkTokensInCookie()) {
+            if (userId) {
                 navigate("/my-page");
             } else {
                 navigate("/login");
