@@ -1,7 +1,6 @@
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
 
-
 // Firebase 설정
 const firebaseConfig = {
   apiKey: "AIzaSyC2msjHQWn7iopQAoOIx9Vy86X7QMK-8HQ",
@@ -10,16 +9,20 @@ const firebaseConfig = {
   appId: "1:495128991810:web:9f1b33ff219866069935db"
 };
 
+// Firebase 초기화
+firebase.initializeApp(firebaseConfig);
 
+// Firebase Messaging 객체 초기화
 const messaging = firebase.messaging();
 
-// 백그라운드에서 메시지 처리
-messaging.onBackgroundMessage((payload) => {
-  console.log('백그라운드 메시지 수신:', payload);
+// 백그라운드에서 푸시 알림 수신
+messaging.onBackgroundMessage(function(payload) {
+  console.log('백그라운드에서 푸시 알림 받음:', payload);scrollY
+  const { title, body, icon } = payload.notification;
 
-  const { title, body, icon } = payload.notification || {};
-  self.registration.showNotification(title || '알림 제목 없음', {
-    body: body || '알림 내용 없음',
-    icon: icon || '/default-icon.png',
+  // 알림을 화면에 표시
+  self.registration.showNotification(title, {
+    body: body,
+    icon: icon, // 필요에 따라 아이콘 추가
   });
 });

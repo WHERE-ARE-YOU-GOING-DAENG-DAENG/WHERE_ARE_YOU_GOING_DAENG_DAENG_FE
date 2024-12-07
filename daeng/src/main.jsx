@@ -3,14 +3,6 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './style/font.css'
 import GlobalStyle from './style/GlobalStyles'
-import { requestNotificationPermission, setupForegroundMessageHandler } from './firebase/firebase.js'
-
-const initializeFirebase = async () => {
-  await requestNotificationPermission();
-  setupForegroundMessageHandler();
-}
-
-initializeFirebase();
 
 const naverSiteId = import.meta.env.VITE_NAVER_SITE_ID;
 
