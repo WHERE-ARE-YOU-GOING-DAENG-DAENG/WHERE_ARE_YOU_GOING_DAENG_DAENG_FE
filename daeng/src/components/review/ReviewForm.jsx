@@ -123,6 +123,7 @@ const StyledArrow = styled.img`
   color: #818181;
   margin-left: 10px;
   display: flex;
+  cursor: pointer;
 
   @media (max-width: 554px) {
     display: flex;
