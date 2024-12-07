@@ -26,12 +26,12 @@ const ToggleButton = styled.button`
   border: none;
   border-radius: 8px;
   color: #fff;
-  background-color: ${({ isSubscribed }) => (isSubscribed ? "#FFD7EB" : "#FF69A9")};
+  background-color: ${({ isSubscribed }) => (isSubscribed ? "#FFC1DA" : "#FF69A9")};
   cursor: pointer;
 
   &:hover {
     background-color: ${({ isSubscribed }) =>
-      isSubscribed ? "#FFE1F1" : "#FF4580"};
+      isSubscribed ? "#FFD7EB" : "#FF4580"};
   }
 `;
 
