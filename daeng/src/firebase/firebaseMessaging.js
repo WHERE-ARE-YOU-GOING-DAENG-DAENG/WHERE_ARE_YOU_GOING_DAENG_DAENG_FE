@@ -28,11 +28,11 @@ export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
     console.log("알림 내용: ", payload);
 
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-      image: payload.notification.image,
-      icon: payload.notification.icon,
+    const notificationData = {
+      title: payload.notification?.title || "알림 제목 없음",
+      body: payload.notification?.body || "알림 내용 없음",
+      icon: payload.notification?.icon || "/default-icon.png",
+      image: payload.notification?.image || "",
     };
 
     const notification = new Notification(notificationTitle, notificationOptions);
