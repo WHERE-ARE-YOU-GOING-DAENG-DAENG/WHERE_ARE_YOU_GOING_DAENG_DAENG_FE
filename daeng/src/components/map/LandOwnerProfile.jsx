@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import crown from "../../assets/icons/crown.svg";
+import rightarrow from "../../assets/icons/arrow.svg";
+import leftarrow from "../../assets/icons/reversearrow.svg";
 
 const Bubble = styled.div`
   position: relative;
   background-color: white;
-  border: 2px solid #ff69a9;
+  border: 5px solid #ff69a9;
   border-radius: 8px;
   padding: 10px 20px;
   color: #333;
@@ -16,7 +19,7 @@ const Bubble = styled.div`
     position: absolute;
     bottom: -12px;
     left: 20px;
-    border-width: 12px 12px 0;
+    border-width: 16px 16px 0;
     border-style: solid;
     border-color: white transparent;
     display: block;
@@ -26,9 +29,9 @@ const Bubble = styled.div`
   &::before {
     content: '';
     position: absolute;
-    bottom: -14px;
+    bottom: -19px;
     left: 18px;
-    border-width: 14px 14px 0;
+    border-width: 18px 18px 0;
     border-style: solid;
     border-color: #ff69a9 transparent;
     display: block;
@@ -59,13 +62,14 @@ const Pink = styled.p`
 const PetsWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: ${({ hasArrows }) => (hasArrows ? "space-between" : "center")}; /* Arrow 여부에 따라 정렬 */
   margin-top: 10px;
+  gap: 10px;
 `;
 
 const PetsContainer = styled.div`
-  overflow: hidden; /* 슬라이더 밖의 내용 숨기기 */
-  width: 180px; /* 3개씩 표시할 너비 (50px * 3 + 간격) */
+  overflow: hidden;
+  width: ${({ hasArrows }) => (hasArrows ? "180px" : "auto")};
 `;
 
 const PetList = styled.div`
@@ -91,7 +95,6 @@ const ArrowButton = styled.button`
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #ff69a9;
 
   &:disabled {
     color: #ccc;
@@ -113,16 +116,19 @@ const LandOwnerProfile = ({ area, nickname, pets }) => {
     setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   };
 
+  const hasArrows = pets.length > itemsPerPage; // Arrow 버튼 표시 여부
+
   return (
     <Bubble>
-      <Title>
-        <Pink>{area}</Pink> 땅주인 <p>{nickname}</p>님
-      </Title>
-      <PetsWrapper>
-        <ArrowButton onClick={handlePrev} disabled={currentIndex === 0}>
-          &lt;
-        </ArrowButton>
-        <PetsContainer>
+      <Title><Pink>{area}</Pink> 땅주인 </Title>
+      <Title><img src={crown} alt="왕관" /><p>{nickname}</p>님</Title>
+      <PetsWrapper hasArrows={hasArrows}>
+        {hasArrows && (
+          <ArrowButton onClick={handlePrev} disabled={currentIndex === 0}>
+            <img src={leftarrow} alt="왼쪽" />
+          </ArrowButton>
+        )}
+        <PetsContainer hasArrows={hasArrows}>
           <PetList translateX={-currentIndex * itemsPerPage * itemWidth}>
             {pets.map((pet) => (
               <PetCard key={pet.id}>
@@ -132,9 +138,11 @@ const LandOwnerProfile = ({ area, nickname, pets }) => {
             ))}
           </PetList>
         </PetsContainer>
-        <ArrowButton onClick={handleNext} disabled={currentIndex === maxIndex}>
-          &gt;
-        </ArrowButton>
+        {hasArrows && (
+          <ArrowButton onClick={handleNext} disabled={currentIndex === maxIndex}>
+            <img src={rightarrow} alt="오른쪽" />
+          </ArrowButton>
+        )}
       </PetsWrapper>
     </Bubble>
   );
