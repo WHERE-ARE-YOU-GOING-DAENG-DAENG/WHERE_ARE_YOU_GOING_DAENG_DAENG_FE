@@ -7,7 +7,8 @@ const ReviewPictureContainer = styled.div`
   align-items: center;
   overflow: hidden;
   width: 100%;
-  padding: 10px 0;
+  margin-left: 5px;
+  padding: 20px 0;
 `;
 
 const ReviewPictureWrapper = styled.div`
