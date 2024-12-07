@@ -52,6 +52,7 @@ const SubTitleSection = styled.div`
     margin-left: 2px;
     color: #808080;
     font-weight: normal;
+    cursor:pointer;
   }
 `
 
