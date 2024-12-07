@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { requestNotificationPermission } from '../../firebase/firebase';
+import { requestNotificationPermission } from '../../firebase/firebaseMessaging';
 import axios from 'axios';
 import { pushAgree } from '../../data/CommonCode';
 import AlertDialog from "../commons/SweetAlert";
