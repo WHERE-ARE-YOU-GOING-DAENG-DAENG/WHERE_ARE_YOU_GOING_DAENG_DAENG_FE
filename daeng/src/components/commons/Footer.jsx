@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
+import useUserStore from "../../stores/userStore";
 import footerHome from "../../assets/icons/footer_home.svg";
 import footerHoverHome from "../../assets/icons/footer_hover_home.svg";
 import footerSearch from "../../assets/icons/footer_search.svg";
@@ -11,6 +12,7 @@ import footerVisiting from "../../assets/icons/footer_visiting.svg";
 import footerHoverVisiting from "../../assets/icons/footer_hover_visiting.svg";
 import footerMypage from "../../assets/icons/footer_mypage.svg";
 import footerHoverMypage from "../../assets/icons/footer_hover_mypage.svg";
+import ScrollBtn from "./ScrollBtn";
 
 const FooterContainer = styled.div`
     display: flex;
@@ -78,6 +80,7 @@ const items = [
 const Footer = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { userId } = useUserStore.getState();
 
     const [activeIndex, setActiveIndex] = useState(null);
     const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -88,17 +91,9 @@ const Footer = () => {
         setActiveIndex(currentIndex);
     }, [location.pathname]);
 
-    // 토큰 확인 함수
-    const checkTokensInCookie = () => {
-        const cookies = document.cookie.split("; ");
-        const authorizationToken = cookies.find((cookie) => cookie.startsWith("Authorization="));
-        const refreshToken = cookies.find((cookie) => cookie.startsWith("RefreshToken="));
-        return authorizationToken && refreshToken; 
-    };
-
     const handleNavigation = (path, index) => {
         if (path === "/my-page") {
-            if (checkTokensInCookie()) {
+            if (userId) {
                 navigate("/my-page");
             } else {
                 navigate("/login");
@@ -110,28 +105,31 @@ const Footer = () => {
     };
 
     return (
-        <FooterContainer>
-            {items.map((item, index) => (
-                <FooterItem
-                    key={index}
-                    isActive={activeIndex === index}
-                    isHovered={hoveredIndex === index}
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                    onClick={() => handleNavigation(item.path, index)}
-                >
-                    <img
-                        src={
-                            hoveredIndex === index || activeIndex === index
-                                ? item.hoverIcon
-                                : item.icon
-                        }
-                        alt={item.label}
-                    />
-                    <span>{item.label}</span>
-                </FooterItem>
-            ))}
-        </FooterContainer>
+        <>
+            <ScrollBtn />
+            <FooterContainer>
+                {items.map((item, index) => (
+                    <FooterItem
+                        key={index}
+                        isActive={activeIndex === index}
+                        isHovered={hoveredIndex === index}
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                        onClick={() => handleNavigation(item.path, index)}
+                    >
+                        <img
+                            src={
+                                hoveredIndex === index || activeIndex === index
+                                    ? item.hoverIcon
+                                    : item.icon
+                            }
+                            alt={item.label}
+                        />
+                        <span>{item.label}</span>
+                    </FooterItem>
+                ))}
+            </FooterContainer>
+        </>
     );
 };
 

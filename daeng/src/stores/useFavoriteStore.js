@@ -62,10 +62,24 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 추가
   addFavorite: async (placeId) => {
     try {
-      await axiosInstance.post("/api/v1/favorites", { placeId },{
+      const response = await axiosInstance.post("/api/v1/favorites", { placeId },{
         withCredentials: true
       });
-      // await get().fetchFavorites();
+
+      if (response.status === 200) {
+      const newFavorite = response.data.data; // 서버가 추가된 즐겨찾기를 반환한다고 가정
+      set((state) => ({
+        favorites: [...state.favorites, newFavorite], // 상태 즉시 업데이트
+      }));
+        AlertDialog({
+          mode: "alert",
+          title: "즐겨찾기 추가",
+          text: "즐겨찾기 목록에 추가되었습니다.",
+          icon: "success",
+          confirmText: "확인",
+          onConfirm: () => console.log("즐겨찾기 추가됨"),
+        });
+      }
     } catch (error) {
       if(error.response){
         if (error.response.status === 401) {
@@ -91,13 +105,24 @@ const useFavoriteStore = create((set, get) => ({
   // 즐겨찾기 삭제
   removeFavorite: async (favoriteId) => {
     try {
-      await axiosInstance.delete(`/api/v1/favorites/${favoriteId}`,{
+      const response = await axiosInstance.delete(`/api/v1/favorites/${favoriteId}`,{
         withCredentials: true
       });
       // await get().fetchFavorites();
       set((state) => ({
         favorites: state.favorites.filter((fav) => fav.favoriteId !== favoriteId),
       }));
+
+      if(response.status === 200){
+        AlertDialog({
+          mode: "alert",
+          title: "즐겨찾기 삭제",
+          text: "즐겨찾기 목록에서 삭제되었습니다.",
+          icon: "success",
+          confirmText: "확인",
+          onConfirm: () => console.log("즐겨찾기 삭제됨"),
+        });
+      }
     } catch (error) {
       if(error.response){
         AlertDialog({
