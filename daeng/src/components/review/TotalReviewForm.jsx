@@ -261,7 +261,7 @@ const LastReview = styled.span`
   margin-top: 30px;
   font-weight: bold;
 `
-const TotalReviewForm = ({ review }) => {
+const TotalReviewForm = () => {
   const { placeId } = useParams();
   const navigate = useNavigate();
   const {
