@@ -20,7 +20,7 @@ const ScrollTop = styled.button`
   @media(max-width:554px){
     right: 10px;
     transform: translateZ(0);
-    bottom: 60px;
+    bottom: 68px;
     img{
       width: 45px;
     }
@@ -30,24 +30,22 @@ const ScrollTop = styled.button`
 const ScrollBtn = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // 스크롤 감지 핸들러
   const handleScroll = () => {
     if (window.scrollY > 300) {
-      setIsVisible(true); // 스크롤 위치가 300px 이상일 때 버튼 표시
+      setIsVisible(true);
     } else {
-      setIsVisible(false); // 그렇지 않으면 버튼 숨김
+      setIsVisible(false);
     }
   };
 
-  // 클릭 시 최상단으로 이동
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // 부드러운 스크롤
+      behavior: "smooth",
     });
   };
 
-  // 스크롤 이벤트 등록 및 해제
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {

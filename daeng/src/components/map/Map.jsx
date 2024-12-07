@@ -19,7 +19,7 @@ const MapContainer = styled.div`
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter, isLoading }) => {
+const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const isLoaded = useGoogleMapsLoader();
@@ -39,6 +39,7 @@ const Map = ({ data, removeUi, externalCenter, isLoading }) => {
         zoomControl: true,
       });
       setMap(googleMap);
+      onMapLoaded(true);
     }
   }, [isLoaded, map, center, removeUi]);
 
