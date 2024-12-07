@@ -26,10 +26,10 @@ const useVisitStore = create((set) => ({
         }else{
           AlertDialog({
             mode: "alert",
-            title: "방문예정목록 조회",
-            text: "방문예정목록 조회에 실패하였습니다.",
+            title: "방문일정목록 조회",
+            text: "방문일정목록 조회에 실패하였습니다.",
             confirmText: "확인",
-            onConfirm: () => console.log("방문예정 조회 실패"),
+            onConfirm: () => console.log("방문일정 조회 실패"),
         });
         }
   }
@@ -38,20 +38,31 @@ const useVisitStore = create((set) => ({
   // 방문예정 삭제
   removeVisit: async (visitId) => {
     try {
-      await axiosInstance.delete(`https://www.daengdaeng-where.link/api/v1/visit/${visitId}`,{
+      const response = await axiosInstance.delete(`https://www.daengdaeng-where.link/api/v1/visit/${visitId}`,{
         withCredentials: true,
     });
       set((state) => ({
         myVisits: state.myVisits.filter((v) => v.visitId !== visitId),
       }));
+      if(response.status === 200){
+        AlertDialog({
+          mode: "alert",
+          title: "방문일정취소",
+          text: "방문일정이 취소되었습니다.",
+          icon: "success",
+          confirmText: "확인",
+          onConfirm: () => console.log("방문일정 취소됨"),
+        });
+      }
+
     } catch (error) {
       if(error.response){
         AlertDialog({
         mode: "alert",
-        title: "방문예정삭제",
-        text: "방문예정 삭제에 실패하였습니다.",
+        title: "방문일정취소",
+        text: "방문일정 취소에 실패하였습니다.",
         confirmText: "확인",
-        onConfirm: () => console.log("방문예정 삭제 실패"),
+        onConfirm: () => console.log("방문일정 삭제 실패"),
     });
   }
     }
