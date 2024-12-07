@@ -12,6 +12,7 @@ import footerVisiting from "../../assets/icons/footer_visiting.svg";
 import footerHoverVisiting from "../../assets/icons/footer_hover_visiting.svg";
 import footerMypage from "../../assets/icons/footer_mypage.svg";
 import footerHoverMypage from "../../assets/icons/footer_hover_mypage.svg";
+import ScrollBtn from "./ScrollBtn";
 
 const FooterContainer = styled.div`
     display: flex;
@@ -104,28 +105,31 @@ const Footer = () => {
     };
 
     return (
-        <FooterContainer>
-            {items.map((item, index) => (
-                <FooterItem
-                    key={index}
-                    isActive={activeIndex === index}
-                    isHovered={hoveredIndex === index}
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                    onClick={() => handleNavigation(item.path, index)}
-                >
-                    <img
-                        src={
-                            hoveredIndex === index || activeIndex === index
-                                ? item.hoverIcon
-                                : item.icon
-                        }
-                        alt={item.label}
-                    />
-                    <span>{item.label}</span>
-                </FooterItem>
-            ))}
-        </FooterContainer>
+        <>
+            <ScrollBtn />
+            <FooterContainer>
+                {items.map((item, index) => (
+                    <FooterItem
+                        key={index}
+                        isActive={activeIndex === index}
+                        isHovered={hoveredIndex === index}
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                        onClick={() => handleNavigation(item.path, index)}
+                    >
+                        <img
+                            src={
+                                hoveredIndex === index || activeIndex === index
+                                    ? item.hoverIcon
+                                    : item.icon
+                            }
+                            alt={item.label}
+                        />
+                        <span>{item.label}</span>
+                    </FooterItem>
+                ))}
+            </FooterContainer>
+        </>
     );
 };
 
