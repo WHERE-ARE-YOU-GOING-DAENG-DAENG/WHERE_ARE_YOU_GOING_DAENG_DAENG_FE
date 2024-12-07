@@ -27,6 +27,7 @@ const TitleSection = styled.div`
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 3px;
+    text-align:left;
 
     @media(max-width: 554px){
     font-size: 20px;
@@ -87,7 +88,6 @@ const PlaceTitle = ({ data, setData }) => {
     };
 
     const handleVisitListClick = (placeId) => {
-      console.log(userId)
       if (userId) {
         navigate(`/visit-list/${placeId}`);
       } else {
