@@ -4,21 +4,18 @@ import { requestNotificationPermission } from '../../firebase/firebaseMessaging'
 import axios from 'axios';
 import { pushAgree } from '../../data/CommonCode';
 import AlertDialog from "../commons/SweetAlert";
-import AlarmDelete from './AlarmDelete';
 
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top: 43px;
 `;
 
 const AgreeButton = styled.button`
   width: 130px;
   height: 54px;
   border-radius: 10px;
-  background-color: #FF69A9;
   color: #FFFFFF;
   border: none;
   margin-right: 20%;
@@ -76,7 +73,6 @@ function AlarmButton() {
   return (
     <ButtonContainer>
       <AgreeButton onClick={handleNotificationRequest}>알림 받기</AgreeButton>
-      <AlarmDelete>알림 취소</AlarmDelete>
     </ButtonContainer>
   );
 }
