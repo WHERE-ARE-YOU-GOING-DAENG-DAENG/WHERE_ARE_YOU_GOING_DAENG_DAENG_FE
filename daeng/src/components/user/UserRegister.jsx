@@ -35,9 +35,9 @@ function UserRegister() {
     city: '',
     cityDetail: '',
     oauthProvider: providerFromCookie || '',
-    isNicknameChecked: false,
   });
 
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false); 
 
   const handleInputChange = async (field, value) => {
     setUserData((prev) => ({
@@ -62,7 +62,6 @@ function UserRegister() {
     }));
   };
 
-  //유효성 검사
   const validateFields = () => {
     if (!userData.nickname.trim()) {
       AlertDialog({
@@ -70,34 +69,21 @@ function UserRegister() {
         title: "닉네임 필요",
         text: "닉네임은 최소 1자 이상 작성해 주세요.",
         confirmText: "확인",
-        onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
       });
       return false;
     }
 
     const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
-    if (!userData.nickname || !nicknameRegex.test(userData.nickname)) {
+    if (!nicknameRegex.test(userData.nickname)) {
       AlertDialog({
         mode: "alert",
         title: "닉네임 오류",
-        text: "특수문자와 자음/모음 단독 사용은 허용되지 않습니다.",
+        text: "닉네임에 특수문자나 자음/모음 단독 사용은 불가능합니다.",
         confirmText: "확인",
-        onConfirm: () => console.log("닉네임 오류 경고 확인됨"),
       });
       return false;
     }
-
-    if (!userData.isNicknameChecked) {
-      AlertDialog({
-        mode: "alert",
-        title: "중복 확인 필요",
-        text: "닉네임 중복 확인을 완료해 주세요.",
-        confirmText: "확인",
-        onConfirm: () => console.log("닉네임 중복 확인 경고 확인됨"),
-      });
-      return false;
-    }
-
+  
     if (
       !userData.nickname ||
       !userData.gender ||
@@ -109,7 +95,6 @@ function UserRegister() {
         title: "입력 필요",
         text: "모든 필드를 작성해주세요.",
         confirmText: "확인",
-        onConfirm: () => console.log("모든 필드 작성 경고 확인됨"),
       });
       return false;
     }
@@ -118,10 +103,20 @@ function UserRegister() {
   };
 
   const handleConfirm = async () => {
-    if (!validateFields()) {
-      return; // 유효성 검사가 실패하면 종료
-    }
 
+    if (!isNicknameChecked) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 중복 확인 필요",
+        text: "닉네임 중복 확인을 완료해 주세요.",
+        confirmText: "확인",
+      });
+      return; 
+    }
+  
+    if (!validateFields()) {
+      return; 
+    }
   
     const payload = {
       nickname: userData.nickname,
@@ -132,7 +127,6 @@ function UserRegister() {
       oauthProvider: userData.oauthProvider,
     };
     try {
-        // 회원가입 요청
         const { status } = await axios.post(
           "https://www.daengdaeng-where.link/api/v1/signup",
           payload,
@@ -177,16 +171,15 @@ function UserRegister() {
       return;
     }
 
-    const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/; 
+    const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
     if (!nicknameRegex.test(userData.nickname)) {
       AlertDialog({
         mode: "alert",
         title: "닉네임 오류",
-        text: "특수문자와 자음/모음 단독 사용은 허용되지 않습니다.",
+        text: "닉네임에 특수문자나 자음/모음 단독 사용은 불가능합니다.",
         confirmText: "확인",
-        onConfirm: () => console.log("닉네임 유효성 오류 확인됨"),
       });
-      return;
+      return false;
     }
 
     try {
@@ -199,23 +192,21 @@ function UserRegister() {
       );
 
       if (data.data.isDuplicate === false) {
-        setUserData((prev) => ({ ...prev, isNicknameChecked: true }));
+        setIsNicknameChecked(true);
         AlertDialog({
           mode: "alert",
           title: "닉네임 사용 가능",
           text: "사용 가능한 닉네임입니다.",
           confirmText: "확인",
           icon: "success",
-          onConfirm: () => console.log("사용 가능한 닉네임 확인됨"),
         });
       } else if (data.data.isDuplicate === true) {
-        setUserData((prev) => ({ ...prev, isNicknameChecked: false }));
+        setIsNicknameChecked(false);
         AlertDialog({
           mode: "alert",
           title: "닉네임 중복",
           text: "사용 불가능한 닉네임입니다. 다른 닉네임을 입력해주세요.",
           confirmText: "확인",
-          onConfirm: () => console.log("닉네임 중복 확인됨"),
         });
       }
     } catch (error) {
@@ -225,7 +216,6 @@ function UserRegister() {
           title: "닉네임 확인 실패",
           text: error.response.data.message || "알 수 없는 오류가 발생했습니다.",
           confirmText: "확인",
-          onConfirm: () => console.log("서버 응답 오류 확인됨"),
         });
       }
     }
@@ -249,7 +239,10 @@ function UserRegister() {
           type="text"
           placeholder="사용하실 닉네임을 입력해 주세요."
           value={userData.nickname}
-          onChange={(e) => handleInputChange('nickname', e.target.value)}
+          onChange={(e) => {
+            handleInputChange('nickname', e.target.value);
+            setIsNicknameChecked(false);
+          }}
         />
         <DuplicateBtn onClick={handleNicknameCheck}>중복확인</DuplicateBtn>
       </InputBox>

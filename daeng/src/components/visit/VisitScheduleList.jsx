@@ -63,7 +63,7 @@ const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
           />
         ))): (<NoVisit>일주일간 등록된 방문예정이 없습니다.</NoVisit>)}
         <FixedButtonWrapper>
-          <ConfirmBtn label="등록" onClick={() => openModal()} />
+          <ConfirmBtn label="추가" onClick={() => openModal()} />
         </FixedButtonWrapper>
       </Container>
       
