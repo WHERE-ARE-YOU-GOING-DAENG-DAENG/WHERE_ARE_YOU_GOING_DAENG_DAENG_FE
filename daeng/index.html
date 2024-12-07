@@ -10,5 +10,13 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
+    <script type="text/javascript">
+      if(!wcs_add) var wcs_add = {};
+      wcs_add["wa"] = import.meta.env.VITE_NAVER_SITE_ID;
+      if(window.wcs) {
+      wcs_do();
+      }
+    </script>
   </body>
 </html>
