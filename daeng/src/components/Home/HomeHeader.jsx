@@ -10,9 +10,19 @@ function HomeHeader() {
   const { userId } = userStore(); 
 
   const handleAlarm = () => {
-    navigate("/alarm");
+    if (userId) {
+      navigate("/alarm");
+    } else {
+      AlertDialog({
+        mode: "alert",
+        title: "로그인 필요",
+        text: "알림 페이지에 접근하려면 로그인이 필요합니다.",
+        confirmText: "확인",
+        onConfirm: () => navigate("/login"), 
+      });
+    }
   };
-  
+
   const handleLogoClick = () => {
     window.location.reload();
   };
