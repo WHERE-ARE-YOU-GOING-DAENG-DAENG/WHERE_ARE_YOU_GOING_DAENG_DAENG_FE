@@ -1,12 +1,15 @@
+import { useState } from "react";
 import Footer from "../components/commons/Footer";
 import Header from "../components/commons/Header";
-import Map from "../components/map/Map";
+import HopscotchMap from "../components/map/HopscotchMap";
 
 const Hopscotch = () => {
+    const [isMapLoaded, setIsMapLoaded] = useState(false);
+
     return(
         <>
             <Header label="땅따먹기"/>
-            <Map removeUi={true}/>
+            <HopscotchMap removeUi={true} />
             <Footer />
         </>
     )
