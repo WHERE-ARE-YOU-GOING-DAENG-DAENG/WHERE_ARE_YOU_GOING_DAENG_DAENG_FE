@@ -99,14 +99,16 @@ const TotalUserInfoContainer = styled.div`
 `
 
 const UserStarImg = styled.img`
-  width:10px;
-  height:10px;
+  width:15px;
+  height:15px;
   display: flex;
   margin-top: 10px;
   margin-left: 3%;
 
   @media (max-width: 554px) {
     margin-top: 13px;
+    width:13px;
+    height:13px;
   }
 `
 
@@ -157,13 +159,13 @@ const UserId = styled.span`
   }
 `
 const PetType = styled.span`
-  font-size: 13px;
+  font-size: 15px;
   margin-left: 5px;
   color:#B3B3B3;
   margin-top:8px;
 
   @media (max-width: 554px) {
-    font-size: 9px;
+    font-size: 11px;
     margin-top:13px;
   }
 `
@@ -258,7 +260,7 @@ const TotalReviewForm = () => {
     sortedType,
   } = useTotalReviewStore();
 
-  const [placeName, setPlaceName] = useState("장소 정보가 없습니다.");
+  const [placeName, setPlaceName] = useState("");
   const [isExpanded, setIsExpanded] = useState({});
   const observerRef = useRef(null);
 
@@ -277,6 +279,8 @@ const TotalReviewForm = () => {
         });
     }
   }, [placeId]);
+
+  
 
   useEffect(() => {
     if (placeId) {
