@@ -4,12 +4,14 @@ import { useParams } from 'react-router-dom';
 import star from '../../assets/icons/star.svg';
 import notfillstar from "../../assets/icons/notfillstar.svg";
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
-import Sorting from '../../components/commons/Sorting';
+import ReviewSorting from './ReviewSorting';
 import useTotalReviewStore from '../../stores/UseTotalReviewStore';
 import AiReviewSummary from './AIReview';
 import axios from 'axios';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import ReviewSlideshow from './ReviewSlideshow';
+import { useNavigate } from 'react-router-dom';
+import arrow from '../../assets/icons/arrow.svg'
 
 //리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
@@ -30,7 +32,8 @@ const ReviewPlaceTitle = styled.span`
   text-align: left;
 
   @media (max-width: 554px) {
-    font-size:18px;
+    font-size:23px;
+    margin-left:13px;
   }
 `
 const PreferenceContainer = styled.div`
@@ -38,16 +41,19 @@ const PreferenceContainer = styled.div`
   margin-top: 3%;
   flex-direction: row;
   margin-bottom:3%;
+  gap:2px;
+
+  @media (max-width: 554px) {
+    flex-direction: column;
+    gap:5px;
+  }
 `
 
 const ReviewSummaryContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center; 
-
-  @media (max-width: 554px) {
-    margin-left:4%;
-  }
+  align-items: center;
+  margin-top: 6%; 
 `;
 
 const TotalStarPoint = styled.span`
@@ -55,7 +61,7 @@ const TotalStarPoint = styled.span`
   font-weight: bold;
   display: block;
   margin-left: 2%;
-  margin-right: 3%;
+  margin-right: 2%;
 
   @media (max-width: 554px) {
     font-size:13px;
@@ -66,11 +72,9 @@ const TotalReviewCount = styled.span`
   color: #B3B3B3;
   font-size:13px;
   display: block;
-  margin-right: 25%;
 
   @media (max-width: 554px) {
-    font-size: 11px;
-    margin-right:23%;
+    font-size: 12px;
   }
 `
 
@@ -85,29 +89,37 @@ const DivisionLine = styled.div`
   background-color: #E5E5E5;
   margin-right:40px;
   margin-top:5px;
+
+  @media (max-width: 554px) {
+    margin-left:15px;
+  }
 `;
 
 const TotalUserInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
+  
 `
 
 const UserStarImg = styled.img`
-  width:10px;
-  height:10px;
+  width:15px;
+  height:15px;
   display: flex;
   margin-top: 10px;
   margin-left: 3%;
 
   @media (max-width: 554px) {
     margin-top: 13px;
+    width:13px;
+    height:13px;
   }
 `
 
 const ReviewUserContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 5px;
 
   @media (max-width: 554px) {
   margin-top: 5px;
@@ -152,13 +164,13 @@ const UserId = styled.span`
   }
 `
 const PetType = styled.span`
-  font-size: 13px;
+  font-size: 15px;
   margin-left: 5px;
   color:#B3B3B3;
   margin-top:8px;
 
   @media (max-width: 554px) {
-    font-size: 9px;
+    font-size: 11px;
     margin-top:13px;
   }
 `
@@ -175,6 +187,12 @@ const PostDate = styled.span`
     margin-bottom:10px;
     margin-top: 11px;
   }
+`
+
+const StyledArrow  = styled.img`
+  width: 15px;
+  margin-left: 10px;
+  cursor: pointer;
 `
 
 const ReviewContent = styled.span`
@@ -196,6 +214,10 @@ const ReviewContent = styled.span`
 const UserSecondInfoContainer = styled.div`
   display: flex;
   flex-direction: row;  
+`
+const DescriptionContainer = styled.div`
+  display:flex;
+  flex-direction: row;
 `
 
 const VisitDate = styled.span`
@@ -241,6 +263,7 @@ const LastReview = styled.span`
 `
 const TotalReviewForm = () => {
   const { placeId } = useParams();
+  const navigate = useNavigate();
   const {
     reviews,
     total,
@@ -253,7 +276,7 @@ const TotalReviewForm = () => {
     sortedType,
   } = useTotalReviewStore();
 
-  const [placeName, setPlaceName] = useState("장소 정보가 없습니다.");
+  const [placeName, setPlaceName] = useState("");
   const [isExpanded, setIsExpanded] = useState({});
   const observerRef = useRef(null);
 
@@ -272,6 +295,8 @@ const TotalReviewForm = () => {
         });
     }
   }, [placeId]);
+
+  
 
   useEffect(() => {
     if (placeId) {
@@ -292,6 +317,13 @@ const TotalReviewForm = () => {
       ...prev,
       [reviewId]: !prev[reviewId],
     }));
+  };
+
+  const navigateToPlace = () => {
+    if (!placeId) {
+      return;
+    }
+    navigate(`/search/${placeId}`);
   };
 
   // Intersection Observer로 무한 스크롤 구현
@@ -324,7 +356,10 @@ const TotalReviewForm = () => {
 
   return (
     <TotalReviewContainer>
-      <ReviewPlaceTitle>{placeName}</ReviewPlaceTitle>
+      <DescriptionContainer>
+        <ReviewPlaceTitle>{placeName}</ReviewPlaceTitle>
+        <StyledArrow src={arrow} onClick={navigateToPlace} />
+      </DescriptionContainer>
       <PreferenceContainer>
         {bestKeywords.map((keyword, index) => (
           <ReviewKeywords key={index} label={keyword} />
@@ -342,8 +377,7 @@ const TotalReviewForm = () => {
           {score}/5
         </TotalStarPoint>
         <TotalReviewCount>총 {total}개</TotalReviewCount>
-        <Sorting
-          mode="list"
+        <ReviewSorting
           sortingOptions={['최신순', '평점 높은순', '평점 낮은순']}
           activeIndex={['LATEST', 'HIGH_SCORE', 'LOW_SCORE'].indexOf(sortedType)}
           onSortChange={handleSortChange}
@@ -378,7 +412,7 @@ const TotalReviewForm = () => {
                   </CommentContainer>
                   <UserSecondInfoContainer>
                   <PetType>
-                      {review.pets?.join(", ") || "등록된 반려동물이 없습니다."}
+                      {review.pets?.join(", ")}
                     </PetType>
                     {Array.from({ length: 5 }).map((_, idx) => (
                       <UserStarImg

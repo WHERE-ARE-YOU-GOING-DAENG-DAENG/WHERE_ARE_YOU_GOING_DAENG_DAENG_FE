@@ -80,7 +80,7 @@ function UserRegister() {
       AlertDialog({
         mode: "alert",
         title: "닉네임 오류",
-        text: "특수문자는 사용하실 수 없습니다.",
+        text: "특수문자와 자음/모음 단독 사용은 허용되지 않습니다.",
         confirmText: "확인",
         onConfirm: () => console.log("닉네임 오류 경고 확인됨"),
       });
@@ -173,6 +173,18 @@ function UserRegister() {
         text: "닉네임을 입력해 주세요.",
         confirmText: "확인",
         onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
+      });
+      return;
+    }
+
+    const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/; 
+    if (!nicknameRegex.test(userData.nickname)) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 오류",
+        text: "특수문자와 자음/모음 단독 사용은 허용되지 않습니다.",
+        confirmText: "확인",
+        onConfirm: () => console.log("닉네임 유효성 오류 확인됨"),
       });
       return;
     }
