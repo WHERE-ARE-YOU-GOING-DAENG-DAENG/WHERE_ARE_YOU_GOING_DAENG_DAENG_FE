@@ -46,6 +46,7 @@ const SubTitleSection = styled.div`
 
   img{
     margin: 0 5px;
+    width: 15px;
   }
 
   .detail-reviewcnt{
