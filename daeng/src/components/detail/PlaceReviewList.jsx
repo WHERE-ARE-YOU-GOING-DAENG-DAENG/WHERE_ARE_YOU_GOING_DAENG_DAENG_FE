@@ -270,9 +270,19 @@ const PlaceReviewList = ({ data }) => {
   };
 
   const handleWriteReviewClick = () => {
-    navigate(`/write-review/${placeId}`);
+    console.log(userId)
+    if (userId) {
+      navigate(`/write-review/${placeId}`);
+    } else {
+      AlertDialog({
+        mode: "alert",
+        title: "로그인 필요",
+        text: "리뷰를 작성하려면 로그인이 필요합니다.",
+        confirmText: "확인",
+      });
+    }
   };
-  
+
   
   return (
     <>

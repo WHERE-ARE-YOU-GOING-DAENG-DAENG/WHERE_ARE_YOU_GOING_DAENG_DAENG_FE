@@ -60,7 +60,7 @@ const SelectPlaceOptionContainer = styled.div`
   text-align: left;
   padding: 5%;
   border-radius:10px;
-  margin-right: 10px;
+
   background-color: #F7F7F7;
 
   @media (max-width: 554px) {
@@ -468,13 +468,11 @@ const handleFocus = (e) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         if (file.type.startsWith("video/")) {
-          // 동영상인 경우
           setPreviews((prev) => [
             ...prev,
             { type: "video", src: reader.result, name: file.name },
           ]);
         } else if (file.type.startsWith("image/")) {
-          // 이미지인 경우
           setPreviews((prev) => [
             ...prev,
             { type: "image", src: reader.result, name: file.name },
@@ -653,9 +651,14 @@ const handleFocus = (e) => {
         mode: "alert",
         title: "성공",
         text: `리뷰가 성공적으로 등록되었습니다.`,
-        confirmText: "닫기" ,
+        confirmText: "닫기",
         icon: "success",
-        onConfirm: () => navigate(`/total-review/${placeId}`),
+        onConfirm: () => {
+          navigate(`/total-review/${placeId}`);
+          setTimeout(() => {
+            window.location.reload(); 
+          }, ); 
+        },
       });
       
       console.log("리뷰 등록 성공:", response.data);
