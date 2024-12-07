@@ -70,7 +70,7 @@ function UserEdit() {
       AlertDialog({
         mode: "alert",
         title: "닉네임 오류",
-        text: "특수문자는 사용할 수 없습니다.",
+        text: "특수문자와 자음/모음 단독 사용은 허용되지 않습니다.",
         confirmText: "확인",
       });
       return false;
@@ -110,6 +110,17 @@ function UserEdit() {
       return;
     }
 
+    const nicknameRegex = /^[a-zA-Z0-9가-힣]+$/;
+    if (!nicknameRegex.test(nickname)) {
+      AlertDialog({
+        mode: "alert",
+        title: "닉네임 오류",
+        text: "특수문자와 자음/모음 단독 사용은 허용되지 않습니다.",
+        confirmText: "확인",
+      });
+      return;
+    }
+    
     try {
       const { data } = await axios.get(
         `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
