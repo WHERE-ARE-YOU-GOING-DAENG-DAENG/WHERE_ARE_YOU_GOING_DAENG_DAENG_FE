@@ -49,6 +49,7 @@ const RouteText = styled.span`
   margin-bottom: 40px;
   margin-left:10px;
   display : flex;
+  cursor: pointer;
 
   &:hover {
     color:  #ff69a9;

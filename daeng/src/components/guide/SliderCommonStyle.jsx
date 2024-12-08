@@ -24,7 +24,7 @@ export const Slide = styled.img`
 export const IndicatorWrapper = styled.div`
   position: absolute;
   bottom: 10px;
-  left: 91%;
+  left: 90%;
   transform: translateX(-50%);
   background-color: rgba(235, 235, 235, 0.8);
   padding: 5px 10px;
@@ -34,10 +34,36 @@ export const IndicatorWrapper = styled.div`
   color: #333;
 
   @media (max-width: 554px) {
-    left: 88%;
+    left: 86%;
     background-color: rgba(235, 235, 235, 0.8);
     padding: 4px 8px;
   }
 `;
 
+export const ArrowButton = styled.button`
+  position: absolute;
+  top: 50%;
+  ${({ direction }) => (direction === "left" ? "left: 10px;" : "right: 10px;")}
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
 
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  @media (max-width: 554px) {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+`;
