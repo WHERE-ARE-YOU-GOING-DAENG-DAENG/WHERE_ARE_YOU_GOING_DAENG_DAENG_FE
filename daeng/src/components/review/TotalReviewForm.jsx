@@ -192,7 +192,6 @@ const PostDate = styled.span`
   }
 `;
 
-
 const StyledArrow  = styled.img`
   width: 15px;
   margin-left: 10px;
@@ -208,12 +207,12 @@ const ReviewContent = styled.span`
   line-height: 1.5;  
   word-break: break-word;  
   margin-top: 30px;
-  margin-bottom:30px;
+  margin-bottom:10px;
 
   @media (max-width: 554px) {
     padding-left: 4%;
     font-size: 11px;
-    margin-bottom:30px;
+    margin-bottom:10px;
   }
 `;
 
