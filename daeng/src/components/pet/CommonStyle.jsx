@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import footerSearch from "../../assets/icons/footer_search.svg";
 import reviewDefaultImg from "../../assets/icons/reviewDefaultImg.svg";
 
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -94,8 +95,12 @@ export const BirthInput = styled.input`
   border-radius: 5px;
   padding: 10px;
   font-size: 14px;
-  color: #000; 
+  color: #000;
   cursor: pointer;
+
+  -webkit-appearance: none; 
+  -moz-appearance: none;   
+  appearance: none;         
 
   &::placeholder {
     color: #b3b3b3; 
@@ -106,6 +111,7 @@ export const BirthInput = styled.input`
     border-color: #ff69a9; 
   }
 `;
+
 
 export const BirthContainer = styled.div`
   margin-bottom: 20px;
