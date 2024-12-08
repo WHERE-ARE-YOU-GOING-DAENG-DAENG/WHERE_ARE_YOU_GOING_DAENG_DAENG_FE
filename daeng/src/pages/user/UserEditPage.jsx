@@ -22,8 +22,11 @@ const UserContainer = styled.div`
 
 const ImgLogo = styled.img`
   width: 300px;
-  margin-top: 50px;
-  margin-left: 25%;
+  margin: 30px auto 10px auto;
+
+    @media (max-width: 554px) {
+    width: 60%; 
+  }
 `;
 
 export default UserEditPage
