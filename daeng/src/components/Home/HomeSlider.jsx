@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import festival_banner1 from "../../assets/icons/festival_banner1.svg";
+import festival_banner from "../../assets/icons/festival_banner.jpg";
 import banner1 from '../../assets/icons/banner1.svg';
 import banner2 from "../../assets/icons/banner2.svg";
 import AlertDialog from "../commons/SweetAlert";
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 function HomeSlider() {
   const navigate = useNavigate();
-  const slides = [festival_banner1, banner1, banner2]; 
+  const slides = [festival_banner, banner1, banner2]; 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
