@@ -4,8 +4,10 @@ import festival_banner1 from "../../assets/icons/festival_banner1.svg";
 import banner1 from '../../assets/icons/banner1.svg';
 import banner2 from "../../assets/icons/banner2.svg";
 import AlertDialog from "../commons/SweetAlert";
+import { useNavigate } from "react-router-dom";
 
 function HomeSlider() {
+  const navigate = useNavigate();
   const slides = [festival_banner1, banner1, banner2]; 
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -20,20 +22,24 @@ function HomeSlider() {
     setCurrentSlide(index);
   };
 
-  const handleLaterUpdate = () => {
-    AlertDialog({
-      mode: 'alert',
-      title: '펫 페스티벌 안내',
-      text: '추후 업데이트 될 예정입니다.',
-      confirmText: '확인',
-    });
-  }
+  const handleSlideClick = (index) => {
+    if (slides[index] === banner1 || slides[index] === banner2) {
+      navigate("/how-to-guide"); 
+    } else {
+      AlertDialog({
+        mode: "alert",
+        title: "펫 페스티벌 안내",
+        text: "추후 업데이트 될 예정입니다.",
+        confirmText: "확인",
+      });
+    }
+  };
 
   return (
     <SliderWrapper>
       <SlidesContainer currentSlide={currentSlide}>
         {slides.map((slide, index) => (
-          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} onClick={handleLaterUpdate} />
+          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} onClick={() => handleSlideClick(index)}  />
         ))}
       </SlidesContainer>
       <DotsWrapper>
@@ -73,6 +79,7 @@ const Slide = styled.img`
   height: 100%;
   object-fit: contain;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 
 const DotsWrapper = styled.div`
