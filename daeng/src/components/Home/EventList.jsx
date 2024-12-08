@@ -107,7 +107,7 @@ const EventName = styled.h3`
 `;
 
 const EventPlace = styled.p`
-  font-size: 15px;
+  font-size: 14.5px;
   color: #808080;
   margin: 6px 0;
 
@@ -117,7 +117,7 @@ const EventPlace = styled.p`
 `;
 
 const EventAddress = styled.p`
-  font-size: 15px;
+  font-size: 14.5px;
   color: #808080;
   margin: 6px 0;
 
@@ -127,7 +127,7 @@ const EventAddress = styled.p`
 `;
 
 const EventDescriptionRow = styled.div`
-  font-size: 15px;
+  font-size: 14.5px;
   color: #808080;
   margin: 6px 0;
   display: flex;
@@ -139,7 +139,7 @@ const EventDescriptionRow = styled.div`
 `;
 
 const EventDescription = styled.span`
-  font-size: 15px;
+  font-size: 14.5px;
   color: #808080;
 
   @media (max-width: 554px) {
@@ -148,7 +148,7 @@ const EventDescription = styled.span`
 `;
 
 const EventDetailButton = styled.span`
-  font-size: 15px;
+  font-size: 14.5px;
   color: #808080;
   cursor: pointer;
   text-decoration: underline;
