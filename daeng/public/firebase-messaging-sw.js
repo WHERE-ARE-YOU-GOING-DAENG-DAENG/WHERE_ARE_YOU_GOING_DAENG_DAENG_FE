@@ -9,20 +9,18 @@ const firebaseConfig = {
   appId: "1:495128991810:web:9f1b33ff219866069935db"
 };
 
-// Firebase 초기화
 firebase.initializeApp(firebaseConfig);
 
-// Firebase Messaging 객체 초기화
 const messaging = firebase.messaging();
 
-// 백그라운드에서 푸시 알림 수신
 messaging.onBackgroundMessage(function(payload) {
-  console.log('백그라운드에서 푸시 알림 받음:', payload);scrollY
-  const { title, body, icon } = payload.notification;
+  console.log('백그라운드에서 푸시 알림 받음:', payload);
 
-  // 알림을 화면에 표시
+  const { title, body } = payload.notification;
+  const icon = payload.notification.icon || '/alarm_logo.png';
+
   self.registration.showNotification(title, {
     body: body,
-    icon: icon, // 필요에 따라 아이콘 추가
+    icon: icon,
   });
 });
