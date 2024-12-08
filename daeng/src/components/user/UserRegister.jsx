@@ -401,15 +401,15 @@ const SelectBox = styled.select`
   flex: 1;
   height: 44px;
   border-radius: 5px;
-  padding: 10px;
+  padding: 0;
   margin-right: 18px;
   margin-bottom: 10px;
   border: 0.5px solid #e4e4e4;
   font-size: 14px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  text-align: center;
+  text-align-last: center;
+  background-color: white;
+  color: black;
+  line-height: 44px;
 
   &:focus {
     border-color: #ff69a9;
