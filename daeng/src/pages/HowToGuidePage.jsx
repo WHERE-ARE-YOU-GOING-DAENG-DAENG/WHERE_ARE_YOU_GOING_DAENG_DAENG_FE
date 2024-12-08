@@ -37,6 +37,7 @@ const Container = styled.div`
   flex: 1;
   margin-left: 5%;
   margin-right: 5%;
+  margin-bottom: 15%;
 
   @media (max-width: 554px) {
     margin-bottom: 20%;
