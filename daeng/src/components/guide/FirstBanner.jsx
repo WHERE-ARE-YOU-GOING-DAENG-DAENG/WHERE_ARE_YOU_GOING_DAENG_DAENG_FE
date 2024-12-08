@@ -6,12 +6,12 @@ import {
   IndicatorWrapper,
   ArrowButton,
 } from "./SliderCommonStyle";
-import recommend_banner1 from "../../assets/icons/banner/recommend_banner1.svg";
-import recommend_banner2 from "../../assets/icons/banner/recommend_banner2.svg";
-import recommend_banner3 from "../../assets/icons/banner/recommend_banner3.svg";
+import recommend_banner1 from "../../assets/icons/banner/recommend_banner1.jpg";
+import recommend_banner2 from "../../assets/icons/banner/recommend_banner2.jpg";
+import recommend_banner3 from "../../assets/icons/banner/recommend_banner3.jpg";
 
 function FirstBanner() {
-  const banners = [recommend_banner1, recommend_banner2, recommend_banner3];
+  const banners = [recommend_banner1, recommend_banner3, recommend_banner2];
   const [currentBanner, setCurrentBanner] = useState(0);
 
   const handleNext = () => {
