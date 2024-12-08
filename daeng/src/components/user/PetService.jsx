@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import mypageservice from '../../assets/icons/mypageservice.svg'
+import { useNavigate } from 'react-router-dom'; 
 
 const PetServiceContainer = styled.div`
   display: flex;
@@ -42,15 +43,20 @@ const Page = styled.div`
 `
 
 function PetService() {
+  const navigate = useNavigate();
+
+  const handleNavigateToGuide= () => {
+    navigate('/how-to-guide'); 
+  };
   return (
     <PetServiceContainer>
       <PageTitle>댕댕어디가 서비스 관리</PageTitle>
       <SubContainer>
         <PetServiceImg src={mypageservice} />
-        <Page>How-To Guides</Page>
+        <Page onClick={handleNavigateToGuide}>How-To Guides</Page>
       </SubContainer>
     </PetServiceContainer>
   )
-} //2차 작업 때 들어갈 페이지
+} 
 
 export default PetService;

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import footerSearch from "../../assets/icons/footer_search.svg";
 import reviewDefaultImg from "../../assets/icons/reviewDefaultImg.svg";
 
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -47,6 +48,7 @@ export const PetNameInput = styled.input`
     outline: none;
     border-color: #ff69a9; 
   }
+
 `;
 
 export const InputAlert = styled.p`
@@ -89,21 +91,36 @@ export const PetTypeContainer = styled.div`
 export const BirthInput = styled.input`
   width: 96%;
   height: 44px;
-  margin-right: 10%;
   border: 0.5px solid #e4e4e4;
   border-radius: 5px;
   padding: 10px;
   font-size: 14px;
-  color: #000; 
+  color: #000;
+  background-color: #FFFFFF;
   cursor: pointer;
+  margin-right: 20px;
+
+  -webkit-appearance: none; 
+  -moz-appearance: none;
+  appearance: none;
+
+  text-align: left; 
+  padding-left: 10px; 
 
   &::placeholder {
-    color: #b3b3b3; 
+    color: #b3b3b3;
   }
 
   &:focus {
     outline: none;
-    border-color: #ff69a9; 
+    border-color: #ff69a9;
+  }
+
+  @media (max-width: 554px) {
+    font-size: 12px; 
+    height: 40px;    
+    padding-right: 66%;  
+    text-align: left;
   }
 `;
 
