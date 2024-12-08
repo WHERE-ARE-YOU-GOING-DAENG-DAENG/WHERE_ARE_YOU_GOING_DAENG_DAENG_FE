@@ -9,6 +9,10 @@ const ReviewPictureContainer = styled.div`
   width: 100%;
   margin-left: 5px;
   padding: 20px 0;
+
+  @media (max-width: 554px) {
+    margin-left: 10px;
+  }
 `;
 
 const ReviewPictureWrapper = styled.div`
