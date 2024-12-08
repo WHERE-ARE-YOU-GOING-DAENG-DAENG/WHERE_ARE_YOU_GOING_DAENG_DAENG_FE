@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import festival_banner from "../../assets/icons/festival_banner.jpg";
-import banner1 from '../../assets/icons/banner1.svg';
-import banner2 from "../../assets/icons/banner2.svg";
+import banner1 from '../../assets/icons/banner1.jpg';
+import banner2 from "../../assets/icons/banner2.jpg";
 import AlertDialog from "../commons/SweetAlert";
 import { useNavigate } from "react-router-dom";
 
@@ -96,8 +96,8 @@ const DotsWrapper = styled.div`
 `;
 
 const Dot = styled.div`
-  width: 5px;
-  height: 5px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background-color: ${({ isActive }) => (isActive ? "#ff69b4" : "#D0D0D8")};
   cursor: pointer;
