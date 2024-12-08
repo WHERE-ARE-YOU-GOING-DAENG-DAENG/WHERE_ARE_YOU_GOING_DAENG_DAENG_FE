@@ -65,6 +65,7 @@ const TotalStarPoint = styled.span`
 
   @media (max-width: 554px) {
     font-size:13px;
+    margin-left: 2px;
   }
 `
 
@@ -82,6 +83,10 @@ const StarImg = styled.img`
   width: 15px; 
   height: 15px; 
   border-radius:100px;
+
+  @media (max-width: 554px) {
+    margin-left: 10px;
+  }
 `
 
 const DivisionLine = styled.div`
@@ -106,13 +111,10 @@ const UserStarImg = styled.img`
   width:15px;
   height:15px;
   display: flex;
-  margin-top: 10px;
-  margin-left: 3%;
-
+  margin-top: 5px;
   @media (max-width: 554px) {
-    margin-top: 13px;
-    width:13px;
-    height:13px;
+    width: 13px;
+    margin-top: 0px;
   }
 `
 
@@ -123,6 +125,7 @@ const ReviewUserContainer = styled.div`
 
   @media (max-width: 554px) {
   margin-top: 5px;
+  margin-left: 10px;
   }
 `
 
@@ -141,25 +144,25 @@ const UserPhoto = styled.img`
   margin-right: 3%;
   }
 `
-
 const CommentContainer = styled.div`
+  width: 380px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   margin-top: 5px;
 
   @media (max-width: 554px) {
-    margin-top: -2px;
+    width: 70vw;
   }
 `
-
 const UserId = styled.span`
-  font-size:18px;
+  font-size:20px;
   font-weight: bold;
-  margin-right: 3px;
+  margin-right: 10px;
   margin-top: 5px;
 
   @media (max-width: 554px) {
-    font-size: 13px;
+    font-size: 15px;
     margin-top: 10px;
   }
 `
@@ -176,18 +179,18 @@ const PetType = styled.span`
 `
 
 const PostDate = styled.span`
-  font-size: 14px;
+  font-size: 13px;
   color: #B3B3B3;
-  margin-left:10px;
   margin-top: 8px;
   margin-bottom: 3px;
 
   @media (max-width: 554px) {
     font-size: 11px;
+    margin-top: 6px;
+    margin-right: 20px;
     margin-bottom:10px;
-    margin-top: 11px;
   }
-`
+`;
 
 const StyledArrow  = styled.img`
   width: 15px;
@@ -203,11 +206,13 @@ const ReviewContent = styled.span`
   text-align: justify;  
   line-height: 1.5;  
   word-break: break-word;  
-  margin-top: 20px;
+  margin-top: 30px;
+  margin-bottom:10px;
 
   @media (max-width: 554px) {
-    padding-left: 1%;
+    padding-left: 4%;
     font-size: 11px;
+    margin-bottom:10px;
   }
 `;
 
@@ -215,13 +220,14 @@ const UserSecondInfoContainer = styled.div`
   display: flex;
   flex-direction: row;  
 `
+
 const DescriptionContainer = styled.div`
   display:flex;
   flex-direction: row;
 `
 
 const VisitDate = styled.span`
-  font-size: 15px;
+  font-size: 13px;
   color: #B3B3B3;
   display: flex;
   flex-direction: flex-start;
@@ -232,7 +238,7 @@ const VisitDate = styled.span`
     font-size: 11px;
     margin-top:4%;
     margin-bottom:5px;
-    margin-left:1%;
+    margin-left:4%;
   }
 `
 
@@ -370,9 +376,7 @@ const TotalReviewForm = () => {
       <AiReviewSummary placeId={placeId} />
   
       <ReviewSummaryContainer>
-        <div>
           <StarImg src={star} />
-        </div>
         <TotalStarPoint>
           {score}/5
         </TotalStarPoint>
@@ -404,16 +408,14 @@ const TotalReviewForm = () => {
                   alt="반려동물 이미지"
                 />
                 <TotalUserInfoContainer>
-                  <CommentContainer>
-                    <UserId>{review.nickname}</UserId>
-                    <PostDate>
-                      {new Date(review.createdAt).toLocaleDateString()}
-                    </PostDate>
-                  </CommentContainer>
+                <CommentContainer>
+  <div>
+    <UserId>{review.nickname}</UserId>
+    <PetType>{review.pets?.join(", ")}</PetType>
+  </div>
+  <PostDate>{new Date(review.createdAt).toLocaleDateString()}</PostDate>
+</CommentContainer>
                   <UserSecondInfoContainer>
-                  <PetType>
-                      {review.pets?.join(", ")}
-                    </PetType>
                     {Array.from({ length: 5 }).map((_, idx) => (
                       <UserStarImg
                         key={idx}

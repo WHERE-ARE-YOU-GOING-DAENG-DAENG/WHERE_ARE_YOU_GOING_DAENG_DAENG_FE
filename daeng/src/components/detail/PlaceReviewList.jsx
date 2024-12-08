@@ -38,6 +38,7 @@ const ReviewHeader = styled.div`
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 10px;
+  color: black;
 
   h2 {
     font-size: 20px;
