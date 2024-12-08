@@ -11,9 +11,9 @@ const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({
-   server: {
- https: {
- key: fs.readFileSync(path.resolve(__dirname, 'localhost+2-key.pem')),
+  server: {
+https: {
+key: fs.readFileSync(path.resolve(__dirname, 'localhost+2-key.pem')),
 cert: fs.readFileSync(path.resolve(__dirname, 'localhost+2.pem')),
     },
   },
