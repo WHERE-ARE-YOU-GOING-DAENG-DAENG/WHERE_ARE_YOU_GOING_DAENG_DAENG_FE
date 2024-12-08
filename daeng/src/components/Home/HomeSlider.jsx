@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import festival_banner1 from "../../assets/icons/festival_banner1.svg";
+import banner1 from '../../assets/icons/banner1.svg';
+import banner2 from "../../assets/icons/banner2.svg";
 import AlertDialog from "../commons/SweetAlert";
 
 function HomeSlider() {
-  const slides = [festival_banner1]; // 단일 배너
+  const slides = [festival_banner1, banner1, banner2]; 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -87,10 +89,10 @@ const DotsWrapper = styled.div`
 `;
 
 const Dot = styled.div`
-  width: 10px;
-  height: 10px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background-color: ${({ isActive }) => (isActive ? "#ff69b4" : "#ffffff")};
+  background-color: ${({ isActive }) => (isActive ? "#ff69b4" : "#D0D0D8")};
   cursor: pointer;
   transition: background-color 0.3s;
 
