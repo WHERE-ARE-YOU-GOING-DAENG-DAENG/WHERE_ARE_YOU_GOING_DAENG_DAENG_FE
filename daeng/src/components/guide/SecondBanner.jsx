@@ -6,12 +6,12 @@ import {
   IndicatorWrapper,
   ArrowButton,
 } from "./SliderCommonStyle";
-import visit_banner1 from '../../assets/icons/banner/visit_banner1.svg'
-import visit_banner2 from '../../assets/icons/banner/visit_banner2.svg'
-import visit_banner3 from '../../assets/icons/banner/visit_banner3.svg'
-import visit_banner4 from '../../assets/icons/banner/visit_banner4.svg'
-import visit_banner5 from '../../assets/icons/banner/visit_banner5.svg'
-import visit_banner6 from '../../assets/icons/banner/visit_banner6.svg'
+import visit_banner1 from '../../assets/icons/banner/visit_banner1.jpg'
+import visit_banner2 from '../../assets/icons/banner/visit_banner2.jpg'
+import visit_banner3 from '../../assets/icons/banner/visit_banner3.jpg'
+import visit_banner4 from '../../assets/icons/banner/visit_banner4.jpg'
+import visit_banner5 from '../../assets/icons/banner/visit_banner5.jpg'
+import visit_banner6 from '../../assets/icons/banner/visit_banner6.jpg'
 
 function SecondBanner() {
   const banners = [
