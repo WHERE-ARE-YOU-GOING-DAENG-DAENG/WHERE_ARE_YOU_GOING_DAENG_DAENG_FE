@@ -7,7 +7,12 @@ const ReviewPictureContainer = styled.div`
   align-items: center;
   overflow: hidden;
   width: 100%;
-  padding: 10px 0;
+  margin-left: 5px;
+  padding: 20px 0;
+
+  @media (max-width: 554px) {
+    margin-left: 10px;
+  }
 `;
 
 const ReviewPictureWrapper = styled.div`

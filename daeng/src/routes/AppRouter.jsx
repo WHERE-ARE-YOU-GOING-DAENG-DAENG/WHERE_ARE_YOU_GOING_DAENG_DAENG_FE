@@ -23,6 +23,7 @@ import PlaceVisitList from '../pages/visit/PlaceVisitList';
 import Error from "../pages/Error";
 import { setupAxiosInterceptors } from '../services/axiosInstance';
 import EventPage from '../pages/user/EventPage';
+import HowToGuidePage from '../pages/HowToGuidePage';
 
 // 네이버 애널리틱스 페이지뷰 트래킹 함수
 const trackPageView = () => {
@@ -74,6 +75,7 @@ const AppRoutes = () => {
         <Route path="/write-review/:placeId" element={<WriteReviewPage />} />
         <Route path="/visit-list" element={<MyVisitList />} />
         <Route path="/visit-list/:id" element={<PlaceVisitList />} />
+        <Route path="/how-to-guide" element={<HowToGuidePage />} />
         <Route path="/error" element={<Error />} />
         <Route path="*" element={<Error />} />
       </Routes>
