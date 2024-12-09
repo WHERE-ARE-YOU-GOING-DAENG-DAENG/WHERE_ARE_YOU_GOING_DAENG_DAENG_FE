@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import kakaoLoginBtn from "../assets/icons/kakaoLoginBtn.svg";
 import loginGoogle from "../assets/icons/login_google.svg";
 import loginPuppy from "../assets/icons/login_puppy.svg";
+import loginDangdang from "../assets/icons/login_dangdang.svg"; // 추가
 
 const Login = () => {
     const navigate = useNavigate();
@@ -18,14 +19,13 @@ const Login = () => {
     const handleGoogleLogin = () => {
         location.href = "https://www.daengdaeng-where.link/oauth2/authorization/google";
     };
-    
 
     return (
         <Container>
-            <TitleContainer>
-                <MainTitle>댕댕어디가</MainTitle>
-                <SubTitle>와 함께</SubTitle>
-            </TitleContainer>
+            <LogoContainer>
+                <LogoImage src={loginDangdang} alt="댕댕어디가 로고" />
+                <LogoText>와 함께</LogoText>
+            </LogoContainer>
             <Subtitle>반려동물 동반 가능 시설을 찾아봐요!</Subtitle>
             <Image src={loginPuppy} alt="강아지 이미지" />
             <DividerContainer>
@@ -68,38 +68,35 @@ const Container = styled.div`
     }
 `;
 
-const TitleContainer = styled.div`
+const LogoContainer = styled.div`
     display: flex;
-    align-items: baseline;
-    margin-bottom: 10px;
+    align-items: center;
+    justify-content: center;
     margin-top: 70px;
+    margin-bottom: 10px;
 
     @media (max-width: 554px) {
         margin-top: 50px;
-        margin-bottom: 8px;
     }
 `;
 
-const MainTitle = styled.span`
-    font-family: "RixInooAriDuri", sans-serif;
-    font-size: 60px;
-    color: #ff4b98;
-    font-weight: normal;
-    margin-right: 1px;
+const LogoImage = styled.img`
+    width: 250px;
 
     @media (max-width: 554px) {
-        font-size: 11vw;
+        width: 60%;
     }
 `;
 
-const SubTitle = styled.span`
+const LogoText = styled.span`
     font-family: "Pretendard", sans-serif;
     font-size: 28px;
     font-weight: bold;
     color: #000000;
+    margin-left: 5px;
 
     @media (max-width: 554px) {
-        font-size: 5.9vw;
+        font-size: 5.5vw;
     }
 `;
 

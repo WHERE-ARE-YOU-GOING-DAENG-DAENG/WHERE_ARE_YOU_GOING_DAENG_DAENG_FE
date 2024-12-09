@@ -174,7 +174,12 @@ const PetEditButton = styled.button`
   background-color: #D9D9D9;
   border: none;
   position: absolute;
+  color: black;
   margin-left: 75%;
+
+  @media (max-width: 554px) {
+    margin-left: 60%;
+  }
 `
 
 function PetContainer() {

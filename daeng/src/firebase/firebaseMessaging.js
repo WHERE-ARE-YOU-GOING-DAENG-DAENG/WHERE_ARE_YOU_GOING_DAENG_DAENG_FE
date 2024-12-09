@@ -23,7 +23,7 @@ export const requestNotificationPermission = async () => {
   }
 };
 
-// 포그라운드에서 푸시 알림을 수신하고 처리하는 핸들러
+// 포그라운드에서 푸시 알림을 수신하고 처리
 export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
     console.log("알림 내용: ", payload);
@@ -32,14 +32,14 @@ export const setupOnMessageHandler = () => {
     const notificationOptions = {
       body: payload.notification.body,
       image: payload.notification.image,
-      icon: payload.notification.icon,
+      icon: payload.notification.icon || '/alarm-logo.png',  // 나중에 라이브러리로 처리할까 고민중..
     };
 
     const notification = new Notification(notificationTitle, notificationOptions);
 
     notification.onclick = function (event) {
       event.preventDefault(); 
-      console.log("notification clicked!");
+      console.log("알림 클릭");
       notification.close(); 
     };
   });
