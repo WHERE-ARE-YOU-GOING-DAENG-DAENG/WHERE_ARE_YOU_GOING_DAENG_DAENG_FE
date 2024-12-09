@@ -52,7 +52,7 @@ const KeywordTitle = styled.h3`
   display: flex;
   align-items: center;
   text-align: left;
-  margin: 15px 30px;
+  margin: 10px 30px;
   font-size: 20px;
   font-weight: 600;
   color: black;
