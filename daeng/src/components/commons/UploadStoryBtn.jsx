@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import UploadStoryBtn_DefaultImg from "../../assets/icons/UploadStoryBtn_DefaultImg.svg";
 import UploadStoryBtnCrown from "../../assets/icons/UploadStoryBtn_crown.svg";
 
-const UploadStoryBtn = ({ location, description, isPinkBorder, imageSrc }) => {
+const UploadStoryBtn = ({ location, nickname, isPinkBorder, imageSrc }) => {
   return (
     <ButtonContainer>
       <ImageContainer isPinkBorder={isPinkBorder}>
@@ -14,7 +14,7 @@ const UploadStoryBtn = ({ location, description, isPinkBorder, imageSrc }) => {
       </ImageContainer>
       <TextContainer>
         <LocationText>{location}</LocationText>
-        <DescriptionText>{description}</DescriptionText>
+        <NicknameText>{nickname}</NicknameText>
       </TextContainer>
     </ButtonContainer>
   );
@@ -22,7 +22,7 @@ const UploadStoryBtn = ({ location, description, isPinkBorder, imageSrc }) => {
 
 UploadStoryBtn.propTypes = {
   location: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  nickname: PropTypes.string.isRequired,
   isPinkBorder: PropTypes.bool,
   imageSrc: PropTypes.string,
 };
@@ -48,7 +48,7 @@ const ImageContainer = styled.div`
   border-radius: 50%;
   background: ${({ isPinkBorder }) =>
     isPinkBorder
-      ? "linear-gradient(0deg, #FF4B98 0%, #E7B1FF 52%, #FF4B98 100%)"
+      ? "linear-gradient(45deg, #FF4B98 0%, #E7B1FF 52%, #FF4B98 100%)"
       : "#d9d9d9"};
   display: flex;
   align-items: center;
@@ -57,10 +57,10 @@ const ImageContainer = styled.div`
 `;
 
 const ProfileImageWrapper = styled.div`
-  width: 77px;
-  height: 77px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
-  border: 2px solid white;
+  border: 1.5px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,15 +68,15 @@ const ProfileImageWrapper = styled.div`
 `;
 
 const ProfileImage = styled.img`
-  width: 75px;
-  height: 75px;
+  width: 74px;
+  height: 74px;
   border-radius: 50%;
 `;
 
 const CrownIcon = styled.img`
   position: absolute;
-  top: -14px;
-  right: 15px;
+  top: -12px;
+  right: 14.5px;
   width: 25px;
   height: auto;
 `;
@@ -93,7 +93,7 @@ const LocationText = styled.p`
   color: black;
 `;
 
-const DescriptionText = styled.p`
+const NicknameText = styled.p`
   font-size: 13px;
   font-weight: bold;
   margin: 0;
