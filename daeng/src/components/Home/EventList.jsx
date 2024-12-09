@@ -112,7 +112,7 @@ const EventPlace = styled.p`
   margin: 6px 0;
 
   @media (max-width: 554px) {
-    font-size: 13px;
+    font-size: 12px;
   }
 `;
 
@@ -122,7 +122,7 @@ const EventAddress = styled.p`
   margin: 6px 0;
 
   @media (max-width: 554px) {
-    font-size: 13px;
+    font-size: 12px;
   }
 `;
 
@@ -134,7 +134,7 @@ const EventDescriptionRow = styled.div`
   align-items: center;
 
   @media (max-width: 554px) {
-    font-size: 13px;
+    font-size: 12px;
   }
 `;
 
@@ -143,7 +143,7 @@ const EventDescription = styled.span`
   color: #808080;
 
   @media (max-width: 554px) {
-    font-size: 13px;
+    font-size: 12px;
   }
 `;
 
@@ -155,7 +155,7 @@ const EventDetailButton = styled.span`
   margin-left: 5px;
 
   @media (max-width: 554px) {
-    font-size: 13px;
+    font-size: 12px;
   }
 `;
 
@@ -165,7 +165,7 @@ const EventDate = styled.p`
   margin: 6px 0;
 
   @media (max-width: 554px) {
-    font-size: 13px;
+    font-size: 12px;
   }
 `;
 
