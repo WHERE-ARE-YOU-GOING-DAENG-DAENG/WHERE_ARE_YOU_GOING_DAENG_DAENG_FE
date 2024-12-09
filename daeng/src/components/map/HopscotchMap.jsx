@@ -43,6 +43,21 @@ const HopscotchMap = ({ removeUi }) => {
     useEffect(() => {
       if (map && isLoaded) {
         const polygons = [];
+        const infoWindow = new window.google.maps.InfoWindow({
+          pixelOffset: new window.google.maps.Size(0, -10),
+        });
+
+        const observer = new MutationObserver(() => {
+          const closeButton = document.querySelector(".gm-ui-hover-effect");
+          if (closeButton) {
+            closeButton.style.display = "none";
+          }
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+        });
 
         geojson.features.forEach((feature) => {
           const geometryType = feature.geometry.type;
@@ -75,10 +90,17 @@ const HopscotchMap = ({ removeUi }) => {
             // 다각형에 마우스 오버 이벤트 추가
             polygon.addListener("mouseover", () => {
               polygon.setOptions({ fillColor: "#FF69A9" });
+              // InfoWindow에 지역 이름 표시
+              infoWindow.setContent(`<div style="font-size:14px; margin-left:5px;">${name}</div>`); // 지역 이름 설정
+              infoWindow.setPosition({ lat: center.lat(), lng: center.lng() }); // 마우스 위치에 표시
+              
+              infoWindow.open(map);
+              
             });
     
             polygon.addListener("mouseout", () => {
               polygon.setOptions({ fillColor: "#fff" });
+              infoWindow.close();
             });
             
             const calculatePolygonCenter = (paths) => {
@@ -86,11 +108,10 @@ const HopscotchMap = ({ removeUi }) => {
               paths.forEach((path) => bounds.extend(path));
               return bounds.getCenter();
             };
-
-            // 클릭 시 인포윈도우 표시
+            const center = calculatePolygonCenter(coordinates);
+            
             polygon.addListener("click", () => {
-              const center = calculatePolygonCenter(coordinates);
-        
+              infoWindow.close();
               setOverlayContent(null);
               setTimeout(() => {
                 setOverlayContent({
