@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { createRoot } from "react-dom/client";
 import Loading from "../commons/Loading";
 import styled from "styled-components";
 import geojson from "../../data/sig.json";
 import useGoogleMapsStore from '../../stores/useGoogleMapsStore';
 import useLocationStore from '../../stores/useLocationStore';
+import LandOwnerProfile from "../../components/map/LandOwnerProfile";
+import CustomOverlay from "./CustomOverlay";
 
 const MapContainer = styled.div`
   width: 100%;
@@ -19,7 +22,8 @@ const HopscotchMap = ({ removeUi }) => {
     const [map, setMap] = useState(null);
     const { isLoaded } = useGoogleMapsStore();
     const userLocation = useLocationStore((state) => state.userLocation);
-    
+    const [overlayContent, setOverlayContent] = useState(null);
+
     useEffect(() => {
       if (isLoaded && !map) {
         const center =
@@ -28,7 +32,7 @@ const HopscotchMap = ({ removeUi }) => {
           : userLocation;
 
         const googleMap = new window.google.maps.Map(mapRef.current, {
-          center, // 서울 중심
+          center,
           zoom: 12,
           disableDefaultUI: removeUi,
         });
@@ -38,8 +42,8 @@ const HopscotchMap = ({ removeUi }) => {
   
     useEffect(() => {
       if (map && isLoaded) {
-        const polygons = []; // 생성된 다각형들을 저장
-    
+        const polygons = [];
+
         geojson.features.forEach((feature) => {
           const geometryType = feature.geometry.type;
           const coordinatesList =
@@ -58,7 +62,7 @@ const HopscotchMap = ({ removeUi }) => {
             // 다각형 생성
             const polygon = new window.google.maps.Polygon({
               paths: coordinates,
-              strokeColor: "#55D4FF",
+              strokeColor: "#FF69A9",
               strokeOpacity: 0.8,
               strokeWeight: 2,
               fillColor: "#fff",
@@ -70,20 +74,34 @@ const HopscotchMap = ({ removeUi }) => {
     
             // 다각형에 마우스 오버 이벤트 추가
             polygon.addListener("mouseover", () => {
-              polygon.setOptions({ fillColor: "#55D4FF" });
+              polygon.setOptions({ fillColor: "#FF69A9" });
             });
     
             polygon.addListener("mouseout", () => {
               polygon.setOptions({ fillColor: "#fff" });
             });
-    
+            
+            const calculatePolygonCenter = (paths) => {
+              const bounds = new window.google.maps.LatLngBounds();
+              paths.forEach((path) => bounds.extend(path));
+              return bounds.getCenter();
+            };
+
             // 클릭 시 인포윈도우 표시
-            polygon.addListener("click", (event) => {
-              const infoWindow = new window.google.maps.InfoWindow({
-                position: event.latLng,
-                content: `<div><strong>${name}</strong></div>`,
-              });
-              infoWindow.open(map);
+            polygon.addListener("click", () => {
+              const center = calculatePolygonCenter(coordinates);
+        
+              setOverlayContent(null);
+              setTimeout(() => {
+                setOverlayContent({
+                  position: { lat: center.lat(), lng: center.lng() },
+                  component: <LandOwnerProfile area={name} nickname="내가 진짜" pets={[
+                    { id: 1, name: '강아지1'},
+                    { id: 2, name: '고양이1'},
+                    { id: 3, name: '강아지1'},
+                  ]} />,
+                });
+              }, 0);
             });
           });
         });
@@ -98,6 +116,15 @@ const HopscotchMap = ({ removeUi }) => {
     return (
       <MapContainer ref={mapRef} $removeUi={removeUi}>
         {!isLoaded && <Loading label="지도 로딩 중..." />}
+        {map && overlayContent && (
+        <CustomOverlay
+          map={map}
+          position={overlayContent.position}
+          offset={{ x: 0, y: -80 }}
+        >
+          {overlayContent.component}
+        </CustomOverlay>
+      )}
       </MapContainer>
     );
 };

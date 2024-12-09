@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import crown from "../../assets/icons/crown.svg";
-import rightarrow from "../../assets/icons/arrow.svg";
-import leftarrow from "../../assets/icons/reversearrow.svg";
+import defaultImg from "../../assets/icons/reviewDefaultImg.svg"; 
 
 const Bubble = styled.div`
   position: relative;
   background-color: white;
-  border: 5px solid #ff69a9;
+  border: 5px solid #FF69A9;
   border-radius: 8px;
   padding: 10px 20px;
   color: #333;
@@ -18,7 +17,8 @@ const Bubble = styled.div`
     content: '';
     position: absolute;
     bottom: -12px;
-    left: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     border-width: 16px 16px 0;
     border-style: solid;
     border-color: white transparent;
@@ -30,10 +30,11 @@ const Bubble = styled.div`
     content: '';
     position: absolute;
     bottom: -19px;
-    left: 18px;
+    left: 50%;
+    transform: translateX(-50%);
     border-width: 18px 18px 0;
     border-style: solid;
-    border-color: #ff69a9 transparent;
+    border-color: #FF69A9 transparent;
     display: block;
     width: 0;
     z-index: -1;
@@ -46,42 +47,46 @@ const Title = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 15px;
 
   p {
     font-weight: bold;
     display: inline;
     white-space: nowrap;
   }
+  img{
+    width: 18px;
+  }
 `;
 
 const Pink = styled.p`
-  color: #FF4B98;
+  color: #FF69A9;
   display: inline;
 `;
 
 const PetsWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: ${({ hasArrows }) => (hasArrows ? "space-between" : "center")}; /* Arrow 여부에 따라 정렬 */
+  justify-content: center;
   margin-top: 10px;
-  gap: 10px;
 `;
 
 const PetsContainer = styled.div`
   overflow: hidden;
-  width: ${({ hasArrows }) => (hasArrows ? "180px" : "auto")};
+  width: ${({ isCentered }) => (isCentered ? "auto" : "180px")}; /* 3마리 미만일 땐 자동 크기 */
 `;
 
 const PetList = styled.div`
   display: flex;
-  transform: translateX(${(props) => props.translateX}px); /* 이동 애니메이션 */
-  transition: transform 0.5s ease; /* 부드럽게 이동 */
+  justify-content: ${({ isCentered }) => (isCentered ? "center" : "flex-start")}; /* 중앙 정렬 */
+  transform: translateX(${(props) => (props.isCentered ? 0 : props.translateX)}px); /* 3마리 미만일 땐 이동 없음 */
+  transition: transform 0.5s ease;
+  gap: 15px;
 `;
 
 const PetCard = styled.div`
   text-align: center;
-  flex: 0 0 50px; /* 각 카드의 고정 너비 */
-  margin-right: 15px; /* 카드 간격 */
+  flex: 0 0 50px;
 `;
 
 const PetImage = styled.img`
@@ -90,59 +95,46 @@ const PetImage = styled.img`
   border-radius: 50%;
 `;
 
-const ArrowButton = styled.button`
-  background-color: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-
-  &:disabled {
-    color: #ccc;
-    cursor: not-allowed;
-  }
-`;
-
 const LandOwnerProfile = ({ area, nickname, pets }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 3;
   const itemWidth = 65; // 각 카드의 너비 + 간격 (50px + 15px)
   const maxIndex = Math.ceil(pets.length / itemsPerPage) - 1;
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
-  };
+  const isCentered = pets.length <= itemsPerPage; // 3마리 이하일 때 중앙 정렬
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
-  };
-
-  const hasArrows = pets.length > itemsPerPage; // Arrow 버튼 표시 여부
+  useEffect(() => {
+    if (!isCentered) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0));
+      }, 3000); // 3초마다 슬라이드 이동
+      return () => clearInterval(interval);
+    }
+  }, [isCentered, maxIndex]);
 
   return (
     <Bubble>
-      <Title><Pink>{area}</Pink> 땅주인 </Title>
-      <Title><img src={crown} alt="왕관" /><p>{nickname}</p>님</Title>
-      <PetsWrapper hasArrows={hasArrows}>
-        {hasArrows && (
-          <ArrowButton onClick={handlePrev} disabled={currentIndex === 0}>
-            <img src={leftarrow} alt="왼쪽" />
-          </ArrowButton>
-        )}
-        <PetsContainer hasArrows={hasArrows}>
-          <PetList translateX={-currentIndex * itemsPerPage * itemWidth}>
+      <Title>
+        <Pink>{area}</Pink> 땅주인
+      </Title>
+      <Title>
+        <img src={crown} alt="왕관" />
+        <p>{nickname}</p>님
+      </Title>
+      <PetsWrapper>
+        <PetsContainer isCentered={isCentered}>
+          <PetList
+            isCentered={isCentered}
+            translateX={-currentIndex * itemsPerPage * itemWidth}
+          >
             {pets.map((pet) => (
               <PetCard key={pet.id}>
-                <PetImage src={pet.img} alt={`${pet.name} 사진`} />
+                <PetImage src={pet.img || defaultImg} alt={`${pet.name || "기본 이미지"} 사진`} />
                 <div>{pet.name}</div>
               </PetCard>
             ))}
           </PetList>
         </PetsContainer>
-        {hasArrows && (
-          <ArrowButton onClick={handleNext} disabled={currentIndex === maxIndex}>
-            <img src={rightarrow} alt="오른쪽" />
-          </ArrowButton>
-        )}
       </PetsWrapper>
     </Bubble>
   );
