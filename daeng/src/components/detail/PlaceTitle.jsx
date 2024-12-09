@@ -5,7 +5,7 @@ import ReviewKeywords from "../../components/commons/ReviewKeywords";
 import bookmarkIcon from "../../assets/icons/bookmark.svg";
 import filledbookmarkIcon from "../../assets/icons/filledbookmark.svg";
 import starIcon from "../../assets/icons/star.svg"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFavoriteStore from "../../stores/useFavoriteStore";
 import useUserStore from "../../stores/userStore";
 import AlertDialog from "../commons/SweetAlert";
@@ -70,6 +70,7 @@ const Info = styled.div`
 
 const PlaceTitle = ({ data, setData }) => {
     const navigate = useNavigate();
+    const { id: placeId } = useParams();
     const { userId } = useUserStore.getState();
     
     const toggleBookmark = async (placeId, isFavorite) => {
@@ -108,6 +109,20 @@ const PlaceTitle = ({ data, setData }) => {
         });
       }
     }
+
+    const handleReviewClick = () => {
+      console.log(userId)
+      if (userId) {
+        navigate(`/write-review/${placeId}`, { state: { type: "realTime" } });
+      } else {
+        AlertDialog({
+          mode: "alert",
+          title: "로그인 필요",
+          text: "땅따먹기 리뷰를 작성하려면 로그인이 필요합니다.",
+          confirmText: "확인",
+        });
+      }
+    };
   
     return(
         <Container>
@@ -130,7 +145,7 @@ const PlaceTitle = ({ data, setData }) => {
                       onClick={()=>toggleBookmark(data.placeId, data.isFavorite)}
                   />
                 </Info>
-                <SquareBtn mode="review" />
+                <SquareBtn mode="review" onClick={handleReviewClick}/>
             </SubTitleSection>
         </Container>
     )

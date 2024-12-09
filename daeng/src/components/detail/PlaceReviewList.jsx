@@ -273,7 +273,7 @@ const PlaceReviewList = ({ data }) => {
   const handleWriteReviewClick = () => {
     console.log(userId)
     if (userId) {
-      navigate(`/write-review/${placeId}`);
+      navigate(`/write-review/${placeId}`, { state: { type: "normal" } });
     } else {
       AlertDialog({
         mode: "alert",

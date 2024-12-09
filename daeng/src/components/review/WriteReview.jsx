@@ -8,7 +8,7 @@ import axios from "axios";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Select from "react-select";
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
@@ -416,8 +416,11 @@ function WriteReview({ review = {} }) {
   const [text, setText] = useState(""); // 리뷰 내용 상태
   const [visitedAt, setVisitedAt] = useState(""); // 초기값을 빈 문자열로 설정
   const [selectedPetImage, setSelectedPetImage] = useState(""); //첫번째 펫 이미지
+  const location = useLocation();
+  const {type} = location.state || {};
 
-  
+  console.log("Received type:", type);
+
   useEffect(() => {
     fetchPetList(); 
   }, [fetchPetList]);
