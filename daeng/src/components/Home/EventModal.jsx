@@ -63,6 +63,7 @@ const CloseButton = styled.button`
   border: none;
   font-size: 30px;
   cursor: pointer;
+  color: black;
 `;
 
 const ModalHeader = styled.h2`
