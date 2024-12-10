@@ -22,8 +22,8 @@ import MyVisitList from '../pages/visit/MyVisitList';
 import PlaceVisitList from '../pages/visit/PlaceVisitList';
 import Error from "../pages/Error";
 import { setupAxiosInterceptors } from '../services/axiosInstance';
-import EventPage from '../pages/user/EventPage';
 import Hopscotch from '../pages/Hopscotch';
+import EventPage from '../pages/user/EventPage';
 import HowToGuidePage from '../pages/HowToGuidePage';
 
 const trackPageView = () => {
