@@ -21,7 +21,7 @@ const FooterContainer = styled.div`
     width: 100%;
     max-width: 554px;
     height: 77px;
-    z-index: 1000;
+    z-index: 100;
     background-color: #ffffff;
     position: fixed;
     bottom: 0;
