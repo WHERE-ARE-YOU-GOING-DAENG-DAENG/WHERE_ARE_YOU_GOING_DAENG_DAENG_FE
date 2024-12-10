@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import preferenceDog from "../../assets/icons/preferenceDog.svg";
+import preferenceLogo from "../../assets/icons/preference_logo.svg";
 
 function TopSection() {
   return (
@@ -11,7 +11,7 @@ function TopSection() {
             <span>선호하세요?</span>
           </h1>
         </TextContainer>
-        <Image src={preferenceDog} alt="preference dog" />
+        <Image src={preferenceLogo} alt="preference logo" />
       </TopContainer>
       <Description>
         <p>
