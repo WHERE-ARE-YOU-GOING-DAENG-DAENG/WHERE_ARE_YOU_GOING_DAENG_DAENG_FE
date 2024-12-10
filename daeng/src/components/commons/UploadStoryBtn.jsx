@@ -83,7 +83,7 @@ const CrownIcon = styled.img`
 
 const TextContainer = styled.div`
   text-align: center;
-  margin-top: 2px;
+  margin-top: 12px;
 `;
 
 const LocationText = styled.p`

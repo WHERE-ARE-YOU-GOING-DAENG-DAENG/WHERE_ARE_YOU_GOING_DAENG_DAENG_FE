@@ -8,7 +8,7 @@ import axios from "axios";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Select from "react-select";
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
@@ -412,12 +412,16 @@ function WriteReview({ review = {} }) {
   const [ratings, setRatings] = useState([false, false, false, false, false]);
   const [previews, setPreviews] = useState([]);
   const [placeImgs, setPlaceImgs] = useState([]);
-  const [selectKeywords, setSelectKeywords] = useState([]); 
+  const [selectKeywords, setSelectKeywords] = useState([]);
   const [text, setText] = useState("");
   const [visitedAt, setVisitedAt] = useState("");
   const [selectedPetImage, setSelectedPetImage] = useState("");
+  const location = useLocation();
+  const {type} = location.state || {};
 
+  console.log("Received type:", type);
   
+
   useEffect(() => {
     fetchPetList(); 
   }, [fetchPetList]);

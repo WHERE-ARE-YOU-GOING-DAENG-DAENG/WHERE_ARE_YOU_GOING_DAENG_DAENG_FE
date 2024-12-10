@@ -61,7 +61,8 @@ function ShowMyStory({ onClose }) {
       mode: "alert",
       title: "성공",
       text: `스토리가 성공적으로 삭제되었습니다.`,
-      confirmText: "닫기" 
+      confirmText: "닫기",
+      icon:'success'
     });
     setShowDeleteMenu(false); 
   };
