@@ -35,18 +35,21 @@ function Home() {
   useEffect(() => {
     const loginStatus = checkLoginStatusInCookie();
     setIsLoggedIn(loginStatus);
-
+    console.log("현재위치", userLocation) //로그 삭제
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const newLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
+            accuracy: position.coords.accuracy,
           };
 
+          const { lat, lng, accuracy } = userLocation;
           if (
-            userLocation.lat !== newLocation.lat ||
-            userLocation.lng !== newLocation.lng
+            newLocation.accuracy < accuracy &&
+            (lat !== newLocation.lat || lng !== newLocation.lng)
           ) {
             setUserLocation(newLocation);
           }
