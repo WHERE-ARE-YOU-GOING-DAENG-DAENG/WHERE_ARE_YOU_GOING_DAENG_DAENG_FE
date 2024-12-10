@@ -105,7 +105,7 @@ const Footer = () => {
 
     return (
         <>
-            <ScrollBtn />
+            {location.pathname !== "/hopscotch" && <ScrollBtn />}
             <FooterContainer>
                 {items.map((item, index) => (
                     <FooterItem
