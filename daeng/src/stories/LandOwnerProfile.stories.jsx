@@ -13,6 +13,7 @@ export const Default = Template.bind({});
 Default.args = {
   area: '서울 강남구',
   nickname: '내가진짜',
+  hops: 6,
   pets: [
     { id: 1, name: '바둑이', img: 'https://via.placeholder.com/50?text=Dog' },
     { id: 2, name: '나비', img: 'https://via.placeholder.com/50?text=Cat' },
@@ -25,6 +26,7 @@ NoPets.args = {
   area: '부산 진구',
   nickname: '영희',
   pets: [],
+  hops: 3,
 };
 
 // 반려동물이 많은 경우
@@ -39,4 +41,5 @@ ManyPets.args = {
     { id: 4, name: '강아지2', img: 'https://via.placeholder.com/50?text=Dog2' },
     { id: 5, name: '고양이2', img: 'https://via.placeholder.com/50?text=Cat2' },
   ],
+  hops: 5,
 };
