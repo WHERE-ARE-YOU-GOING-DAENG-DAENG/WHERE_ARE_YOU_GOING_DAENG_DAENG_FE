@@ -19,7 +19,7 @@ const MapContainer = styled.div`
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isSearching }) => {
+const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded}) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const { isLoaded } = useGoogleMapsStore();
