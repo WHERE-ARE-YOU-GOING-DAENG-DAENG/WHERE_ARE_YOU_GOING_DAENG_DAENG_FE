@@ -66,7 +66,6 @@ function PreferenceRegister() {
         title: "선택 초과",
         text: "최대 3개만 선택 가능합니다.",
         confirmText: "확인",
-        onConfirm: () => console.log("확인 버튼 클릭됨"),
       });
       return;
     }
@@ -83,7 +82,6 @@ function PreferenceRegister() {
         title: "항목 선택 필요",
         text: "시설과 선호 항목을 각각 최소 1개 이상 선택해 주세요.",
         confirmText: "확인",
-        onConfirm: () => console.log("필수 항목 선택 경고 확인됨"),
       });
       return;
     }
@@ -107,7 +105,6 @@ function PreferenceRegister() {
           withCredentials: true,
         }
       );
-      console.log("Response1 데이터:", response1.data);
 
       const response2 = await axios.post(
         "https://www.daengdaeng-where.link/api/v1/preferences",
@@ -117,7 +114,6 @@ function PreferenceRegister() {
           withCredentials: true,
         }
       );
-      console.log("Response2 데이터:", response2.data);
 
       AlertDialog({
         mode: "alert",
@@ -126,7 +122,6 @@ function PreferenceRegister() {
         confirmText: "확인",
         icon: "success",
         onConfirm: () => {
-          console.log("등록 성공 확인됨");
           navigate("/pet-register");
         },
       });

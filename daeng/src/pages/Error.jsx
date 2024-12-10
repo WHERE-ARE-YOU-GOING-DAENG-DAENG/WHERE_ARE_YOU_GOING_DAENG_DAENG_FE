@@ -87,7 +87,6 @@ const Error = () => {
     const isDeleteUser = params.get("status") === "DELETE_USER";
     const status = isDeleteUser ? 409 : location.state?.status || 404;
 
-    // 에러 메시지 설정
     const getErrorMessage = () => {
         if (status === 404) {
             return {
@@ -125,7 +124,6 @@ const Error = () => {
             <ErrorContent>{content}</ErrorContent>
             <ButtonContainer>
                 <Button primary onClick={() => navigate("/")}>홈으로</Button>
-                {/* <Button onClick={() => navigate(-1)}>뒤로가기</Button> */}
             </ButtonContainer>
         </Container>
     );

@@ -36,18 +36,6 @@ function UserEdit() {
     oauthProvider,
   });
 
-  useEffect(() => {
-    console.log('Zustand State:', {
-      userId,
-      email,
-      storeNickname,
-      storeCity,
-      storeCityDetail,
-      storeGender,
-      oauthProvider,
-    });
-  }, []);
-
   const handleInputChange = (field, value) => {
     setUserData((prev) => ({
       ...prev,
@@ -210,8 +198,6 @@ function UserEdit() {
           withCredentials: true,
         }
       );
-
-      console.log('Updated User Data:', response.data);
 
       setLoginData({
         userId,

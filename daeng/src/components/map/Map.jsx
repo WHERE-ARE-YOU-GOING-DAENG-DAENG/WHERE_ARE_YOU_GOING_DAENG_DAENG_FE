@@ -43,7 +43,6 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
     }
   }, [isLoaded, map, center, removeUi]);
 
-  // 외부에서 중심 좌표 업데이트
   useEffect(() => {
     if (map && externalCenter) {
       setCenter(externalCenter);
@@ -51,7 +50,6 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
     }
   }, [map, externalCenter]);
 
-  // 현재 위치 실시간으로 추적 후 마커 추가
   const watchIdRef = useRef(null);
 
   useEffect(() => {
@@ -72,7 +70,6 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
             setCenter(location);
             map.setCenter(location);
             setUserLocation(location);
-            console.log(location) //로그 삭제
 
             const currentLocationMarker = (
               <CustomOverlay
@@ -92,7 +89,6 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
                   title: "위치 추적 실패",
                   text: "현재 위치를 확인할 수 없습니다",
                   confirmText: "확인",
-                  onConfirm: () => console.log("현재위치 마커표시 안됨"),
               });
             }
           }
@@ -109,15 +105,12 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
   };
 }, [isLoaded, map, setUserLocation]);
 
- //다른 마커 표시
  useEffect(() => {
   if (isLoaded && map) {
-    // 기존 마커 정리 (Google Maps OverlayView의 상태 관리)
     markers.forEach((marker) => marker.onRemove && marker.onRemove());
     setMarkers([]);
 
     if (data && data.length > 0) {
-      // 새로운 CustomOverlay 생성 및 렌더링
       const newMarkers = data.map((location) => (
         <CustomOverlay
           key={location.placeId}
@@ -127,7 +120,7 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
           <BookMarker label={location.name} icon={bookmarkerIcon} />
         </CustomOverlay>
       ));
-      setMarkers(newMarkers); // 상태 관리
+      setMarkers(newMarkers);
     }
   }
 }, [isLoaded, map, data]);
@@ -161,7 +154,6 @@ useEffect(() => {
   );
 };
 
-// PropTypes 정의
 Map.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({

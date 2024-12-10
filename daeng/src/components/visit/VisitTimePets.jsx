@@ -60,14 +60,14 @@ const PetsContainer = styled.div`
   display: flex;
   gap: 10px;
   margin-top: 10px;
-  overflow: hidden; /* 슬라이더 영역 밖 숨김 */
-  scroll-behavior: smooth; /* 부드러운 스크롤 */
+  overflow: hidden;
+  scroll-behavior: smooth;
 `;
 
 const PetCard = styled.div`
   text-align: center;
-  flex-shrink: 0; /* 크기를 고정 */
-  min-width: 60px; /* 카드 최소 크기 */
+  flex-shrink: 0;
+  min-width: 60px;
 `;
 
 const PetImage = styled.img`
@@ -87,7 +87,6 @@ const VisitTimePets = ({ visitAt, pets, onVisitClick }) => {
   const [isLeftVisible, setIsLeftVisible] = useState(false);
   const [isRightVisible, setIsRightVisible] = useState(false);
 
-  // 스크롤 상태를 업데이트
   const updateScrollState = () => {
     const slider = sliderRef.current;
     if (!slider) return;
@@ -97,7 +96,6 @@ const VisitTimePets = ({ visitAt, pets, onVisitClick }) => {
     setIsRightVisible(scrollLeft + clientWidth < scrollWidth);
   };
 
-  // 좌우 스크롤 핸들러
   const scrollLeft = () => {
     if (sliderRef.current) {
       sliderRef.current.scrollBy({ left: -200, behavior: "smooth" });
@@ -110,14 +108,12 @@ const VisitTimePets = ({ visitAt, pets, onVisitClick }) => {
     }
   };
 
-  // 슬라이더 크기 및 스크롤 변경 시 상태 업데이트
   useEffect(() => {
     const slider = sliderRef.current;
     if (!slider) return;
 
-    updateScrollState(); // 초기 상태 업데이트
+    updateScrollState();
 
-    // 스크롤 이벤트 리스너 추가
     slider.addEventListener("scroll", updateScrollState);
     window.addEventListener("resize", updateScrollState);
 

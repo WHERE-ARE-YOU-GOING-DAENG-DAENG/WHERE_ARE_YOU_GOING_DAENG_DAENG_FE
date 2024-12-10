@@ -7,7 +7,6 @@ import GlobalStyle from './style/GlobalStyles'
 const naverSiteId = import.meta.env.VITE_NAVER_SITE_ID;
 
 if (naverSiteId && window.wcs) {
-  // 네이버 애널리틱스 초기화
   if (!window.wcs_add) window.wcs_add = {};
   window.wcs_add['wa'] = naverSiteId;
   window.wcs_do();

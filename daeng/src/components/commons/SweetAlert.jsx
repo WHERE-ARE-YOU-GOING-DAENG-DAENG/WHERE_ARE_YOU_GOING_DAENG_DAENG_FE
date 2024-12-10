@@ -61,24 +61,23 @@ const injectStyles = () => {
         opacity: 1;
       }
     }
-    /* 아이콘 색상 */
     .swal2-icon {
-      fill: #FF69A9 !important; /* 아이콘 색상 */
+      fill: #FF69A9 !important;
     }
     .swal2-icon.swal2-success .swal2-icon-file,
     .swal2-icon.swal2-error .swal2-icon-file,
     .swal2-icon.swal2-warning .swal2-icon-file,
     .swal2-icon.swal2-info .swal2-icon-file,
     .swal2-icon.swal2-question .swal2-icon-file {
-      fill: #FF69A9 !important; /* 모든 아이콘 배경 */
+      fill: #FF69A9 !important;
     }
     .swal2-title {
       font-family: "Pretendard-Regular", sans-serif;
-      color: #333; /* 제목 색상 */
+      color: #333; 
     }
     .swal2-content {
       font-family: "Pretendard-Regular", sans-serif;
-      color: #555; /* 내용 색상 */
+      color: #555;
     }
   `;
   document.head.appendChild(styleSheet);

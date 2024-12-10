@@ -9,8 +9,6 @@ import SearchNoImage from "../../assets/icons/search_noimage.svg";
 const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
   const navigate = useNavigate();
 
-  
-  //즐겨찾기 토글
   const toggleBookmark = async (placeId, isFavorite) => {
     const favoriteStore = useFavoriteStore.getState();
     
@@ -40,7 +38,7 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
   };
 
   const formatTime = (time) => {
-    if (!time) return "정보없음"; // Handle missing time
+    if (!time) return "정보없음";
     return time.length === 8 ? time.slice(0, 5) : time;
   };
 

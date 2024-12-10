@@ -31,7 +31,6 @@ function AlarmButton() {
     try {
       const token = await requestNotificationPermission();
       if (token) {
-        console.log('FCM 토큰 발급 성공:', token);
         AlertDialog({
           mode: "alert",
           title: "알림 허용",
@@ -50,12 +49,6 @@ function AlarmButton() {
             withCredentials: true,  
           }
         );
-
-        if (response.status === 200) {
-          console.log('서버에 FCM 토큰 전송 성공:', response.data);
-        } else {
-          console.error('서버에 FCM 토큰 전송 실패:', response);
-        }
       } else {
         console.error('알림 권한 요청 실패');
       }

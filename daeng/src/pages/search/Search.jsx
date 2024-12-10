@@ -39,12 +39,10 @@ const Search = () => {
       });
         setFilter(true);
       }else if (isMapLoaded && userLocation) {
-        fetchNearestPlaces(); // 맵 로드 후 추천 장소 가져오기
+        fetchNearestPlaces();
       }
     },[userLocation, isMapLoaded,location.state?.placeType]);
   
-  
-    //가까운순 추천장소 30개
     const fetchNearestPlaces = async () => {
       if (!userLocation) return;
       setIsFetchingNearPlaces(true);
@@ -80,10 +78,8 @@ const Search = () => {
   
     const sortPlaces = (index) => {
       if (index === 0) {
-        // 가까운 순 정렬
         setPlaces([...nearPlaces]);
       } else if (index === 1) {
-        // 별점 높은 순 정렬
         setPlaces((prevPlaces) =>
           [...prevPlaces].sort((a, b) => b.placeScore - a.placeScore)
         );
@@ -130,7 +126,6 @@ const Search = () => {
       }
 
       if (filter && userLocation) {
-        console.log("필터링")
         setIsFetchingNearPlaces(false);
         setIsLoading(true); 
         setPlaces([]);
@@ -146,7 +141,6 @@ const Search = () => {
           latitude: userLocation.lat,
           longitude: userLocation.lng,
         };
-        console.log(payload)
         try {
           const response = await axiosInstance.post(
             "https://www.daengdaeng-where.link/api/v1/places/filter",
