@@ -13,7 +13,6 @@ import ReviewSlideshow from './ReviewSlideshow';
 import { useNavigate } from 'react-router-dom';
 import arrow from '../../assets/icons/arrow.svg'
 
-//리뷰 전체보기 페이지
 const TotalReviewContainer = styled.div`
   display: block;
   padding:3%;
@@ -332,16 +331,15 @@ const TotalReviewForm = () => {
     navigate(`/search/${placeId}`);
   };
 
-  // Intersection Observer로 무한 스크롤 구현
   const observeLastItem = useCallback(
     (node) => {
-      if (isLoading || isLast) return; // 로딩 중이거나 마지막 페이지라면 요청하지 않음
+      if (isLoading || isLast) return;
 
       if (observerRef.current) observerRef.current.disconnect();
 
       observerRef.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && placeId) {
-          fetchReviews(placeId); // 마지막 아이템에 도달하면 데이터 요청
+          fetchReviews(placeId);
         }
       });
 

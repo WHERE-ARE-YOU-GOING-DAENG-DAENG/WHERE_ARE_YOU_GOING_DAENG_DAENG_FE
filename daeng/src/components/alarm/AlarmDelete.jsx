@@ -27,7 +27,6 @@ function AlarmDelete() {
       );
 
       if (response.status === 200) {
-        console.log('성공적으로취소')
         AlertDialog({
           mode: "alert",
           title: "알림 취소",

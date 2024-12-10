@@ -3,14 +3,14 @@ import axios from "axios";
 
 const useReviewStore = create((set) => ({
   reviews: [], 
-  total: 0, // 총 리뷰 개수
-  page: 0, // 현재 페이지
-  size: 15, // 페이지 크기 (고정)
-  isFirst: true, // 첫 번째 페이지 여부
-  isLast: true, // 마지막 페이지 여부
-  isLoading: false, // 로딩 상태
-  placeName: "", // 장소 이름 추가
-  error: null, // 에러 메시지
+  total: 0,
+  page: 0,
+  size: 15,
+  isFirst: true,
+  isLast: true,
+  isLoading: false,
+  placeName: "",
+  error: null,
 
   fetchUserReviews: async (page = 0, size = 15) => {
     set({ isLoading: true, error: null });
@@ -26,7 +26,7 @@ const useReviewStore = create((set) => ({
       const data = response.data.data;
 
       set({
-        reviews: page === 0 ? data.reviews : [...get().reviews, ...data.reviews], // 페이지가 0이면 초기화, 아니면 추가
+        reviews: page === 0 ? data.reviews : [...get().reviews, ...data.reviews],
         total: data.total,
         page: data.page,
         size: data.size,

@@ -21,7 +21,7 @@ const useUserStore = create(
           gender: userData.gender || '',
           oauthProvider: userData.oauthProvider || '',
         }),
-      // 상태를 초기화하는 함수
+    
       clearStorage: () => set({
         userId: '',
         email: '',
