@@ -39,6 +39,11 @@ const ButtonContainer = styled.div`
   justify-content: center;
   width: 40%;
   height: 150px;
+
+    @media (max-width: 554px) {
+    height: 120px;
+    margin-top: 12px;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -54,6 +59,11 @@ const ImageContainer = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+    @media (max-width: 554px) {
+    width: 70px;
+    height: 70px;
+  }
 `;
 
 const ProfileImageWrapper = styled.div`
@@ -65,12 +75,22 @@ const ProfileImageWrapper = styled.div`
   align-items: center;
   justify-content: center;
   background-color: white;
+
+    @media (max-width: 554px) {
+    width: 60px;
+    height: 60px;
+  }
 `;
 
 const ProfileImage = styled.img`
   width: 74px;
   height: 74px;
   border-radius: 50%;
+
+    @media (max-width: 554px) {
+    width: 58px;
+    height: 58px;
+  }
 `;
 
 const CrownIcon = styled.img`
@@ -79,11 +99,19 @@ const CrownIcon = styled.img`
   right: 14.5px;
   width: 25px;
   height: auto;
+
+    @media (max-width: 554px) {
+    width: 20px;
+  }
 `;
 
 const TextContainer = styled.div`
   text-align: center;
   margin-top: 12px;
+
+    @media (max-width: 554px) {
+    margin-top: 8px;
+  }
 `;
 
 const LocationText = styled.p`
@@ -91,6 +119,10 @@ const LocationText = styled.p`
   font-weight: bold;
   margin: 0;
   color: black;
+
+    @media (max-width: 554px) {
+    font-size: 11px;
+  }
 `;
 
 const NicknameText = styled.p`
@@ -98,6 +130,10 @@ const NicknameText = styled.p`
   font-weight: bold;
   margin: 0;
   color: #ff69b4;
+
+  @media (max-width: 554px) {
+    font-size: 11px;
+  }
 `;
 
 export default UploadStoryBtn;
