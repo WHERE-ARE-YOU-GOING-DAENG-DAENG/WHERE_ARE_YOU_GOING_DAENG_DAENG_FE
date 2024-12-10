@@ -35,7 +35,8 @@ function Home() {
   useEffect(() => {
     const loginStatus = checkLoginStatusInCookie();
     setIsLoggedIn(loginStatus);
-
+    console.log("현재위치", userLocation) //로그 삭제
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -44,9 +45,6 @@ function Home() {
             lng: position.coords.longitude,
             accuracy: position.coords.accuracy,
           };
-
-          console.log("첫 위치추적:", newLocation)
-          console.log("현재위치",userLocation)
 
           const { lat, lng, accuracy } = userLocation;
           if (
