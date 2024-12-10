@@ -37,7 +37,7 @@ const FavoriteListPicture = styled.div`
   border-radius: 10px;
   background-color: #e0e0e0;
   margin: 0px 15px;
-  background-image: url(${(props) => props.imgUrl});  // 이미지 URL을 props로 받도록 수정
+  background-image: url(${(props) => props.imgUrl});
   background-size: cover;
   background-position: center;
 

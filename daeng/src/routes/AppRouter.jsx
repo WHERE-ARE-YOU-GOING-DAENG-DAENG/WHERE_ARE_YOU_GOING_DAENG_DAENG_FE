@@ -24,19 +24,17 @@ import Error from "../pages/Error";
 import { setupAxiosInterceptors } from '../services/axiosInstance';
 import HowToGuidePage from '../pages/HowToGuidePage';
 
-// 네이버 애널리틱스 페이지뷰 트래킹 함수
 const trackPageView = () => {
   if (window.wcs) {
-    window.wcs_do(); // 네이버 애널리틱스 트래킹 호출
+    window.wcs_do();
   }
 };
 
-// 라우트 변경 감지 Hook
 const usePageTracking = () => {
   const location = useLocation();
 
   useEffect(() => {
-    trackPageView(); // 라우트 변경 시 페이지뷰 트래킹
+    trackPageView();
   }, [location]);
 };
 
@@ -44,7 +42,6 @@ const AppRoutes = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Axios 인터셉터 설정
     setupAxiosInterceptors(navigate);
   }, [navigate]);
 

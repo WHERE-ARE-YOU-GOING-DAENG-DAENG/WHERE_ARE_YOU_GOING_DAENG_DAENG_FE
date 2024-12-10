@@ -46,7 +46,7 @@ const OpenModalButton = styled.button`
 const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
 	const [center, setCenter] = useState(false);
-	const [page, setPage] = useState(0); //불러올 페이지 번호
+	const [page, setPage] = useState(0);
 	const [isMapLoaded, setIsMapLoaded] = useState(false);
 	const favorites = useFavoriteStore((state) => state.favorites);
 	const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites);
@@ -62,12 +62,11 @@ const Bookmark = () => {
 
 	  const fetchNextPage = () => {
 		if (hasMore) {
-		  setPage((prevPage) => prevPage + 1); // 다음 페이지 로드
+		  setPage((prevPage) => prevPage + 1);
 		}
 	  };
 
 	  useEffect(() => {
-		console.log("Updated favorites:", favorites); // 상태 변경 확인
 	  }, [favorites]);
 
     const toggleModal = () => {

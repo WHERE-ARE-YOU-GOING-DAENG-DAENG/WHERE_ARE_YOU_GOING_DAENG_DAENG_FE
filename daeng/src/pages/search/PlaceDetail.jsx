@@ -61,7 +61,6 @@ const PlaceDetail = () => {
                 title: "리뷰 데이터 오류",
                 text: reviewError.response.data.message || "리뷰 데이터를 불러오는 데 실패했습니다.",
                 confirmText: "확인",
-                onConfirm: () => console.log("리뷰 요청 오류 확인됨"),
               });
             }
           }
@@ -78,7 +77,6 @@ const PlaceDetail = () => {
             bestKeywords: reviewData.bestKeywords || [],
           };
     
-          console.log(combinedData); // 로그 삭제
           setData(combinedData);
         } catch (placeError) {
           if (placeError.response) {
@@ -87,7 +85,6 @@ const PlaceDetail = () => {
               title: "시설 데이터 오류",
               text: placeError.response.data.message || "시설 데이터를 불러오는 데 실패했습니다.",
               confirmText: "확인",
-              onConfirm: () => console.log("시설 요청 오류 확인됨"),
             });
           }
         }
