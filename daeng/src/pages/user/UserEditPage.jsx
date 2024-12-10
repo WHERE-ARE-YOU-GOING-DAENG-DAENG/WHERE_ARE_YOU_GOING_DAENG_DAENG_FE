@@ -1,6 +1,6 @@
 import Header from '../../components/commons/Header'
 import styled from "styled-components";
-import preferenceDog from "../../assets/icons/preferenceDog.svg";
+import preferenceDog from "../../assets/icons/preference_logo.svg";
 import UserEdit from '../../components/user/UserEdit'
 
 function UserEditPage() {
