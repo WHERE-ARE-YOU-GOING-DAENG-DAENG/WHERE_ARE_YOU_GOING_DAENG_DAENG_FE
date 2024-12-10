@@ -102,6 +102,11 @@ const HomeStory = () => {
 const StoryWrapper = styled.div`
   margin: 10px 0;
   padding: 0 20px;
+
+  @media (max-width: 554px) {
+    padding: 0 10px;
+    margin: 10px 0 0 0;
+  }
 `;
 
 const Title = styled.h3`
@@ -109,12 +114,21 @@ const Title = styled.h3`
   font-weight: 600;
   margin-bottom: 10px;
   text-align: left;
+
+  @media (max-width: 554px) {
+    font-size: 15px;
+    margin: 10px 10px 0 10px;
+  }
 `;
 
 const StoryContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+
+  @media (max-width: 554px) {
+    gap: 5px;
+  }
 `;
 
 const ArrowButton = styled.button`
@@ -124,19 +138,33 @@ const ArrowButton = styled.button`
   img {
     width: 30px;
     height: 30px;
+
+    @media (max-width: 554px) {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 
 const ScrollableArea = styled.div`
   overflow: hidden;
   flex: 1;
+
+  @media (max-width: 554px) {
+    margin-top: 5px;
+  }
 `;
 
 const ScrollableStories = styled.div`
   display: flex;
   gap: 15px;
-  transform: translateX(${({ currentIndex }) => -currentIndex * 119}px); /* 카드 너비(104) + gap(15) */
+  transform: translateX(${({ currentIndex }) => -currentIndex * 104}px); /* 카드 크기에 따라 조정 */
   transition: transform 0.3s ease-in-out;
+  align-items: center;
+
+  @media (max-width: 554px) {
+    gap: 10px;
+  }
 `;
 
 const FixedStoryAdd = styled.div`
@@ -146,9 +174,15 @@ const FixedStoryAdd = styled.div`
   justify-content: center;
   width: 104px;
   height: 136px;
-  margin-top:8px;
+  
   text-align: center;
   cursor: pointer;
+
+  @media (max-width: 554px) {
+    width: 88px;
+    height: 120px;
+    margin-top: 10px;
+  }
 `;
 
 const PersonIconWrapper = styled.div`
@@ -160,6 +194,11 @@ const PersonIconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 554px) {
+    width: 70px;
+    height: 70px;
+  }
 `;
 
 const PersonIcon = styled.img`
@@ -167,6 +206,11 @@ const PersonIcon = styled.img`
   height: 88px;
   border-radius: 50%;
   background-color: #d9d9d9;
+
+  @media (max-width: 554px) {
+    width: 70px;
+    height: 70px;
+  }
 `;
 
 const PlusIcon = styled.img`
@@ -175,6 +219,11 @@ const PlusIcon = styled.img`
   right: 0;
   width: 30px;
   height: 30px;
+
+  @media (max-width: 554px) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const AddText = styled.p`
@@ -182,6 +231,11 @@ const AddText = styled.p`
   font-size: 14px;
   font-weight: bold;
   color: black;
+
+  @media (max-width: 554px) {
+    font-size: 12px;
+    margin-top: 5px;
+  }
 `;
 
 const Overlay = styled.div`
