@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import x from "../../assets/icons/x.svg";
+import useUserStore  from '../../stores/userStore'
 //지역 입력 팝업창
 
 const FirstPopupContainer = styled.div`
@@ -101,6 +102,8 @@ function Detail({ onClose, onNext }) {
   const [nickname, setNickname] = useState("");
   const [city, setCity] = useState("");
   const [cityDetail, setCityDetail] = useState("");
+  //const { nickname, city, cityDetail } = useUserStore.getState();
+  // 이 부분에서 city랑 cityDetail은 땅 주인이 된 지역만 받아와야 해서.. 다르게 받아올듯 
 
   const handleNextClick = () => {
     onNext(); 
@@ -118,16 +121,8 @@ function Detail({ onClose, onNext }) {
       />
       <DropdownContainer>
         <Dropdown value={city} onChange={(e) => setCity(e.target.value)}>
-          <option value="">city</option>
-          <option value="서울">서울</option>
-          <option value="부산">부산</option>
-          <option value="대구">대구</option>
         </Dropdown> 
         <Dropdown value={cityDetail} onChange={(e) => setCityDetail(e.target.value)}>
-          <option value="">city detail</option>
-          <option value="강남구">강남구</option>
-          <option value="서초구">서초구</option>
-          <option value="송파구">송파구</option>
         </Dropdown>
       </DropdownContainer>
       <SubmitButton onClick={handleNextClick}>다음</SubmitButton> 

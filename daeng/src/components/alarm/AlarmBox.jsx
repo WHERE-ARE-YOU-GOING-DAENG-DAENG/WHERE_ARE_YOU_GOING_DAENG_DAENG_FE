@@ -38,8 +38,7 @@ const ToggleButton = styled.button`
 const AlarmBox = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [selectedPushType] = useState(pushAgree[0].code);
-
-  // 알림 활성화 상태 가져오기
+  
   useEffect(() => {
     const fetchNotificationConsent = async () => {
       try {
@@ -138,14 +137,13 @@ const AlarmBox = () => {
     <AlarmContainer>
       <ToggleButton
         isSubscribed={isSubscribed}
-        onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest}
-      >
-        {isSubscribed ? "알림 그만 받기" : "알림 받기"}
+        onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest}>
+      {isSubscribed ? "알림 그만 받기" : "알림 받기"}
       </ToggleButton>
       <p>{isSubscribed ? "현재 알림이 활성화된 상태입니다." : "현재 알림이 비활성화된 상태입니다."}</p>
     </AlarmContainer>
-          {isSubscribed && <AlarmList activeTab="subscribe" />}
-          </>
+      {isSubscribed && <AlarmList activeTab="subscribe" />}
+    </>
   );
 };
 
