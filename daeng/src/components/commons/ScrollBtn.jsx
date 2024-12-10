@@ -7,14 +7,14 @@ const ScrollTop = styled.button`
   bottom: 90px; 
   right: 50%;
   transform: translateX(500%);
-  z-index: 1000; /* 다른 요소보다 위에 표시 */
+  z-index: 1000;
   border: none;
-  border-radius: 50%; /* 둥근 버튼 */
+  border-radius: 50%;
   width: 50px;
   height: 50px;
   cursor: pointer;
-  opacity: ${(props) => (props.visible ? 1 : 0)}; /* 스크롤 위치에 따라 투명도 변경 */
-  pointer-events: ${(props) => (props.visible ? "auto" : "none")}; /* 클릭 가능 여부 */
+  opacity: ${(props) => (props.visible ? 1 : 0)};
+  pointer-events: ${(props) => (props.visible ? "auto" : "none")};
   transition: opacity 0.3s ease;
 
   @media(max-width:554px){

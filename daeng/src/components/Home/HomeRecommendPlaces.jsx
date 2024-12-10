@@ -12,8 +12,8 @@ function HomeRecommendPlaces() {
   const navigate = useNavigate();
 
   const defaultLocation = {
-    lat: 37.5666, //실시간 위치를 허용하지 않았을 경우
-    lng: 126.9782, //서울시청 위도 경도
+    lat: 37.5666,
+    lng: 126.9782,
   };
 
   useEffect(() => {

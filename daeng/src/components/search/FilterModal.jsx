@@ -121,7 +121,7 @@ const FilterModal = ({ isOpen, onClose, keywords, setKeywords, setFilter }) => {
                 </Reset>
                 <Gap>
                 {Object.entries(keywords)
-                    .filter(([key]) => key === "cityDetail" || key === "placeType") // 필터링
+                    .filter(([key]) => key === "cityDetail" || key === "placeType")
                     .map(([key, value]) =>
                         value ? (
                             <AreaBtn
@@ -187,8 +187,8 @@ const Modal = styled.div`
     border-top-right-radius: 30px;
     animation: ${({ isClosing }) => (isClosing ? slideDown : slideUp)} 0.4s ease-out;
     z-index: 999;
-    overflow-y: auto; /* 모달 내부에서 스크롤 가능 */
-    -webkit-overflow-scrolling: touch; /* 모바일 스크롤 부드럽게 */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     @media (max-width: 554px) {
         width: 100%;
         bottom: 64px;

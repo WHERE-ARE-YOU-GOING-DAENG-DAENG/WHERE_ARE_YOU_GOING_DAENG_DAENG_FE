@@ -68,7 +68,7 @@ const ArrowButton = styled.button`
 
 const ReviewSlideshow = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(4); // 큰 화면에서 4개 보여줌
+  const [visibleCount, setVisibleCount] = useState(4);
   const [itemWidth, setItemWidth] = useState(120);
 
   const totalImages = images.length;
@@ -79,17 +79,17 @@ const ReviewSlideshow = ({ images }) => {
 
       if (screenWidth <= 554) {
         setVisibleCount(2);
-        setItemWidth(90); // 작은 화면에서 이미지 크기 축소
+        setItemWidth(90);
       } else if (screenWidth <= 768) {
         setVisibleCount(3);
-        setItemWidth(110); // 중간 화면
+        setItemWidth(110);
       } else {
-        setVisibleCount(4); // 큰 화면에서 4개
+        setVisibleCount(4);
         setItemWidth(120);
       }
     };
 
-    handleResize(); // 초기 화면 크기 반영
+    handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -107,7 +107,6 @@ const ReviewSlideshow = ({ images }) => {
     );
   };
 
-  // 화살표 표시 조건
   const canShowPrev = currentIndex > 0;
   const canShowNext = currentIndex < totalImages - visibleCount;
 

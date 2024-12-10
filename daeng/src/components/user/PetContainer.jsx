@@ -235,13 +235,13 @@ const handleToPetEdit = (petId) => {
 
 const handlePrev = () => {
   if (startIndex > 0) {
-    setStartIndex((prevIndex) => prevIndex - 1); // 1씩 이동
+    setStartIndex((prevIndex) => prevIndex - 1);
   }
 };
 
 const handleNext = () => {
   if (startIndex + 1 < petData.length) {
-    setStartIndex((prevIndex) => prevIndex + 1); // 1씩 이동
+    setStartIndex((prevIndex) => prevIndex + 1);
   }
 };
 const visiblePets = petData.slice(startIndex, startIndex + 1);
