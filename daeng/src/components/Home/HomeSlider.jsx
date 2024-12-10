@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+// import survey_banner from "../../assets/icons/survey_banner.jpg";
 import festival_banner from "../../assets/icons/festival_banner.jpg";
 import banner1 from '../../assets/icons/banner1.jpg';
 import banner2 from "../../assets/icons/banner2.jpg";
@@ -74,6 +75,8 @@ const Slide = styled.img`
   object-fit: contain;
   flex-shrink: 0;
   cursor: pointer;
+
+
 `;
 
 const DotsWrapper = styled.div`
