@@ -166,7 +166,6 @@ function UserRegister() {
         title: "닉네임 필요",
         text: "닉네임을 입력해 주세요.",
         confirmText: "확인",
-        onConfirm: () => console.log("닉네임 부족 경고 확인됨"),
       });
       return;
     }

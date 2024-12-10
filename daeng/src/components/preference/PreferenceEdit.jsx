@@ -121,7 +121,6 @@ function PreferenceEdit() {
         title: "항목 선택 필요",
         text: "시설과 선호 항목을 각각 최소 1개 이상 선택해 주세요.",
         confirmText: "확인",
-        onConfirm: () => console.log("필수 항목 선택 경고 확인됨"),
       });
       return;
     }
@@ -137,7 +136,7 @@ function PreferenceEdit() {
     };
   
     try {
-      const response1 = await axios.put(
+      await axios.put(
         "https://www.daengdaeng-where.link/api/v1/preferences",
         placePayload,
         {
@@ -145,9 +144,8 @@ function PreferenceEdit() {
           withCredentials: true,
         }
       );
-      console.log("Response for PLACE_TYP:", response1.data);
   
-      const response2 = await axios.put(
+      await axios.put(
         "https://www.daengdaeng-where.link/api/v1/preferences",
         favoritePayload,
         {
@@ -155,7 +153,6 @@ function PreferenceEdit() {
           withCredentials: true,
         }
       );
-      console.log("Response for PLACE_FTE:", response2.data);
   
       AlertDialog({
         mode: "alert",

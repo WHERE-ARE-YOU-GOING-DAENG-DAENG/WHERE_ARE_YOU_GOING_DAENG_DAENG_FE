@@ -53,13 +53,11 @@ function AlarmList({ activeTab }) {
             }
           );
           if (response.status === 200) {
-            console.log("알림 데이터:", response.data.data);
             setNotifications(response.data.data);
           } else {
             throw new Error("알림 데이터를 불러오는 데 실패했습니다.");
           }
         } catch (err) {
-          console.error("오류 발생:", err.message);
           setError(err.message || "알림 데이터를 가져오는 중 오류가 발생했습니다.");
         } finally {
           setLoading(false);
