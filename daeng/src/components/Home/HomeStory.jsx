@@ -7,10 +7,11 @@ import HomeStoryAddBtn from "../../assets/icons/home_storyaddBtn.svg";
 import UploadStoryBtn from "../../components/commons/UploadStoryBtn";
 import Detail from "../story/Detail";
 import ShowMyStory from "../story/ShowMystory";
+import UploadVideo from "../story/UploadVideo";
+
 const HomeStory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [showDetailPopup, setShowDetailPopup] = useState(false);
-  const [showMyStoryPopup, setShowMyStoryPopup] = useState(false); 
+  const [currentPopup, setCurrentPopup] = useState(null); 
 
   const stories = [
     { location: "서울 강남구", nickname: "내가 짱", isPinkBorder: true, imageSrc: "https://via.placeholder.com/80" },
@@ -35,22 +36,21 @@ const HomeStory = () => {
     }
   };
 
-  const openDetailPopup = () => {
-    setShowDetailPopup(true);
-  };
-
-  const closeDetailPopup = () => {
-    setShowDetailPopup(false);
-  };
-
   const openMyStoryPopup = () => {
-    setShowMyStoryPopup(true); 
+    setCurrentPopup("myStory"); // ShowMyStory 팝업 열기
   };
 
-  const closeMyStoryPopup = () => {
-    setShowMyStoryPopup(false); 
+  const openDetailPopup = () => {
+    setCurrentPopup("detail"); // Detail 팝업 열기
   };
 
+  const closePopup = () => {
+    setCurrentPopup(null); // 모든 팝업 닫기
+  };
+
+  const openNextPopup = () => {
+    setCurrentPopup("uploadVideo"); // UploadVideo 팝업 열기
+  };
 
   return (
     <StoryWrapper>
@@ -64,7 +64,7 @@ const HomeStory = () => {
             <FixedStoryAdd>
               <PersonIconWrapper>
                 <PersonIcon src={HomeStoryAdd} alt="내 스토리 확인" onClick={openMyStoryPopup} />
-                <PlusIcon src={HomeStoryAddBtn} alt="더하기 아이콘" onClick={openDetailPopup} />
+                <PlusIcon src={HomeStoryAddBtn} alt="스토리 추가 아이콘" onClick={openDetailPopup} />
               </PersonIconWrapper>
               <AddText>스토리 추가</AddText>
             </FixedStoryAdd>
@@ -84,15 +84,21 @@ const HomeStory = () => {
         </ArrowButton>
       </StoryContainer>
 
-      {showMyStoryPopup && (
+      {currentPopup === "myStory" && (
         <Overlay>
-          <ShowMyStory onClose={closeMyStoryPopup} />
+          <ShowMyStory onClose={closePopup} />
         </Overlay>
       )}
 
-      {showDetailPopup && (
+      {currentPopup === "detail" && (
         <Overlay>
-          <Detail onClose={closeDetailPopup} />
+          <Detail onClose={closePopup} onNext={openNextPopup} />
+        </Overlay>
+      )}
+
+      {currentPopup === "uploadVideo" && (
+        <Overlay>
+          <UploadVideo onClose={closePopup} />
         </Overlay>
       )}
     </StoryWrapper>
@@ -174,7 +180,6 @@ const FixedStoryAdd = styled.div`
   justify-content: center;
   width: 104px;
   height: 136px;
-  
   text-align: center;
   cursor: pointer;
 
