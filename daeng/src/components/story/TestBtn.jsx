@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ShowVideo from "./ShowVideo";
+import ShowMyStory from "./ShowMystory";
 import Detail from "./Detail";
 import UploadVideo from "./UploadVideo";
 import styled from "styled-components";
@@ -54,7 +54,7 @@ function TestBtn() {
 
       {currentPopup === "showVideo" && (
         <Overlay>
-          <ShowVideo onClose={handleClosePopup} />
+          <UploadVideo onClose={handleClosePopup} />
         </Overlay>
       )}
 
@@ -62,7 +62,7 @@ function TestBtn() {
           
       {showUploadVideo && (
         <Overlay>
-          <UploadVideo onClose={handleCloseUploadVideo} />
+          <ShowMyStory onClose={handleCloseUploadVideo} />
         </Overlay>
       )}
     </>
