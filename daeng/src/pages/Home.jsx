@@ -1,6 +1,5 @@
 import HomeHeader from "../components/Home/HomeHeader";
 import HomeSlider from "../components/Home/HomeSlider";
-import HomeStory from "../components/Home/HomeStory";
 import HomeDogPlaces from "../components/Home/HomeDogPlaces";
 import HomeTrendingPlaces from "../components/Home/HomeTrendingPlaces";
 import HomeSanta from "../components/Home/HomeSanta";
@@ -84,7 +83,6 @@ function Home() {
     <Wrapper>
       <HomeHeader />
       <HomeSlider />
-      <HomeStory />
       {isLoggedIn ? <HomeDogPlaces /> : <HomeLogout />}
       <HomeTrendingPlaces />
       <HomeSanta />
