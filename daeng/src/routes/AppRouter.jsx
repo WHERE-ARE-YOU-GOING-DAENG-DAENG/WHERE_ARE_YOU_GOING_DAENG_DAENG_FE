@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
@@ -22,8 +22,8 @@ import MyVisitList from '../pages/visit/MyVisitList';
 import PlaceVisitList from '../pages/visit/PlaceVisitList';
 import Error from "../pages/Error";
 import { setupAxiosInterceptors } from '../services/axiosInstance';
+import EventPage from '../pages/user/EventPage';
 import HowToGuidePage from '../pages/HowToGuidePage';
-import Video from '../components/story/ShowVideo';
 import TestBtn from '../components/story/TestBtn';
 
 const trackPageView = () => {
@@ -55,6 +55,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/event" element={<EventPage />} />
         <Route path="/user-register" element={<UserRegisterPage />} />
         <Route path="/user-edit" element={<UserEditPage />} />
         <Route path="/preference-register" element={<PreferenceRegister />} />
