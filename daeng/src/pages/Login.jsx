@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import kakaoLoginBtn from "../assets/icons/kakaoLoginBtn.svg";
 import loginGoogle from "../assets/icons/login_google.svg";
-import loginPuppy from "../assets/icons/login_puppy.svg";
+import loginLogo from "../assets/icons/login_mainlogo.svg";
 import loginDangdang from "../assets/icons/login_dangdang.svg"; // 추가
 
 const Login = () => {
@@ -27,7 +27,7 @@ const Login = () => {
                 <LogoText>와 함께</LogoText>
             </LogoContainer>
             <Subtitle>반려동물 동반 가능 시설을 찾아봐요!</Subtitle>
-            <Image src={loginPuppy} alt="강아지 이미지" />
+            <Image src={loginLogo} alt="강아지 이미지" />
             <DividerContainer>
                 <Line />
                 <DividerText>소셜 로그인으로 간편 가입</DividerText>
