@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-import HomeLeftArrow from "../../assets/icons/home_leftarrow.svg";
-import HomeRightArrow from "../../assets/icons/home_rightarrow.svg";
+import reversearrow from "../../assets/icons/reversearrow.svg";
+import arrow from "../../assets/icons/arrow.svg";
 import HomeStoryAdd from "../../assets/icons/home_storyadd.svg";
 import HomeStoryAddBtn from "../../assets/icons/home_storyaddBtn.svg";
 import UploadStoryBtn from "../../components/commons/UploadStoryBtn";
@@ -57,7 +57,7 @@ const HomeStory = () => {
       <Title>땅주인들의 스토리</Title>
       <StoryContainer>
         <ArrowButton onClick={handlePrev}>
-          <img src={HomeLeftArrow} alt="왼쪽 화살표" />
+          <img src={reversearrow} alt="왼쪽 화살표" />
         </ArrowButton>
         <ScrollableArea>
           <ScrollableStories currentIndex={currentIndex}>
@@ -80,7 +80,7 @@ const HomeStory = () => {
           </ScrollableStories>
         </ScrollableArea>
         <ArrowButton onClick={handleNext}>
-          <img src={HomeRightArrow} alt="오른쪽 화살표" />
+          <img src={arrow} alt="오른쪽 화살표" />
         </ArrowButton>
       </StoryContainer>
 
