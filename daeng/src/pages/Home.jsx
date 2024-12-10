@@ -50,14 +50,8 @@ function Home() {
             userLocation.lng !== newLocation.lng
           ) {
             setUserLocation(newLocation);
-            console.log("Location updated:", newLocation);
           }
         },
-        (error) => {
-          if (!userLocation.lat && !userLocation.lng) {
-            console.log("위치접근 비동의, 기본값:", userLocation);
-          }
-        }
       );
     }
   }, [userLocation]);
@@ -76,16 +70,12 @@ function Home() {
       const { user } = response.data.data;
 
       setLoginData(user);
-
-      console.log("Fetched User Data:", user);
     } catch (error) {
-      console.error("Error fetching user data:", error);
       AlertDialog({
         mode: "alert",
         title: "데이터 불러오기 실패",
         text: "사용자 정보를 불러오는 데 문제가 발생했습니다.",
         confirmText: "확인",
-        onConfirm: () => console.log("데이터 불러오기 실패 확인됨"),
       });
     }
   };

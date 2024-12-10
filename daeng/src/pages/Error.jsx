@@ -83,9 +83,10 @@ const Button = styled.button`
 const Error = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const status = location.state?.status || 404;
+    const params = new URLSearchParams(location.search);
+    const isDeleteUser = params.get("status") === "DELETE_USER";
+    const status = isDeleteUser ? 409 : location.state?.status || 404;
 
-    // 에러 메시지 설정
     const getErrorMessage = () => {
         if (status === 404) {
             return {
@@ -96,6 +97,11 @@ const Error = () => {
             return {
                 title: "권한이 없는 요청입니다.",
                 content: "권한이 없거나, 사용할 수 없는 페이지입니다.\n로그인 정보를 다시 한 번 확인해주세요.",
+            };
+        }else if (status === 409) {
+            return {
+                title: "탈퇴된 계정입니다.",
+                content: "탈퇴일로부터 30일이 지나야 재가입이 가능합니다.\n다른 계정으로 로그인 해주세요.",
             };
         } else {
             return {
@@ -118,7 +124,6 @@ const Error = () => {
             <ErrorContent>{content}</ErrorContent>
             <ButtonContainer>
                 <Button primary onClick={() => navigate("/")}>홈으로</Button>
-                {/* <Button onClick={() => navigate(-1)}>뒤로가기</Button> */}
             </ButtonContainer>
         </Container>
     );

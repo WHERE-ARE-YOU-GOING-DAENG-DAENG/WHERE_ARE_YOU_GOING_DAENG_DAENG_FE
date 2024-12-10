@@ -30,15 +30,15 @@ import {
 function EditInputForm() {
   const { petId } = useParams();
   const { petInfo, fetchPetData, isLoading, error } = usePetStore(); 
-  const [petName, setPetName] = useState("");  //이름
-  const [preview, setPreview] = useState(null); //미리보기
-  const [selectedPetType, setSelectedPetType] = useState(""); //종
-  const [selectedSize, setSelectedSize] = useState(""); // 반려동물 사이즈
-  const [selectedGender, setSelectedGender] = useState(""); //성별
-  const [selectedNeutering, setSelectedNeutering] = useState(""); //중성화
-  const [petPicture, setPetPicture] = useState(""); //서버에서 받아온 기존 사진 URL
-  const [imageFile, setImageFile] = useState(null); //사용자가 새로 업로드하려는 이미지 파일
-  const [petBirth, setPetBirth] = useState(""); //생일
+  const [petName, setPetName] = useState(""); 
+  const [preview, setPreview] = useState(null);
+  const [selectedPetType, setSelectedPetType] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedGender, setSelectedGender] = useState("");
+  const [selectedNeutering, setSelectedNeutering] = useState(""); 
+  const [petPicture, setPetPicture] = useState("");
+  const [imageFile, setImageFile] = useState(null); 
+  const [petBirth, setPetBirth] = useState(""); 
 
   const navigate = useNavigate();
 
@@ -69,7 +69,7 @@ function EditInputForm() {
     const month = String(today.getMonth() + 1).padStart(2, "0"); 
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-  }; // 오늘 이후는 선택 불가하게
+  }; 
 
   const handleFocus = (e) => {
     e.target.showPicker();
@@ -102,14 +102,12 @@ function EditInputForm() {
 
   const handleNeuteringClick = (status) => {
     setSelectedNeutering(status); 
-  };//중성화
+  };
 
   const handleSizeClick = (sizeCode) => {
     setSelectedSize(sizeCode); 
-  }; //사이즈 
+  }; 
 
-
-  //유효성 검사
   const validateForm = () => {
     const nameRegex = /^[가-힣a-zA-Z\s]+$/;
   
@@ -172,8 +170,6 @@ function EditInputForm() {
     return true;
   }; 
 
-  //API 연동 시작
-
   const handlePetDataUpdate = async (event) => {
     event.preventDefault();
   
@@ -181,7 +177,6 @@ function EditInputForm() {
   
     let imageUrl = petPicture;
   
-    // 새 이미지가 있을 경우에만 S3에 업로드 처리
     if (imageFile) {
       try {
         const presignResponse = await axios.post(
@@ -203,9 +198,7 @@ function EditInputForm() {
           console.error('Presigned URL이 없습니다. 응답 데이터를 확인하세요.');
           throw new Error('Presigned URL이 없습니다.');
         }
-        console.log('Extracted Presigned URL:', presignedUrl);
 
-      // 이미지 업로드
       const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
         headers: {
           'Content-Type': imageFile.type, 
@@ -214,7 +207,7 @@ function EditInputForm() {
       });
 
       if (imageUploadResponse.status === 200) {
-        imageUrl = presignedUrl.split('?')[0]; // 쿼리 파라미터를 제외한 URL만 사용
+        imageUrl = presignedUrl.split('?')[0];
       } else {
         alert('이미지 업로드에 실패했습니다.');
         return;
@@ -235,8 +228,6 @@ function EditInputForm() {
   };
 
   try {
-    console.log('보내는 Payload:', petData);
-
     const response = await axios.put(
       `https://www.daengdaeng-where.link/api/v1/pets/${petId}`,
       petData,
@@ -249,16 +240,6 @@ function EditInputForm() {
     );
 
     if (response.status === 200) {
-
-      console.log("Updated pet data:", {
-        petName,
-        selectedPetType,
-        imageUrl,
-        petBirth,
-        selectedGender,
-        selectedNeutering,
-        selectedSize
-      }); 
       AlertDialog({
         mode: "alert",
         title: "성공",

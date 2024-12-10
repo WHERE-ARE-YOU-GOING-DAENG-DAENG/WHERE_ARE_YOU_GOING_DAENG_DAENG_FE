@@ -3,7 +3,7 @@ import axios from "axios";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../data/CommonCode";
 
 const usePetStore = create((set) => ({
-  pets: [], // 펫 리스트 > 리뷰 등록에서 사용
+  pets: [],
   petInfo: null,
   isLoading: false,
   error: null,
@@ -15,8 +15,6 @@ const usePetStore = create((set) => ({
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-
-      console.log("API 응답 데이터:", response.data.data);
       set({ pets: response.data.data || [], isLoading: false });
     } catch (error) {
       set({ isLoading: false, error: "펫 리스트를 불러오는 데 실패했습니다." });
@@ -36,7 +34,6 @@ const usePetStore = create((set) => ({
       );
 
       const petData = response.data.data;
-      console.log("API로부터 가져온 펫 데이터:", petData); 
       const speciesOption = petTypeOptions.find((option) => option.name === petData.species);
       const genderOption = genderOptions.find((option) => option.name === petData.gender);
       const sizeOption = petSizeOptions.find((option) => option.name === petData.size);

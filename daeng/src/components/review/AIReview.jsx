@@ -45,7 +45,6 @@ function AiReviewSummary({ placeId }) {
   const [badSummary, setBadSummary] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log("AiReviewSummary placeId:", placeId);
 
   useEffect(() => {
   const fetchAiSummary = async () => {
@@ -59,12 +58,10 @@ function AiReviewSummary({ placeId }) {
           },
         }
       );
-      console.log("응답", getResponse.data);
 
       setGoodSummary(getResponse.data.goodSummary || "요약된 좋은 점이 없습니다.");
       setBadSummary(getResponse.data.badSummary || "요약된 나쁜 점이 없습니다.");
     } catch (error) {
-      console.error("[ERROR] AI 요약 데이터 처리 중 문제 발생:", error.response || error.message);
       setGoodSummary( "좋은 점에 대한 요약이 없습니다.");
       setBadSummary("안 좋은 점에 대한 요약이 없습니다.");
     } finally {
