@@ -4,7 +4,7 @@ import styled from "styled-components";
 import markerIcon from "../../assets/icons/marker.svg";
 import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
 import BookMarker from "../commons/BookMarker";
-import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
+import useGoogleMapsStore from "../../stores/useGoogleMapsStore";
 import CustomOverlay from "./CustomOverlay";
 import AlertDialog from "../../components/commons/SweetAlert";
 import useLocationStore from "../../stores/useLocationStore";
@@ -12,17 +12,17 @@ import Loading from "../commons/Loading";
 
 const MapContainer = styled.div`
   width: 100%;
-  height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 172px)" : "485px")};
+  height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 160px)" : "485px")};
   display: flex;
   @media (max-width: 554px) {
-    height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 173px)" : "385px")};
+    height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 150px)" : "385px")};
   }
 `;
 
 const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
-  const isLoaded = useGoogleMapsLoader();
+  const { isLoaded } = useGoogleMapsStore();
   const [currentLocation, setCurrentLocation] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 });

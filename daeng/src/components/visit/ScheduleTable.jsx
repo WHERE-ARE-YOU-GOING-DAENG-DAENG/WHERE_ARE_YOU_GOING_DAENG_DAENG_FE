@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import xIcon from "../../assets/icons/x.svg";
+import pinkxIcon from "../../assets/icons/pinkX.svg";
 import useVisitStore from "../../stores/useVisitStore";
 import AlertDialog from "../commons/SweetAlert";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const TableWrapper = styled.div`
   margin: 0px 40px;
   overflow: auto;
-  padding-bottom: 77px;
+  padding-bottom: 115px;
   @media (max-width: 554px) {
     margin: 0px 7%;
     padding-bottom: 64px;
@@ -24,7 +25,7 @@ const Table = styled.table`
 `;
 
 const Thead = styled.thead`
-  background: #FF4B98;
+  background: #ff4b98;
   color: white;
 `;
 
@@ -54,9 +55,11 @@ const Button = styled.button`
 `;
 
 const ScheduleTable = () => {
-  const myVisits = useVisitStore((state)=>state.myVisits);
-  const removeVisit  = useVisitStore((state) => state.removeVisit);
+  const myVisits = useVisitStore((state) => state.myVisits);
+  const removeVisit = useVisitStore((state) => state.removeVisit);
   const navigate = useNavigate();
+
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const handleVisitClick = (placeId) => {
     navigate(`/visit-list/${placeId}`);
@@ -72,8 +75,8 @@ const ScheduleTable = () => {
       cancelText: "닫기",
       onConfirm: async () => {
         await removeVisit(id);
-      }
-  })
+      },
+    });
   };
 
   return (
@@ -96,7 +99,7 @@ const ScheduleTable = () => {
                 onClick={() => handleVisitClick(schedule.placeId)}
                 style={{ cursor: "pointer" }}
               >
-                <Td>{schedule.visitAt.split("T")[0].slice(5).replace("-","/")}</Td>
+                <Td>{schedule.visitAt.split("T")[0].slice(5).replace("-", "/")}</Td>
                 <Td>{schedule.visitAt.split("T")[1].slice(0, 5)}</Td>
                 <Td>{schedule.placeName}</Td>
                 <Td>
@@ -108,8 +111,15 @@ const ScheduleTable = () => {
                   ))}
                 </Td>
                 <Td>
-                  <Button onClick={(e) => handleDelete(e, schedule.visitId)}>
-                    <img src={xIcon} alt="삭제" />
+                  <Button
+                    onClick={(e) => handleDelete(e, schedule.visitId)}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
+                    <img
+                      src={hoveredIndex === index ? pinkxIcon : xIcon}
+                      alt="삭제"
+                    />
                   </Button>
                 </Td>
               </tr>
