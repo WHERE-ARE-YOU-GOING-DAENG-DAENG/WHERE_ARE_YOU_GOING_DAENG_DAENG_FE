@@ -57,13 +57,13 @@ FilterBtn.propTypes = {
   label: PropTypes.string.isRequired,
   icon: PropTypes.string,
   size: PropTypes.oneOf(['default', 'small']),
-  onClick: PropTypes.func, // onClick Prop 추가
+  onClick: PropTypes.func,
 };
 
 FilterBtn.defaultProps = {
   icon: null,
   size: 'default',
-  onClick: null, // 기본값 null
+  onClick: null,
 };
 
 export default FilterBtn;

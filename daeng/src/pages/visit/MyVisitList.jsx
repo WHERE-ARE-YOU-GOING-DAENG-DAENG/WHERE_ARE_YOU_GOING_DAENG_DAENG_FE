@@ -33,9 +33,6 @@ const Text = styled.div`
 `
 
 const MyVisitList = () => {
-  const [schedules, setSchedules] = useState([]);
-  const [allSchedules, setAllSchedules] = useState([]);
-  const myVisits = useVisitStore((state)=>state.myVisits);
   const fetchVisits = useVisitStore((state)=>state.fetchVisits);
   const nickname = useUserStore((state)=> state.nickname);
   const [name, setName] = useState(nickname || '')
@@ -46,10 +43,6 @@ const MyVisitList = () => {
     
     fetchmyVisits();
   },[])
-
-  useEffect(() => {
-    console.log("Updated visites:", myVisits);
-  }, [myVisits]);
 
   return (
     <>

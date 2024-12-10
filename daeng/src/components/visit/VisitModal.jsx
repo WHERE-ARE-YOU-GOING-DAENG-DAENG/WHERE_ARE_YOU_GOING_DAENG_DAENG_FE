@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import ConfirmBtn from "../../components/commons/ConfirmBtn";
-import ReactSelect from "react-select" // 다중선택 select라이브러리
+import ReactSelect from "react-select"
 import AlertDialog from "../commons/SweetAlert";
 import axios from "axios";
 import axiosInstance from "../../services/axiosInstance";
@@ -40,8 +40,8 @@ const Modal = styled.div`
     border-top-right-radius: 30px;
     animation: ${({ isClosing }) => (isClosing ? slideDown : slideUp)} 0.4s ease-out;
     z-index: 999;
-    overflow-y: auto; /* 모달 내부에서 스크롤 가능 */
-    -webkit-overflow-scrolling: touch; /* 모바일 스크롤 부드럽게 */
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch;
     @media (max-width: 554px) {
         width: 100%;
         bottom: 64px;
@@ -104,7 +104,6 @@ const InputAlert = styled.p`
   gap: 1px;
 `;
 
-// select css
 const selectStyles = {
     control: (provided, state) => ({
         ...provided,
@@ -168,7 +167,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
                 title: "영업시간 조회",
                 text: "영업시간 조회에 실패하였습니다.",
                 confirmText: "확인",
-                onConfirm: () => console.log("영업시간 조회 실패"),
             });
           }
         }
@@ -183,7 +181,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
     
         if (start.isAfter(end)) {
             let currentTime = dayjs("00:00", "HH:mm");
-            const nextDay = dayjs("23:59", "HH:mm"); // 하루의 마지막 시간을 설정
+            const nextDay = dayjs("23:59", "HH:mm");
             while (currentTime.isBefore(nextDay) || currentTime.isSame(nextDay)) {
                 options.push({
                     value: currentTime.format("HH:mm"),
@@ -227,16 +225,26 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         const endDate = dayjs().add(6, "day").format("YYYY-MM-DD");
     
         if (dayjs(date).isBefore(today, "day")) {
-          alert("등록불가")
+          AlertDialog({
+            mode: "alert",
+            title: "등록불가",
+            text: "당일부터 일주일간 선택할 수 있습니다.",
+            confirmText: "확인",
+        });
         } else if (dayjs(date).isBetween(startDate, endDate, "day", "[]")) {
           if(initDate){
             return;
           }else {
             setSelectedDate(date);
           }
-        } else (
-            alert("등록불가")
-        )
+        } else {
+            AlertDialog({
+                mode: "alert",
+                title: "등록불가",
+                text: "당일부터 일주일간 선택할 수 있습니다.",
+                confirmText: "확인",
+            });
+        }
       };
 
       const handleTimeChange = (selectedOption) => {
@@ -258,7 +266,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
                 title: "",
                 text: "날짜를 선택해주세요.",
                 confirmText: "확인",
-                onConfirm: () => console.log("날짜 선택 누락"),
             });
             return false;
         }
@@ -269,7 +276,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
                 title: "",
                 text: "시간을 선택해주세요.",
                 confirmText: "확인",
-                onConfirm: () => console.log("시간 선택 누락"),
             });
             return false;
         }
@@ -280,7 +286,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
                 title: "",
                 text: "반려동물을 선택해주세요.",
                 confirmText: "확인",
-                onConfirm: () => console.log("반려동물 선택 누락"),
             });
             return false;
         }
@@ -297,7 +302,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
             petIds: selectedPets,
             visitAt: `${selectedDate}T${selectedTime}:00`,
         }
-        console.log(payload) //로그 삭제
         try{
           const response = await axiosInstance.post("https://www.daengdaeng-where.link/api/v1/visit", payload,{
           withCredentials: true
@@ -310,7 +314,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
               text: "방문일정이 등록되었습니다.",
               icon: "success",
               confirmText: "확인",
-              onConfirm: () => console.log("방문일정 등록됨"),
             });
           }
         }catch(error){
@@ -320,7 +323,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
                 title: "방문예정 등록",
                 text: "이미 등록된 반려동물입니다.",
                 confirmText: "확인",
-                onConfirm: () => console.log("방문예정 중복 등록"),
             });
             } else {
                 if(error.response){
@@ -329,7 +331,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
                     title: "방문예정등록",
                     text: "방문예정 등록에 실패하였습니다.",
                     confirmText: "확인",
-                    onConfirm: () => console.log("방문예정 등록 실패"),
                 });
               }
             }

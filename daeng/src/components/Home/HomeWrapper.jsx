@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* 화면 전체를 덮음 */
+  min-height: 100vh;
   max-width: 554px;
   margin: 0 auto;
   position: relative;

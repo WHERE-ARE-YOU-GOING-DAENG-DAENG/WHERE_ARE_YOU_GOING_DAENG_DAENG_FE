@@ -12,8 +12,8 @@ function HomeDogPlaces() {
   const navigate = useNavigate();
 
   const defaultLocation = {
-    lat: 0.0, // 실시간 위치를 허용하지 않았을 경우
-    lng: 0.0, //위도, 경도 모두 0.0
+    lat: 0.0,
+    lng: 0.0,
   };
 
   useEffect(() => {
