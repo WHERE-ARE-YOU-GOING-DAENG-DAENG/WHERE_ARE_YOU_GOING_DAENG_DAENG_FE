@@ -42,11 +42,16 @@ function Home() {
           const newLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
+            accuracy: position.coords.accuracy,
           };
 
+          console.log("첫 위치추적:", newLocation)
+          console.log("현재위치",userLocation)
+
+          const { lat, lng, accuracy } = userLocation;
           if (
-            userLocation.lat !== newLocation.lat ||
-            userLocation.lng !== newLocation.lng
+            newLocation.accuracy < accuracy &&
+            (lat !== newLocation.lat || lng !== newLocation.lng)
           ) {
             setUserLocation(newLocation);
           }
