@@ -85,7 +85,6 @@ const Footer = () => {
     const [activeIndex, setActiveIndex] = useState(null);
     const [hoveredIndex, setHoveredIndex] = useState(null);
 
-    // 현재 경로에 따라 활성화 상태 업데이트
     useEffect(() => {
         const currentIndex = items.findIndex((item) => item.path === location.pathname);
         setActiveIndex(currentIndex);

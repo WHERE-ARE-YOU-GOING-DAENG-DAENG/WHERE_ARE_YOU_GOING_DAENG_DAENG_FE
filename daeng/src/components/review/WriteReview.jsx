@@ -359,7 +359,7 @@ const getCurrentDate = () => {
   const month = String(today.getMonth() + 1).padStart(2, "0"); 
   const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
-}; //오늘 날짜 가지고 오기
+};
 
 
 function WriteReview({ review = {} }) {
@@ -408,18 +408,19 @@ function WriteReview({ review = {} }) {
 
   const navigate = useNavigate();
   const { pets, fetchPetList } = usePetStore();
-  const [selectPet, setSelectPet] = useState([]); // 선택된 펫 목록들
-  const [ratings, setRatings] = useState([false, false, false, false, false]); // 별점
-  const [previews, setPreviews] = useState([]); //이미지 미리보기
-  const [placeImgs, setPlaceImgs] = useState([]); // 업로드할 이미지 파일
-  const [selectKeywords, setSelectKeywords] = useState([]); 
-  const [text, setText] = useState(""); // 리뷰 내용 상태
-  const [visitedAt, setVisitedAt] = useState(""); // 초기값을 빈 문자열로 설정
-  const [selectedPetImage, setSelectedPetImage] = useState(""); //첫번째 펫 이미지
+  const [selectPet, setSelectPet] = useState([]);
+  const [ratings, setRatings] = useState([false, false, false, false, false]);
+  const [previews, setPreviews] = useState([]);
+  const [placeImgs, setPlaceImgs] = useState([]);
+  const [selectKeywords, setSelectKeywords] = useState([]);
+  const [text, setText] = useState("");
+  const [visitedAt, setVisitedAt] = useState("");
+  const [selectedPetImage, setSelectedPetImage] = useState("");
   const location = useLocation();
   const {type} = location.state || {};
 
   console.log("Received type:", type);
+  
 
   useEffect(() => {
     fetchPetList(); 
@@ -444,10 +445,6 @@ const handlePetSelection = (selectedOptions) => {
 const handleFocus = (e) => {
   e.target.showPicker();
 };
-
-  useEffect(() => {
-    console.log("useParams placeId:", placeId);
-  }, [placeId]);
 
   if (!placeId) {
     return <div>장소 정보를 불러오는 데 실패했습니다.</div>;
@@ -489,7 +486,7 @@ const handleFocus = (e) => {
   };
 
   const handleStarClick = (index) => {
-    const newRatings = [...ratings]; // 기존 별점 배열 복사
+    const newRatings = [...ratings];
     for (let i = 0; i <= index; i++) {
       newRatings[i] = true;
     }
@@ -497,7 +494,7 @@ const handleFocus = (e) => {
     for (let i = index + 1; i < newRatings.length; i++) {
       newRatings[i] = false;
     }
-    setRatings(newRatings); // 상태 업데이트
+    setRatings(newRatings);
   };
   const handleRemoveImage = (index) => {
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
@@ -574,8 +571,6 @@ const handleFocus = (e) => {
     return true;
   };
 
-
- // S3 업로드 시작
   const uploadMedia = async (files) => {
   const uploadedUrls = [];
   for (const file of files) {
@@ -609,7 +604,6 @@ const handleFocus = (e) => {
       if (uploadResponse.status === 200) {
         const uploadedUrl = presignedUrl.split("?")[0]; 
         uploadedUrls.push(uploadedUrl); 
-        console.log(`업로드 성공: ${uploadedUrl}`);
       }
     }catch(error) {
         console.error(`파일 업로드 실패: ${file.name}`, error);
@@ -626,7 +620,6 @@ const handleFocus = (e) => {
     let media = [];
     if (placeImgs.length > 0) {
       media = await uploadMedia(placeImgs);
-      console.log("Uploaded media URLs:", media);
     }
   
     const pets = selectPet.map((pet) => pet.value);
@@ -640,7 +633,6 @@ const handleFocus = (e) => {
       pets,
       visitedAt, 
     };
-    console.log("리뷰데이터: ", reviewData); 
 
     try {
       const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
@@ -663,8 +655,6 @@ const handleFocus = (e) => {
           }, ); 
         },
       });
-      
-      console.log("리뷰 등록 성공:", response.data);
     } catch (error) {
       AlertDialog({
         mode: "alert",
@@ -706,7 +696,7 @@ const handleFocus = (e) => {
           options={petOptions}
           value={selectPet}
           onChange={handlePetSelection}
-          styles={selectStyles}  //select 라이브러리 스타일
+          styles={selectStyles}
           placeholder="댕댕이를 선택해주세요"
         />
         </UserQuestionContainer>
