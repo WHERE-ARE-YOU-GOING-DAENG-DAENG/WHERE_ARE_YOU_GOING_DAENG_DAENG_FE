@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import festival_banner from "../../assets/icons/festival_banner.jpg";
+import survey_banner from "../../assets/icons/survey_banner.jpg";
+// import festival_banner from "../../assets/icons/festival_banner.jpg";
 import banner1 from '../../assets/icons/banner1.jpg';
 import banner2 from "../../assets/icons/banner2.jpg";
 import AlertDialog from "../commons/SweetAlert";
@@ -8,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 function HomeSlider() {
   const navigate = useNavigate();
-  const slides = [festival_banner, banner1, banner2]; 
+  const slides = [survey_banner, banner1, banner2]; 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -26,12 +27,7 @@ function HomeSlider() {
     if (slides[index] === banner1 || slides[index] === banner2) {
       navigate("/how-to-guide"); 
     } else {
-      AlertDialog({
-        mode: "alert",
-        title: "펫 페스티벌 안내",
-        text: "추후 업데이트 될 예정입니다.",
-        confirmText: "확인",
-      });
+      window.location.href = "https://forms.gle/TPUnhGBEzGzaosPt8"
     }
   };
 
