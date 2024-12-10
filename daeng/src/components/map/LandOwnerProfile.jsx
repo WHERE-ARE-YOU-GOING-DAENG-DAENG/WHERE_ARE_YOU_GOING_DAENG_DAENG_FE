@@ -95,7 +95,7 @@ const PetImage = styled.img`
   border-radius: 50%;
 `;
 
-const LandOwnerProfile = ({ area, nickname, pets }) => {
+const LandOwnerProfile = ({ area, nickname, pets, hops }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 3;
   const itemWidth = 65; // 각 카드의 너비 + 간격 (50px + 15px)
@@ -120,6 +120,7 @@ const LandOwnerProfile = ({ area, nickname, pets }) => {
       <Title>
         <img src={crown} alt="왕관" />
         <p>{nickname}</p>님
+        <Pink> {hops}회 방문</Pink>
       </Title>
       <PetsWrapper>
         <PetsContainer isCentered={isCentered}>
