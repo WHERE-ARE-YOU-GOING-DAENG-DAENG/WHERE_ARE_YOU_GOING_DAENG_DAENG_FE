@@ -123,43 +123,35 @@ const Day = styled.div`
 
 const Calendar = ({ onDateClick, selectedDate, dot }) => {
   const [currentDate, setCurrentDate] = useState(dayjs());
-  // const [selectedDate, setSelectedDate] = useState(null);
   const startOfMonth = currentDate.startOf("month");
   const endOfMonth = currentDate.endOf("month");
   const today = dayjs().format("YYYY-MM-DD");
   const myVisits = useVisitStore((state)=>state.myVisits);
 
-  // 오늘부터 1주일 구간
   const startDate = dayjs().format("YYYY-MM-DD");
   const endDate = dayjs().add(6, "day").format("YYYY-MM-DD");
 
-  // 이전 달 보기
   const handlePrevMonth = () => {
     setCurrentDate((prev) => prev.subtract(1, "month"));
   };
 
-  // 다음 달 보기
   const handleNextMonth = () => {
     setCurrentDate((prev) => prev.add(1, "month"));
   };
 
-  // 달력에 요일 표시
   const renderWeekdays = () => {
     const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
     return weekdays.map((day, index) => <Weekday key={index}>{day}</Weekday>);
   };
 
-  // 날짜 렌더링
   const renderDays = () => {
     const daysInMonth = endOfMonth.date();
-    const firstDayOfWeek = startOfMonth.day(); // 해당 월의 첫날 요일
+    const firstDayOfWeek = startOfMonth.day();
 
-    // 이전 달의 빈 공간 채우기
     const blanks = Array.from({ length: firstDayOfWeek }, (_, i) => (
       <Day key={`blank-${i}`} />
     ));
 
-    // 현재 월의 날짜
     const days = Array.from({ length: daysInMonth }, (_, i) => {
       const date = startOfMonth.add(i, "day").format("YYYY-MM-DD");
 
@@ -196,7 +188,6 @@ const Calendar = ({ onDateClick, selectedDate, dot }) => {
 
   return (
     <CalendarWrapper>
-      {/* 달력 상단 */}
       <CalendarHeader>
         <MonthNavigation onClick={handlePrevMonth}>
             <img src={reversearrowIcon} alt="이전 달" />
@@ -206,11 +197,7 @@ const Calendar = ({ onDateClick, selectedDate, dot }) => {
         <img src={arrowIcon} alt="다음 달" />
         </MonthNavigation>
       </CalendarHeader>
-
-      {/* 요일 */}
       <CalendarGrid>{renderWeekdays()}</CalendarGrid>
-
-      {/* 날짜 */}
       <CalendarGrid>{renderDays()}</CalendarGrid>
     </CalendarWrapper>
   );

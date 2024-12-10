@@ -6,9 +6,9 @@ const useTotalReviewStore = create((set, get) => ({
   total: 0,
   bestKeywords: [], 
   score: 0, 
-  page: 0, // 현재 페이지
-  isLast: false, // 마지막 페이지 여부
-  isLoading: false, // 로딩 상태
+  page: 0,
+  isLast: false,
+  isLoading: false,
   placeName: "",
   error: null, 
   sortedType: "LATEST", 
@@ -17,17 +17,17 @@ const useTotalReviewStore = create((set, get) => ({
     set({
       sortedType: type,
       page: 0,
-      reviews: [], // 정렬 변경 시 기존 리뷰 초기화
-      isLast: false, // 새 정렬에서는 처음부터 다시 로드
+      reviews: [],
+      isLast: false,
     }),
 
   fetchReviews: async (placeId) => {
     const { page, sortedType, isLoading, isLast } = get();
     const size = 15; 
 
-    if (isLoading || isLast) return; // 중복 요청 방지 및 마지막 페이지 처리
+    if (isLoading || isLast) return;
 
-    set({ isLoading: true, error: null }); // 로딩 상태 활성화
+    set({ isLoading: true, error: null });
 
     try {
       const response = await axios.get(
@@ -41,7 +41,6 @@ const useTotalReviewStore = create((set, get) => ({
         }
       );
 
-      console.log("응답 데이터:", response.data);
       const data = response.data.data;
     
       set((state) => ({

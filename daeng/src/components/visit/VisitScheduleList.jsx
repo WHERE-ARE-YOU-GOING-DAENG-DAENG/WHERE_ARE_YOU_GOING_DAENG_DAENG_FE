@@ -30,7 +30,6 @@ const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
   useEffect(()=>{
     const fetchPets = async () => {
         await fetchPetList();
-        console.log(pets)
     };
     
     fetchPets();
@@ -41,7 +40,6 @@ const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
   };
 
   const openModal = (initDate = null , initTime = null) => {
-    console.log("현재 펫:",pets)
 
     setModalProps({
       initDate,

@@ -74,7 +74,6 @@ function LastContainer() {
             confirmText: '확인',
             icon: "success",
             onConfirm: () => {
-              console.log('회원탈퇴 성공 확인 클릭됨');
               navigate('/');
             },
           });
@@ -84,7 +83,6 @@ function LastContainer() {
             title: '회원탈퇴 실패',
             text: '회원탈퇴에 실패했습니다.',
             confirmText: '확인',
-            onConfirm: () => console.log('회원탈퇴 실패 확인 클릭됨'),
           });
         }
       },
@@ -104,7 +102,6 @@ function LastContainer() {
         confirmText: '확인',
         icon: "success", 
         onConfirm: () => {
-          console.log('로그아웃 성공 확인 클릭됨');
           navigate('/');
         },
       });
@@ -114,7 +111,6 @@ function LastContainer() {
         title: '로그아웃 실패',
         text: '로그아웃에 실패했습니다.',
         confirmText: '확인',
-        onConfirm: () => console.log('로그아웃 실패 확인 클릭됨'),
       });
     }
   };

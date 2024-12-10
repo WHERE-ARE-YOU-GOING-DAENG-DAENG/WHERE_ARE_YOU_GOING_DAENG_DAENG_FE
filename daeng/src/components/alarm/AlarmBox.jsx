@@ -48,7 +48,6 @@ const AlarmBox = () => {
         );
 
         if (response.status === 200) {
-          console.log("알림 활성화 상태:", response.data.data.isNotificationConsent);
           setIsSubscribed(response.data.data.isNotificationConsent);
         } else {
           console.error("알림 활성화 상태 확인 실패:", response);

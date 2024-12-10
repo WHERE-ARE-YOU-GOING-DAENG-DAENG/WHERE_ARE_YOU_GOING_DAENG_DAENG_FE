@@ -74,7 +74,7 @@ const ModalContent = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 30px;
-    overflow-y: auto; /* 스크롤 활성화 */
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     height: calc(100% - 120px);
 
@@ -90,14 +90,13 @@ const BookMarkList = ({ isOpen, onClose , data, onPlaceClick, fetchNextPage, pag
     const removeFavorite  = useFavoriteStore((state) => state.removeFavorite);
     const isLoading = useFavoriteStore((state) => state.isLoading);
 
-    // IntersectionObserver 설정
     useEffect(() => {
         if (!observerRef.current) return;
 
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && !isLoading) {
-                    fetchNextPage(); // 다음 페이지 데이터 로드
+                    fetchNextPage();
                 }
             },
             { threshold: 1.0 }
@@ -138,13 +137,13 @@ const BookMarkList = ({ isOpen, onClose , data, onPlaceClick, fetchNextPage, pag
 
     useEffect(() => {
         if (isOpen) {
-            document.body.style.overflow = 'hidden'; // Body 스크롤 잠금
+            document.body.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'auto'; // Body 스크롤 복원
+            document.body.style.overflow = 'auto';
         }
 
         return () => {
-            document.body.style.overflow = 'auto'; // 컴포넌트 언마운트 시 복원
+            document.body.style.overflow = 'auto';
         };
     }, [isOpen]);
 
