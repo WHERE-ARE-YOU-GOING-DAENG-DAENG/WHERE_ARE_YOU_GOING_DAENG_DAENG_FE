@@ -57,10 +57,10 @@ const ImageContainer = styled.div`
 `;
 
 const ProfileImageWrapper = styled.div`
-  width: 76px;
-  height: 76px;
+  width: 77px;
+  height: 77px;
   border-radius: 50%;
-  border: 1.5px solid white;
+  border: 2px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
