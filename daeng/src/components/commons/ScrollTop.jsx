@@ -17,7 +17,7 @@ const ScrollTop = () => {
       });
     };
 
-    window.addEventListener('popstate', handlePopState); //popstate = 브라우저의 히스토리 상태가 변경될 때 발생하는 이벤트
+    window.addEventListener('popstate', handlePopState);
 
     return () => {
       window.removeEventListener('popstate', handlePopState);

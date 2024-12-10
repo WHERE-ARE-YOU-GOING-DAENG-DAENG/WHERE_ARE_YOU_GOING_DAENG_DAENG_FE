@@ -5,7 +5,6 @@ import VisitScheduleList from "../../components/visit/VisitScheduleList";
 import styled from "styled-components";
 import AlertDialog from "../../components/commons/SweetAlert";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import banner from "../../assets/icons/visitbanner.jpg"
 import axiosInstance from "../../services/axiosInstance";
 
@@ -34,7 +33,6 @@ const PlaceVisitList = () => {
                     title: "방문예정목록 조회",
                     text: "방문예정목록 조회에 실패하였습니다.",
                     confirmText: "확인",
-                    onConfirm: () => console.log("방문예정 조회 실패"),
                 });
               }
             }

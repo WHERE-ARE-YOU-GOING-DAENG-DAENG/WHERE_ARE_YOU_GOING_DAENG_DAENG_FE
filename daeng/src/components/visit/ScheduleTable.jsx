@@ -72,7 +72,6 @@ const ScheduleTable = () => {
       cancelText: "닫기",
       onConfirm: async () => {
         await removeVisit(id);
-          
       }
   })
   };

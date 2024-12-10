@@ -104,10 +104,10 @@ const PlaceInfo = ({data}) => {
       return null;
     };
 
-    const weightLimit = "제한없음"; //일단 제한없음
+    const weightLimit = "제한없음";
 
     const formatTime = (time) => {
-      if (!time) return "정보없음"; // Handle missing time
+      if (!time) return "정보없음";
       return time.length === 8 ? time.slice(0, 5) : time;
     };
     
