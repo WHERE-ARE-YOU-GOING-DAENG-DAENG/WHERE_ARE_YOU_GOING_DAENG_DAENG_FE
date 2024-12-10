@@ -23,8 +23,8 @@ import PlaceVisitList from '../pages/visit/PlaceVisitList';
 import Error from "../pages/Error";
 import { setupAxiosInterceptors } from '../services/axiosInstance';
 import EventPage from '../pages/user/EventPage';
+import Hopscotch from '../pages/Hopscotch';
 import HowToGuidePage from '../pages/HowToGuidePage';
-import TestBtn from '../components/story/TestBtn';
 
 const trackPageView = () => {
   if (window.wcs) {
@@ -73,9 +73,8 @@ const AppRoutes = () => {
         <Route path="/write-review/:placeId" element={<WriteReviewPage />} />
         <Route path="/visit-list" element={<MyVisitList />} />
         <Route path="/visit-list/:id" element={<PlaceVisitList />} />
+        <Route path="/hopscotch" element={<Hopscotch />} />
         <Route path="/how-to-guide" element={<HowToGuidePage />} />
-
-        <Route path="video-content" element={<TestBtn />} />
         <Route path="/error" element={<Error />} />
         <Route path="*" element={<Error />} />
       </Routes>
