@@ -19,7 +19,7 @@ const MapContainer = styled.div`
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
+const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isSearching }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const { isLoaded } = useGoogleMapsStore();
@@ -54,57 +54,81 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
 
   useEffect(() => {
     if (isLoaded && map) {
+      const initialLocation = useLocationStore.getState().userLocation;
+  
+      // 초기 위치 설정
+      if (initialLocation.lat && initialLocation.lng) {
+        setCenter(initialLocation);
+        map.setCenter(initialLocation);
+  
+        const initialLocationMarker = (
+          <CustomOverlay
+            key="initial-location"
+            position={initialLocation}
+            map={map}
+          >
+            <BookMarker label="현재 위치" icon={markerIcon} />
+          </CustomOverlay>
+        );
+        setCurrentLocation(initialLocationMarker);
+      }
+  
       if (navigator.geolocation) {
-
+        // 기존 위치 추적 중지
         if (watchIdRef.current !== null) {
           navigator.geolocation.clearWatch(watchIdRef.current);
         }
-
+  
+        // 새 위치 추적 시작
         watchIdRef.current = navigator.geolocation.watchPosition(
           (position) => {
             const location = {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
+              accuracy: position.coords.accuracy, // 정확도 포함
             };
-
-            setCenter(location);
-            map.setCenter(location);
-            setUserLocation(location);
-
-            const currentLocationMarker = (
-              <CustomOverlay
-                key="current-location"
-                position={location}
-                map={map}
-              >
-                <BookMarker label="현재 위치" icon={markerIcon} />
-              </CustomOverlay>
-            );
-            setCurrentLocation(currentLocationMarker);
+  
+            const currentLocation = useLocationStore.getState().userLocation;
+  
+            if (
+              location.accuracy < currentLocation.accuracy &&
+              (currentLocation.lat !== location.lat || currentLocation.lng !== location.lng)
+            ) {
+              setCenter(location);
+              map.setCenter(location);
+  
+              const currentLocationMarker = (
+                <CustomOverlay
+                  key="current-location"
+                  position={location}
+                  map={map}
+                >
+                  <BookMarker label="현재 위치" icon={markerIcon} />
+                </CustomOverlay>
+              );
+              setCurrentLocation(currentLocationMarker);
+              useLocationStore.getState().setUserLocation(location);
+            }
           },
           (error) => {
-            if (error.response) {
-              AlertDialog({
-                  mode: "alert",
-                  title: "위치 추적 실패",
-                  text: "현재 위치를 확인할 수 없습니다",
-                  confirmText: "확인",
-              });
-            }
+            console.error("위치 추적 실패:", error);
+          },
+          {
+            enableHighAccuracy: true, // 정확도를 높이기 위해 설정
           }
         );
       }
-    };
-
-
-  return () => {
-    if (watchIdRef.current !== null) {
-      navigator.geolocation.clearWatch(watchIdRef.current);
-      watchIdRef.current = null;
     }
-  };
-}, [isLoaded, map, setUserLocation]);
-
+  
+    // 컴포넌트 언마운트 시 위치 추적 중지
+    return () => {
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+    };
+  }, [map, isLoaded]);
+  
  useEffect(() => {
   if (isLoaded && map) {
     markers.forEach((marker) => marker.onRemove && marker.onRemove());
