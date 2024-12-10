@@ -121,8 +121,16 @@ function Detail({ onClose, onNext }) {
       />
       <DropdownContainer>
         <Dropdown value={city} onChange={(e) => setCity(e.target.value)}>
+          <option value="">city</option>
+          <option value="서울">서울</option>
+          <option value="부산">부산</option>
+          <option value="대구">대구</option>
         </Dropdown> 
         <Dropdown value={cityDetail} onChange={(e) => setCityDetail(e.target.value)}>
+          <option value="">city detail</option>
+          <option value="강남구">강남구</option>
+          <option value="서초구">서초구</option>
+          <option value="송파구">송파구</option>
         </Dropdown>
       </DropdownContainer>
       <SubmitButton onClick={handleNextClick}>다음</SubmitButton> 
