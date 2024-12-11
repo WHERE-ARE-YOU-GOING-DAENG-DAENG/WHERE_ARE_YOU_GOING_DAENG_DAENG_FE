@@ -42,7 +42,7 @@ const PlaceDetail = () => {
     useEffect(() => {
       const fetchPlaceDetail = async () => {
         try {
-          const placeResponse = await axios.get(`https://www.daengdaeng-where.link/api/v1/places/${id}`, {
+          const placeResponse = await axios.get(`https://dev.daengdaeng-where.link/api/v1/places/${id}`, {
             withCredentials: true,
           });
           const placeData = placeResponse.data.data;
@@ -50,7 +50,7 @@ const PlaceDetail = () => {
           let reviewData = {};
           try {
             const reviewResponse = await axios.get(
-              `https://www.daengdaeng-where.link/api/v1/reviews/place/${id}/LATEST?page=0&size=3`,
+              `https://dev.daengdaeng-where.link/api/v1/reviews/place/${id}/LATEST?page=0&size=3`,
               { withCredentials: true }
             );
             reviewData = reviewResponse.data.data;

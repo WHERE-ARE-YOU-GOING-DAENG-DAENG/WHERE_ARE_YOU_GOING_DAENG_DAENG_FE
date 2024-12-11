@@ -576,7 +576,7 @@ const handleFocus = (e) => {
   for (const file of files) {
     try {
       const presignResponse = await axios.post(
-        'https://www.daengdaeng-where.link/api/v1/S3',
+        'https://dev.daengdaeng-where.link/api/v1/S3',
         {
           prefix: 'REVIEW',
           fileNames: [file.name]
@@ -635,7 +635,7 @@ const handleFocus = (e) => {
     };
 
     try {
-      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
+      const response = await axios.post("https://dev.daengdaeng-where.link/api/v1/review", reviewData, {
           headers: {
             'Content-Type': 'application/json',
           },
