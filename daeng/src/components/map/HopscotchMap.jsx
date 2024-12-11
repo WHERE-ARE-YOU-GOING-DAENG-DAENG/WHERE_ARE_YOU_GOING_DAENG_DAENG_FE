@@ -21,7 +21,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
     const { isLoaded } = useGoogleMapsStore();
     const userLocation = useLocationStore((state) => state.userLocation);
     const [overlayContent, setOverlayContent] = useState(null);
-    const [ownerList, setOwnerList] = useState({});
+    const [ownerList, setOwnerList] = useState({ regionOwners: {} });
 
     useEffect(()=>{
       fetchOwnerData();
