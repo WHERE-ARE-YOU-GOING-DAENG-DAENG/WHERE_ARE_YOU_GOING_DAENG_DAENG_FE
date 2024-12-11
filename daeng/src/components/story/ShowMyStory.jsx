@@ -67,7 +67,7 @@ function ShowMyStory({ onClose }) {
 
     fetchStories();
   }, []);
-  
+
   const handleNext = () => {
     if (currentIndex < stories.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -103,10 +103,10 @@ function ShowMyStory({ onClose }) {
           />
             {showDeleteMenu && (
               <DeleteStory
-                storyId={currentStory.storyId} // 현재 스토리의 ID 전달
+                storyId={currentStory.storyId} 
                 setShowDeleteMenu={setShowDeleteMenu} // 삭제 메뉴 닫기 함수 전달
                 stories={stories} // 현재 스토리 배열 전달
-                setStories={setStories} // 상태 업데이트 함수 전달
+                setStories={setStories} // 상태 업데이트 함수 전달 > 삭제하면 바로 다음 스토리를 보여주기 위해 필요~
               />
             )}
         </DeleteDotContainer>
