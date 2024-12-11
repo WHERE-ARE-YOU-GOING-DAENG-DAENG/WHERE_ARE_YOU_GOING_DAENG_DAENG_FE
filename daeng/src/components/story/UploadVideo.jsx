@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import x from "../../assets/icons/x.svg";
 import crown from "../../assets/icons/crown.svg";
+import AlertDialog from "../../components/commons/SweetAlert";
 import {
   VideoContainer,
   CloseButton,
@@ -12,7 +13,7 @@ import {
   UploadImg,
 } from "./StoryCommonStyle";
 
-function UploadVideo({ onClose, nickname, city, cityDetail }) {
+function UploadStory({ onClose, nickname, city, cityDetail }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -29,20 +30,25 @@ function UploadVideo({ onClose, nickname, city, cityDetail }) {
     }
   };
 
-  const uploadMedia = async (event) => {
+  const uploadStory = async (event) => {
     event.preventDefault();
 
     if (!selectedFile) {
-      alert("파일을 선택하세요!");
+      AlertDialog({
+        mode: "alert", 
+        title: "선택 오류",
+        text: "이미지나 동영상을 선택해 주세요",
+        confirmText: "확인"
+      })
       return;
     }
 
     try {
       const postResponse = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v2/S3",
+        "https://dev.daengdaeng-where.link/api/v1/S3",
         {
           prefix: "STORY",
-          path: selectedFile.name,
+          fileNames: [selectedFile.name],
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -50,7 +56,10 @@ function UploadVideo({ onClose, nickname, city, cityDetail }) {
         }
       );
 
-      const presignedUrl = postResponse.data?.data?.presignedUrl;
+      console.log("POST 요청 응답 데이터:", postResponse.data);
+      const presignedUrl = postResponse.data?.data?.[selectedFile.name];
+      console.log("생성된 Presigned URL:", presignedUrl);
+
       if (!presignedUrl) throw new Error("Presigned URL이 없습니다.");
 
       const uploadResponse = await axios.put(presignedUrl, selectedFile, {
@@ -59,22 +68,24 @@ function UploadVideo({ onClose, nickname, city, cityDetail }) {
       });
 
       if (uploadResponse.status !== 200) {
-        console.error("파일 업로드 실패:", uploadResponse);
+        console.error("Presigned URL로 파일 업로드 실패:", uploadResponse);
         alert("스토리 업로드 실패!");
         return;
       }
 
-      const imageUrl = presignedUrl.split("?")[0];
-      const uploadData = {
+      const uploadedUrl = presignedUrl.split("?")[0];
+      console.log("업로드된 파일 URL:", uploadedUrl);
+
+      const storyData = {
         nickname,
         city,
         cityDetail,
-        path: imageUrl,
+        path: uploadedUrl, 
       };
 
       const storyResponse = await axios.post(
         "https://dev.daengdaeng-where.link/api/v2/story",
-        uploadData,
+        storyData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -129,9 +140,9 @@ function UploadVideo({ onClose, nickname, city, cityDetail }) {
         </Location>
         <span>{nickname}님</span>
       </BottomBar>
-      <button onClick={uploadMedia}>업로드</button>
+      <button onClick={uploadStory}>업로드</button>
     </VideoContainer>
   );
 }
 
-export default UploadVideo;
+export default UploadStory;
