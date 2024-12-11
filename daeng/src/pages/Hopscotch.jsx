@@ -94,8 +94,6 @@ const Hopscotch = () => {
       const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region",{
         withCredentials: true
       });
-
-      console.log(response.data.data);
       setMyLandList(response.data.data);
     }catch(error){
       console.error("땅 목록을 불러오는 데 에러 발생",error)

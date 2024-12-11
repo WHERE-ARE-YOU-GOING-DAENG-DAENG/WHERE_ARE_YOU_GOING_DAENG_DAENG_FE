@@ -138,6 +138,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
             
             polygon.addListener("click", () => {
               infoWindow.close();
+              map.panTo(center);
               const regionOwner =
                 ownerList.regionOwners[region]?.[subRegion] || null;
                 const ownerInfo = regionOwner
