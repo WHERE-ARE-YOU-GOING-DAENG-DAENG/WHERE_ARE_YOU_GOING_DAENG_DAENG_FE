@@ -6,6 +6,7 @@ import rightArrow from "../../assets/icons/arrow.svg";
 import leftArrow from "../../assets/icons/reversearrow.svg";
 import deleteDot from "../../assets/icons/deleteDot.svg";
 import DeleteStory from "./DeleteStory";
+import { useNavigate } from "react-router-dom"; 
 import {
   VideoContainer,
   CloseButton,
@@ -49,6 +50,7 @@ function ShowMyStory({ onClose }) {
   const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteMenu, setShowDeleteMenu] = useState(false);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -59,18 +61,22 @@ function ShowMyStory({ onClose }) {
             withCredentials: true,
           }
         );
-        console.log("스토리 데이터:", response.data.data.content);
+        console.log("스토리 데이터:", response.data.data.content); 
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
       } catch (error) {
         console.error("데이터를 가져오는 데 실패했습니다:", error);
       }
     };
-
+  
     fetchStories();
   }, []);
+  
+  
 
   const handleNext = () => {
+    const currentStory = stories[currentIndex];
+  
     if (currentIndex < stories.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
@@ -86,31 +92,8 @@ function ShowMyStory({ onClose }) {
     setShowDeleteMenu(!showDeleteMenu);
   };
 
-  const handleStoryDelete = (storyId) => {
-    const updatedStories = stories.filter((story) => story.storyId !== storyId);
-
-    if (updatedStories.length === 0) {
-      // 모든 스토리가 삭제된 경우
-      setStories([]);
-      setCurrentIndex(0);
-    } else {
-      // 마지막 스토리를 삭제했을 때 currentIndex를 조정
-      if (currentIndex >= updatedStories.length) {
-        setCurrentIndex(updatedStories.length - 1); // 배열 길이에 맞게 인덱스 조정
-      }
-      setStories(updatedStories);
-    }
-  };
-
   if (stories.length === 0) {
-    // 스토리가 아예 없는 경우
-    return <div>현재 스토리가 없습니다.</div>;
-  }
-
-  if (!stories[currentIndex]) {
-    // 마지막 스토리를 삭제했지만 스토리가 남아 있는 경우
-    setCurrentIndex(stories.length - 1); // currentIndex를 마지막 스토리로 조정
-    return null; // 상태가 업데이트될 때까지 컴포넌트를 리렌더링
+    return <div>스토리를 불러오는 중...</div>;
   }
 
   const currentStory = stories[currentIndex];
@@ -123,34 +106,34 @@ function ShowMyStory({ onClose }) {
         <DeleteDotContainer>
           <DeleteDot
             src={deleteDot}
-            alt="스토리 삭제 버튼"
+            alt="스토리 안의 삭제 버튼"
             onClick={handleDeleteDotClick}
           />
-          {showDeleteMenu && (
-            <DeleteStory
-              storyId={currentStory.storyId}
-              setShowDeleteMenu={setShowDeleteMenu}
-              stories={stories}
-              setStories={handleStoryDelete} 
-            />
-          )}
+            {showDeleteMenu && (
+              <DeleteStory
+                storyId={currentStory.storyId} 
+                setShowDeleteMenu={setShowDeleteMenu} // 삭제 메뉴 닫기 함수 전달
+                stories={stories} // 현재 스토리 배열 전달
+                setStories={setStories} // 상태 업데이트 함수 전달 > 삭제하면 바로 다음 스토리를 보여주기 위해 필요~
+              />
+            )}
         </DeleteDotContainer>
         {currentStory.path.endsWith(".mp4") || currentStory.path.endsWith(".webm") ? (
           <video
-            src={currentStory.path}
-            controls
-            autoPlay
-            loop
-            muted
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        ) : (
-          <img
-            src={currentStory.path}
-            alt={`스토리 ${currentStory.storyId}`}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        )}
+          src={currentStory.path}
+          controls
+          autoPlay
+          loop
+          muted
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      ) : (
+        <img
+          src={currentStory.path}
+          alt={`스토리 ${currentStory.storyId}`}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      )}
         <NavigationButton
           src={leftArrow}
           alt="이전 스토리"
