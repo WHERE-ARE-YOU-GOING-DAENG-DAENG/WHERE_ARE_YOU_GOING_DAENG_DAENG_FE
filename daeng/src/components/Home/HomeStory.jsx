@@ -98,6 +98,7 @@ const HomeStory = () => {
                 isPinkBorder={story.petImage ? true : false}
                 imageSrc={story.petImage || "https://via.placeholder.com/80"}
                 onClick={() => openOtherUserStoryPopup(story)} 
+                onClose={closePopup} 
               />
             ))}
           </ScrollableStories>
