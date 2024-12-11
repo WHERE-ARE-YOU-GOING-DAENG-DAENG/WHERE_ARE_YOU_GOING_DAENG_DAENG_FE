@@ -11,11 +11,11 @@ import {
   UploadImg,
 } from "./StoryCommonStyle";
 
-function OtherUserStory() {
+function OtherUserStory({ onClose }) {
   return (
     <VideoContainer>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
-      <CloseButton src={x} alt="팝업 닫기" />
+      <CloseButton src={x} alt="팝업 닫기" onClick={onClose}/>
       <ImageContainer>
           <UploadImg>이미지/동영상 영역.</UploadImg>
       </ImageContainer>
