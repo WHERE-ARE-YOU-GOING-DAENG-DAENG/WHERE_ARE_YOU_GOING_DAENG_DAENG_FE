@@ -4,8 +4,9 @@ import axios from "axios";
 import x from "../../assets/icons/x.svg";
 import rightArrow from "../../assets/icons/arrow.svg";
 import leftArrow from "../../assets/icons/reversearrow.svg";
-import AlertDialog from "../../components/commons/SweetAlert";
 import deleteDot from "../../assets/icons/deleteDot.svg";
+import DeleteStory from "./DeleteStory";
+import { useNavigate } from "react-router-dom"; 
 import {
   VideoContainer,
   CloseButton,
@@ -25,28 +26,6 @@ const DeleteDot = styled.img`
   width: 20px;
   height: 20px;
   cursor: pointer;
-`;
-
-const DeleteMenu = styled.div`
-  position: absolute;
-  top: 10px;
-  left: -50px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 5px 10px;
-  z-index: 10;
-`;
-
-const DeleteMenuButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 14px;
-  color: #333;
-  padding: 5px;
-  cursor: pointer;
-  width: 100%;
 `;
 
 const NavigationButton = styled.img`
@@ -71,20 +50,27 @@ function ShowMyStory({ onClose }) {
   const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteMenu, setShowDeleteMenu] = useState(false);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/story/mystory");
+        const response = await axios.get(
+          "https://dev.daengdaeng-where.link/api/v2/story/mystory",
+          {
+            withCredentials: true, 
+          }
+        );
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
       } catch (error) {
         console.error("데이터를 가져오는 데 실패했습니다:", error);
       }
     };
-
+  
     fetchStories();
   }, []);
+  
 
   const handleNext = () => {
     if (currentIndex < stories.length - 1) {
@@ -100,17 +86,6 @@ function ShowMyStory({ onClose }) {
 
   const handleDeleteDotClick = () => {
     setShowDeleteMenu(!showDeleteMenu);
-  };
-
-  const handleDelete = (storyId) => {
-    AlertDialog({
-      mode: "alert",
-      title: "성공",
-      text: `스토리 ID ${storyId}가 성공적으로 삭제되었습니다.`,
-      confirmText: "닫기",
-      icon: "success",
-    });
-    setShowDeleteMenu(false);
   };
 
   if (stories.length === 0) {
@@ -130,13 +105,14 @@ function ShowMyStory({ onClose }) {
             alt="스토리 안의 삭제 버튼"
             onClick={handleDeleteDotClick}
           />
-          {showDeleteMenu && (
-            <DeleteMenu>
-              <DeleteMenuButton onClick={() => handleDelete(currentStory.storyId)}>
-                삭제
-              </DeleteMenuButton>
-            </DeleteMenu>
-          )}
+            {showDeleteMenu && (
+              <DeleteStory
+                storyId={currentStory.storyId} 
+                setShowDeleteMenu={setShowDeleteMenu} // 삭제 메뉴 닫기 함수 전달
+                stories={stories} // 현재 스토리 배열 전달
+                setStories={setStories} // 상태 업데이트 함수 전달 > 삭제하면 바로 다음 스토리를 보여주기 위해 필요~
+              />
+            )}
         </DeleteDotContainer>
         <img
           src={currentStory.path}
