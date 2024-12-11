@@ -180,7 +180,7 @@ function EditInputForm() {
     if (imageFile) {
       try {
         const presignResponse = await axios.post(
-          'https://www.daengdaeng-where.link/api/v1/S3',
+          'https://dev.daengdaeng-where.link/api/v1/S3',
           {
             prefix: 'PET',
             fileNames: [imageFile.name]
@@ -229,7 +229,7 @@ function EditInputForm() {
 
   try {
     const response = await axios.put(
-      `https://www.daengdaeng-where.link/api/v1/pets/${petId}`,
+      `https://dev.daengdaeng-where.link/api/v1/pets/${petId}`,
       petData,
       {
         headers: {
