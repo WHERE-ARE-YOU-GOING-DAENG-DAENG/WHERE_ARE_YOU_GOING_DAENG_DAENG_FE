@@ -21,7 +21,16 @@ const HomeStory = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/story");
+        const response = await axios.get(
+          "https://dev.daengdaeng-where.link/api/v2/story",
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+        
         const fetchedStories = response.data.data.map((story) => ({
           nickname: story.nickname,
           city: story.city,
