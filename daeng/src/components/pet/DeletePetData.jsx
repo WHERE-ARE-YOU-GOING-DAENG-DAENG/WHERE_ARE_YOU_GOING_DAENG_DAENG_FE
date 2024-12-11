@@ -39,7 +39,7 @@ function DeletePetData({ petId }) {
       onConfirm: async () => {
         try {
           const response = await axios.delete(
-            `https://www.daengdaeng-where.link/api/v1/pets/${petId}`,
+            `https://dev.daengdaeng-where.link/api/v1/pets/${petId}`,
             {
               headers: {
                 'Content-Type': 'application/json'

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import arrow from '../../assets/icons/arrow.svg';
 import { useNavigate } from 'react-router-dom';

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import SelectLabel from "../../components/commons/SelectLabel";
 import SelectBtn from "../../components/commons/SelectBtn";
@@ -112,7 +112,7 @@ function UserEdit() {
 
     try {
       const { data } = await axios.get(
-        `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
+        `https://dev.daengdaeng-where.link/api/v1/user/duplicateNickname`,
         {
           params: { nickname },
           withCredentials: true,
@@ -189,7 +189,7 @@ function UserEdit() {
 
     try {
       const response = await axios.put(
-        'https://www.daengdaeng-where.link/api/v1/user/adjust',
+        'https://dev.daengdaeng-where.link/api/v1/user/adjust',
         payload,
         {
           headers: {
