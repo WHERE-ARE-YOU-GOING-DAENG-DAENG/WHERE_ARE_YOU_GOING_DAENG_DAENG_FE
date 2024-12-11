@@ -164,7 +164,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
 
               setSelectedArea([region, subRegion, regionOwner?.count]);
               setOverlayContent(null);
-              console.log(ownerInfo.nickname)
+       
               setTimeout(() => {
                 setOverlayContent({
                   position: { lat: center.lat(), lng: center.lng() },

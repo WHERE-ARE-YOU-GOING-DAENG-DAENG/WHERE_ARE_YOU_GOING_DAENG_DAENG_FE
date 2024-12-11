@@ -122,6 +122,18 @@ const Hopscotch = () => {
     return 0;
   };
 
+  const isOwned = () => {
+    const [region, subRegion] = selectedArea;
+
+    if (!region || !subRegion) return false;
+
+    return myLandlist.lands.some(
+      (land) =>
+        land.city === region &&
+        land.cityDetails.some((detail) => detail.cityDetail === subRegion)
+    );
+  };
+
   return (
     <Container>
       <Header label="땅따먹기" />
@@ -130,9 +142,10 @@ const Hopscotch = () => {
         {selectedArea[0]? (
           <>
             <Label>
-              <Pink>{selectedArea[0]} {selectedArea[1]}</Pink> 점령까지 남은 방문횟수
+              <Pink>{selectedArea[0]} {selectedArea[1]}</Pink>
+              {isOwned() ? "를(을) 점령하셨습니다!" : " 점령까지 남은 방문횟수"}
             </Label>
-            <ProgressBar current={getCurrentVisitCount()} total={selectedArea[2]+1 || 2} />
+            <ProgressBar current={getCurrentVisitCount()} total={isOwned() ? selectedArea[2] : selectedArea[2]+1 || 1} />
           </>
         ):<Label>점령하고 싶은 땅을 선택해보세요</Label>}
         <Label>
