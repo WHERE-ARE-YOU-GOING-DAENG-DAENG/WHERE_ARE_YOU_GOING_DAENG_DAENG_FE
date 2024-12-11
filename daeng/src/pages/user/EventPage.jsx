@@ -10,7 +10,7 @@ function EventPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responce = await axios.get('https://www.daengdaeng-where.link/api/v1/banners',{
+        const responce = await axios.get('https://dev.daengdaeng-where.link/api/v1/banners',{
           withCredentials : true,
         });
 
