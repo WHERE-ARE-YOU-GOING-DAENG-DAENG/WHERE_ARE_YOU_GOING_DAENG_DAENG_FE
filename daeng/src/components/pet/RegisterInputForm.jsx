@@ -155,7 +155,7 @@ function RegisterInputForm() {
   if (imageFile) {
     try {
       const presignResponse = await axios.post(
-        'https://www.daengdaeng-where.link/api/v1/S3',
+        'https://dev.daengdaeng-where.link/api/v1/S3',
         {
           prefix: 'PET',
           fileNames: [imageFile.name]
@@ -205,7 +205,7 @@ function RegisterInputForm() {
 
   try {
     const response = await axios.post(
-      "https://www.daengdaeng-where.link/api/v1/pets", 
+      "https://dev.daengdaeng-where.link/api/v1/pets", 
       petData, 
       {
         headers: {
