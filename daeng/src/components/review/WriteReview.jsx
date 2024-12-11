@@ -370,7 +370,7 @@ function WriteReview({ review = {} }) {
   useEffect(() => {
     const fetchUserNickname = async () => {
       try {
-        const response = await axios.get("https://www.daengdaeng-where.link/api/v1/user/adjust", {
+        const response = await axios.get("https://dev.daengdaeng-where.link/api/v1/user/adjust", {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true,
         });
@@ -388,7 +388,7 @@ function WriteReview({ review = {} }) {
   useEffect(() => {
     if (placeId) {
       axios
-        .get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`)
+        .get(`https://dev.daengdaeng-where.link/api/v1/places/${placeId}`)
         .then((response) => {
           const name = response.data?.data?.name; 
           setPlaceName(name || "장소 이름 없음"); 

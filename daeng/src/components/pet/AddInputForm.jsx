@@ -156,7 +156,7 @@ function RegisterInputForm() {
       try {
         // Presigned URL 요청
         const presignResponse = await axios.post(
-          'https://www.daengdaeng-where.link/api/v1/S3',
+          'https://https://dev.daengdaeng-where.link/api/v1/S3',
           {
             prefix: 'PET',
             fileNames: [imageFile.name]
@@ -205,7 +205,7 @@ function RegisterInputForm() {
   };
 
   try {
-      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/pets", 
+      const response = await axios.post("https://dev.daengdaeng-where.link/api/v1/pets", 
       petData, 
       {
         headers: {
