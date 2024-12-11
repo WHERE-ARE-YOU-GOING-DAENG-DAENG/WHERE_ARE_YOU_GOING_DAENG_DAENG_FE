@@ -4,6 +4,7 @@ import crown from "../../assets/icons/crown.svg";
 import defaultImg from "../../assets/icons/reviewDefaultImg.svg"; 
 
 const Bubble = styled.div`
+  font-size: 15px;
   position: relative;
   background-color: white;
   border: 5px solid #FF69A9;
@@ -98,19 +99,23 @@ const PetImage = styled.img`
 const LandOwnerProfile = ({ area, nickname, pets, hops }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 3;
-  const itemWidth = 65; // 각 카드의 너비 + 간격 (50px + 15px)
+  const itemWidth = 65;
   const maxIndex = Math.ceil(pets.length / itemsPerPage) - 1;
 
-  const isCentered = pets.length <= itemsPerPage; // 3마리 이하일 때 중앙 정렬
+  const isCentered = pets.length <= itemsPerPage;
 
   useEffect(() => {
     if (!isCentered) {
       const interval = setInterval(() => {
         setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0));
-      }, 3000); // 3초마다 슬라이드 이동
+      }, 3000);
       return () => clearInterval(interval);
     }
   }, [isCentered, maxIndex]);
+
+  if(!area){
+    return <Bubble>땅 주인이 없습니다.</Bubble>
+  }
 
   return (
     <Bubble>

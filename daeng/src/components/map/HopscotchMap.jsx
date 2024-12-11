@@ -116,7 +116,7 @@ const HopscotchMap = ({ removeUi }) => {
               setTimeout(() => {
                 setOverlayContent({
                   position: { lat: center.lat(), lng: center.lng() },
-                  component: <LandOwnerProfile area={name} nickname="내가 진짜" hops={3} pets={[
+                  component: <LandOwnerProfile area={null} nickname="내가 진짜" hops={3} pets={[
                     { id: 1, name: '강아지1'},
                     { id: 2, name: '고양이1'},
                     { id: 3, name: '강아지1'},
