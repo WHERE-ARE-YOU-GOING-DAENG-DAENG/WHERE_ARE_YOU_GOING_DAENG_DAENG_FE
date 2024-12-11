@@ -74,13 +74,13 @@ const PetsWrapper = styled.div`
 
 const PetsContainer = styled.div`
   overflow: hidden;
-  width: ${({ isCentered }) => (isCentered ? "auto" : "180px")}; /* 3마리 미만일 땐 자동 크기 */
+  width: ${({ isCentered }) => (isCentered ? "auto" : "180px")};
 `;
 
 const PetList = styled.div`
   display: flex;
-  justify-content: ${({ isCentered }) => (isCentered ? "center" : "flex-start")}; /* 중앙 정렬 */
-  transform: translateX(${(props) => (props.isCentered ? 0 : props.translateX)}px); /* 3마리 미만일 땐 이동 없음 */
+  justify-content: ${({ isCentered }) => (isCentered ? "center" : "flex-start")};
+  transform: translateX(${(props) => (props.isCentered ? 0 : props.translateX)}px);
   transition: transform 0.5s ease;
   gap: 15px;
 `;
