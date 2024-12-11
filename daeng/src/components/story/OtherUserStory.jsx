@@ -23,7 +23,7 @@ function OtherUserStory() {
         <Location>
           <img src={crown} alt="왕관" style={{ marginRight: "5px" }} />
         </Location>
-        <span>{nickname}님</span>
+        <span>내가 최고님</span>
       </BottomBar>
     </VideoContainer>
   );
