@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import reversearrow from "../../assets/icons/reversearrow.svg";
 import arrow from "../../assets/icons/arrow.svg";
@@ -8,19 +8,31 @@ import UploadStoryBtn from "../../components/commons/UploadStoryBtn";
 import Detail from "../story/Detail";
 import ShowMyStory from "../story/ShowMystory";
 import UploadVideo from "../story/UploadVideo";
+import axios from "axios";
 
 const HomeStory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [currentPopup, setCurrentPopup] = useState(null); 
+  const [currentPopup, setCurrentPopup] = useState(null);
+  const [stories, setStories] = useState([]);
 
-  const stories = [
-    { location: "서울 강남구", nickname: "내가 짱", isPinkBorder: true, imageSrc: "https://via.placeholder.com/80" },
-    { location: "서울 중구", nickname: "내가 짱", isPinkBorder: true, imageSrc: null },
-    { location: "서울 강동구", nickname: "내가 짱", isPinkBorder: false, imageSrc: null },
-    { location: "서울 마포구", nickname: "내가 짱", isPinkBorder: false, imageSrc: null },
-    { location: "서울 송파구", nickname: "내가 짱", isPinkBorder: true, imageSrc: null },
-    { location: "서울 종로구", nickname: "내가 짱", isPinkBorder: false, imageSrc: null },
-  ];
+  useEffect(() => {
+    const fetchStories = async () => {
+      try {
+        const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/story");
+        const fetchedStories = response.data.data.map((story) => ({
+          nickname: story.nickname,
+          city: story.city,
+          cityDetail: story.cityDetail,
+          petImage: story.petImage,
+        }));
+        setStories(fetchedStories);
+      } catch (error) {
+        console.error("데이터를 가져오는 데 실패했습니다:", error);
+      }
+    };
+
+    fetchStories();
+  }, []);
 
   const ITEMS_PER_VIEW = 3;
 
@@ -71,10 +83,10 @@ const HomeStory = () => {
             {stories.map((story, index) => (
               <UploadStoryBtn
                 key={index}
-                location={story.location}
+                location={`${story.city} ${story.cityDetail}`}
                 nickname={story.nickname}
-                isPinkBorder={story.isPinkBorder}
-                imageSrc={story.imageSrc}
+                isPinkBorder={story.petImage ? true : false}
+                imageSrc={story.petImage || "https://via.placeholder.com/80"}
               />
             ))}
           </ScrollableStories>
