@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import x from "../../assets/icons/x.svg";
-import useUserStore  from '../../stores/userStore'
-//지역 입력 팝업창
+import axios from "axios";
 
 const FirstPopupContainer = styled.div`
   width: 481px;
@@ -99,43 +98,74 @@ const SubmitButton = styled.button`
 `;
 
 function Detail({ onClose, onNext }) {
-  const [nickname, setNickname] = useState("");
-  const [city, setCity] = useState("");
-  const [cityDetail, setCityDetail] = useState("");
-  //const { nickname, city, cityDetail } = useUserStore.getState();
-  // 이 부분에서 city랑 cityDetail은 땅 주인이 된 지역만 받아와야 해서.. 다르게 받아올듯 
+  const [nickname, setNickname] = useState(""); // 유저 닉네임
+  const [city, setCity] = useState(""); // 선택된 시티
+  const [cityDetail, setCityDetail] = useState(""); // 선택된 시티 디테일
+  const [cityDetails, setCityDetails] = useState([]); // 선택된 시티의 디테일 목록
+  const [lands, setLands] = useState([]); // API에서 가져온 지역 데이터
+
+  useEffect(() => {
+    const fetchRegionData = async () => {
+      try {
+        const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region", {
+          withCredentials: true,
+        });
+        if (response.data.message === "success") {
+          const data = response.data.data;
+          setNickname(data.nickname); 
+          setLands(data.lands); 
+        }
+      } catch (error) {
+        console.error("데이터를 가져오는 데 실패했습니다.", error);
+      }
+    };
+
+    fetchRegionData();
+  }, []);
+
+  const handleCityChange = (e) => {
+    const selectedCity = e.target.value;
+    setCity(selectedCity); 
+
+    const selectedLand = lands.find((land) => land.city === selectedCity);
+    setCityDetails(selectedLand ? selectedLand.cityDetails : []);
+  };
 
   const handleNextClick = () => {
-    onNext(); 
+    const selectedData = {
+      nickname, 
+      city, 
+      cityDetail, 
+    };
+    onNext(selectedData); 
   };
 
   return (
     <FirstPopupContainer>
       <CloseButton src={x} alt="닫기" onClick={onClose} />
       <Title>업로드하고 싶은 지역을 선택해 주세요</Title>
-      <InputField
-        type="text"
-        placeholder="닉네임"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-      />
+      <InputField type="text" placeholder="닉네임" value={nickname} readOnly />
       <DropdownContainer>
-        <Dropdown value={city} onChange={(e) => setCity(e.target.value)}>
+        <Dropdown value={city} onChange={handleCityChange}>
           <option value="">city</option>
-          <option value="서울">서울</option>
-          <option value="부산">부산</option>
-          <option value="대구">대구</option>
-        </Dropdown> 
+          {lands.map((land, index) => (
+            <option key={index} value={land.city}>
+              {land.city}
+            </option>
+          ))}
+        </Dropdown>
         <Dropdown value={cityDetail} onChange={(e) => setCityDetail(e.target.value)}>
-          <option value="">city detail</option>
-          <option value="강남구">강남구</option>
-          <option value="서초구">서초구</option>
-          <option value="송파구">송파구</option>
+          <option value="">cityDetail</option>
+          {cityDetails.map((detail, index) => (
+            <option key={index} value={detail.cityDetail}>
+              {detail.cityDetail}
+            </option>
+          ))}
         </Dropdown>
       </DropdownContainer>
-      <SubmitButton onClick={handleNextClick}>다음</SubmitButton> 
+      <SubmitButton onClick={handleNextClick}>다음</SubmitButton>
     </FirstPopupContainer>
-  ); //nickname이랑 city, cityDetail 다 받아오는 정보들
+  );
 }
 
 export default Detail;
