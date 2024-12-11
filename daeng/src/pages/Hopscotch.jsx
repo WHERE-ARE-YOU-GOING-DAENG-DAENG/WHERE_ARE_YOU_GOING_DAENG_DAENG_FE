@@ -72,9 +72,11 @@ const Hopscotch = () => {
   const [myLandlist, setMyLandList] = useState({ nickname: "", lands: [] })
   const landListRef = useRef(null);
   const [selectedArea, setSelectedArea] = useState([]);
+  const [visitCount, setVisitCount] = useState({});
 
   useEffect(()=>{
     fetchMyLand();
+    fetchMyVisit();
   },[])
 
   const scroll = (direction) => {
@@ -89,6 +91,7 @@ const Hopscotch = () => {
   };
 
   const totalLands = myLandlist.lands.reduce((acc, land) => acc + land.cityDetails.length, 0);
+  
   const fetchMyLand = async() => {
     try{
       const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region",{
@@ -99,6 +102,26 @@ const Hopscotch = () => {
       console.error("땅 목록을 불러오는 데 에러 발생",error)
     }
   }
+
+  const fetchMyVisit = async() => {
+    try{
+      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region/visitCount",{
+        withCredentials: true
+      });
+      setVisitCount(response.data.data.visitInfo);
+    }catch(error){
+      console.error("방문 횟수를 불러오는 데 에러 발생",error)
+    }
+  };
+
+  const getCurrentVisitCount = () => {
+    const [region, subRegion] = selectedArea;
+    if (region && subRegion && visitCount[region]?.[subRegion] !== undefined) {
+      return visitCount[region][subRegion];
+    }
+    return 0;
+  };
+
   return (
     <Container>
       <Header label="땅따먹기" />
@@ -109,7 +132,7 @@ const Hopscotch = () => {
             <Label>
               <Pink>{selectedArea[0]} {selectedArea[1]}</Pink> 점령까지 남은 방문횟수
             </Label>
-            <ProgressBar current={1} total={selectedArea[2] || 2} />
+            <ProgressBar current={getCurrentVisitCount()} total={selectedArea[2]+1 || 2} />
           </>
         ):<Label>점령하고 싶은 땅을 선택해보세요</Label>}
         <Label>

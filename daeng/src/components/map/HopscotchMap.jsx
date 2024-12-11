@@ -21,7 +21,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
     const { isLoaded } = useGoogleMapsStore();
     const userLocation = useLocationStore((state) => state.userLocation);
     const [overlayContent, setOverlayContent] = useState(null);
-    const [ownerList, setOwnerList] = useState({ regionOwners: {} });
+    const [ownerList, setOwnerList] = useState({ visitInfo: {} });
 
     useEffect(()=>{
       fetchOwnerData();
@@ -140,7 +140,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
               infoWindow.close();
               map.panTo(center);
               const regionOwner =
-                ownerList.regionOwners[region]?.[subRegion] || null;
+                ownerList.visitInfo[region]?.[subRegion] || null;
                 const ownerInfo = regionOwner
               ? {
                   nickname: regionOwner.nickname,
