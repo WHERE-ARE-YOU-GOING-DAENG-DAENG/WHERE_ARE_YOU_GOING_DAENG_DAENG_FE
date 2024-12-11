@@ -78,8 +78,7 @@ function DeleteStory({ storyId, setShowDeleteMenu, stories, setStories }) {
   return (
     <DeleteMenu>
       <DeleteMenuButton
-        onClick={() => handleDelete(storyId, setShowDeleteMenu, stories, setStories)}
-      >
+        onClick={() => handleDelete(storyId, setShowDeleteMenu, stories, setStories)}>
         삭제
       </DeleteMenuButton>
     </DeleteMenu>
