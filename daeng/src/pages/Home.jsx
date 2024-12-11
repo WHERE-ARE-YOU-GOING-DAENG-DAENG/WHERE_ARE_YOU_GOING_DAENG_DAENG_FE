@@ -67,7 +67,7 @@ function Home() {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get("https://www.daengdaeng-where.link/api/v1/user/adjust", {
+      const response = await axios.get("https://dev.daengdaeng-where.link/api/v1/user/adjust", {
         withCredentials: true,
       });
       const { user } = response.data.data;

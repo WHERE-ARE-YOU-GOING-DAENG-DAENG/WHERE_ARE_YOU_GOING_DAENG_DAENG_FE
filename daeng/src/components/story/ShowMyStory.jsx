@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import x from "../../assets/icons/x.svg";
+import rightArrow from "../../assets/icons/arrow.svg";
+import leftArrow from "../../assets/icons/reversearrow.svg";
+import AlertDialog from "../../components/commons/SweetAlert";
+import deleteDot from "../../assets/icons/deleteDot.svg";
 import {
   VideoContainer,
   CloseButton,
@@ -8,27 +13,23 @@ import {
   ImageContainer,
   BottomBar,
   Location,
-} from './StoryCommonStyle';
-import AlertDialog from '../../components/commons/SweetAlert';
-import deleteDot from "../../assets/icons/deleteDot.svg";
-
-//내 스토리조회 컴포넌트
+} from "./StoryCommonStyle";
 
 const DeleteDotContainer = styled.div`
   position: absolute;
-  top: 20px; 
+  top: 20px;
   right: 10px;
 `;
 
 const DeleteDot = styled.img`
-  width: 20px; 
+  width: 20px;
   height: 20px;
   cursor: pointer;
 `;
 
 const DeleteMenu = styled.div`
   position: absolute;
-  top: 10px; 
+  top: 10px;
   left: -50px;
   background: #fff;
   border: 1px solid #ddd;
@@ -48,24 +49,75 @@ const DeleteMenuButton = styled.button`
   width: 100%;
 `;
 
+const NavigationButton = styled.img`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+
+  &.left {
+    left: 10px;
+  }
+
+  &.right {
+    right: 10px;
+  }
+`;
 
 function ShowMyStory({ onClose }) {
+  const [stories, setStories] = useState([]);
+  const [nickname, setNickname] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteMenu, setShowDeleteMenu] = useState(false);
 
-  const handleDeleteDotClick = () => {
-    setShowDeleteMenu(!showDeleteMenu); 
+  useEffect(() => {
+    const fetchStories = async () => {
+      try {
+        const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/story/mystory");
+        setStories(response.data.data.content);
+        setNickname(response.data.data.nickname);
+      } catch (error) {
+        console.error("데이터를 가져오는 데 실패했습니다:", error);
+      }
+    };
+
+    fetchStories();
+  }, []);
+
+  const handleNext = () => {
+    if (currentIndex < stories.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
   };
 
-  const handleDelete = () => {
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const handleDeleteDotClick = () => {
+    setShowDeleteMenu(!showDeleteMenu);
+  };
+
+  const handleDelete = (storyId) => {
     AlertDialog({
       mode: "alert",
       title: "성공",
-      text: `스토리가 성공적으로 삭제되었습니다.`,
+      text: `스토리 ID ${storyId}가 성공적으로 삭제되었습니다.`,
       confirmText: "닫기",
-      icon:'success'
+      icon: "success",
     });
-    setShowDeleteMenu(false); 
+    setShowDeleteMenu(false);
   };
+
+  if (stories.length === 0) {
+    return <div>스토리를 불러오는 중...</div>;
+  }
+
+  const currentStory = stories[currentIndex];
 
   return (
     <VideoContainer>
@@ -80,18 +132,35 @@ function ShowMyStory({ onClose }) {
           />
           {showDeleteMenu && (
             <DeleteMenu>
-              <DeleteMenuButton onClick={handleDelete}>삭제</DeleteMenuButton>
+              <DeleteMenuButton onClick={() => handleDelete(currentStory.storyId)}>
+                삭제
+              </DeleteMenuButton>
             </DeleteMenu>
           )}
         </DeleteDotContainer>
-        <span>이미지 영역</span>
+        <img
+          src={currentStory.path}
+          alt={`스토리 ${currentStory.storyId}`}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+        <NavigationButton
+          src={leftArrow}
+          alt="이전 스토리"
+          className="left"
+          onClick={handlePrev}
+        />
+        <NavigationButton
+          src={rightArrow}
+          alt="다음 스토리"
+          className="right"
+          onClick={handleNext}
+        />
       </ImageContainer>
       <BottomBar>
         <Location>
-          <span>👑</span> 
-          서울 강남구 
+          <span>👑</span> {currentStory.city} {currentStory.cityDetail}
         </Location>
-        <span>내가 진짜님</span>
+        <span>{nickname}님</span>
       </BottomBar>
     </VideoContainer>
   );
