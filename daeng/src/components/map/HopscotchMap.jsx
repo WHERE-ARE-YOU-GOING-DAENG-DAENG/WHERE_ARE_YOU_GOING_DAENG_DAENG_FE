@@ -22,6 +22,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
     const userLocation = useLocationStore((state) => state.userLocation);
     const [overlayContent, setOverlayContent] = useState(null);
     const [ownerList, setOwnerList] = useState({ visitInfo: {} });
+    const [isOwnerListLoaded, setIsOwnerListLoaded] = useState(false);
 
     useEffect(()=>{
       fetchOwnerData();
@@ -33,6 +34,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
           withCredentials: true
         });
         setOwnerList(response.data.data);
+        setIsOwnerListLoaded(true);
       }catch(error){
         console.error("땅 주인 목록을 조회할 수 없습니다",error)
       }
@@ -55,7 +57,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
     }, [isLoaded, map, removeUi]);
   
     useEffect(() => {
-      if (map && isLoaded) {
+      if (isLoaded && map && isOwnerListLoaded) {
         const polygons = [];
         const infoWindow = new window.google.maps.InfoWindow({
           pixelOffset: new window.google.maps.Size(0, -10),
@@ -140,7 +142,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
               infoWindow.close();
               map.panTo(center);
               const regionOwner =
-                ownerList.visitInfo[region]?.[subRegion] || null;
+                ownerList.visitInfo?.[region]?.[subRegion] || null;
                 const ownerInfo = regionOwner
               ? {
                   nickname: regionOwner.nickname,
@@ -152,13 +154,13 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
                   hops: 0,
                   pets: [],
                 };
-
+                
                 polygons.forEach((polygon) => {
                   const polygonSub = polygon.get("sub");
                   if (polygonSub && polygonSub.startsWith(subRegion)) {
-                    polygon.setOptions({ fillColor: "#FF69A9", fillOpacity: 0.8 });
+                    polygon.setOptions({ fillColor: "#FF69A9"});
                   } else {
-                    polygon.setOptions({ fillColor: "#fff", fillOpacity: 0.7 });
+                    polygon.setOptions({ fillColor: "#fff" });
                   }
                 });
 
@@ -184,7 +186,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
           polygons.forEach((polygon) => polygon.setMap(null));
         };
       }
-    }, [map, isLoaded]);    
+    }, [map, isLoaded, isOwnerListLoaded]);    
   
     return (
       <MapContainer ref={mapRef} $removeUi={removeUi}>
