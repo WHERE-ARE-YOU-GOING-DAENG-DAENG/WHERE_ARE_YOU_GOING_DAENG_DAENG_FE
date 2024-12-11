@@ -155,7 +155,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
 
     useEffect(()=>{
         const fetchTime = async () => {
-            try{const response = await axios.get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`,{
+            try{const response = await axios.get(`https://dev.daengdaeng-where.link/api/v1/places/${placeId}`,{
                 withCredentials: true,
             });
             setStartTime(response.data.data.startTime);
@@ -303,7 +303,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
             visitAt: `${selectedDate}T${selectedTime}:00`,
         }
         try{
-          const response = await axiosInstance.post("https://www.daengdaeng-where.link/api/v1/visit", payload,{
+          const response = await axiosInstance.post("https://dev.daengdaeng-where.link/api/v1/visit", payload,{
           withCredentials: true
         })
           setReloadTrigger((prev) => !prev);

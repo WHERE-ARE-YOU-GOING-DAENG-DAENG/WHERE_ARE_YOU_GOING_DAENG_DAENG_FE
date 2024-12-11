@@ -11,7 +11,7 @@ const PushAlerts = ({ message, dateTime, notificationId, onNotificationClose }) 
   const handleClose = async () => {
     try {
       await axios.put(
-        `https://www.daengdaeng-where.link/api/v1/notifications/${notificationId}`, 
+        `https://dev.daengdaeng-where.link/api/v1/notifications/${notificationId}`, 
         {},
         { withCredentials: true }
       );
