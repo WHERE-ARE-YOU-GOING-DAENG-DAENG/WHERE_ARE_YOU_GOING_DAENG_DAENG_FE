@@ -16,7 +16,7 @@ const useReviewStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await axios.get(
-        `https://www.daengdaeng-where.link/api/v1/reviews/user?page=${page}&size=${size}`,
+        `https://dev.daengdaeng-where.link/api/v1/reviews/user?page=${page}&size=${size}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,

@@ -6,7 +6,7 @@ const useVisitStore = create((set) => ({
   myVisits: [],
   fetchVisits: async () => {
     try {
-      const response = await axiosInstance.get("https://www.daengdaeng-where.link/api/v1/visit/user",{
+      const response = await axiosInstance.get("https://dev.daengdaeng-where.link/api/v1/visit/user",{
         withCredentials: true,
     });
       
@@ -33,7 +33,7 @@ const useVisitStore = create((set) => ({
   },
   removeVisit: async (visitId) => {
     try {
-      const response = await axiosInstance.delete(`https://www.daengdaeng-where.link/api/v1/visit/${visitId}`,{
+      const response = await axiosInstance.delete(`https://dev.daengdaeng-where.link/api/v1/visit/${visitId}`,{
         withCredentials: true,
     });
       set((state) => ({
