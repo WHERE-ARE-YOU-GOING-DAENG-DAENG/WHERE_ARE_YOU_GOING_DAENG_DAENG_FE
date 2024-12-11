@@ -16,14 +16,16 @@ const Icon = styled.div`
   align-items: center;
   justify-content: center;
   margin-right: 8px;
+  img{
+    width: 35px;
+  }
 `;
 
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  font-family: Arial, sans-serif;
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
 `;
 
