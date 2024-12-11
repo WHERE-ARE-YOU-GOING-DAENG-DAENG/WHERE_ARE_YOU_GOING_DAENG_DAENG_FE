@@ -70,7 +70,7 @@ const ProfileImageWrapper = styled.div`
   width: 77px;
   height: 77px;
   border-radius: 50%;
-  border: 6px solid white;
+  border: 3px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,9 +83,10 @@ const ProfileImageWrapper = styled.div`
 `;
 
 const ProfileImage = styled.img`
-  width: 74px;
-  height: 74px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
+  object-fit: cover;
 
     @media (max-width: 554px) {
     width: 58px;

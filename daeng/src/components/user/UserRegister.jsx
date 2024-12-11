@@ -128,7 +128,7 @@ function UserRegister() {
     };
     try {
         const { status } = await axios.post(
-          "https://www.daengdaeng-where.link/api/v1/signup",
+          "https://dev.daengdaeng-where.link/api/v1/signup",
           payload,
           {
             withCredentials: true,
@@ -183,7 +183,7 @@ function UserRegister() {
 
     try {
       const { data } = await axios.get(
-        `https://www.daengdaeng-where.link/api/v1/user/duplicateNickname`,
+        `https://dev.daengdaeng-where.link/api/v1/user/duplicateNickname`,
         {
           params: { nickname: userData.nickname },
           withCredentials: true,
