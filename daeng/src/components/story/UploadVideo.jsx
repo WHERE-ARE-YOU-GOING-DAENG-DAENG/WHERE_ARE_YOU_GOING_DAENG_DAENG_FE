@@ -69,7 +69,12 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
 
       if (uploadResponse.status !== 200) {
         console.error("Presigned URL로 파일 업로드 실패:", uploadResponse);
-        alert("스토리 업로드 실패!");
+        AlertDialog({
+          mode: "alert", 
+          title: "오류",
+          text: "이미지 업로드에 실패했습니다.",
+          confirmText: "확인"
+        })
         return;
       }
 
@@ -95,15 +100,31 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
       );
 
       if (storyResponse.status === 200) {
-        alert("스토리가 성공적으로 업로드되었습니다!");
+        AlertDialog({
+          mode: "alert", 
+          title: "성공",
+          text: "스토리가 성공적으로 올라갔습니다. ",
+          confirmText: "확인",
+          icon: 'success'
+        })
         onClose();
       } else {
         console.error("스토리 등록 실패:", storyResponse);
-        alert("스토리 등록 실패!");
+        AlertDialog({
+          mode: "alert", 
+          title: "실패",
+          text: "스토리가 업로드에 실패했습니다. ",
+          confirmText: "확인"
+        })
       }
     } catch (error) {
       console.error("업로드 중 오류 발생:", error);
-      alert("업로드 실패!");
+      AlertDialog({
+        mode: "alert", 
+        title: "실패",
+        text: "스토리가 업로드에 실패했습니다. ",
+        confirmText: "확인"
+      })
     }
   };
 
