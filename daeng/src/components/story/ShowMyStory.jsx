@@ -6,7 +6,6 @@ import rightArrow from "../../assets/icons/arrow.svg";
 import leftArrow from "../../assets/icons/reversearrow.svg";
 import deleteDot from "../../assets/icons/deleteDot.svg";
 import DeleteStory from "./DeleteStory";
-import { useNavigate } from "react-router-dom"; 
 import {
   VideoContainer,
   CloseButton,
@@ -15,6 +14,7 @@ import {
   BottomBar,
   Location,
 } from "./StoryCommonStyle";
+import AlertDialog from "../commons/SweetAlert";
 
 const DeleteDotContainer = styled.div`
   position: absolute;
@@ -50,7 +50,6 @@ function ShowMyStory({ onClose }) {
   const [nickname, setNickname] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteMenu, setShowDeleteMenu] = useState(false);
-  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -58,6 +57,9 @@ function ShowMyStory({ onClose }) {
         const response = await axios.get(
           "https://dev.daengdaeng-where.link/api/v2/story/mystory",
           {
+            headers: {
+              "Content-Type": "application/json",
+            },
             withCredentials: true,
           }
         );
@@ -65,14 +67,27 @@ function ShowMyStory({ onClose }) {
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
       } catch (error) {
-        console.error("데이터를 가져오는 데 실패했습니다:", error);
+        if (
+          error.response &&
+          error.response.status === 404 &&
+          error.response.data.message === "스토리가 존재하지 않습니다."
+        ) {
+          AlertDialog({
+            mode: "alert",
+            title: "알림",
+            text: "스토리가 없습니다. 스토리를 추가해주세요.",
+            confirmText: "확인",
+            icon: "warning",
+            onConfirm: onClose,
+          });
+        } else {
+          console.error("데이터를 가져오는 데 실패했습니다:", error);
+        }
       }
     };
-  
+
     fetchStories();
-  }, []);
-  
-  
+  }, [onClose]);
 
   const handleNext = () => {
     const currentStory = stories[currentIndex];
@@ -92,11 +107,17 @@ function ShowMyStory({ onClose }) {
     setShowDeleteMenu(!showDeleteMenu);
   };
 
-  if (stories.length === 0) {
-    return <div>스토리를 불러오는 중...</div>;
-  }
-
   const currentStory = stories[currentIndex];
+
+  // currentStory가 undefined인 경우 처리
+  if (!currentStory) {
+    return (
+      <VideoContainer>
+        <TextContainer>스토리가 없습니다. 스토리를 추가해주세요.</TextContainer>
+        <CloseButton src={x} alt="팝업 닫기" onClick={onClose} />
+      </VideoContainer>
+    );
+  }
 
   return (
     <VideoContainer>
@@ -109,14 +130,15 @@ function ShowMyStory({ onClose }) {
             alt="스토리 안의 삭제 버튼"
             onClick={handleDeleteDotClick}
           />
-            {showDeleteMenu && (
-              <DeleteStory
-                storyId={currentStory.storyId} 
-                setShowDeleteMenu={setShowDeleteMenu} // 삭제 메뉴 닫기 함수 전달
-                stories={stories} // 현재 스토리 배열 전달
-                setStories={setStories} // 상태 업데이트 함수 전달 > 삭제하면 바로 다음 스토리를 보여주기 위해 필요~
-              />
-            )}
+          {showDeleteMenu && (
+            <DeleteStory
+              storyId={currentStory.storyId}
+              setShowDeleteMenu={setShowDeleteMenu} // 삭제 메뉴 닫기 함수 전달
+              stories={stories} // 현재 스토리 배열 전달
+              setStories={setStories} // 상태 업데이트 함수 전달
+              onClose={onClose}
+            />
+          )}
         </DeleteDotContainer>
         {currentStory.path.endsWith(".mp4") || currentStory.path.endsWith(".webm") ? (
           <video
@@ -133,19 +155,22 @@ function ShowMyStory({ onClose }) {
           alt={`스토리 ${currentStory.storyId}`}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
-      )}
-        <NavigationButton
-          src={leftArrow}
-          alt="이전 스토리"
-          className="left"
-          onClick={handlePrev}
-        />
-        <NavigationButton
-          src={rightArrow}
-          alt="다음 스토리"
-          className="right"
-          onClick={handleNext}
-        />
+        {currentIndex > 0 && (
+          <NavigationButton
+            src={leftArrow}
+            alt="이전 스토리"
+            className="left"
+            onClick={handlePrev}
+          />
+        )}
+        {currentIndex < stories.length - 1 && (
+          <NavigationButton
+            src={rightArrow}
+            alt="다음 스토리"
+            className="right"
+            onClick={handleNext}
+          />
+        )}
       </ImageContainer>
       <BottomBar>
         <Location>
