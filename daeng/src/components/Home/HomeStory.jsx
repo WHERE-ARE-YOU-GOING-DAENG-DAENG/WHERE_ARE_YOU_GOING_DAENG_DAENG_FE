@@ -8,6 +8,7 @@ import UploadStoryBtn from "../../components/commons/UploadStoryBtn";
 import Detail from "../story/Detail";
 import ShowMyStory from "../story/ShowMystory";
 import UploadVideo from "../story/UploadVideo";
+import OtherUserStory from "../story/OtherUserStory";
 import axios from "axios";
 
 const HomeStory = () => {
@@ -15,6 +16,7 @@ const HomeStory = () => {
   const [currentPopup, setCurrentPopup] = useState(null); 
   const [detailData, setDetailData] = useState(null); // Detail에서 전달받은 데이터
   const [stories, setStories] = useState([]);
+  const [selectedStory, setSelectedStory] = useState(null);
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -66,6 +68,12 @@ const HomeStory = () => {
     setCurrentPopup("uploadVideo"); // UploadVideo 팝업 열기
   };
 
+  const openOtherUserStoryPopup = (story) => {
+    setSelectedStory(story);
+    setCurrentPopup("otherUserStory");
+  };
+
+
   return (
     <StoryWrapper>
       <Title>땅주인들의 스토리</Title>
@@ -89,6 +97,8 @@ const HomeStory = () => {
                 nickname={story.nickname}
                 isPinkBorder={story.petImage ? true : false}
                 imageSrc={story.petImage || "https://via.placeholder.com/80"}
+                onClick={() => openOtherUserStoryPopup(story)} 
+                onClose={closePopup} 
               />
             ))}
           </ScrollableStories>
@@ -117,6 +127,17 @@ const HomeStory = () => {
             nickname={detailData.nickname}
             city={detailData.city}
             cityDetail={detailData.cityDetail}
+          />
+        </Overlay>
+      )}
+      {currentPopup === "otherUserStory" && selectedStory && (
+        <Overlay>
+          <OtherUserStory
+            nickname={selectedStory.nickname}
+            city={selectedStory.city}
+            cityDetail={selectedStory.cityDetail}
+            imageSrc={selectedStory.petImage}
+            onClose={closePopup}
           />
         </Overlay>
       )}

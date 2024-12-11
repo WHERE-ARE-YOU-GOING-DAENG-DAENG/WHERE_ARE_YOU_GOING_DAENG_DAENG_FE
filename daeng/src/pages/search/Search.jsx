@@ -51,7 +51,7 @@ const Search = () => {
         longitude: userLocation.lng
       }
       try{
-        const response = await axiosInstance.post("https://www.daengdaeng-where.link/api/v1/places/nearest",payload,{
+        const response = await axiosInstance.post("https://dev.daengdaeng-where.link/api/v1/places/nearest",payload,{
           withCredentials: true,
         });
         setPlaces(response.data.data);
@@ -104,7 +104,7 @@ const Search = () => {
 
         try {
           const response = await axiosInstance.post(
-            "https://www.daengdaeng-where.link/api/v1/places/search",
+            "https://dev.daengdaeng-where.link/api/v1/places/search",
             payload,
             { withCredentials: true }
           );
@@ -143,7 +143,7 @@ const Search = () => {
         };
         try {
           const response = await axiosInstance.post(
-            "https://www.daengdaeng-where.link/api/v1/places/filter",
+            "https://dev.daengdaeng-where.link/api/v1/places/filter",
             payload,
             { withCredentials: true }
           );
