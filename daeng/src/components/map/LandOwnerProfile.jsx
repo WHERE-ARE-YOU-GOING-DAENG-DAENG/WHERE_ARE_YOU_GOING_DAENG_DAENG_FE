@@ -113,7 +113,7 @@ const LandOwnerProfile = ({ area, nickname, pets, hops }) => {
     }
   }, [isCentered, maxIndex]);
 
-  if(!area){
+  if(!nickname){
     return <Bubble>땅 주인이 없습니다.</Bubble>
   }
 
@@ -134,9 +134,9 @@ const LandOwnerProfile = ({ area, nickname, pets, hops }) => {
             translateX={-currentIndex * itemsPerPage * itemWidth}
           >
             {pets.map((pet) => (
-              <PetCard key={pet.id}>
-                <PetImage src={pet.img || defaultImg} alt={`${pet.name || "기본 이미지"} 사진`} />
-                <div>{pet.name}</div>
+              <PetCard key={pet.petId}>
+                <PetImage src={pet.petImg? pet.petImg : defaultImg} alt={`${pet.petName || "기본 이미지"} 사진`} />
+                <div>{pet.petName}</div>
               </PetCard>
             ))}
           </PetList>
