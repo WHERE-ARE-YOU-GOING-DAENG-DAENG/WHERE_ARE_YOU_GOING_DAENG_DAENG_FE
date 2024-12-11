@@ -12,6 +12,7 @@ import UploadVideo from "../story/UploadVideo";
 const HomeStory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentPopup, setCurrentPopup] = useState(null); 
+  const [detailData, setDetailData] = useState(null); // Detail에서 전달받은 데이터
 
   const stories = [
     { location: "서울 강남구", nickname: "내가 짱", isPinkBorder: true, imageSrc: "https://via.placeholder.com/80" },
@@ -37,18 +38,19 @@ const HomeStory = () => {
   };
 
   const openMyStoryPopup = () => {
-    setCurrentPopup("myStory"); // ShowMyStory 팝업 열기
+    setCurrentPopup("myStory"); 
   };
 
   const openDetailPopup = () => {
-    setCurrentPopup("detail"); // Detail 팝업 열기
+    setCurrentPopup("detail"); 
   };
 
   const closePopup = () => {
-    setCurrentPopup(null); // 모든 팝업 닫기
+    setCurrentPopup(null); 
   };
 
-  const openNextPopup = () => {
+  const openNextPopup = (data) => {
+    setDetailData(data); // Detail에서 전달받은 데이터를 저장
     setCurrentPopup("uploadVideo"); // UploadVideo 팝업 열기
   };
 
@@ -92,13 +94,18 @@ const HomeStory = () => {
 
       {currentPopup === "detail" && (
         <Overlay>
-          <Detail onClose={closePopup} onNext={openNextPopup} />
+          <Detail onClose={closePopup} onNext={(data) => openNextPopup(data)} />
         </Overlay>
       )}
 
-      {currentPopup === "uploadVideo" && (
+      {currentPopup === "uploadVideo" && detailData && (
         <Overlay>
-          <UploadVideo onClose={closePopup} />
+          <UploadVideo
+            onClose={closePopup}
+            nickname={detailData.nickname}
+            city={detailData.city}
+            cityDetail={detailData.cityDetail}
+          />
         </Overlay>
       )}
     </StoryWrapper>

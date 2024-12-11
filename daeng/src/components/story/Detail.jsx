@@ -104,7 +104,6 @@ function Detail({ onClose, onNext }) {
   const [cityDetails, setCityDetails] = useState([]); // 선택된 시티의 디테일 목록
   const [lands, setLands] = useState([]); // API에서 가져온 지역 데이터
 
-  // API 호출하여 데이터 가져오기
   useEffect(() => {
     const fetchRegionData = async () => {
       try {
