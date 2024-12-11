@@ -98,7 +98,7 @@ function PreferenceRegister() {
 
     try {
       const response1 = await axios.post(
-        "https://www.daengdaeng-where.link/api/v1/preferences",
+        "https://dev.daengdaeng-where.link/api/v1/preferences",
         placePayload,
         {
           headers: { "Content-Type": "application/json" },
@@ -107,7 +107,7 @@ function PreferenceRegister() {
       );
 
       const response2 = await axios.post(
-        "https://www.daengdaeng-where.link/api/v1/preferences",
+        "https://dev.daengdaeng-where.link/api/v1/preferences",
         favoritePayload,
         {
           headers: { "Content-Type": "application/json" },
