@@ -98,11 +98,11 @@ const SubmitButton = styled.button`
 `;
 
 function Detail({ onClose, onNext }) {
-  const [nickname, setNickname] = useState(""); // 유저 닉네임
-  const [city, setCity] = useState(""); // 선택된 시티
-  const [cityDetail, setCityDetail] = useState(""); // 선택된 시티 디테일
-  const [cityDetails, setCityDetails] = useState([]); // 선택된 시티의 디테일 목록
-  const [lands, setLands] = useState([]); // API에서 가져온 지역 데이터
+  const [nickname, setNickname] = useState(""); 
+  const [city, setCity] = useState(""); 
+  const [cityDetail, setCityDetail] = useState(""); 
+  const [cityDetails, setCityDetails] = useState([]); 
+  const [lands, setLands] = useState([]); 
 
   useEffect(() => {
     const fetchRegionData = async () => {

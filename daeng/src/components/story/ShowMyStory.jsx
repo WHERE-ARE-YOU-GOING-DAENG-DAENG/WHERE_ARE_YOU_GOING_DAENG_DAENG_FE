@@ -4,8 +4,8 @@ import axios from "axios";
 import x from "../../assets/icons/x.svg";
 import rightArrow from "../../assets/icons/arrow.svg";
 import leftArrow from "../../assets/icons/reversearrow.svg";
-import AlertDialog from "../../components/commons/SweetAlert";
 import deleteDot from "../../assets/icons/deleteDot.svg";
+import DeleteStory from "./DeleteStory";
 import {
   VideoContainer,
   CloseButton,
@@ -14,6 +14,7 @@ import {
   BottomBar,
   Location,
 } from "./StoryCommonStyle";
+import AlertDialog from "../commons/SweetAlert";
 
 const DeleteDotContainer = styled.div`
   position: absolute;
@@ -25,28 +26,6 @@ const DeleteDot = styled.img`
   width: 20px;
   height: 20px;
   cursor: pointer;
-`;
-
-const DeleteMenu = styled.div`
-  position: absolute;
-  top: 10px;
-  left: -50px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 5px 10px;
-  z-index: 10;
-`;
-
-const DeleteMenuButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 14px;
-  color: #333;
-  padding: 5px;
-  cursor: pointer;
-  width: 100%;
 `;
 
 const NavigationButton = styled.img`
@@ -75,16 +54,40 @@ function ShowMyStory({ onClose }) {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/story/mystory");
+        const response = await axios.get(
+          "https://dev.daengdaeng-where.link/api/v2/story/mystory",
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+        console.log("스토리 데이터:", response.data.data.content);
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
       } catch (error) {
-        console.error("데이터를 가져오는 데 실패했습니다:", error);
+        if (
+          error.response &&
+          error.response.status === 404 &&
+          error.response.data.message === "스토리가 존재하지 않습니다."
+        ) {
+          AlertDialog({
+            mode: "alert",
+            title: "알림",
+            text: "스토리가 없습니다. 스토리를 추가해주세요.",
+            confirmText: "확인",
+            icon: "warning",
+            onConfirm: onClose,
+          });
+        } else {
+          console.error("데이터를 가져오는 데 실패했습니다:", error);
+        }
       }
     };
 
     fetchStories();
-  }, []);
+  }, [onClose]);
 
   const handleNext = () => {
     if (currentIndex < stories.length - 1) {
@@ -102,22 +105,17 @@ function ShowMyStory({ onClose }) {
     setShowDeleteMenu(!showDeleteMenu);
   };
 
-  const handleDelete = (storyId) => {
-    AlertDialog({
-      mode: "alert",
-      title: "성공",
-      text: `스토리 ID ${storyId}가 성공적으로 삭제되었습니다.`,
-      confirmText: "닫기",
-      icon: "success",
-    });
-    setShowDeleteMenu(false);
-  };
-
-  if (stories.length === 0) {
-    return <div>스토리를 불러오는 중...</div>;
-  }
-
   const currentStory = stories[currentIndex];
+
+  // currentStory가 undefined인 경우 처리
+  if (!currentStory) {
+    return (
+      <VideoContainer>
+        <TextContainer>스토리가 없습니다. 스토리를 추가해주세요.</TextContainer>
+        <CloseButton src={x} alt="팝업 닫기" onClick={onClose} />
+      </VideoContainer>
+    );
+  }
 
   return (
     <VideoContainer>
@@ -131,30 +129,47 @@ function ShowMyStory({ onClose }) {
             onClick={handleDeleteDotClick}
           />
           {showDeleteMenu && (
-            <DeleteMenu>
-              <DeleteMenuButton onClick={() => handleDelete(currentStory.storyId)}>
-                삭제
-              </DeleteMenuButton>
-            </DeleteMenu>
+            <DeleteStory
+              storyId={currentStory.storyId}
+              setShowDeleteMenu={setShowDeleteMenu} // 삭제 메뉴 닫기 함수 전달
+              stories={stories} // 현재 스토리 배열 전달
+              setStories={setStories} // 상태 업데이트 함수 전달
+              onClose={onClose}
+            />
           )}
         </DeleteDotContainer>
-        <img
-          src={currentStory.path}
-          alt={`스토리 ${currentStory.storyId}`}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-        <NavigationButton
-          src={leftArrow}
-          alt="이전 스토리"
-          className="left"
-          onClick={handlePrev}
-        />
-        <NavigationButton
-          src={rightArrow}
-          alt="다음 스토리"
-          className="right"
-          onClick={handleNext}
-        />
+        {currentStory.path.endsWith(".mp4") || currentStory.path.endsWith(".webm") ? (
+          <video
+            src={currentStory.path}
+            controls
+            autoPlay
+            loop
+            muted
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          <img
+            src={currentStory.path}
+            alt={`스토리 ${currentStory.storyId}`}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        )}
+        {currentIndex > 0 && (
+          <NavigationButton
+            src={leftArrow}
+            alt="이전 스토리"
+            className="left"
+            onClick={handlePrev}
+          />
+        )}
+        {currentIndex < stories.length - 1 && (
+          <NavigationButton
+            src={rightArrow}
+            alt="다음 스토리"
+            className="right"
+            onClick={handleNext}
+          />
+        )}
       </ImageContainer>
       <BottomBar>
         <Location>
