@@ -58,6 +58,9 @@ function ShowMyStory({ onClose }) {
         const response = await axios.get(
           "https://dev.daengdaeng-where.link/api/v2/story/mystory",
           {
+            headers: {
+              "Content-Type": "application/json",
+            },
             withCredentials: true, 
           }
         );
