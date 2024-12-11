@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import x from "../../assets/icons/x.svg";
-//지역 입력 팝업창
 import axios from 'axios';
 
 const FirstPopupContainer = styled.div`
