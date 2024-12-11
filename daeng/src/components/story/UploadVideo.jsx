@@ -13,6 +13,8 @@ import {
   UploadImg,
 } from "./StoryCommonStyle";
 
+
+
 function UploadStory({ onClose, nickname, city, cityDetail }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);

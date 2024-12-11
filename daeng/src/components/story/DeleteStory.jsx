@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 import AlertDialog from "../../components/commons/SweetAlert";
+import { useNavigate } from "react-router-dom";
+
 
 const DeleteMenu = styled.div`
   position: absolute;
@@ -75,10 +77,11 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories) => 
 };
 
 function DeleteStory({ storyId, setShowDeleteMenu, stories, setStories }) {
+  const navigate = useNavigate(); 
   return (
     <DeleteMenu>
       <DeleteMenuButton
-        onClick={() => handleDelete(storyId, setShowDeleteMenu, stories, setStories)}>
+        onClick={() => handleDelete(storyId, setShowDeleteMenu, stories, setStories, navigate)}>
         삭제
       </DeleteMenuButton>
     </DeleteMenu>

@@ -58,9 +58,10 @@ function ShowMyStory({ onClose }) {
         const response = await axios.get(
           "https://dev.daengdaeng-where.link/api/v2/story/mystory",
           {
-            withCredentials: true, 
+            withCredentials: true,
           }
         );
+        console.log("스토리 데이터:", response.data.data.content); 
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
       } catch (error) {
@@ -71,8 +72,11 @@ function ShowMyStory({ onClose }) {
     fetchStories();
   }, []);
   
+  
 
   const handleNext = () => {
+    const currentStory = stories[currentIndex];
+  
     if (currentIndex < stories.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
@@ -114,11 +118,22 @@ function ShowMyStory({ onClose }) {
               />
             )}
         </DeleteDotContainer>
+        {currentStory.path.endsWith(".mp4") || currentStory.path.endsWith(".webm") ? (
+          <video
+          src={currentStory.path}
+          controls
+          autoPlay
+          loop
+          muted
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      ) : (
         <img
           src={currentStory.path}
           alt={`스토리 ${currentStory.storyId}`}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
+      )}
         <NavigationButton
           src={leftArrow}
           alt="이전 스토리"
