@@ -38,7 +38,7 @@ const ToggleButton = styled.button`
 const AlarmBox = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [selectedPushType] = useState(pushAgree[0].code);
-  
+
   useEffect(() => {
     const fetchNotificationConsent = async () => {
       try {
@@ -58,6 +58,20 @@ const AlarmBox = () => {
     };
 
     fetchNotificationConsent();
+
+    // 서비스 워커 등록 
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js")
+        .then((registration) => {
+          console.log("Service Worker 등록 성공:", registration.scope);
+        })
+        .catch((error) => {
+          console.error("Service Worker 등록 실패:", error);
+        });
+    } else {
+      console.warn("이 브라우저는 Service Worker를 지원하지 않습니다.");
+    }
   }, []);
 
   const handleNotificationRequest = async () => {
@@ -133,14 +147,15 @@ const AlarmBox = () => {
 
   return (
     <>
-    <AlarmContainer>
-      <ToggleButton
-        isSubscribed={isSubscribed}
-        onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest}>
-      {isSubscribed ? "알림 그만 받기" : "알림 받기"}
-      </ToggleButton>
-      <p>{isSubscribed ? "현재 알림이 활성화된 상태입니다." : "현재 알림이 비활성화된 상태입니다."}</p>
-    </AlarmContainer>
+      <AlarmContainer>
+        <ToggleButton
+          isSubscribed={isSubscribed}
+          onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest}
+        >
+          {isSubscribed ? "알림 그만 받기" : "알림 받기"}
+        </ToggleButton>
+        <p>{isSubscribed ? "현재 알림이 활성화된 상태입니다." : "현재 알림이 비활성화된 상태입니다."}</p>
+      </AlarmContainer>
       {isSubscribed && <AlarmList activeTab="subscribe" />}
     </>
   );
