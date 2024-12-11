@@ -1,11 +1,11 @@
-import React from 'react'
-import axios from 'axios'
+import React from "react";
+import axios from "axios";
 import styled from "styled-components";
-import AlertDialog from '../../components/commons/SweetAlert';
+import AlertDialog from "../../components/commons/SweetAlert";
 
 const DeleteMenu = styled.div`
   position: absolute;
-  top: 10px; 
+  top: 10px;
   left: -50px;
   background: #fff;
   border: 1px solid #ddd;
@@ -24,7 +24,8 @@ const DeleteMenuButton = styled.button`
   cursor: pointer;
   width: 100%;
 `;
-const handleDelete = async (storyId, setShowDeleteMenu) => {
+
+const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories) => {
   AlertDialog({
     mode: "confirm",
     title: "삭제 확인",
@@ -32,20 +33,22 @@ const handleDelete = async (storyId, setShowDeleteMenu) => {
     cancelText: "취소",
     icon: "warning",
     confirmText: "삭제",
-
     onConfirm: async () => {
       try {
         const response = await axios.delete(
           `https://dev.daengdaeng-where.link/api/v2/story/${storyId}`,
           {
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             withCredentials: true,
           }
         );
 
         if (response.status === 200) {
+          const updatedStories = stories.filter((story) => story.storyId !== storyId);
+          setStories(updatedStories);
+
           AlertDialog({
             mode: "alert",
             title: "성공",
@@ -71,15 +74,16 @@ const handleDelete = async (storyId, setShowDeleteMenu) => {
   });
 };
 
-
-function DeleteStory() {
+function DeleteStory({ storyId, setShowDeleteMenu, stories, setStories }) {
   return (
-    <>
     <DeleteMenu>
-      <DeleteMenuButton onClick={handleDelete}>삭제</DeleteMenuButton>
+      <DeleteMenuButton
+        onClick={() => handleDelete(storyId, setShowDeleteMenu, stories, setStories)}
+      >
+        삭제
+      </DeleteMenuButton>
     </DeleteMenu>
-    </>
-  )
+  );
 }
 
-export default DeleteStory
+export default DeleteStory;
