@@ -36,7 +36,7 @@ const handleDelete = async (storyId, setShowDeleteMenu) => {
     onConfirm: async () => {
       try {
         const response = await axios.delete(
-          `https://www.daengdaeng-where.link/api/v2/story/${storyId}`,
+          `https://dev.daengdaeng-where.link/api/v2/story/${storyId}`,
           {
             headers: {
               'Content-Type': 'application/json',

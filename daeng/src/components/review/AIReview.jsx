@@ -50,7 +50,7 @@ function AiReviewSummary({ placeId }) {
   const fetchAiSummary = async () => {
     try {
       const getResponse = await axios.get(
-        `https://www.daengdaeng-where.link/api/v1/places/${placeId}/reviews/summary`,
+        `https://dev.daengdaeng-where.link/api/v1/places/${placeId}/reviews/summary`,
         {
           withCredentials: true,
           headers: {

@@ -289,7 +289,7 @@ const TotalReviewForm = () => {
   useEffect(() => {
     if (placeId) {
       axios
-        .get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`)
+        .get(`https://dev.daengdaeng-where.link/api/v1/places/${placeId}`)
         .then((response) => {
           const name = response.data?.data?.name;
           setPlaceName(name || "장소 정보가 없습니다.");
