@@ -56,7 +56,10 @@ function ShowMyStory({ onClose }) {
     const fetchStories = async () => {
       try {
         const response = await axios.get(
-          "https://dev.daengdaeng-where.link/api/v2/story/mystory"
+          "https://dev.daengdaeng-where.link/api/v2/story/mystory",
+          {
+            withCredentials: true, 
+          }
         );
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
@@ -64,9 +67,10 @@ function ShowMyStory({ onClose }) {
         console.error("데이터를 가져오는 데 실패했습니다:", error);
       }
     };
-
+  
     fetchStories();
   }, []);
+  
 
   const handleNext = () => {
     if (currentIndex < stories.length - 1) {
