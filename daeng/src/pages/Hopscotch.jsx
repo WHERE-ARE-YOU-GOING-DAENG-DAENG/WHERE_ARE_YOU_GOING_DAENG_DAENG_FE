@@ -7,6 +7,7 @@ import MyLandLabel from "../components/hopscotch/MyLandLabel";
 import rightarrow from "../assets/icons/arrow.svg";
 import leftarrow from "../assets/icons/reversearrow.svg";
 import styled from "styled-components";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -68,9 +69,13 @@ const MyLandWrapper = styled.div`
 `;
 
 const Hopscotch = () => {
-  const { lands } = landdata.data;
+  const [myLandlist, setMyLandList] = useState({ nickname: "", lands: [] })
   const landListRef = useRef(null);
   const [selectedArea, setSelectedArea] = useState([]);
+
+  useEffect(()=>{
+    fetchMyLand();
+  },[])
 
   const scroll = (direction) => {
     if (landListRef.current) {
@@ -83,8 +88,19 @@ const Hopscotch = () => {
     }
   };
 
-  const totalLands = lands.reduce((acc, land) => acc + land.cityDetails.length, 0);
- 
+  const totalLands = myLandlist.lands.reduce((acc, land) => acc + land.cityDetails.length, 0);
+  const fetchMyLand = async() => {
+    try{
+      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region",{
+        withCredentials: true
+      });
+
+      console.log(response.data.data);
+      setMyLandList(response.data.data);
+    }catch(error){
+      console.error("땅 목록을 불러오는 데 에러 발생",error)
+    }
+  }
   return (
     <Container>
       <Header label="땅따먹기" />
@@ -99,7 +115,7 @@ const Hopscotch = () => {
           </>
         ):<Label>점령하고 싶은 땅을 선택해보세요</Label>}
         <Label>
-          <Pink>{landdata.data.nickname}</Pink>님의 땅 목록
+          <Pink>{myLandlist.nickname}</Pink>님의 땅 목록
         </Label>
         <ScrollContainer>
           {totalLands > 3 && (
@@ -108,7 +124,7 @@ const Hopscotch = () => {
             </ArrowButton>
           )}
           <LandList ref={landListRef}>
-            {lands.map((land) =>
+            {myLandlist.lands.map((land) =>
               land.cityDetails.map((detail) => (
                 <MyLandWrapper key={`${land.city}-${detail.cityDetail}`}>
                   <MyLandLabel region={land.city} subRegion={detail.cityDetail} />
@@ -127,53 +143,5 @@ const Hopscotch = () => {
     </Container>
   );
 };
-  const landdata = {
-    message: "success",
-    data: {
-      nickname: "내가 짱",
-      lands: [
-        {
-          city: "서울",
-          cityDetails: [
-            {
-              cityDetail: "강남구",
-              count: 13,
-            },
-            {
-                cityDetail: "중구",
-                count: 13,
-              },
-          ],
-        },
-        {
-            city: "서울",
-            cityDetails: [
-              {
-                cityDetail: "강남구",
-                count: 13,
-              },
-              {
-                  cityDetail: "중구",
-                  count: 13,
-                },
-            ],
-          },
-          {
-            city: "서울",
-            cityDetails: [
-              {
-                cityDetail: "강남구",
-                count: 13,
-              },
-              {
-                  cityDetail: "중구",
-                  count: 13,
-                },
-            ],
-          },
-      ],
-    },
-    timestamp: "2024-12-11T09:58:07",
-  };
 
 export default Hopscotch;
