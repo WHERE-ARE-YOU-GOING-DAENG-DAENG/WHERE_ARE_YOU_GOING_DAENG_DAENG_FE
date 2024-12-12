@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import ReviewProfile from '../components/commons/ReviewProfile';
-import user from "../assets/icons/user.svg"
+import user from "../assets/icons/reviewDefaultImg.svg"
 
 export default {
   title: 'Components/ReviewProfile',

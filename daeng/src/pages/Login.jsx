@@ -1,33 +1,49 @@
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 import kakaoLoginBtn from "../assets/icons/kakaoLoginBtn.svg";
 import loginGoogle from "../assets/icons/login_google.svg";
-import loginPuppy from "../assets/icons/login_puppy.svg";
-import loginDangdang from "../assets/icons/login_dangdang.svg"; // 추가
+import loginLogo from "../assets/icons/login_mainlogo.svg";
+import loginDangdang from "../assets/icons/login_dangdang.svg";
+import cloud from "../assets/icons/cloud.svg";
 
 const Login = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        gsap.to(".floating-cloud", {
+            y: "20px",
+            duration: 2,
+            ease: "power1.inOut",
+            repeat: -1,
+            yoyo: true,
+        });
+    }, []);
 
     const handleGoHome = () => {
         navigate("/");
     };
 
     const handleKakaoLogin = () => {
-        window.location.href = "https://www.daengdaeng-where.link/oauth2/authorization/kakao";
+        window.location.href = "https://dev.daengdaeng-where.link/oauth2/authorization/kakao";
     };
 
     const handleGoogleLogin = () => {
-        location.href = "https://www.daengdaeng-where.link/oauth2/authorization/google";
+        location.href = "https://dev.daengdaeng-where.link/oauth2/authorization/google";
     };
 
     return (
         <Container>
+            <CloudContainer>
+                <FloatingCloud src={cloud} alt="Floating Cloud" className="floating-cloud" />
+            </CloudContainer>
             <LogoContainer>
                 <LogoImage src={loginDangdang} alt="댕댕어디가 로고" />
                 <LogoText>와 함께</LogoText>
             </LogoContainer>
             <Subtitle>반려동물 동반 가능 시설을 찾아봐요!</Subtitle>
-            <Image src={loginPuppy} alt="강아지 이미지" />
+            <Image src={loginLogo} alt="강아지 이미지" />
             <DividerContainer>
                 <Line />
                 <DividerText>소셜 로그인으로 간편 가입</DividerText>
@@ -60,12 +76,29 @@ const Container = styled.div`
     padding: 50px 20px 20px 20px;
     box-sizing: border-box;
     overflow-y: auto;
+`;
+
+const CloudContainer = styled.div`
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 100px;
 
     @media (max-width: 554px) {
-        width: 90%;
-        height: 75vh;
-        padding: 10px;
+        top: 5%;
+        left: 5%;
+        width: 80px;
     }
+`;
+
+const FloatingCloud = styled.img`
+    width: 500px;
+    height: 500px;
+    position: fixed; 
+    top: 50px; 
+    left: 20px; 
+    z-index: -1; 
+    pointer-events: none; 
 `;
 
 const LogoContainer = styled.div`

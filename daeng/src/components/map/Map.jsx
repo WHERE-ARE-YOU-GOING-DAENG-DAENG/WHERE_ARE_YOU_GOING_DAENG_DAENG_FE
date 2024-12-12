@@ -4,7 +4,7 @@ import styled from "styled-components";
 import markerIcon from "../../assets/icons/marker.svg";
 import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
 import BookMarker from "../commons/BookMarker";
-import { useGoogleMapsLoader } from "../../hooks/useGoogleMapLoader";
+import useGoogleMapsStore from "../../stores/useGoogleMapsStore";
 import CustomOverlay from "./CustomOverlay";
 import AlertDialog from "../../components/commons/SweetAlert";
 import useLocationStore from "../../stores/useLocationStore";
@@ -12,20 +12,21 @@ import Loading from "../commons/Loading";
 
 const MapContainer = styled.div`
   width: 100%;
-  height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 172px)" : "485px")};
+  height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 160px)" : "485px")};
   display: flex;
   @media (max-width: 554px) {
-    height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 173px)" : "385px")};
+    height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 150px)" : "385px")};
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
+const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded}) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
-  const isLoaded = useGoogleMapsLoader();
+  const { isLoaded } = useGoogleMapsStore();
   const [currentLocation, setCurrentLocation] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 });
+  const userLocation = useLocationStore((state)=> state.userLocation);
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
 
   useEffect(() => {
@@ -54,57 +55,76 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded }) => {
 
   useEffect(() => {
     if (isLoaded && map) {
+  
+      if (userLocation.lat && userLocation.lng) {
+        setCenter(userLocation);
+        map.setCenter(userLocation);
+  
+        const initialLocationMarker = (
+          <CustomOverlay
+            key="initial-location"
+            position={userLocation}
+            map={map}
+          >
+            <BookMarker label="현재 위치" icon={markerIcon} />
+          </CustomOverlay>
+        );
+        setCurrentLocation(initialLocationMarker);
+      }
+ 
       if (navigator.geolocation) {
-
         if (watchIdRef.current !== null) {
           navigator.geolocation.clearWatch(watchIdRef.current);
         }
-
+  
         watchIdRef.current = navigator.geolocation.watchPosition(
           (position) => {
             const location = {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
+              accuracy: position.coords.accuracy,
             };
+            
+            console.log("새 위치",location) //로그 삭제
 
-            setCenter(location);
-            map.setCenter(location);
-            setUserLocation(location);
-
-            const currentLocationMarker = (
-              <CustomOverlay
-                key="current-location"
-                position={location}
-                map={map}
-              >
-                <BookMarker label="현재 위치" icon={markerIcon} />
-              </CustomOverlay>
-            );
-            setCurrentLocation(currentLocationMarker);
+            if (
+               location.accuracy < userLocation.accuracy &&
+              (userLocation.lat !== location.lat || userLocation.lng !== location.lng)
+            ) {
+              setCenter(location);
+              map.setCenter(location);
+              setUserLocation(location);
+  
+              const currentLocationMarker = (
+                <CustomOverlay
+                  key="current-location"
+                  position={location}
+                  map={map}
+                >
+                  <BookMarker label="현재 위치" icon={markerIcon} />
+                </CustomOverlay>
+              );
+              setCurrentLocation(currentLocationMarker);
+            }
           },
           (error) => {
-            if (error.response) {
-              AlertDialog({
-                  mode: "alert",
-                  title: "위치 추적 실패",
-                  text: "현재 위치를 확인할 수 없습니다",
-                  confirmText: "확인",
-              });
-            }
+            console.error("위치 추적 실패:", error.message);
+          },
+          {
+            enableHighAccuracy: true,
           }
         );
       }
-    };
-
-
-  return () => {
-    if (watchIdRef.current !== null) {
-      navigator.geolocation.clearWatch(watchIdRef.current);
-      watchIdRef.current = null;
     }
-  };
-}, [isLoaded, map, setUserLocation]);
-
+  
+    return () => {
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+    };
+  }, [map, isLoaded, setUserLocation]);
+  
  useEffect(() => {
   if (isLoaded && map) {
     markers.forEach((marker) => marker.onRemove && marker.onRemove());

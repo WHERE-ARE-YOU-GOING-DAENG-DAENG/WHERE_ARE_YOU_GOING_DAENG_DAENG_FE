@@ -14,7 +14,7 @@ const useFavoriteStore = create((set, get) => ({
     try {
       set({ isLoading: true });
       const response = await axiosInstance.get(
-        `https://www.daengdaeng-where.link/api/v1/favorites?page=${page}&size=10`,
+        `https://dev.daengdaeng-where.link/api/v1/favorites?page=${page}&size=10`,
         {
           withCredentials: true,
         }

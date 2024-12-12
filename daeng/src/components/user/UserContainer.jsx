@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import arrow from '../../assets/icons/arrow.svg';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ function UserContainer() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('https://www.daengdaeng-where.link/api/v1/user/adjust', {
+        const response = await axios.get('https://dev.daengdaeng-where.link/api/v1/user/adjust', {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true,
         });
