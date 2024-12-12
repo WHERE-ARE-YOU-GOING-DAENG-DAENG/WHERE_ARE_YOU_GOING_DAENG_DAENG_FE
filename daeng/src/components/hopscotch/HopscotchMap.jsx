@@ -16,7 +16,7 @@ const MapContainer = styled.div`
   display: flex;
 `;
 
-const HopscotchMap = ({ removeUi, setSelectedArea }) => {
+const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
     const mapRef = useRef(null);
     const [map, setMap] = useState(null);
     const { isLoaded } = useGoogleMapsStore();
@@ -43,6 +43,24 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
     };
 
     useEffect(() => {
+      if (map && changeCenter) {
+        const { region, subRegion } = changeCenter;
+  
+        // markers 배열에서 해당 지역의 마커 찾기
+        const matchingMarker = markers.find(
+          (marker) =>
+            marker.region === region && marker.subRegion === subRegion
+        );
+  
+        if (matchingMarker) {
+          map.panTo(matchingMarker.marker.getPosition());
+        } else {
+          console.error("선택한 지역의 마커를 찾을 수 없습니다.");
+        }
+      }
+    }, [changeCenter, map, markers]);
+
+    useEffect(() => {
       if (isLoaded && !map) {
         const center =
         userLocation.lat === 0.0 && userLocation.lng === 0.0
@@ -51,7 +69,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
 
         const googleMap = new window.google.maps.Map(mapRef.current, {
           center,
-          zoom: 12,
+          zoom: 11,
           disableDefaultUI: removeUi,
         });
         setMap(googleMap);
@@ -142,6 +160,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
               map,
               icon: markerIcon,
             });
+
             setMarkers((prev) => [...prev, { marker, region, subRegion }]);
           }
     
@@ -205,7 +224,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
       }
     }, [map, isLoaded, isOwnerListLoaded]);
       
-  
+    console.log(markers)
     return (
       <MapContainer ref={mapRef} $removeUi={removeUi}>
         {!isLoaded && <Loading label="지도 로딩 중..." />}
