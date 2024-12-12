@@ -9,6 +9,7 @@ const LabelContainer = styled.div`
   background-color: #FDF2F8;
   border-radius: 10px;
   width: fit-content;
+  cursor: pointer;
 `;
 
 const Icon = styled.div`
@@ -29,12 +30,12 @@ const TextContainer = styled.div`
   font-weight: bold;
 `;
 
-const MyLandLabel = ({ region, subRegion }) => {
+const MyLandLabel = ({ region, subRegion, onClick }) => {
   const [firstPart, ...remainingParts] = subRegion.split(" ");
   const remainingPart = remainingParts.join(" ");
 
   return (
-    <LabelContainer>
+    <LabelContainer onClick={onClick}>
       <Icon>
         <img src={badge} alt="뱃지" />
       </Icon>

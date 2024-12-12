@@ -73,6 +73,7 @@ const Hopscotch = () => {
   const landListRef = useRef(null);
   const [selectedArea, setSelectedArea] = useState([]);
   const [visitCount, setVisitCount] = useState({});
+  const [myLand, setMyLand] = useState({region: "", subRegion: ""});
 
   useEffect(()=>{
     fetchMyLand();
@@ -137,7 +138,7 @@ const Hopscotch = () => {
   return (
     <Container>
       <Header label="땅따먹기" />
-      <HopscotchMap removeUi={false} setSelectedArea={setSelectedArea}/>
+      <HopscotchMap removeUi={false} setSelectedArea={setSelectedArea} changeCenter={myLand}/>
       <LandContainer>
         {selectedArea[0]? (
           <>
@@ -161,7 +162,7 @@ const Hopscotch = () => {
             {myLandlist.lands.map((land) =>
               land.cityDetails.map((detail) => (
                 <MyLandWrapper key={`${land.city}-${detail.cityDetail}`}>
-                  <MyLandLabel region={land.city} subRegion={detail.cityDetail} />
+                  <MyLandLabel region={land.city} subRegion={detail.cityDetail} onClick={()=>setMyLand({region:land.city, subRegion:detail.cityDetail})}/>
                 </MyLandWrapper>
               ))
             )}
