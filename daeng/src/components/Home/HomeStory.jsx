@@ -6,7 +6,7 @@ import HomeStoryAdd from "../../assets/icons/home_storyadd.svg";
 import HomeStoryAddBtn from "../../assets/icons/home_storyaddBtn.svg";
 import UploadStoryBtn from "../../components/commons/UploadStoryBtn";
 import Detail from "../story/Detail";
-import ShowMyStory from "../story/ShowMystory";
+import ShowMyStory from "../story/ShowMyStory";
 import UploadVideo from "../story/UploadVideo";
 import OtherUserStory from "../story/OtherUserStory";
 import axios from "axios";
