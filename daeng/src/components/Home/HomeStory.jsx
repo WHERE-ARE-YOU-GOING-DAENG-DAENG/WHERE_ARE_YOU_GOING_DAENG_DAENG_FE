@@ -30,6 +30,7 @@ const HomeStory = () => {
             withCredentials: true,
           }
         );
+        console.log("전체 스토리 데이터:", response.data);
         
         const fetchedStories = response.data.data.map((story) => ({
           nickname: story.nickname,
@@ -38,6 +39,7 @@ const HomeStory = () => {
           petImage: story.petImage,
           storyType: story.storyType,
         }));
+        console.log("스토리 데이터:", fetchedStories);
         setStories(fetchedStories);
       } catch (error) {
         console.error("데이터를 가져오는 데 실패했습니다:", error);
