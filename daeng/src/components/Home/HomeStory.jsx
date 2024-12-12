@@ -30,13 +30,16 @@ const HomeStory = () => {
             withCredentials: true,
           }
         );
+        console.log("전체 스토리 데이터:", response.data);
         
         const fetchedStories = response.data.data.map((story) => ({
           nickname: story.nickname,
           city: story.city,
           cityDetail: story.cityDetail,
           petImage: story.petImage,
+          storyType: story.storyType,
         }));
+        console.log("스토리 데이터:", fetchedStories);
         setStories(fetchedStories);
       } catch (error) {
         console.error("데이터를 가져오는 데 실패했습니다:", error);
@@ -104,7 +107,7 @@ const HomeStory = () => {
                 key={index}
                 location={`${story.city} ${story.cityDetail}`}
                 nickname={story.nickname}
-                isPinkBorder={story.petImage ? true : false}
+                isPinkBorder={story.storyType === "unviewed"}
                 imageSrc={story.petImage || "https://via.placeholder.com/80"}
                 onClick={() => openOtherUserStoryPopup(story)} 
                 onClose={closePopup} 
