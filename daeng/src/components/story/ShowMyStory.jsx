@@ -69,25 +69,44 @@ function ShowMyStory({ onClose }) {
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
       } catch (error) {
-        if (
-          error.response &&
-          error.response.status === 404 &&
-          error.response.data.message === "스토리가 존재하지 않습니다."
-        ) {
-          AlertDialog({
-            mode: "alert",
-            title: "알림",
-            text: "스토리가 없습니다. 스토리를 추가해주세요.",
-            confirmText: "확인",
-            icon: "warning",
-            onConfirm: onClose,
-          });
+        if (error.response) {
+          if (error.response.status === 401) {
+            AlertDialog({
+              mode: "alert",
+              title: "로그인 필요",
+              text: "스토리를 업로드 하기 위해서는 로그인이 필요합니다.",
+              confirmText: "확인",
+              icon: "warning",
+              onConfirm: onClose,
+            });
+          } else if (error.response.status === 404) {
+            if (error.response.data.message === "스토리가 존재하지 않습니다.") {
+              AlertDialog({
+                mode: "alert",
+                title: "알림",
+                text: "스토리가 없습니다. 스토리를 추가해주세요.",
+                confirmText: "확인",
+                icon: "warning",
+                onConfirm: onClose,
+              });
+            } else {
+              AlertDialog({
+                mode: "alert",
+                title: "알림",
+                text: "땅따먹기 1등을 먼저 해주세요!",
+                confirmText: "확인",
+                icon: "warning",
+              });
+            }
+          } else {
+            console.error("데이터를 가져오는 데 실패했습니다:", error);
+          }
         } else {
-          console.error("데이터를 가져오는 데 실패했습니다:", error);
+          console.error("알 수 없는 에러:", error);
         }
       }
     };
-
+  
     fetchStories();
   }, [onClose]);
 
