@@ -70,6 +70,8 @@ const Dropdown = styled.select`
   width: 48%;
   height: 40px;
   border: 1px solid #ddd;
+  background-color: white;
+  color: black;
   border-radius: 5px;
   font-size: 14px;
   padding: 0 10px;
