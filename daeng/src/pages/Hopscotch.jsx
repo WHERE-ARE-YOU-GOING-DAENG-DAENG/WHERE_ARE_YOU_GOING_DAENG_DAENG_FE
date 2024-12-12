@@ -163,7 +163,7 @@ const Hopscotch = () => {
           <Pink>{myLandlist.nickname}</Pink>님의 땅 목록
         </Label>
         <ScrollContainer>
-          {totalLands > 3 && (
+          {totalLands > 2 && (
             <ArrowButton direction="left" onClick={() => scroll("left")}>
               <img src={leftarrow} alt="왼쪽 화살표" />
             </ArrowButton>
@@ -177,7 +177,7 @@ const Hopscotch = () => {
               ))
             )}
           </LandList>
-          {totalLands > 3 && (
+          {totalLands > 2 && (
             <ArrowButton direction="right" onClick={() => scroll("right")}>
               <img src={rightarrow} alt="오른쪽 화살표" />
             </ArrowButton>
