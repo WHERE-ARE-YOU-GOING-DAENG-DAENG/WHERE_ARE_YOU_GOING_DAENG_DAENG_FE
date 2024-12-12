@@ -7,6 +7,7 @@ import useGoogleMapsStore from '../../stores/useGoogleMapsStore';
 import useLocationStore from '../../stores/useLocationStore';
 import LandOwnerProfile from "../../components/map/LandOwnerProfile";
 import CustomOverlay from "../../components/map/CustomOverlay";
+import markerIcon from "../../assets/icons/marker.svg";
 import axios from "axios";
 
 const MapContainer = styled.div`
@@ -23,6 +24,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
     const [overlayContent, setOverlayContent] = useState(null);
     const [ownerList, setOwnerList] = useState({ visitInfo: {} });
     const [isOwnerListLoaded, setIsOwnerListLoaded] = useState(false);
+    const [markers, setMarkers] = useState([]);
 
     useEffect(()=>{
       fetchOwnerData();
@@ -105,6 +107,25 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
             polygon.set("city", subRegion_city);
             polygon.setMap(map);
             polygons.push(polygon);
+
+            const calculatePolygonCenter = (paths) => {
+              const bounds = new window.google.maps.LatLngBounds();
+              paths.forEach((path) => bounds.extend(path));
+              return bounds.getCenter();
+            };
+            
+            const center = calculatePolygonCenter(coordinates);
+
+            const owner = ownerList.visitInfo?.[region]?.[subRegion] || null;
+            
+            if (owner) {
+              const marker = new window.google.maps.Marker({
+                position: center,
+                map,
+                icon: markerIcon,
+              });
+              setMarkers((prev) => [...prev, { marker, region, subRegion }]);
+            }
     
             polygon.addListener("mouseover", () => {
               const city = polygon.get("city");
@@ -140,17 +161,17 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
               // setOverlayContent(null); //마우스 아웃되면 프로필도 같이 없앨건지?
             });
             
-            const calculatePolygonCenter = (paths) => {
-              const bounds = new window.google.maps.LatLngBounds();
-              paths.forEach((path) => bounds.extend(path));
-              return bounds.getCenter();
-            };
-            const center = calculatePolygonCenter(coordinates);
-            
             polygon.addListener("click", () => {
               infoWindow.close();
               map.panTo(center);
               const selectedName = polygon.get("city") || subRegion;
+
+              const markerToHide = markers.find(
+                (m) => m.region === region && m.subRegion === subRegion
+              );
+              if (markerToHide) {
+                markerToHide.marker.setVisible(false);
+              }
 
               const regionOwner =
                 ownerList.visitInfo?.[region]?.[selectedName] || null;
@@ -198,7 +219,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
           polygons.forEach((polygon) => polygon.setMap(null));
         };
       }
-    }, [map, isLoaded, isOwnerListLoaded]);    
+    }, [map, isLoaded, isOwnerListLoaded]);  
   
     return (
       <MapContainer ref={mapRef} $removeUi={removeUi}>
