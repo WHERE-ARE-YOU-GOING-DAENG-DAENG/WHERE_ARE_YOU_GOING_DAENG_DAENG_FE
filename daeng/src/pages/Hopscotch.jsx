@@ -8,6 +8,7 @@ import rightarrow from "../assets/icons/arrow.svg";
 import leftarrow from "../assets/icons/reversearrow.svg";
 import styled from "styled-components";
 import axios from "axios";
+import Confetti from "../components/commons/Confetti";
 
 const Container = styled.div`
   display: flex;
@@ -74,6 +75,7 @@ const Hopscotch = () => {
   const [selectedArea, setSelectedArea] = useState([]);
   const [visitCount, setVisitCount] = useState({});
   const [myLand, setMyLand] = useState({region: "", subRegion: ""});
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(()=>{
     fetchMyLand();
@@ -135,8 +137,16 @@ const Hopscotch = () => {
     );
   };
 
+  useEffect(() => {
+    if (isOwned()) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 2000);
+    }
+  }, [selectedArea]);
+
   return (
     <Container>
+      {showConfetti && <Confetti />}
       <Header label="땅따먹기" />
       <HopscotchMap removeUi={false} setSelectedArea={setSelectedArea} changeCenter={myLand}/>
       <LandContainer>
