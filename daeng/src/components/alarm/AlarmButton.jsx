@@ -40,7 +40,7 @@ function AlarmButton() {
         });
 
         const response = await axios.post(
-          'https://www.daengdaeng-where.link/api/v1/notifications/pushToken',
+          'https://dev.daengdaeng-where.link/api/v1/notifications/pushToken',
           {
             token,
             pushType: selectedPushType,

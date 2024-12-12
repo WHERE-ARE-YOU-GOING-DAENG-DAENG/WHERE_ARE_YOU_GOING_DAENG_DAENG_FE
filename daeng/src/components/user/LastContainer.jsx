@@ -63,7 +63,7 @@ function LastContainer() {
       confirmText: '확인',
       onConfirm: async () => {
         try {
-          await axios.delete('https://www.daengdaeng-where.link/api/v1/user/delete', {
+          await axios.delete('https://dev.daengdaeng-where.link/api/v1/user/delete', {
             withCredentials: true,
           });
           clearStorage();
@@ -91,7 +91,7 @@ function LastContainer() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('https://www.daengdaeng-where.link/api/v1/logout', null, {
+      await axios.post('https://dev.daengdaeng-where.link/api/v1/logout', null, {
         withCredentials: true,
       });
       clearStorage();

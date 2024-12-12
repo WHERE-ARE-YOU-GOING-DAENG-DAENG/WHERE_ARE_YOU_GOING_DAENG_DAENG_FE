@@ -31,7 +31,7 @@ const useTotalReviewStore = create((set, get) => ({
 
     try {
       const response = await axios.get(
-        `https://www.daengdaeng-where.link/api/v1/reviews/place/${placeId}/${sortedType}?page=${page}&size=${size}`,
+        `https://dev.daengdaeng-where.link/api/v1/reviews/place/${placeId}/${sortedType}?page=${page}&size=${size}`,
         
         {
           headers: {
@@ -47,7 +47,7 @@ const useTotalReviewStore = create((set, get) => ({
         reviews: page === 0 ? data.reviews : [...state.reviews, ...data.reviews],
         total: data.total,
         bestKeywords: data.bestKeywords,
-        score: parseFloat(data.score) || 0,
+        score: data.score,
         page: state.page + 1,
         isLast: data.isLast,
         isLoading: false,
