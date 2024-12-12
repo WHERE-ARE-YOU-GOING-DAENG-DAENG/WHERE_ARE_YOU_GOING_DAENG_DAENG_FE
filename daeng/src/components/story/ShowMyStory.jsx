@@ -109,7 +109,6 @@ function ShowMyStory({ onClose }) {
 
   const currentStory = stories[currentIndex];
 
-  // currentStory가 undefined인 경우 처리
   if (!currentStory) {
     return (
       <VideoContainer>
