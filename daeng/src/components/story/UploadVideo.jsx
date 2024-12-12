@@ -137,9 +137,14 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
       <ImageContainer>
         {preview ? (
           preview.type === "video" ? (
-            <video src={preview.src} controls style={{ width: "100%" }} />
+            <video 
+              src={preview.src} 
+              alt="스토리 비디오 미리보기"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}/>
           ) : (
-            <img src={preview.src} alt="미리보기" style={{ width: "100%" }} />
+            <img src={preview.src} 
+                alt="스토리 이미지 미리보기" 
+                style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           )
         ) : (
           <UploadImg>

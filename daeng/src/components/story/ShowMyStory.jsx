@@ -6,6 +6,7 @@ import rightArrow from "../../assets/icons/arrow.svg";
 import leftArrow from "../../assets/icons/reversearrow.svg";
 import deleteDot from "../../assets/icons/deleteDot.svg";
 import DeleteStory from "./DeleteStory";
+import crown from '../../assets/icons/crown.svg';
 import {
   VideoContainer,
   CloseButton,
@@ -131,12 +132,13 @@ function ShowMyStory({ onClose }) {
           />
           {showDeleteMenu && (
             <DeleteStory
-              storyId={currentStory.storyId}
-              setShowDeleteMenu={setShowDeleteMenu} // 삭제 메뉴 닫기 함수 전달
-              stories={stories} // 현재 스토리 배열 전달
-              setStories={setStories} // 상태 업데이트 함수 전달
-              onClose={onClose}
-            />
+            storyId={currentStory.storyId}
+            setShowDeleteMenu={setShowDeleteMenu}
+            stories={stories}
+            setStories={setStories}
+            currentIndex={currentIndex} 
+            setCurrentIndex={setCurrentIndex} 
+          />
           )}
         </DeleteDotContainer>
         {currentStory.path.endsWith(".mp4") || currentStory.path.endsWith(".webm") ? (
@@ -174,7 +176,7 @@ function ShowMyStory({ onClose }) {
       </ImageContainer>
       <BottomBar>
         <Location>
-          <span>👑</span> {currentStory.city} {currentStory.cityDetail}
+          <img src={crown} alt="왕관" /> {currentStory.city} {currentStory.cityDetail}
         </Location>
         <span>{nickname}님</span>
       </BottomBar>
