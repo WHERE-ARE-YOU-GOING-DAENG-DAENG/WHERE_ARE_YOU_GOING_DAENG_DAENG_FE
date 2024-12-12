@@ -30,13 +30,19 @@ const TextContainer = styled.div`
 `;
 
 const MyLandLabel = ({ region, subRegion }) => {
+  const [firstPart, ...remainingParts] = subRegion.split(" ");
+  const remainingPart = remainingParts.join(" ");
+
   return (
     <LabelContainer>
       <Icon>
         <img src={badge} alt="뱃지" />
       </Icon>
       <TextContainer>
-        {region}<br/>{subRegion}
+        {region}
+        {remainingPart ? ` ${firstPart}` : null}
+        <br />
+        {remainingPart || firstPart}
       </TextContainer>
     </LabelContainer>
   );

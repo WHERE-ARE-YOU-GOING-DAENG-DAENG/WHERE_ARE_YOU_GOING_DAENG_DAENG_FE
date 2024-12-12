@@ -5,7 +5,7 @@ import styled from "styled-components";
 import geojson from "../../data/sig.json";
 import useGoogleMapsStore from '../../stores/useGoogleMapsStore';
 import useLocationStore from '../../stores/useLocationStore';
-import LandOwnerProfile from "../../components/map/LandOwnerProfile";
+import LandOwnerProfile from "./LandOwnerProfile";
 import CustomOverlay from "../../components/map/CustomOverlay";
 import markerIcon from "../../assets/icons/marker.svg";
 import axios from "axios";
