@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Footer from "../components/commons/Footer";
 import Header from "../components/commons/Header";
 import ProgressBar from "../components/hopscotch/ProgressBar";
-import HopscotchMap from "../components/map/HopscotchMap";
+import HopscotchMap from "../components/hopscotch/HopscotchMap";
 import MyLandLabel from "../components/hopscotch/MyLandLabel";
 import rightarrow from "../assets/icons/arrow.svg";
 import leftarrow from "../assets/icons/reversearrow.svg";

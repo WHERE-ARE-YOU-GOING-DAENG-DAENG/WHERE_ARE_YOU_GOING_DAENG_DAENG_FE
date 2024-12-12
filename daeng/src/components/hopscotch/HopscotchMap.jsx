@@ -6,7 +6,7 @@ import geojson from "../../data/sig.json";
 import useGoogleMapsStore from '../../stores/useGoogleMapsStore';
 import useLocationStore from '../../stores/useLocationStore';
 import LandOwnerProfile from "../../components/map/LandOwnerProfile";
-import CustomOverlay from "./CustomOverlay";
+import CustomOverlay from "../../components/map/CustomOverlay";
 import axios from "axios";
 
 const MapContainer = styled.div`
@@ -89,10 +89,10 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
             }));
     
             const region = feature.properties.CTP_KOR_NM
-            const subRegionFull = feature.properties.SIG_KOR_NM;
-            const subRegion = subRegionFull.includes("시 ")
-              ? subRegionFull.split(" ")[0]
-              : subRegionFull;
+            const subRegion = feature.properties.SIG_KOR_NM;
+            const subRegion_city = subRegion.includes("시 ")
+              ? subRegion.split(" ")[0]
+              : "";
 
             const polygon = new window.google.maps.Polygon({
               paths: coordinates,
@@ -102,18 +102,23 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
               fillColor: "#fff",
               fillOpacity: 0.7,
             });
-            polygon.set("sub", subRegionFull);
+            polygon.set("city", subRegion_city);
             polygon.setMap(map);
             polygons.push(polygon);
     
             polygon.addListener("mouseover", () => {
-              polygons.forEach((polygon) => {
-                const polygonSub = polygon.get("sub");
-                if (polygonSub && polygonSub.startsWith(subRegion)) {
-                  polygon.setOptions({ fillColor: "#FF69A9"});
+              const city = polygon.get("city");
+                if (city) {
+                  polygons.forEach((p) => {
+                    if (p.get("city") === city && subRegion.startsWith(city)) {
+                      p.setOptions({ fillColor: "#FF69A9" });
+                    }
+                  });
+                } else {
+                  polygon.setOptions({ fillColor: "#FF69A9" });
                 }
-              });
-              infoWindow.setContent(`<div style="font-size:14px; margin-left:5px;">${region} ${subRegion}</div>`); // 지역 이름 설정
+                const selectedName = city || subRegion;
+              infoWindow.setContent(`<div style="font-size:14px; margin-left:5px;">${region} ${selectedName}</div>`);
               infoWindow.setPosition({ lat: center.lat(), lng: center.lng() });
               
               infoWindow.open(map);
@@ -121,12 +126,16 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
             });
     
             polygon.addListener("mouseout", () => {
-              polygons.forEach((polygon) => {
-                const polygonSub = polygon.get("sub");
-                if (polygonSub && polygonSub.startsWith(subRegion)) {
-                  polygon.setOptions({ fillColor: "#fff"});
-                }
-              });
+              const city = polygon.get("city");
+              if (city) {
+                polygons.forEach((p) => {
+                  if (p.get("city") === city && subRegion.startsWith(city)) {
+                    p.setOptions({ fillColor: "#fff" });
+                  }
+                });
+              } else {
+                polygon.setOptions({ fillColor: "#fff" });
+              }
               infoWindow.close();
               // setOverlayContent(null); //마우스 아웃되면 프로필도 같이 없앨건지?
             });
@@ -141,8 +150,11 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
             polygon.addListener("click", () => {
               infoWindow.close();
               map.panTo(center);
+              const selectedName = polygon.get("city") || subRegion;
+
               const regionOwner =
-                ownerList.visitInfo?.[region]?.[subRegion] || null;
+                ownerList.visitInfo?.[region]?.[selectedName] || null;
+
                 const ownerInfo = regionOwner
               ? {
                   nickname: regionOwner.nickname,
@@ -156,22 +168,22 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
                 };
                 
                 polygons.forEach((polygon) => {
-                  const polygonSub = polygon.get("sub");
-                  if (polygonSub && polygonSub.startsWith(subRegion)) {
+                  const city = polygon.get("city");
+                  if (city && subRegion.startsWith(city)) {
                     polygon.setOptions({ fillColor: "#FF69A9"});
                   } else {
                     polygon.setOptions({ fillColor: "#fff" });
                   }
                 });
 
-              setSelectedArea([region, subRegion, regionOwner?.count]);
+              setSelectedArea([region, selectedName, regionOwner?.count]);
               setOverlayContent(null);
-       
+
               setTimeout(() => {
                 setOverlayContent({
                   position: { lat: center.lat(), lng: center.lng() },
                   component: <LandOwnerProfile
-                    area={`${region} ${subRegion}`}
+                    area={`${region} ${selectedName}`}
                     nickname={ownerInfo.nickname}
                     hops={ownerInfo.hops}
                     pets={ownerInfo.pets} />,
