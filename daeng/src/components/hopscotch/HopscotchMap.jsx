@@ -64,19 +64,22 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
         const infoWindow = new window.google.maps.InfoWindow({
           pixelOffset: new window.google.maps.Size(0, -10),
         });
-
+    
         const observer = new MutationObserver(() => {
           const closeButton = document.querySelector(".gm-ui-hover-effect");
           if (closeButton) {
             closeButton.style.display = "none";
           }
         });
-
+    
         observer.observe(document.body, {
           childList: true,
           subtree: true,
         });
-
+    
+        // subregion 별로 가장 큰 폴리곤 저장
+        const subRegionLargestPolygons = {};
+    
         geojson.features.forEach((feature) => {
           const geometryType = feature.geometry.type;
           const coordinatesList =
@@ -90,12 +93,9 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
               lng: coord[0],
             }));
     
-            const region = feature.properties.CTP_KOR_NM
+            const region = feature.properties.CTP_KOR_NM;
             const subRegion = feature.properties.SIG_KOR_NM;
-            const subRegion_city = subRegion.includes("시 ")
-              ? subRegion.split(" ")[0]
-              : "";
-
+    
             const polygon = new window.google.maps.Polygon({
               paths: coordinates,
               strokeColor: "#FF69A9",
@@ -104,79 +104,70 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
               fillColor: "#fff",
               fillOpacity: 0.7,
             });
-            polygon.set("city", subRegion_city);
             polygon.setMap(map);
             polygons.push(polygon);
-
-            const calculatePolygonCenter = (paths) => {
-              const bounds = new window.google.maps.LatLngBounds();
-              paths.forEach((path) => bounds.extend(path));
-              return bounds.getCenter();
-            };
+    
             
-            const center = calculatePolygonCenter(coordinates);
-
-            const owner = ownerList.visitInfo?.[region]?.[subRegion] || null;
+            const area = window.google.maps.geometry.spherical.computeArea(
+              polygon.getPath()
+            );
+    
             
-            if (owner) {
-              const marker = new window.google.maps.Marker({
-                position: center,
-                map,
-                icon: markerIcon,
-              });
-              setMarkers((prev) => [...prev, { marker, region, subRegion }]);
+            const key = `${region}-${subRegion}`;
+            if (!subRegionLargestPolygons[key] || subRegionLargestPolygons[key].area < area) {
+              subRegionLargestPolygons[key] = { polygon, coordinates, area };
             }
+          });
+        });
     
-            polygon.addListener("mouseover", () => {
-              const city = polygon.get("city");
-                if (city) {
-                  polygons.forEach((p) => {
-                    if (p.get("city") === city && subRegion.startsWith(city)) {
-                      p.setOptions({ fillColor: "#FF69A9" });
-                    }
-                  });
-                } else {
-                  polygon.setOptions({ fillColor: "#FF69A9" });
-                }
-                const selectedName = city || subRegion;
-              infoWindow.setContent(`<div style="font-size:14px; margin-left:5px;">${region} ${selectedName}</div>`);
-              infoWindow.setPosition({ lat: center.lat(), lng: center.lng() });
-              
-              infoWindow.open(map);
-              
+          Object.keys(subRegionLargestPolygons).forEach((key) => {
+          const { polygon, coordinates } = subRegionLargestPolygons[key];
+          const [region, subRegion] = key.split("-");
+
+          const calculatePolygonCenter = (paths) => {
+            const bounds = new window.google.maps.LatLngBounds();
+            paths.forEach((path) => {
+              bounds.extend(new window.google.maps.LatLng(path.lat, path.lng));
             });
+            return bounds.getCenter();
+          };
+
+          const center = calculatePolygonCenter(coordinates);
     
-            polygon.addListener("mouseout", () => {
-              const city = polygon.get("city");
-              if (city) {
-                polygons.forEach((p) => {
-                  if (p.get("city") === city && subRegion.startsWith(city)) {
-                    p.setOptions({ fillColor: "#fff" });
-                  }
-                });
-              } else {
-                polygon.setOptions({ fillColor: "#fff" });
-              }
-              infoWindow.close();
-              // setOverlayContent(null); //마우스 아웃되면 프로필도 같이 없앨건지?
+          const owner = ownerList.visitInfo?.[region]?.[subRegion] || null;
+    
+          if (owner) {
+            const marker = new window.google.maps.Marker({
+              position: center,
+              map,
+              icon: markerIcon,
             });
-            
-            polygon.addListener("click", () => {
-              infoWindow.close();
-              map.panTo(center);
-              const selectedName = polygon.get("city") || subRegion;
-
-              const markerToHide = markers.find(
-                (m) => m.region === region && m.subRegion === subRegion
-              );
-              if (markerToHide) {
-                markerToHide.marker.setVisible(false);
-              }
-
-              const regionOwner =
-                ownerList.visitInfo?.[region]?.[selectedName] || null;
-
-                const ownerInfo = regionOwner
+            setMarkers((prev) => [...prev, { marker, region, subRegion }]);
+          }
+    
+          polygon.addListener("mouseover", () => {
+            polygon.setOptions({ fillColor: "#FF69A9" });
+            infoWindow.setContent(
+              `<div style="font-size:14px; margin-left:5px;">${region} ${subRegion}</div>`
+            );
+            infoWindow.setPosition({ lat: center.lat(), lng: center.lng() });
+    
+            infoWindow.open(map);
+          });
+    
+          polygon.addListener("mouseout", () => {
+            polygon.setOptions({ fillColor: "#fff" });
+            infoWindow.close();
+          });
+    
+          polygon.addListener("click", () => {
+            infoWindow.close();
+            map.panTo(center);
+    
+            const regionOwner =
+              ownerList.visitInfo?.[region]?.[subRegion] || null;
+    
+            const ownerInfo = regionOwner
               ? {
                   nickname: regionOwner.nickname,
                   hops: regionOwner.count,
@@ -187,31 +178,24 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
                   hops: 0,
                   pets: [],
                 };
-                
-                polygons.forEach((polygon) => {
-                  const city = polygon.get("city");
-                  if (city && subRegion.startsWith(city)) {
-                    polygon.setOptions({ fillColor: "#FF69A9"});
-                  } else {
-                    polygon.setOptions({ fillColor: "#fff" });
-                  }
-                });
-
-              setSelectedArea([region, selectedName, regionOwner?.count]);
-              setOverlayContent(null);
-
-              setTimeout(() => {
-                setOverlayContent({
-                  position: { lat: center.lat(), lng: center.lng() },
-                  component: <LandOwnerProfile
-                    area={`${region} ${selectedName}`}
+    
+            setSelectedArea([region, subRegion, regionOwner?.count]);
+            setOverlayContent(null);
+    
+            setTimeout(() => {
+              setOverlayContent({
+                position: { lat: center.lat(), lng: center.lng() },
+                component: (
+                  <LandOwnerProfile
+                    area={`${region} ${subRegion}`}
                     nickname={ownerInfo.nickname}
                     hops={ownerInfo.hops}
-                    pets={ownerInfo.pets} />,
-                  offset: ownerInfo.nickname ? { x: 0, y: -80 } : { x: 0, y: -40 },
-                });
-              }, 0);
-            });
+                    pets={ownerInfo.pets}
+                  />
+                ),
+                offset: ownerInfo.nickname ? { x: 0, y: -80 } : { x: 0, y: -40 },
+              });
+            }, 0);
           });
         });
     
@@ -219,7 +203,8 @@ const HopscotchMap = ({ removeUi, setSelectedArea }) => {
           polygons.forEach((polygon) => polygon.setMap(null));
         };
       }
-    }, [map, isLoaded, isOwnerListLoaded]);  
+    }, [map, isLoaded, isOwnerListLoaded]);
+      
   
     return (
       <MapContainer ref={mapRef} $removeUi={removeUi}>
