@@ -27,8 +27,8 @@ export const VideoContainer = styled.div`
   position: relative;
 
   @media (max-width: 554px) {
-    width: 80%;
-    height: 80%;
+    width: 90%;
+    height: 90%;
   }
 `;
 
@@ -45,7 +45,8 @@ export const TextContainer = styled.div`
   color: #b3b3b3;
   font-size: 14px;
   text-align: center;
-  margin-top: 40px;
+  margin-top: 30px;
+  margin-bottom:10px;
 `;
 
 export const ImageContainer = styled.div`
@@ -59,42 +60,59 @@ export const ImageContainer = styled.div`
   position: relative;
 `;
 
-export const BottomBar = styled.div`
+export const ShowStoryBottomBar = styled.div`
   text-align: center;
-  font-size: 14px;
   color: #ff69b4;
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
-  padding-bottom: 30px;
+  padding-bottom: 50px;
   border-radius: 10px;
   align-items: center;
   background-color: #fdf2f8;
 
   & > span {
-    font-size: 16px;
+    font-size:20px;
     font-weight: bold;
     color: #ff69b4;
   }
 
   & > div {
-    font-size: 14px;
+    font-size: 20px;
     color: #333;
   }
 `;
 
-export const Location = styled.div`
+export const UploadStoryBottomBar = styled.div`
+  text-align: center;
+  color: #ff69b4;
   display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  padding-bottom: 10px;
+  border-radius: 10px;
   align-items: center;
-  gap: 5px;
+  background-color: #fdf2f8;
 
   & > span {
-    font-size: 16px;
+    font-size:20px;
     font-weight: bold;
-    color: #ffd700;
+    color: #ff69b4;
   }
+
+  & > div {
+    font-size: 20px;
+    color: #333;
+  }
+`
+export const Location = styled.div`
+  display: flex;
+  gap: 10px;
+  font-size: 20px; 
+  margin-right:10px;
 `;
 
 export const UploadImg = styled.div`
   cursor: pointer;
+  font-size: 14px;
 `;
