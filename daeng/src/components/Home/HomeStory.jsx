@@ -36,6 +36,7 @@ const HomeStory = () => {
           city: story.city,
           cityDetail: story.cityDetail,
           petImage: story.petImage,
+          storyType: story.storyType,
         }));
         setStories(fetchedStories);
       } catch (error) {
@@ -104,7 +105,7 @@ const HomeStory = () => {
                 key={index}
                 location={`${story.city} ${story.cityDetail}`}
                 nickname={story.nickname}
-                isPinkBorder={story.petImage ? true : false}
+                isPinkBorder={story.storyType === "unviewed"}
                 imageSrc={story.petImage || "https://via.placeholder.com/80"}
                 onClick={() => openOtherUserStoryPopup(story)} 
                 onClose={closePopup} 
