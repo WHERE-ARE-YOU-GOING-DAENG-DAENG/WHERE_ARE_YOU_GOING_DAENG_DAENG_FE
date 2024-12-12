@@ -4,7 +4,6 @@ import styled from "styled-components";
 import AlertDialog from "../../components/commons/SweetAlert";
 import { useNavigate } from "react-router-dom";
 
-
 const DeleteMenu = styled.div`
   position: absolute;
   top: 10px;
@@ -27,7 +26,7 @@ const DeleteMenuButton = styled.button`
   width: 100%;
 `;
 
-const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories) => {
+const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories, currentIndex, setCurrentIndex, navigate) => {
   AlertDialog({
     mode: "confirm",
     title: "삭제 확인",
@@ -37,6 +36,7 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories) => 
     confirmText: "삭제",
     onConfirm: async () => {
       try {
+        console.log("삭제 요청 storyId:", storyId);
         const response = await axios.delete(
           `https://dev.daengdaeng-where.link/api/v2/story/${storyId}`,
           {
@@ -49,7 +49,18 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories) => 
 
         if (response.status === 200) {
           const updatedStories = stories.filter((story) => story.storyId !== storyId);
+          console.log("업데이트된 스토리 목록:", updatedStories);
+
           setStories(updatedStories);
+
+          // 삭제 후 인덱스 업데이트
+          if (updatedStories.length === 0) {
+            navigate("/"); // 스토리가 없으면 메인으로 이동
+          } else if (currentIndex >= updatedStories.length) {
+            setCurrentIndex(updatedStories.length - 1); // 이전 스토리로 이동
+          } else {
+            setCurrentIndex((prevIndex) => Math.min(prevIndex, updatedStories.length - 1)); // 현재 또는 이전 스토리
+          }
 
           AlertDialog({
             mode: "alert",
@@ -61,8 +72,11 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories) => 
               setShowDeleteMenu(false);
             },
           });
+        } else {
+          console.error("삭제 실패 응답:", response);
         }
       } catch (error) {
+        console.error("삭제 요청 중 오류 발생:", error);
         AlertDialog({
           mode: "alert",
           title: "실패",
@@ -70,18 +84,18 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories) => 
           confirmText: "확인",
           icon: "error",
         });
-        console.error("삭제 실패:", error);
       }
     },
   });
 };
 
-function DeleteStory({ storyId, setShowDeleteMenu, stories, setStories }) {
+
+function DeleteStory({ storyId, setShowDeleteMenu, stories, setStories, currentIndex, setCurrentIndex }) {
   const navigate = useNavigate(); 
   return (
     <DeleteMenu>
       <DeleteMenuButton
-        onClick={() => handleDelete(storyId, setShowDeleteMenu, stories, setStories, navigate)}>
+        onClick={() => handleDelete(storyId, setShowDeleteMenu, stories, setStories, currentIndex, setCurrentIndex, navigate)}>
         삭제
       </DeleteMenuButton>
     </DeleteMenu>
