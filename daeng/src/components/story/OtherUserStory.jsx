@@ -10,7 +10,7 @@ import {
   CloseButton,
   TextContainer,
   ImageContainer,
-  BottomBar,
+  ShowStoryBottomBar,
   Location,
 } from "./StoryCommonStyle";
 
@@ -103,13 +103,13 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
           />
         )}
       </ImageContainer>
-      <BottomBar>
+      <ShowStoryBottomBar>
         <Location>
           <img src={crown} alt="왕관" style={{ marginRight: "5px" }} />
           {city} {cityDetail}
         </Location>
         <span>{nickname}</span>
-      </BottomBar>
+      </ShowStoryBottomBar>
     </VideoContainer>
   );
 }
