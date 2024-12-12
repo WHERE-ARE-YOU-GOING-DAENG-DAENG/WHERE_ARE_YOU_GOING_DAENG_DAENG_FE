@@ -168,6 +168,7 @@ const Title = styled.h3`
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 10px;
+  margin-left: 10px;
   text-align: left;
 
   @media (max-width: 554px) {

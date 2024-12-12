@@ -12,7 +12,7 @@ import {
   CloseButton,
   TextContainer,
   ImageContainer,
-  BottomBar,
+  ShowStoryBottomBar,
   Location,
 } from "./StoryCommonStyle";
 import AlertDialog from "../commons/SweetAlert";
@@ -173,12 +173,12 @@ function ShowMyStory({ onClose }) {
           />
         )}
       </ImageContainer>
-      <BottomBar>
+      <ShowStoryBottomBar>
         <Location>
           <img src={crown} alt="왕관" /> {currentStory.city} {currentStory.cityDetail}
         </Location>
         <span>{nickname}님</span>
-      </BottomBar>
+      </ShowStoryBottomBar>
     </VideoContainer>
   );
 }
