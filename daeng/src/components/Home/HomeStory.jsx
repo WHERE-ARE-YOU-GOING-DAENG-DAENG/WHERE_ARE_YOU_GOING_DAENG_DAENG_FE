@@ -97,7 +97,7 @@ const HomeStory = () => {
                 <PersonIcon src={HomeStoryAdd} alt="내 스토리 확인" onClick={openMyStoryPopup} />
                 <PlusIcon src={HomeStoryAddBtn} alt="스토리 추가 아이콘" onClick={openDetailPopup} />
               </PersonIconWrapper>
-              <AddText>스토리 추가</AddText>
+              <AddText>내 스토리</AddText>
             </FixedStoryAdd>
             {stories.map((story, index) => (
               <UploadStoryBtn
