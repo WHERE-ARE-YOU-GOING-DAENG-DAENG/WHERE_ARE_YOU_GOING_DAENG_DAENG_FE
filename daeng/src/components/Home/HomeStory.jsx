@@ -6,7 +6,7 @@ import HomeStoryAdd from "../../assets/icons/home_storyadd.svg";
 import HomeStoryAddBtn from "../../assets/icons/home_storyaddBtn.svg";
 import UploadStoryBtn from "../../components/commons/UploadStoryBtn";
 import Detail from "../story/Detail";
-import ShowMyStory from "../story/ShowMystory";
+import ShowMyStory from "../story/ShowMyStory";
 import UploadVideo from "../story/UploadVideo";
 import OtherUserStory from "../story/OtherUserStory";
 import axios from "axios";
@@ -97,7 +97,7 @@ const HomeStory = () => {
                 <PersonIcon src={HomeStoryAdd} alt="내 스토리 확인" onClick={openMyStoryPopup} />
                 <PlusIcon src={HomeStoryAddBtn} alt="스토리 추가 아이콘" onClick={openDetailPopup} />
               </PersonIconWrapper>
-              <AddText>스토리 추가</AddText>
+              <AddText>내 스토리</AddText>
             </FixedStoryAdd>
             {stories.map((story, index) => (
               <UploadStoryBtn
@@ -168,6 +168,7 @@ const Title = styled.h3`
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 10px;
+  margin-left: 10px;
   text-align: left;
 
   @media (max-width: 554px) {
