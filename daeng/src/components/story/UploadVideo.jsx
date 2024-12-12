@@ -8,12 +8,31 @@ import {
   CloseButton,
   TextContainer,
   ImageContainer,
-  BottomBar,
+  UploadStoryBottomBar,
   Location,
   UploadImg,
 } from "./StoryCommonStyle";
+import styled from "styled-components";
 
+const UploadStoryBtn = styled.button`
+  width: calc(100% - 20px); 
+  max-width: 400px;
+  height: 40px;
+  background-color: #ff69b4;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px auto; 
+  display: block; 
+  margin-bottom: 20px;
 
+  &:hover {
+    background-color: #ff85c1;
+  }
+`;
 
 function UploadStory({ onClose, nickname, city, cityDetail }) {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -161,14 +180,14 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
           </UploadImg>
         )}
       </ImageContainer>
-      <BottomBar>
+      <UploadStoryBottomBar >
         <Location>
           <img src={crown} alt="왕관" style={{ marginRight: "5px" }} />
           {city} {cityDetail}
         </Location>
         <span>{nickname}님</span>
-      </BottomBar>
-      <button onClick={uploadStory}>업로드</button>
+      </UploadStoryBottomBar >
+      <UploadStoryBtn onClick={uploadStory}>업로드</UploadStoryBtn>
     </VideoContainer>
   );
 }
