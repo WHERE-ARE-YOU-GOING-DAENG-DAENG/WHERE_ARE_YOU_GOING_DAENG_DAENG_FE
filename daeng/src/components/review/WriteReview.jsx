@@ -631,11 +631,8 @@ const handleFocus = (e) => {
       keywords: selectKeywords, 
       pets,
       visitedAt,
+      reviewType: type === "realtime" ? "REVIEW_TYP_02" : "REVIEW_TYP_01"
     };
-
-    if (type === "realtime") {
-      reviewData.reviewType = "REVIEW_TYP_02";
-    }
 
     try {
       const response = await axios.post("https://dev.daengdaeng-where.link/api/v1/review", reviewData, {
