@@ -13,6 +13,7 @@ import {
   ShowStoryBottomBar,
   Location,
 } from "./StoryCommonStyle";
+import { Navigate } from "react-router-dom";
 
 function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   const [stories, setStories] = useState([]);
@@ -55,6 +56,34 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
     fetchStories();
   }, [nickname, city, cityDetail]);
 
+  useEffect(() => {
+    const markStoryAsViewed = async () => {
+      if (stories.length > 0) {
+        const currentStoryId = stories[currentIndex]?.storyId;
+
+        if (currentStoryId) {
+          try {
+            await axios.put(
+              `https://dev.daengdaeng-where.link/api/v2/story/${currentStoryId}/viewed`,
+              {},
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                withCredentials: true,
+              }
+            );
+            console.log(`스토리 ${currentStoryId}가 확인 처리되었습니다.`);
+          } catch (error) {
+            console.error(`스토리 ${currentStoryId} 확인 처리에 실패했습니다:`, error);
+          }
+        }
+      }
+    };
+
+    markStoryAsViewed();
+  }, [currentIndex, stories]); 
+
   const handleNext = () => {
     if (currentIndex < stories.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -65,6 +94,11 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
+  };
+
+  const handleClose = () => {
+    onClose();
+    Navigate(0); 
   };
 
   if (stories.length === 0) {
@@ -81,7 +115,10 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   return (
     <VideoContainer>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
-      <CloseButton src={x} alt="팝업 닫기" onClick={onClose} />
+      <CloseButton 
+        src={x} alt="팝업 닫기" 
+        onClick={handleClose}
+      />
       <ImageContainer>
         <StyledImage src={currentStory.path} alt={`스토리 ${currentStory.storyId}`} />
 
