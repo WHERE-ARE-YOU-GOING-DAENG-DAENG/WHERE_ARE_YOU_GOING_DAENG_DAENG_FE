@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import x from "../../assets/icons/x.svg";
 import axios from "axios";
+import AlertDialog from "../../components/commons/SweetAlert";
 
 const FirstPopupContainer = styled.div`
   width: 481px;
@@ -98,11 +99,11 @@ const SubmitButton = styled.button`
 `;
 
 function Detail({ onClose, onNext }) {
-  const [nickname, setNickname] = useState(""); 
-  const [city, setCity] = useState(""); 
-  const [cityDetail, setCityDetail] = useState(""); 
-  const [cityDetails, setCityDetails] = useState([]); 
-  const [lands, setLands] = useState([]); 
+  const [nickname, setNickname] = useState("");
+  const [city, setCity] = useState("");
+  const [cityDetail, setCityDetail] = useState("");
+  const [cityDetails, setCityDetails] = useState([]);
+  const [lands, setLands] = useState([]);
 
   useEffect(() => {
     const fetchRegionData = async () => {
@@ -112,8 +113,8 @@ function Detail({ onClose, onNext }) {
         });
         if (response.data.message === "success") {
           const data = response.data.data;
-          setNickname(data.nickname); 
-          setLands(data.lands); 
+          setNickname(data.nickname);
+          setLands(data.lands);
         }
       } catch (error) {
         console.error("데이터를 가져오는 데 실패했습니다.", error);
@@ -125,19 +126,29 @@ function Detail({ onClose, onNext }) {
 
   const handleCityChange = (e) => {
     const selectedCity = e.target.value;
-    setCity(selectedCity); 
+    setCity(selectedCity);
 
     const selectedLand = lands.find((land) => land.city === selectedCity);
     setCityDetails(selectedLand ? selectedLand.cityDetails : []);
   };
 
   const handleNextClick = () => {
+    if (!city || !cityDetail) {
+      AlertDialog({
+        mode: "alert",
+        title: "알림",
+        text: "지역을 선택해주세요.",
+        confirmText: "확인",
+        icon: "warning",
+      });
+      return;
+    }
     const selectedData = {
-      nickname, 
-      city, 
-      cityDetail, 
+      nickname,
+      city,
+      cityDetail,
     };
-    onNext(selectedData); 
+    onNext(selectedData);
   };
 
   return (
