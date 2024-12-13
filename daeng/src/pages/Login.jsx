@@ -99,6 +99,13 @@ const FloatingCloud = styled.img`
     left: 20px; 
     z-index: -1; 
     pointer-events: none; 
+
+    @media (max-width: 554px) {
+        width: 400px; 
+        height: 400px; 
+        top: 30px; 
+        left: 10px; 
+    }
 `;
 
 const LogoContainer = styled.div`
