@@ -116,3 +116,22 @@ export const UploadImg = styled.div`
   cursor: pointer;
   font-size: 14px;
 `;
+export const ProgressBar = styled.div`
+  display: flex;
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  right: 5px;
+  height: 5px;
+  gap: 2px;
+  z-index: 20;
+`;
+
+export const ProgressItem = styled.div`
+  flex: 1;
+  height: 2px;
+  background-color: ${({ isCompleted }) =>
+    isCompleted ? " #ff69b4" : "#e0e0e0"}; 
+  border-radius: 5px;
+`;
+
