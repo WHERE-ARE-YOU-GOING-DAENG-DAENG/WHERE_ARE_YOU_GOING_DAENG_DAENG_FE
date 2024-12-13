@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import AreaField from '../../data/AreaField';
 import axios from 'axios';
 import AlertDialog from "../commons/SweetAlert";
-
+import Loading from "../commons/Loading";
 
 function UserRegister() { 
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ function UserRegister() {
   const emailFromCookie = getCookieValue('email');
   const providerFromCookie = getCookieValue('provider');
 
-
+  const [isLoading, setIsLoading] = useState(false);
   const [userData, setUserData] = useState({
     email: emailFromCookie || '',
     nickname: '',
@@ -126,6 +126,8 @@ function UserRegister() {
       cityDetail: userData.cityDetail,
       oauthProvider: userData.oauthProvider,
     };
+
+    setIsLoading(true);
     try {
         const { status } = await axios.post(
           "https://dev.daengdaeng-where.link/api/v1/signup",
@@ -156,6 +158,8 @@ function UserRegister() {
         text: "서버와 통신 중 문제가 발생했습니다.",
         confirmText: "확인",
       });
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
 
@@ -181,6 +185,7 @@ function UserRegister() {
       return false;
     }
 
+    setIsLoading(true);
     try {
       const { data } = await axios.get(
         `https://dev.daengdaeng-where.link/api/v1/user/duplicateNickname`,
@@ -217,11 +222,14 @@ function UserRegister() {
           confirmText: "확인",
         });
       }
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
 
   return (
     <UserContainer>
+      {isLoading && <Loading label="처리 중입니다..." />}
       <SelectLabel label="이메일" />
       <InputEmailContainer>
         <Input type="email" value={userData.email} disabled />
