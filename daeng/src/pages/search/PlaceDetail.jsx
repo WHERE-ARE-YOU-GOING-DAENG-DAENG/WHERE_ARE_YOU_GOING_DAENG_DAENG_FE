@@ -8,6 +8,7 @@ import PlaceDescription from "../../components/detail/PlaceDescription";
 import AiReviewSummary from '../../components/review/AIReview';
 import PlaceReviewList from "../../components/detail/PlaceReviewList";
 import AlertDialog from "../../components/commons/SweetAlert";
+import Loading from "../../components/commons/Loading";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import PlaceDetailNoImage from "../../assets/icons/placeDetail_noimage.svg";
@@ -38,10 +39,12 @@ const Division = styled.div`
 const PlaceDetail = () => {
     const { id } = useParams();
     const [data, setData] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
       
     useEffect(() => {
       const fetchPlaceDetail = async () => {
         try {
+          setIsLoading(true);
           const placeResponse = await axios.get(`https://dev.daengdaeng-where.link/api/v1/places/${id}`, {
             withCredentials: true,
           });
@@ -87,6 +90,8 @@ const PlaceDetail = () => {
               confirmText: "확인",
             });
           }
+        } finally{
+          setIsLoading(false);
         }
       };
     
@@ -97,15 +102,19 @@ const PlaceDetail = () => {
     return(
         <>
           <Header label="시설 상세페이지" />
-          <HeaderImage src={ data.imageurl ? data.imageurl : PlaceDetailNoImage} alt="시설이미지" />
-          <PlaceTitle data={data} setData={setData}/>
-          <PlaceInfo data={data} />
-          <Division />
-          <PlaceDescription data={data}/>
-          <Division />
-          <AiReview><AiReviewSummary placeId={id} /></AiReview>
-          <Division />
-          <PlaceReviewList data={data}/>/
+          {isLoading ? <Loading lable="로딩 중입니다..." />:
+            <>
+            <HeaderImage src={ data.imageurl ? data.imageurl : PlaceDetailNoImage} alt="시설이미지" />
+            <PlaceTitle data={data} setData={setData}/>
+            <PlaceInfo data={data} />
+            <Division />
+            <PlaceDescription data={data}/>
+            <Division />
+            <AiReview><AiReviewSummary placeId={id} /></AiReview>
+            <Division />
+            <PlaceReviewList data={data}/>
+            </>
+          }
           <Footer />
         </>
     )

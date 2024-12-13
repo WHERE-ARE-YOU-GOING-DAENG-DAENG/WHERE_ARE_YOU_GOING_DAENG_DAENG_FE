@@ -59,7 +59,7 @@ const AlarmBox = () => {
 
     fetchNotificationConsent();
 
-    // 서비스 워커 등록 
+    // 서비스 워커 등록 로직
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register("/firebase-messaging-sw.js")
