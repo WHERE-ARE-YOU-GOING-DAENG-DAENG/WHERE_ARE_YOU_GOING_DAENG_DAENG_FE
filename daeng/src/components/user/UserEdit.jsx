@@ -10,6 +10,7 @@ import axios from "axios";
 import AlertDialog from "../commons/SweetAlert";
 import useUserStore from "../../stores/userStore";
 import { useNavigate } from "react-router-dom";
+import Loading from "../commons/Loading";
 
 
 function UserEdit() {
@@ -25,6 +26,8 @@ function UserEdit() {
     oauthProvider,
     setLoginData,
   } = useUserStore.getState();
+
+  const [isLoading, setIsLoading] = useState(false);
   const [nickname, setNickname] = useState(storeNickname || '');
   const [isNicknameChecked, setIsNicknameChecked] = useState(false); 
   const [userData, setUserData] = useState({
@@ -110,6 +113,7 @@ function UserEdit() {
       return;
     }
 
+    setIsLoading(true);
     try {
       const { data } = await axios.get(
         `https://dev.daengdaeng-where.link/api/v1/user/duplicateNickname`,
@@ -158,6 +162,8 @@ function UserEdit() {
           confirmText: "확인",
         });
       }
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
 
@@ -187,8 +193,9 @@ function UserEdit() {
       email,
     };
 
+    setIsLoading(true);
     try {
-      const response = await axios.put(
+      await axios.put(
         'https://dev.daengdaeng-where.link/api/v1/user/adjust',
         payload,
         {
@@ -228,11 +235,14 @@ function UserEdit() {
           confirmText: '확인',
         });
       }
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
 
   return (
     <UserContainer>
+      {isLoading && <Loading label="처리 중입니다..." />}
       <SelectLabel label="이메일" />
       <InputEmailContainer>
         <Input type="email" value={email} disabled />
