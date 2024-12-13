@@ -26,6 +26,7 @@ import clean from "../../assets/icons/clean.svg";
 import gongwon from "../../assets/icons/gongwon.svg";
 import parkingLot from "../../assets/icons/parkingLot.svg";
 import AlertDialog from "../commons/SweetAlert";
+import Loading from "../commons/Loading";
 import axios from "axios";
 
 function PreferenceRegister() {
@@ -58,6 +59,7 @@ function PreferenceRegister() {
   const navigate = useNavigate();
   const [selectedPlaceOptions, setSelectedPlaceOptions] = useState([]);
   const [selectedFavoriteOptions, setSelectedFavoriteOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOptionClick = (selectedOptions, setSelectedOptions, code) => {
     if (selectedOptions.length >= 3 && !selectedOptions.includes(code)) {
@@ -96,8 +98,10 @@ function PreferenceRegister() {
       preferenceTypes: selectedFavoriteOptions,
     };
 
+    setIsLoading(true);
+
     try {
-      const response1 = await axios.post(
+      await axios.post(
         "https://dev.daengdaeng-where.link/api/v1/preferences",
         placePayload,
         {
@@ -106,7 +110,7 @@ function PreferenceRegister() {
         }
       );
 
-      const response2 = await axios.post(
+      await axios.post(
         "https://dev.daengdaeng-where.link/api/v1/preferences",
         favoritePayload,
         {
@@ -143,11 +147,14 @@ function PreferenceRegister() {
           confirmText: "확인",
         });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <Wrap>
+      {isLoading && <Loading label="로딩 중입니다..." />}
       <Section>
         <Title>어떤 시설에 관심이 많으신가요?</Title>
         <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
@@ -194,7 +201,6 @@ function PreferenceRegister() {
     </Wrap>
   );
 }
-
 
 const Wrap = styled.div`
   padding: 20px;
