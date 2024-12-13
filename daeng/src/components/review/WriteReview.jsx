@@ -266,7 +266,7 @@ const QuestionBox = styled.span`
 
 const CountText = styled.span`
   font-size: 15px;
-  color: #FF0000;
+  color: black;
   margin-top:3px;
   margin-right:10px;
 `
