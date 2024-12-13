@@ -26,6 +26,15 @@ const PreferenceButton = styled.button`
     color: #DB2877;
   }
 
+  @media (hover: hover) {
+    &:hover:not(.selected) {
+      background-color: #fdf2f8;
+      color: #db2877;
+      font-weight: bold;
+      border-color: #ff4b98;
+    }
+  }
+
   @media (max-width: 554px) {
     height:27px;
     font-size: 10px;
