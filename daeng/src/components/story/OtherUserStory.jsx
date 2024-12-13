@@ -59,7 +59,7 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
 
   useEffect(() => {
     const markStoryAsViewed = async () => {
-      if (stories.length === 0) return;
+      if (stories.length === 0 || currentIndex >= stories.length) return;
 
       const currentStoryId = stories[currentIndex]?.storyId;
 
@@ -76,7 +76,7 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
             }
           );
           console.log(`스토리 ${currentStoryId}가 확인 처리되었습니다.`);
-          setViewedStories((prev) => new Set(prev).add(currentStoryId)); 
+          setViewedStories((prev) => new Set(prev).add(currentStoryId));
         } catch (error) {
           console.error(`스토리 ${currentStoryId} 확인 처리에 실패했습니다:`, error);
         }
@@ -112,12 +112,13 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   return (
     <VideoContainer>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
-      <CloseButton 
-        src={x} alt="팝업 닫기" 
+      <CloseButton
+        src={x}
+        alt="팝업 닫기"
         onClick={() => {
-          onClose(); 
-          window.location.reload(); 
-        }} 
+          onClose();
+          window.location.reload();
+        }}
       />
       <ImageContainer>
         <StyledImage src={currentStory.path} alt={`스토리 ${currentStory.storyId}`} />
