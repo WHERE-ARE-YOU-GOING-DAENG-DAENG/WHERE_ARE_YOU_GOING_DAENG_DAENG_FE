@@ -366,6 +366,25 @@ function WriteReview({ review = {} }) {
   const { placeId } = useParams();
   const [nickname, setNickname] = useState("");
   const [placeName, setPlaceName] = useState("장소 이름 없음");
+  const navigate = useNavigate();
+  const { pets, fetchPetList } = usePetStore();
+  const [selectPet, setSelectPet] = useState([]);
+  const [ratings, setRatings] = useState([false, false, false, false, false]);
+  const [previews, setPreviews] = useState([]);
+  const [placeImgs, setPlaceImgs] = useState([]);
+  const [selectKeywords, setSelectKeywords] = useState([]);
+  const [text, setText] = useState("");
+  const [visitedAt, setVisitedAt] = useState("");
+  const [selectedPetImage, setSelectedPetImage] = useState("");
+  const location = useLocation();
+  const {type} = location.state || {};
+
+  console.log("Received type:", type);
+  
+
+  useEffect(() => {
+    fetchPetList(); 
+  }, [fetchPetList]);
 
   useEffect(() => {
     const fetchUserNickname = async () => {
@@ -405,26 +424,6 @@ function WriteReview({ review = {} }) {
   if (!placeIdValue) {
     return <div>장소 정보를 가져올 수 없습니다.</div>;
   }
-
-  const navigate = useNavigate();
-  const { pets, fetchPetList } = usePetStore();
-  const [selectPet, setSelectPet] = useState([]);
-  const [ratings, setRatings] = useState([false, false, false, false, false]);
-  const [previews, setPreviews] = useState([]);
-  const [placeImgs, setPlaceImgs] = useState([]);
-  const [selectKeywords, setSelectKeywords] = useState([]);
-  const [text, setText] = useState("");
-  const [visitedAt, setVisitedAt] = useState("");
-  const [selectedPetImage, setSelectedPetImage] = useState("");
-  const location = useLocation();
-  const {type} = location.state || {};
-
-  console.log("Received type:", type);
-  
-
-  useEffect(() => {
-    fetchPetList(); 
-  }, [fetchPetList]);
 
   const petOptions = pets.map((pet) => ({
     value: pet.petId,
@@ -631,7 +630,8 @@ const handleFocus = (e) => {
       media, 
       keywords: selectKeywords, 
       pets,
-      visitedAt, 
+      visitedAt,
+      reviewType: type === "realtime" ? "REVIEW_TYP_02" : "REVIEW_TYP_01"
     };
 
     try {
