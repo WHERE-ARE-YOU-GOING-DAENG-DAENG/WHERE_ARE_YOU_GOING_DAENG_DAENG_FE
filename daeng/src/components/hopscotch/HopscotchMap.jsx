@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { createRoot } from "react-dom/client";
-import Loading from "../commons/Loading";
 import styled from "styled-components";
+import axios from "axios";
 import geojson from "../../data/sig.json";
 import useGoogleMapsStore from '../../stores/useGoogleMapsStore';
 import useLocationStore from '../../stores/useLocationStore';
 import LandOwnerProfile from "./LandOwnerProfile";
 import CustomOverlay from "../../components/map/CustomOverlay";
 import markerIcon from "../../assets/icons/marker.svg";
-import axios from "axios";
+import Loading from "../commons/Loading";
 
 const MapContainer = styled.div`
   width: 100%;
@@ -17,218 +16,221 @@ const MapContainer = styled.div`
 `;
 
 const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
-    const mapRef = useRef(null);
-    const [map, setMap] = useState(null);
-    const { isLoaded } = useGoogleMapsStore();
-    const userLocation = useLocationStore((state) => state.userLocation);
-    const [overlayContent, setOverlayContent] = useState(null);
-    const [ownerList, setOwnerList] = useState({ visitInfo: {} });
-    const [isOwnerListLoaded, setIsOwnerListLoaded] = useState(false);
-    const [markers, setMarkers] = useState([]);
+  const mapRef = useRef(null);
+  const [map, setMap] = useState(null);
+  const { isLoaded } = useGoogleMapsStore();
+  const userLocation = useLocationStore((state) => state.userLocation);
+  const [overlayContent, setOverlayContent] = useState(null);
+  const [ownerList, setOwnerList] = useState({ visitInfo: {} });
+  const [isOwnerListLoaded, setIsOwnerListLoaded] = useState(false);
+  const [markers, setMarkers] = useState([]);
 
-    useEffect(()=>{
-      fetchOwnerData();
-    },[])
+  useEffect(() => {
+    fetchOwnerData();
+  }, []);
 
-    const fetchOwnerData = async() => {
-      try{
-        const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region/owners",{
-          withCredentials: true
-        });
-        setOwnerList(response.data.data);
-        setIsOwnerListLoaded(true);
-      }catch(error){
-        console.error("땅 주인 목록을 조회할 수 없습니다",error)
-      }
-    };
+  const fetchOwnerData = async () => {
+    try {
+      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region/owners", {
+        withCredentials: true,
+      });
+      setOwnerList(response.data.data);
+      setIsOwnerListLoaded(true);
+    } catch (error) {
+      console.error("땅 주인 목록을 조회할 수 없습니다", error);
+    }
+  };
 
-    useEffect(() => {
-      if (map && changeCenter) {
-        const { region, subRegion } = changeCenter;
-  
-        // markers 배열에서 해당 지역의 마커 찾기
-        const matchingMarker = markers.find(
-          (marker) =>
-            marker.region === region && marker.subRegion === subRegion
-        );
-  
-        if (matchingMarker) {
-          map.panTo(matchingMarker.marker.getPosition());
-        } else {
-          console.error("선택한 지역의 마커를 찾을 수 없습니다.");
+  const handleMarkerClick = (marker, region, subRegion, center) => {
+    const regionOwner = ownerList.visitInfo?.[region]?.[subRegion] || null;
+
+    const ownerInfo = regionOwner
+      ? {
+          nickname: regionOwner.nickname,
+          hops: regionOwner.count,
+          pets: regionOwner.pets,
         }
-      }
-    }, [changeCenter, map, markers]);
+      : {
+          nickname: null,
+          hops: 0,
+          pets: [],
+        };
 
-    useEffect(() => {
-      if (isLoaded && !map) {
-        const center =
+    setSelectedArea([region, subRegion, regionOwner?.count]);
+    setOverlayContent(null);
+
+    setTimeout(() => {
+      setOverlayContent({
+        position: { lat: center.lat(), lng: center.lng() },
+        component: (
+          <LandOwnerProfile
+            area={`${region} ${subRegion}`}
+            nickname={ownerInfo.nickname}
+            hops={ownerInfo.hops}
+            pets={ownerInfo.pets}
+          />
+        ),
+        offset: ownerInfo.nickname ? { x: 0, y: -80 } : { x: 0, y: -40 },
+      });
+    }, 0);
+  };
+
+  useEffect(() => {
+    if (map && changeCenter) {
+      const { region, subRegion } = changeCenter;
+      const matchingMarker = markers.find(
+        (marker) => marker.region === region && marker.subRegion === subRegion
+      );
+
+      if (matchingMarker) {
+        const { marker } = matchingMarker;
+        const center = marker.getPosition();
+
+        map.panTo(center);
+        handleMarkerClick(marker, region, subRegion, center);
+      } else {
+        console.error("선택한 지역의 마커를 찾을 수 없습니다.");
+      }
+    }
+  }, [changeCenter, map, markers]);
+
+  useEffect(() => {
+    if (isLoaded && !map) {
+      const center =
         userLocation.lat === 0.0 && userLocation.lng === 0.0
           ? { lat: 37.5665, lng: 126.978 } // 서울 중심
           : userLocation;
 
-        const googleMap = new window.google.maps.Map(mapRef.current, {
-          center,
-          zoom: 11,
-          disableDefaultUI: removeUi,
-        });
-        setMap(googleMap);
-      }
-    }, [isLoaded, map, removeUi]);
+      const googleMap = new window.google.maps.Map(mapRef.current, {
+        center,
+        zoom: 11,
+        disableDefaultUI: removeUi,
+      });
+      setMap(googleMap);
+    }
+  }, [isLoaded, map, removeUi]);
+
+  useEffect(() => {
+    if (isLoaded && map && isOwnerListLoaded) {
+      const polygons = [];
+      const infoWindow = new window.google.maps.InfoWindow({
+        pixelOffset: new window.google.maps.Size(0, -10),
+      });
+
+      const observer = new MutationObserver(() => {
+        const closeButton = document.querySelector(".gm-ui-hover-effect");
+        if (closeButton) {
+          closeButton.style.display = "none";
+        }
+      });
   
-    useEffect(() => {
-      if (isLoaded && map && isOwnerListLoaded) {
-        const polygons = [];
-        const infoWindow = new window.google.maps.InfoWindow({
-          pixelOffset: new window.google.maps.Size(0, -10),
-        });
-    
-        const observer = new MutationObserver(() => {
-          const closeButton = document.querySelector(".gm-ui-hover-effect");
-          if (closeButton) {
-            closeButton.style.display = "none";
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+
+      const subRegionLargestPolygons = {};
+
+      geojson.features.forEach((feature) => {
+        const geometryType = feature.geometry.type;
+        const coordinatesList =
+          geometryType === "MultiPolygon"
+            ? feature.geometry.coordinates
+            : [feature.geometry.coordinates];
+
+        coordinatesList.forEach((polygonCoordinates) => {
+          const coordinates = polygonCoordinates[0].map((coord) => ({
+            lat: coord[1],
+            lng: coord[0],
+          }));
+
+          const region = feature.properties.CTP_KOR_NM;
+          const subRegion = feature.properties.SIG_KOR_NM;
+
+          const polygon = new window.google.maps.Polygon({
+            paths: coordinates,
+            strokeColor: "#FF69A9",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#fff",
+            fillOpacity: 0.7,
+          });
+          polygon.setMap(map);
+          polygons.push(polygon);
+
+          const area = window.google.maps.geometry.spherical.computeArea(
+            polygon.getPath()
+          );
+
+          const key = `${region}-${subRegion}`;
+          if (!subRegionLargestPolygons[key] || subRegionLargestPolygons[key].area < area) {
+            subRegionLargestPolygons[key] = { polygon, coordinates, area };
           }
         });
-    
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true,
-        });
-    
-        // subregion 별로 가장 큰 폴리곤 저장
-        const subRegionLargestPolygons = {};
-    
-        geojson.features.forEach((feature) => {
-          const geometryType = feature.geometry.type;
-          const coordinatesList =
-            geometryType === "MultiPolygon"
-              ? feature.geometry.coordinates
-              : [feature.geometry.coordinates];
-    
-          coordinatesList.forEach((polygonCoordinates) => {
-            const coordinates = polygonCoordinates[0].map((coord) => ({
-              lat: coord[1],
-              lng: coord[0],
-            }));
-    
-            const region = feature.properties.CTP_KOR_NM;
-            const subRegion = feature.properties.SIG_KOR_NM;
-    
-            const polygon = new window.google.maps.Polygon({
-              paths: coordinates,
-              strokeColor: "#FF69A9",
-              strokeOpacity: 0.8,
-              strokeWeight: 2,
-              fillColor: "#fff",
-              fillOpacity: 0.7,
-            });
-            polygon.setMap(map);
-            polygons.push(polygon);
-    
-            
-            const area = window.google.maps.geometry.spherical.computeArea(
-              polygon.getPath()
-            );
-    
-            
-            const key = `${region}-${subRegion}`;
-            if (!subRegionLargestPolygons[key] || subRegionLargestPolygons[key].area < area) {
-              subRegionLargestPolygons[key] = { polygon, coordinates, area };
-            }
-          });
-        });
-    
-          Object.keys(subRegionLargestPolygons).forEach((key) => {
-          const { polygon, coordinates } = subRegionLargestPolygons[key];
-          const [region, subRegion] = key.split("-");
+      });
 
-          const calculatePolygonCenter = (paths) => {
-            const bounds = new window.google.maps.LatLngBounds();
-            paths.forEach((path) => {
-              bounds.extend(new window.google.maps.LatLng(path.lat, path.lng));
-            });
-            return bounds.getCenter();
-          };
+      Object.keys(subRegionLargestPolygons).forEach((key) => {
+        const { polygon, coordinates } = subRegionLargestPolygons[key];
+        const [region, subRegion] = key.split("-");
 
-          const center = calculatePolygonCenter(coordinates);
-    
-          const owner = ownerList.visitInfo?.[region]?.[subRegion] || null;
-    
-          if (owner) {
-            const marker = new window.google.maps.Marker({
-              position: center,
-              map,
-              icon: markerIcon,
-            });
-
-            setMarkers((prev) => [...prev, { marker, region, subRegion }]);
-          }
-    
-          polygon.addListener("mouseover", () => {
-            polygon.setOptions({ fillColor: "#FF69A9" });
-            infoWindow.setContent(
-              `<div style="font-size:14px; margin-left:5px;">${region} ${subRegion}</div>`
-            );
-            infoWindow.setPosition({ lat: center.lat(), lng: center.lng() });
-    
-            infoWindow.open(map);
+        const calculatePolygonCenter = (paths) => {
+          const bounds = new window.google.maps.LatLngBounds();
+          paths.forEach((path) => {
+            bounds.extend(new window.google.maps.LatLng(path.lat, path.lng));
           });
-    
-          polygon.addListener("mouseout", () => {
-            polygon.setOptions({ fillColor: "#fff" });
-            infoWindow.close();
-          });
-    
-          polygon.addListener("click", () => {
-            infoWindow.close();
-            map.panTo(center);
-    
-            const regionOwner =
-              ownerList.visitInfo?.[region]?.[subRegion] || null;
-    
-            const ownerInfo = regionOwner
-              ? {
-                  nickname: regionOwner.nickname,
-                  hops: regionOwner.count,
-                  pets: regionOwner.pets,
-                }
-              : {
-                  nickname: null,
-                  hops: 0,
-                  pets: [],
-                };
-    
-            setSelectedArea([region, subRegion, regionOwner?.count]);
-            setOverlayContent(null);
-    
-            setTimeout(() => {
-              setOverlayContent({
-                position: { lat: center.lat(), lng: center.lng() },
-                component: (
-                  <LandOwnerProfile
-                    area={`${region} ${subRegion}`}
-                    nickname={ownerInfo.nickname}
-                    hops={ownerInfo.hops}
-                    pets={ownerInfo.pets}
-                  />
-                ),
-                offset: ownerInfo.nickname ? { x: 0, y: -80 } : { x: 0, y: -40 },
-              });
-            }, 0);
-          });
-        });
-    
-        return () => {
-          polygons.forEach((polygon) => polygon.setMap(null));
+          return bounds.getCenter();
         };
-      }
-    }, [map, isLoaded, isOwnerListLoaded]);
-      
-    console.log(markers)
-    return (
-      <MapContainer ref={mapRef} $removeUi={removeUi}>
-        {!isLoaded && <Loading label="지도 로딩 중..." />}
-        {map && overlayContent && (
+
+        const center = calculatePolygonCenter(coordinates);
+
+        const owner = ownerList.visitInfo?.[region]?.[subRegion] || null;
+
+        if (owner) {
+          const marker = new window.google.maps.Marker({
+            position: center,
+            map,
+            icon: markerIcon,
+          });
+
+          setMarkers((prev) => [...prev, { marker, region, subRegion }]);
+
+          marker.addListener("click", () =>
+            handleMarkerClick(marker, region, subRegion, center)
+          );
+        }
+
+        polygon.addListener("mouseover", () => {
+          polygon.setOptions({ fillColor: "#FF69A9" });
+          infoWindow.setContent(
+            `<div style="font-size:14px; margin-left:5px;">${region} ${subRegion}</div>`
+          );
+          infoWindow.setPosition({ lat: center.lat(), lng: center.lng() });
+
+          infoWindow.open(map);
+        });
+
+        polygon.addListener("mouseout", () => {
+          polygon.setOptions({ fillColor: "#fff" });
+          infoWindow.close();
+        });
+
+        polygon.addListener("click", () => {
+          map.panTo(center);
+          infoWindow.close();
+          handleMarkerClick(null, region, subRegion, center);
+        });
+      });
+
+      return () => {
+        polygons.forEach((polygon) => polygon.setMap(null));
+      };
+    }
+  }, [map, isLoaded, isOwnerListLoaded]);
+
+  return (
+    <MapContainer ref={mapRef} $removeUi={removeUi}>
+      {!isLoaded && <Loading label="지도 로딩 중..." />}
+      {map && overlayContent && (
         <CustomOverlay
           map={map}
           position={overlayContent.position}
@@ -237,8 +239,8 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
           {overlayContent.component}
         </CustomOverlay>
       )}
-      </MapContainer>
-    );
+    </MapContainer>
+  );
 };
 
 export default HopscotchMap;
