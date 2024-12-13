@@ -57,10 +57,11 @@ function LastContainer() {
 
   const handleDeleteUser = async () => {
     AlertDialog({
-      mode: 'alert',
+      mode: 'confirm',
       title: '회원탈퇴 확인',
-      text: '정말 회원탈퇴 하시겠습니까?',
+      text: '탈퇴일 기준 30일간 재가입할 수 없습니다.<br/>정말 회원탈퇴 하시겠습니까? ',
       confirmText: '확인',
+      cancelText: '취소',
       onConfirm: async () => {
         try {
           await axios.delete('https://dev.daengdaeng-where.link/api/v1/user/delete', {
