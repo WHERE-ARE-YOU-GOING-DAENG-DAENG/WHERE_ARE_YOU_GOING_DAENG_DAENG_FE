@@ -34,21 +34,12 @@ const useFavoriteStore = create((set, get) => ({
       }));
     } catch (error) {
       if (error.response) {
-        if (error.response.status === 401) {
-          AlertDialog({
-            mode: "alert",
-            title: "로그인 필요",
-            text: "로그인이 필요한 기능입니다.",
-            confirmText: "확인",
-          });
-        } else {
-          AlertDialog({
-            mode: "alert",
-            title: "즐겨찾기 조회",
-            text: "즐겨찾기 조회가 실패하였습니다.",
-            confirmText: "확인",
-          });
-        }
+        AlertDialog({
+          mode: "alert",
+          title: "즐겨찾기 조회",
+          text: "즐겨찾기 조회가 실패하였습니다.",
+          confirmText: "확인",
+        });
       }
       set({ hasMore: false });
     } finally {
@@ -76,21 +67,12 @@ const useFavoriteStore = create((set, get) => ({
       }
     } catch (error) {
       if(error.response){
-        if (error.response.status === 401) {
-          AlertDialog({
-            mode: "alert",
-            title: "로그인 필요",
-            text: "로그인이 필요한 기능입니다.",
-            confirmText: "확인",
-          });
-        } else {
-          AlertDialog({
-            mode: "alert",
-            title: "즐겨찾기 등록",
-            text: "즐겨찾기 등록이 실패하였습니다.",
-            confirmText: "확인",
-          });
-        }
+        AlertDialog({
+          mode: "alert",
+          title: "즐겨찾기 등록",
+          text: "즐겨찾기 등록이 실패하였습니다.",
+          confirmText: "확인",
+        });
   }
     }
   },

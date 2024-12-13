@@ -108,7 +108,7 @@ const AlertDialog = ({
   if (mode === "alert") {
     Swal.fire({
       title,
-      text,
+      html: text,
       icon: selectedIcon,
       confirmButtonText: confirmText,
       customClass: {
@@ -123,7 +123,7 @@ const AlertDialog = ({
   } else if (mode === "confirm") {
     Swal.fire({
       title,
-      text,
+      html: text,
       icon: selectedIcon,
       showCancelButton: true,
       confirmButtonText: confirmText,

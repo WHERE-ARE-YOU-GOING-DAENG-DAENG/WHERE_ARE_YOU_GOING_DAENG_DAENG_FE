@@ -9,6 +9,7 @@ import CustomOverlay from "./CustomOverlay";
 import AlertDialog from "../../components/commons/SweetAlert";
 import useLocationStore from "../../stores/useLocationStore";
 import Loading from "../commons/Loading";
+import { useNavigate } from "react-router-dom";
 
 const MapContainer = styled.div`
   width: 100%;
@@ -28,6 +29,7 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded}) => {
   const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 });
   const userLocation = useLocationStore((state)=> state.userLocation);
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoaded && !map) {
@@ -137,7 +139,7 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded}) => {
           position={{ lat: location.latitude, lng: location.longitude }}
           map={map}
         >
-          <BookMarker label={location.name} icon={bookmarkerIcon} />
+          <BookMarker label={location.name} icon={bookmarkerIcon} onClick={()=> navigate(`/search/${location.placeId}`)}/>
         </CustomOverlay>
       ));
       setMarkers(newMarkers);
