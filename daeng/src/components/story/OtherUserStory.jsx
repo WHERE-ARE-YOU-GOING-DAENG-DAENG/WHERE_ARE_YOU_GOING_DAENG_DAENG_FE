@@ -13,11 +13,11 @@ import {
   ShowStoryBottomBar,
   Location,
 } from "./StoryCommonStyle";
-import { Navigate } from "react-router-dom";
 
 function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   const [stories, setStories] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [viewedStories, setViewedStories] = useState(new Set()); 
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -33,7 +33,8 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
         );
 
         const user = userResponse.data.data.find(
-          (u) => u.nickname === nickname && u.city === city && u.cityDetail === cityDetail
+          (u) =>
+            u.nickname === nickname && u.city === city && u.cityDetail === cityDetail
         );
 
         if (user) {
@@ -58,31 +59,32 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
 
   useEffect(() => {
     const markStoryAsViewed = async () => {
-      if (stories.length > 0) {
-        const currentStoryId = stories[currentIndex]?.storyId;
+      if (stories.length === 0 || currentIndex >= stories.length) return;
 
-        if (currentStoryId) {
-          try {
-            await axios.put(
-              `https://dev.daengdaeng-where.link/api/v2/story/${currentStoryId}/viewed`,
-              {},
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                withCredentials: true,
-              }
-            );
-            console.log(`스토리 ${currentStoryId}가 확인 처리되었습니다.`);
-          } catch (error) {
-            console.error(`스토리 ${currentStoryId} 확인 처리에 실패했습니다:`, error);
-          }
+      const currentStoryId = stories[currentIndex]?.storyId;
+
+      if (currentStoryId && !viewedStories.has(currentStoryId)) {
+        try {
+          await axios.put(
+            `https://dev.daengdaeng-where.link/api/v2/story/${currentStoryId}/viewed`,
+            {},
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            }
+          );
+          console.log(`스토리 ${currentStoryId}가 확인 처리되었습니다.`);
+          setViewedStories((prev) => new Set(prev).add(currentStoryId));
+        } catch (error) {
+          console.error(`스토리 ${currentStoryId} 확인 처리에 실패했습니다:`, error);
         }
       }
     };
 
     markStoryAsViewed();
-  }, [currentIndex, stories]); 
+  }, [currentIndex, stories]);
 
   const handleNext = () => {
     if (currentIndex < stories.length - 1) {
@@ -94,11 +96,6 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
-  };
-
-  const handleClose = () => {
-    onClose();
-    Navigate(0); 
   };
 
   if (stories.length === 0) {
@@ -115,9 +112,13 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   return (
     <VideoContainer>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
-      <CloseButton 
-        src={x} alt="팝업 닫기" 
-        onClick={handleClose}
+      <CloseButton
+        src={x}
+        alt="팝업 닫기"
+        onClick={() => {
+          onClose();
+          window.location.reload();
+        }}
       />
       <ImageContainer>
         <StyledImage src={currentStory.path} alt={`스토리 ${currentStory.storyId}`} />
