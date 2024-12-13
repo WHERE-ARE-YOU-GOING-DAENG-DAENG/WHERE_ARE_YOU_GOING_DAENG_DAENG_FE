@@ -167,7 +167,7 @@ const UserId = styled.span`
 `
 const PetType = styled.span`
   font-size: 15px;
-  margin-left: 5px;
+  margin-left: -5px;
   color:#B3B3B3;
   margin-top:8px;
 
@@ -409,7 +409,7 @@ const TotalReviewForm = () => {
                 <CommentContainer>
                   <div>
                     <UserId>{review.nickname}</UserId>
-                    <PetType>{review.pets?.join(", ")}</PetType>
+                    <PetType>({review.pets?.join(", ")})</PetType>
                   </div>
                   <PostDate>{new Date(review.createdAt).toLocaleDateString()}</PostDate>
                 </CommentContainer>
