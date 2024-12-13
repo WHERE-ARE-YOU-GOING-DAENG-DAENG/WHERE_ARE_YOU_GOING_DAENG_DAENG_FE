@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import DeleteBtn from '../../components/commons/DeleteBtn';
 import AlertDialog from '../commons/SweetAlert';
 
-function DeleteReview({ reviewId }) {
+function DeleteReview({ reviewId, reviewType }) {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
     AlertDialog({
       mode: "confirm",
-      title: "삭제 확인",
-      text: "삭제된 리뷰는 복구할 수 없습니다.",
+      title: reviewType === '실시간리뷰' ? "땅따먹기 리뷰 삭제" : "리뷰 삭제",
+      text: reviewType === '실시간리뷰' ? "실시간리뷰 삭제 시 땅따먹기에 영향을 줄 수 있습니다.<br/>정말 삭제하시겠습니까?":"삭제된 리뷰는 복구할 수 없습니다.<br/>삭제하시겠습니까?",
       cancelText: "취소",
       icon: "warning",
       confirmText: "삭제",
