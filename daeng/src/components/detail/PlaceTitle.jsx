@@ -105,10 +105,12 @@ const PlaceTitle = ({ data, setData }) => {
         navigate(`/visit-list/${placeId}`);
       } else {
         AlertDialog({
-          mode: "alert",
+          mode: "confirm",
           title: "로그인 필요",
-          text: "방문등록을 하시려면 로그인이 필요합니다.",
-          confirmText: "확인",
+          text: `방문등록을 하시려면 로그인이 필요합니다.<br/>로그인페이지로 이동하시겠습니까?`,
+          confirmText: "네",
+          cancelText: "아니오",
+          onConfirm: ()=> navigate('/login')
         });
       }
     }
@@ -150,10 +152,12 @@ const PlaceTitle = ({ data, setData }) => {
         }
       } else {
         AlertDialog({
-          mode: "alert",
+          mode: "confirm",
           title: "로그인 필요",
-          text: "땅따먹기 리뷰를 작성하려면 로그인이 필요합니다.",
-          confirmText: "확인",
+          text: `땅따먹기리뷰를 작성하시려면 로그인이 필요합니다.<br/>로그인페이지로 이동하시겠습니까?`,
+          confirmText: "네",
+          cancelText: "아니오",
+          onConfirm: ()=> navigate('/login')
         });
       }
     };
