@@ -87,7 +87,9 @@ const ProgressBar = ({ current, total }) => {
       <BarContainer>
         <BarBackground>
           <Bar progress={progress} />
-          <CurrentText progress={progress}>{current}</CurrentText>
+          {current !== total && (
+            <CurrentText progress={progress}>{current}</CurrentText>
+          )}
         </BarBackground>
         <FlagIcon src={flag} alt="깃발" />
       </BarContainer>
