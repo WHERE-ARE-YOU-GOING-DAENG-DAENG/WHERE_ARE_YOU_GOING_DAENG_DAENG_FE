@@ -12,6 +12,7 @@ import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import ReviewSlideshow from './ReviewSlideshow';
 import { useNavigate } from 'react-router-dom';
 import arrow from '../../assets/icons/arrow.svg'
+import Loading from '../../components/commons/Loading'; 
 
 const TotalReviewContainer = styled.div`
   display: block;
@@ -350,12 +351,9 @@ const TotalReviewForm = () => {
   );
 
   if (isLoading && reviews.length === 0) {
-    return (
-      <div>
-        <p>로딩 중...</p>
-      </div>
-    );
+    return <Loading label="리뷰를 불러오는 중입니다..." />;
   }
+
   if (!placeId) return <div>장소 정보를 가져올 수 없습니다.</div>;
 
   return (
@@ -442,15 +440,15 @@ const TotalReviewForm = () => {
             </div>
           );
         })
-      ) : !isLoading ? (
+      ) :!isLoading ? (
         <NoReview>리뷰가 없습니다.</NoReview>
       ) : null}
   
-      {isLoading && <div>로딩 중...</div>}
+      {isLoading && reviews.length > 0 && <Loading label="리뷰를 추가로 불러오는 중입니다..." />}
       {!isLoading && isLast && reviews.length > 0 && <LastReview>더이상 리뷰가 없습니다.</LastReview>}
     </TotalReviewContainer>
   );
-  };
-  
+};
+
   export default TotalReviewForm;
   
