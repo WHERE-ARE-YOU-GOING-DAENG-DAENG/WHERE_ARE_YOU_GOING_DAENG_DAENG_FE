@@ -10,6 +10,7 @@ import DeletePetData from "./DeletePetData";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
 import usePetStore from "../../stores/usePetStore";
+import upload from '../../assets/icons/upload.svg';
 import Loading from '../../components/commons/Loading';
 import { 
   Container, 
@@ -24,8 +25,8 @@ import {
   BirthContainer, 
   SelectContainer, 
   SelectWeight, 
+  CancelPetImg,
 } from './CommonStyle';
-
 
 
 function EditInputForm() {
@@ -268,17 +269,29 @@ function EditInputForm() {
   if (error) return <p>{error}</p>;
 
   return (
-    <Container>
-      <FirstInputContainer>
-        <label htmlFor="file-input">
-        <PetImg src={preview || petPicture || reviewDefaultImg} />
-        </label>
-        <HiddenInput
-          id="file-input"
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-        />
+  <Container>
+    <FirstInputContainer> 
+    <label htmlFor="file-input">
+      <PetImg src={preview || petPicture || reviewDefaultImg}>
+      {(preview || petPicture) && (
+          <CancelPetImg
+            onClick={(e) => {
+              e.stopPropagation(); 
+              setPreview(null);
+              setImageFile(null); 
+              setPetPicture(""); 
+            }}>
+            <img src={upload} alt="업로드 버튼" />
+        </CancelPetImg>
+        )}
+      </PetImg>
+    </label>
+      <HiddenInput
+        id="file-input"
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+      />
       </FirstInputContainer>
       <PetTypeContainer>
           <SelectLabel label="댕댕이 이름" />
