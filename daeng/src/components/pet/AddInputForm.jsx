@@ -6,6 +6,7 @@ import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
+import upload from '../../assets/icons/upload.svg';
 import Loading from '../../components/commons/Loading';
 import { 
   Container, 
@@ -20,6 +21,7 @@ import {
   BirthContainer, 
   SelectContainer, 
   SelectWeight, 
+  CancelPetImg,
 } from './CommonStyle';
 
 
@@ -254,9 +256,21 @@ function RegisterInputForm() {
   return (
     <Container>
       <FirstInputContainer>
-        <label htmlFor="file-input">
-          <PetImg src={preview} />
-        </label>
+      <label htmlFor="file-input">
+        <PetImg src={preview}>
+          {preview && (
+            <CancelPetImg
+              onClick={(e) => {
+                e.stopPropagation(); 
+                setPreview(null);
+                setImageFile(null); 
+              }}
+            >
+              <img src={upload} alt="업로드 버튼" />
+            </CancelPetImg>
+          )}
+        </PetImg>
+      </label>
         <HiddenInput
           id="file-input"
           type="file"

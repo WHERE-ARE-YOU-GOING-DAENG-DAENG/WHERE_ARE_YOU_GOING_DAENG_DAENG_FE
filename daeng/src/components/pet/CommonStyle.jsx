@@ -18,6 +18,7 @@ export const FirstInputContainer = styled.div`
   margin-bottom: 15px;
   width: 100%;
   height:100%;
+  position: relative;
 `;
 
 export const PetImg = styled.div`
@@ -29,7 +30,31 @@ export const PetImg = styled.div`
   background-size: cover;
   background-position: center;
   cursor: pointer;
+  position: relative;
 `;
+
+export const CancelPetImg = styled.button`
+  position: absolute; 
+  top: 75%;
+  right: 10px; 
+  background: rgba(0, 0, 0, 0.6); 
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 2; 
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.8); 
+  }
+`;
+
 
 export const HiddenInput = styled.input`
   display: none;
