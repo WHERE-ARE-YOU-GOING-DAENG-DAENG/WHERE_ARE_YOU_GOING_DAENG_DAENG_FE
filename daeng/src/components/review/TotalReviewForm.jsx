@@ -12,6 +12,7 @@ import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import ReviewSlideshow from './ReviewSlideshow';
 import { useNavigate } from 'react-router-dom';
 import arrow from '../../assets/icons/arrow.svg'
+import Loading from '../../components/commons/Loading'; 
 
 const TotalReviewContainer = styled.div`
   display: block;
@@ -32,7 +33,7 @@ const ReviewPlaceTitle = styled.span`
 
   @media (max-width: 554px) {
     font-size:23px;
-    margin-left:13px;
+    margin-left:4px;
   }
 `
 const PreferenceContainer = styled.div`
@@ -40,11 +41,13 @@ const PreferenceContainer = styled.div`
   margin-top: 3%;
   flex-direction: row;
   margin-bottom:3%;
-  gap:2px;
+  gap:3px;
+  margin-left:-5px;
+  flex-wrap: wrap; 
 
   @media (max-width: 554px) {
-    flex-direction: column;
     gap:5px;
+    margin-left:3px;
   }
 `
 
@@ -349,13 +352,9 @@ const TotalReviewForm = () => {
   );
 
   if (isLoading && reviews.length === 0) {
-    return (
-      <div>
-        <img src="/assets/spinner.gif" alt="로딩 중..." />
-        <p>로딩 중...</p>
-      </div>
-    );
+    return <Loading label="리뷰를 불러오는 중입니다..." />;
   }
+
   if (!placeId) return <div>장소 정보를 가져올 수 없습니다.</div>;
 
   return (
@@ -442,15 +441,15 @@ const TotalReviewForm = () => {
             </div>
           );
         })
-      ) : !isLoading ? (
+      ) :!isLoading ? (
         <NoReview>리뷰가 없습니다.</NoReview>
       ) : null}
   
-      {isLoading && <div>로딩 중...</div>}
+      {isLoading && reviews.length > 0 && <Loading label="리뷰를 추가로 불러오는 중입니다..." />}
       {!isLoading && isLast && reviews.length > 0 && <LastReview>더이상 리뷰가 없습니다.</LastReview>}
     </TotalReviewContainer>
   );
-  };
-  
+};
+
   export default TotalReviewForm;
   

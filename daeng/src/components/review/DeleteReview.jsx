@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import DeleteBtn from '../../components/commons/DeleteBtn';
 import AlertDialog from '../commons/SweetAlert';
-
+import Loading from '../../components/commons/Loading';
 function DeleteReview({ reviewId, reviewType }) {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async () => {
     AlertDialog({
@@ -17,6 +18,7 @@ function DeleteReview({ reviewId, reviewType }) {
       confirmText: "삭제",
 
       onConfirm: async () => {
+        setIsLoading(true);
         try {
           const response = await axios.delete(
             `https://dev.daengdaeng-where.link/api/v1/review/${reviewId}`,
@@ -28,6 +30,7 @@ function DeleteReview({ reviewId, reviewType }) {
             }
           );
           if (response.status === 200) {
+            setIsLoading(false); 
             AlertDialog({
               mode: "alert",
               title: "성공",
@@ -41,6 +44,7 @@ function DeleteReview({ reviewId, reviewType }) {
           }
         } catch (error) {
           console.error("삭제 실패:", error);
+          setIsLoading(false); 
           AlertDialog({
             mode: "alert",
             title: "오류",
@@ -51,6 +55,10 @@ function DeleteReview({ reviewId, reviewType }) {
       },
     });
   };
+
+  if (isLoading) {
+    return <Loading label="삭제 중입니다..." />; 
+  }
 
   return (
     <>
