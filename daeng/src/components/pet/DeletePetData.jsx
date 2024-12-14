@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios'; 
 import { useNavigate } from "react-router-dom";
-
+import Loading from '../../components/commons/Loading';
 
 const DeletePet = styled.button`
   background-color: white;
@@ -26,6 +26,7 @@ const DeletePet = styled.button`
 
 function DeletePetData({ petId }) {
   const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     AlertDialog({
@@ -37,6 +38,7 @@ function DeletePetData({ petId }) {
       confirmText: "삭제",
 
       onConfirm: async () => {
+        setIsDeleting(true);
         try {
           const response = await axios.delete(
             `https://dev.daengdaeng-where.link/api/v1/pets/${petId}`,
@@ -61,10 +63,16 @@ function DeletePetData({ petId }) {
           }
         } catch (error) {
           console.error("삭제 실패:", error);
+        }finally {
+          setIsDeleting(false); 
         }
       },
     });
   };
+
+  if (isDeleting) {
+    return <Loading label="삭제 중입니다..." />;
+  }
 
   return (
     <DeletePet onClick={handleDelete}>
