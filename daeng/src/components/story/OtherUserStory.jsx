@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import x from "../../assets/icons/x.svg";
 import crown from "../../assets/icons/crown.svg";
@@ -17,7 +17,7 @@ import {
 function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   const [stories, setStories] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [viewedStories, setViewedStories] = useState(new Set()); 
+  const [viewedStories, setViewedStories] = useRef(new Set()); 
 
   useEffect(() => {
     const fetchStories = async () => {
