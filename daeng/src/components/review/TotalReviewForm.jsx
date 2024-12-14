@@ -40,10 +40,11 @@ const PreferenceContainer = styled.div`
   margin-top: 3%;
   flex-direction: row;
   margin-bottom:3%;
-  gap:2px;
+  gap:3px;
+  margin-left: 5px;
 
   @media (max-width: 554px) {
-    flex-direction: column;
+
     gap:5px;
   }
 `
@@ -351,7 +352,6 @@ const TotalReviewForm = () => {
   if (isLoading && reviews.length === 0) {
     return (
       <div>
-        <img src="/assets/spinner.gif" alt="로딩 중..." />
         <p>로딩 중...</p>
       </div>
     );
