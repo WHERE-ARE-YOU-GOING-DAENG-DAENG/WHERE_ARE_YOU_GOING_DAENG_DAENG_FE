@@ -499,6 +499,7 @@ const handleFocus = (e) => {
   };
   const handleRemoveImage = (index) => {
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+    setPlaceImgs((prevPlaceImgs) => prevPlaceImgs.filter((_, i) => i !== index));
   };
 
   const handleChange = (e) => {
@@ -672,7 +673,7 @@ const handleFocus = (e) => {
       setIsLoading(false);
     }
   };
-  
+
   if (isLoading) {
     return <Loading label="리뷰를 등록 중입니다..." />;
   }
