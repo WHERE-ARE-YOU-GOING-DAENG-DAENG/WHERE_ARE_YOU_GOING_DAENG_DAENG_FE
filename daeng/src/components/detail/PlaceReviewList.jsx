@@ -58,6 +58,7 @@ const ReviewHeader = styled.div`
       margin-left: 10px;
       font-size: 15px;
       cursor: pointer;
+      color: black;
 
       @media(max-width:554px){
         font-size: 13px;
@@ -104,8 +105,7 @@ const KeywordsContainer = styled.div`
     @media (max-width: 554px){
     gap: 5px;
   }
-  }
-  
+  } 
 `
 const TotalUserInfoContainer = styled.div`
   display: flex;
@@ -127,7 +127,6 @@ const UserStarImg = styled.img`
 const ReviewUserContainer = styled.div`
   display: flex;
   flex-direction: row;
-
   @media (max-width: 554px) {
   margin-top: 5px;
   }
@@ -147,6 +146,7 @@ const UserPhoto = styled.img`
   height: 53px;
   margin-left: 5px;
   margin-right: 3%;
+  flex-shrink: 0;
   }
 `
 

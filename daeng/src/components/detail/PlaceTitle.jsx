@@ -10,6 +10,8 @@ import useFavoriteStore from "../../stores/useFavoriteStore";
 import useUserStore from "../../stores/userStore";
 import AlertDialog from "../commons/SweetAlert";
 import SquareBtn from "../commons/SquareBtn";
+import useLocationStore from "../../stores/useLocationStore";
+import axios from "axios";
 
 const Container = styled.div`
   padding: 0px 44px;
@@ -72,6 +74,7 @@ const PlaceTitle = ({ data, setData }) => {
     const navigate = useNavigate();
     const { id: placeId } = useParams();
     const { userId } = useUserStore.getState();
+    const userLocation = useLocationStore((state)=>state.userLocation);
     
     const toggleBookmark = async (placeId, isFavorite) => {
       const favoriteStore = useFavoriteStore.getState();
@@ -102,24 +105,59 @@ const PlaceTitle = ({ data, setData }) => {
         navigate(`/visit-list/${placeId}`);
       } else {
         AlertDialog({
-          mode: "alert",
+          mode: "confirm",
           title: "로그인 필요",
-          text: "방문등록을 하시려면 로그인이 필요합니다.",
-          confirmText: "확인",
+          text: `방문등록을 하시려면 로그인이 필요합니다.<br/>로그인페이지로 이동하시겠습니까?`,
+          confirmText: "네",
+          cancelText: "아니오",
+          onConfirm: ()=> navigate('/login')
         });
       }
     }
 
-    const handleReviewClick = () => {
-      console.log(userId)
+    const handleReviewClick = async() => {
       if (userId) {
-        navigate(`/write-review/${placeId}`, { state: { type: "realTime" } });
+        if(userLocation.lat !== 0 || userLocation.lng !== 0){
+          try{
+            const payload = {
+              placeId,
+              latitude: userLocation.lat,
+              longitude: userLocation.lng
+            }
+            const response = await axios.post("https://dev.daengdaeng-where.link/api/v2/review/realtime",payload,{
+              withCredentials: true
+            });
+            if(response.data.message === "success"){
+              navigate(`/write-review/${placeId}`, { state: { type: "realtime" } });
+            }
+          }catch(error){
+            if(error.response && error.response.data){
+              AlertDialog({
+                mode: "alert",
+                title: "위치확인필요",
+                text: error.response.data.message,
+                confirmText: "닫기",
+              });
+            }else{
+              console.error("실시간리뷰 판별 중 오류발생", error)
+            }
+          }
+        }else{
+          AlertDialog({
+            mode: "alert",
+            title: "위치동의 필요",
+            text: "땅따먹기 리뷰를 작성하려면 위치동의가 필요합니다.",
+            confirmText: "확인",
+          });
+        }
       } else {
         AlertDialog({
-          mode: "alert",
+          mode: "confirm",
           title: "로그인 필요",
-          text: "땅따먹기 리뷰를 작성하려면 로그인이 필요합니다.",
-          confirmText: "확인",
+          text: `땅따먹기리뷰를 작성하시려면 로그인이 필요합니다.<br/>로그인페이지로 이동하시겠습니까?`,
+          confirmText: "네",
+          cancelText: "아니오",
+          onConfirm: ()=> navigate('/login')
         });
       }
     };

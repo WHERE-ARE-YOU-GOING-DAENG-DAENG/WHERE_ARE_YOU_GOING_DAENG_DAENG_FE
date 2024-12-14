@@ -34,8 +34,8 @@ export const VideoContainer = styled.div`
 
 export const CloseButton = styled.img`
   position: absolute;
-  top: 20px;
-  right: 17px;
+  top: 30px;
+  right: 15px;
   width: 16px;
   height: 16px;
   cursor: pointer;
@@ -65,7 +65,7 @@ export const ShowStoryBottomBar = styled.div`
   color: #ff69b4;
   display: flex;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 20px 20px;
   padding-bottom: 50px;
   border-radius: 10px;
   align-items: center;
@@ -116,3 +116,22 @@ export const UploadImg = styled.div`
   cursor: pointer;
   font-size: 14px;
 `;
+export const ProgressBar = styled.div`
+  display: flex;
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  right: 5px;
+  height: 5px;
+  gap: 2px;
+  z-index: 20;
+`;
+
+export const ProgressItem = styled.div`
+  flex: 1;
+  height: 3px;
+  background-color: ${({ isCompleted }) =>
+    isCompleted ? " #ff69b4" : "#e0e0e0"}; 
+  border-radius: 5px;
+`;
+

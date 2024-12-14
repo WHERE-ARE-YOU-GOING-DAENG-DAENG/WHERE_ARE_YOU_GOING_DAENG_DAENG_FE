@@ -14,6 +14,8 @@ import {
   ImageContainer,
   ShowStoryBottomBar,
   Location,
+  ProgressBar,
+  ProgressItem,
 } from "./StoryCommonStyle";
 import AlertDialog from "../commons/SweetAlert";
 
@@ -69,25 +71,44 @@ function ShowMyStory({ onClose }) {
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
       } catch (error) {
-        if (
-          error.response &&
-          error.response.status === 404 &&
-          error.response.data.message === "스토리가 존재하지 않습니다."
-        ) {
-          AlertDialog({
-            mode: "alert",
-            title: "알림",
-            text: "스토리가 없습니다. 스토리를 추가해주세요.",
-            confirmText: "확인",
-            icon: "warning",
-            onConfirm: onClose,
-          });
+        if (error.response) {
+          if (error.response.status === 401) {
+            AlertDialog({
+              mode: "alert",
+              title: "로그인 필요",
+              text: "스토리를 업로드 하기 위해서는 로그인이 필요합니다.",
+              confirmText: "확인",
+              icon: "warning",
+              onConfirm: onClose,
+            });
+          } else if (error.response.status === 404) {
+            if (error.response.data.message === "스토리가 존재하지 않습니다.") {
+              AlertDialog({
+                mode: "alert",
+                title: "알림",
+                text: "스토리가 없습니다. 스토리를 추가해주세요.",
+                confirmText: "확인",
+                icon: "warning",
+                onConfirm: onClose,
+              });
+            } else {
+              AlertDialog({
+                mode: "alert",
+                title: "알림",
+                text: "땅따먹기 1등을 먼저 해주세요!",
+                confirmText: "확인",
+                icon: "warning",
+              });
+            }
+          } else {
+            console.error("데이터를 가져오는 데 실패했습니다:", error);
+          }
         } else {
-          console.error("데이터를 가져오는 데 실패했습니다:", error);
+          console.error("알 수 없는 에러:", error);
         }
       }
     };
-
+  
     fetchStories();
   }, [onClose]);
 
@@ -120,6 +141,15 @@ function ShowMyStory({ onClose }) {
 
   return (
     <VideoContainer>
+      <ProgressBar>
+        {stories.map((_, index) => (
+          <ProgressItem
+            key={index}
+            isActive={index === currentIndex} 
+            isCompleted={index <= currentIndex} // 현재까지 스토리 색상 주기 
+          />
+        ))}
+      </ProgressBar>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
       <CloseButton src={x} alt="팝업 닫기" onClick={onClose} />
       <ImageContainer>

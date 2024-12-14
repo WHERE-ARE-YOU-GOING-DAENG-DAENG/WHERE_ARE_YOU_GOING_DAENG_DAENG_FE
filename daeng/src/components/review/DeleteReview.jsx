@@ -1,22 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import DeleteBtn from '../../components/commons/DeleteBtn';
 import AlertDialog from '../commons/SweetAlert';
-
-function DeleteReview({ reviewId }) {
+import Loading from '../../components/commons/Loading';
+function DeleteReview({ reviewId, reviewType }) {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async () => {
     AlertDialog({
       mode: "confirm",
-      title: "삭제 확인",
-      text: "삭제된 리뷰는 복구할 수 없습니다.",
+      title: reviewType === '실시간리뷰' ? "땅따먹기 리뷰 삭제" : "리뷰 삭제",
+      text: reviewType === '실시간리뷰' ? "실시간리뷰 삭제 시 땅따먹기에 영향을 줄 수 있습니다.<br/>정말 삭제하시겠습니까?":"삭제된 리뷰는 복구할 수 없습니다.<br/>삭제하시겠습니까?",
       cancelText: "취소",
       icon: "warning",
       confirmText: "삭제",
 
       onConfirm: async () => {
+        setIsLoading(true);
         try {
           const response = await axios.delete(
             `https://dev.daengdaeng-where.link/api/v1/review/${reviewId}`,
@@ -28,6 +30,7 @@ function DeleteReview({ reviewId }) {
             }
           );
           if (response.status === 200) {
+            setIsLoading(false); 
             AlertDialog({
               mode: "alert",
               title: "성공",
@@ -41,6 +44,7 @@ function DeleteReview({ reviewId }) {
           }
         } catch (error) {
           console.error("삭제 실패:", error);
+          setIsLoading(false); 
           AlertDialog({
             mode: "alert",
             title: "오류",
@@ -51,6 +55,10 @@ function DeleteReview({ reviewId }) {
       },
     });
   };
+
+  if (isLoading) {
+    return <Loading label="삭제 중입니다..." />; 
+  }
 
   return (
     <>

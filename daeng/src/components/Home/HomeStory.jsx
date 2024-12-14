@@ -14,9 +14,10 @@ import axios from "axios";
 const HomeStory = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentPopup, setCurrentPopup] = useState(null); 
-  const [detailData, setDetailData] = useState(null); // Detail에서 전달받은 데이터
+  const [detailData, setDetailData] = useState(null); 
   const [stories, setStories] = useState([]);
   const [selectedStory, setSelectedStory] = useState(null);
+  const [hasMyStory, setHasMyStory] = useState(false);
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -30,13 +31,16 @@ const HomeStory = () => {
             withCredentials: true,
           }
         );
+        console.log("전체 스토리 데이터:", response.data);
         
         const fetchedStories = response.data.data.map((story) => ({
           nickname: story.nickname,
           city: story.city,
           cityDetail: story.cityDetail,
           petImage: story.petImage,
+          storyType: story.storyType,
         }));
+        console.log("스토리 데이터:", fetchedStories);
         setStories(fetchedStories);
       } catch (error) {
         console.error("데이터를 가져오는 데 실패했습니다:", error);
@@ -73,8 +77,8 @@ const HomeStory = () => {
   };
 
   const openNextPopup = (data) => {
-    setDetailData(data); // Detail에서 전달받은 데이터를 저장
-    setCurrentPopup("uploadVideo"); // UploadVideo 팝업 열기
+    setDetailData(data); 
+    setCurrentPopup("uploadVideo"); 
   };
 
   const openOtherUserStoryPopup = (story) => {
@@ -104,7 +108,7 @@ const HomeStory = () => {
                 key={index}
                 location={`${story.city} ${story.cityDetail}`}
                 nickname={story.nickname}
-                isPinkBorder={story.petImage ? true : false}
+                isPinkBorder={story.storyType === "unviewed"}
                 imageSrc={story.petImage || "https://via.placeholder.com/80"}
                 onClick={() => openOtherUserStoryPopup(story)} 
                 onClose={closePopup} 
@@ -214,7 +218,7 @@ const ScrollableArea = styled.div`
 const ScrollableStories = styled.div`
   display: flex;
   gap: 15px;
-  transform: translateX(${({ currentIndex }) => -currentIndex * 104}px); /* 카드 크기에 따라 조정 */
+  transform: translateX(${({ currentIndex }) => -currentIndex * 104}px); 
   transition: transform 0.3s ease-in-out;
   align-items: center;
 
