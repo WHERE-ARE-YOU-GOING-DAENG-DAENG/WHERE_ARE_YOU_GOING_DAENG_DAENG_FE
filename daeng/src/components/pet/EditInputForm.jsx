@@ -10,6 +10,7 @@ import DeletePetData from "./DeletePetData";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
 import usePetStore from "../../stores/usePetStore";
+import Loading from '../../components/commons/Loading';
 import { 
   Container, 
   FirstInputContainer, 
@@ -31,6 +32,7 @@ function EditInputForm() {
   const { petId } = useParams();
   const { petInfo, fetchPetData, isLoading, error } = usePetStore(); 
   const [petName, setPetName] = useState(""); 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [preview, setPreview] = useState(null);
   const [selectedPetType, setSelectedPetType] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -60,9 +62,6 @@ function EditInputForm() {
     }
   }, [petInfo]);
 
-  if (isLoading) return <p>로딩 중...</p>;
-  if (error) return <p>{error}</p>;
-
   const getTodayDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -90,7 +89,7 @@ function EditInputForm() {
 
   const handlePetNameChange = (e) => {
     setPetName(e.target.value);
-  }; //이름
+  }; 
 
   const handlePetTypeChange = (e) => {
     setSelectedPetType(e.target.value);  
@@ -174,6 +173,7 @@ function EditInputForm() {
     event.preventDefault();
   
     if (!validateForm()) return;
+    setIsSubmitting(true);
   
     let imageUrl = petPicture;
   
@@ -258,7 +258,14 @@ function EditInputForm() {
       });
       console.error("수정 실패:", error);
     }
+    finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isLoading) return <p>로딩 중...</p>;
+  if (isSubmitting) return <Loading label="댕댕이 정보를 수정 중입니다..." />; 
+  if (error) return <p>{error}</p>;
 
   return (
     <Container>

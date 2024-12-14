@@ -6,6 +6,7 @@ import ConfirmBtn from "../commons/ConfirmBtn";
 import PreferencePlaceOption from "../commons/PreferencePlaceOption";
 import PreferenceFavoriteOption from "../commons/PreferenceFavoriteOption";
 import AlertDialog from "../commons/SweetAlert";
+import Loading from "../commons/Loading"; // Loading 컴포넌트 추가
 import restaurantIcon from "../../assets/icons/restaurant.svg";
 import cafeIcon from "../../assets/icons/cafe.svg";
 import parkIcon from "../../assets/icons/park.svg";
@@ -29,6 +30,10 @@ import parkingLot from "../../assets/icons/parkingLot.svg";
 import axios from "axios";
 
 function PreferenceEdit() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+  const [selectedPlaceOptions, setSelectedPlaceOptions] = useState([]);
+  const [selectedFavoriteOptions, setSelectedFavoriteOptions] = useState([]);
 
   const featureIcons = {
     PLACE_FTE_01: dogfood,
@@ -56,32 +61,33 @@ function PreferenceEdit() {
     PLACE_TYP_09: filmIcon,
   };
 
-  const navigate = useNavigate();
-  const [selectedPlaceOptions, setSelectedPlaceOptions] = useState([]);
-  const [selectedFavoriteOptions, setSelectedFavoriteOptions] = useState([]);
-  
   useEffect(() => {
     const fetchPreferences = async () => {
+      setIsLoading(true); // 로딩 시작
       try {
         const response = await axios.get(
           "https://dev.daengdaeng-where.link/api/v1/preferences",
           { withCredentials: true }
         );
-  
+
         const data = response.data.data || [];
-  
-        const placeTypesMapping = data
-          .find((item) => item.preferenceInfo === "시설종류")
-          ?.preferenceTypes.map(
-            (label) => placeTypes.find((option) => option.name === label)?.codeId
-          ) || [];
-  
-        const placeFeaturesMapping = data
-          .find((item) => item.preferenceInfo === "시설특징")
-          ?.preferenceTypes.map(
-            (label) => placeFeatures.find((option) => option.name === label)?.codeId
-          ) || [];
-  
+
+        const placeTypesMapping =
+          data
+            .find((item) => item.preferenceInfo === "시설종류")
+            ?.preferenceTypes.map(
+              (label) =>
+                placeTypes.find((option) => option.name === label)?.codeId
+            ) || [];
+
+        const placeFeaturesMapping =
+          data
+            .find((item) => item.preferenceInfo === "시설특징")
+            ?.preferenceTypes.map(
+              (label) =>
+                placeFeatures.find((option) => option.name === label)?.codeId
+            ) || [];
+
         setSelectedPlaceOptions(placeTypesMapping);
         setSelectedFavoriteOptions(placeFeaturesMapping);
       } catch (error) {
@@ -92,9 +98,11 @@ function PreferenceEdit() {
           text: "선호도 정보를 불러오지 못했습니다.",
           confirmText: "확인",
         });
+      } finally {
+        setIsLoading(false); // 로딩 종료
       }
     };
-  
+
     fetchPreferences();
   }, []);
 
@@ -124,17 +132,18 @@ function PreferenceEdit() {
       });
       return;
     }
-  
+
     const placePayload = {
       preferenceInfo: "PLACE_TYP",
       preferenceTypes: selectedPlaceOptions,
     };
-  
+
     const favoritePayload = {
       preferenceInfo: "PLACE_FTE",
       preferenceTypes: selectedFavoriteOptions,
     };
-  
+
+    setIsLoading(true); // 로딩 시작
     try {
       await axios.put(
         "https://dev.daengdaeng-where.link/api/v1/preferences",
@@ -144,7 +153,7 @@ function PreferenceEdit() {
           withCredentials: true,
         }
       );
-  
+
       await axios.put(
         "https://dev.daengdaeng-where.link/api/v1/preferences",
         favoritePayload,
@@ -153,7 +162,7 @@ function PreferenceEdit() {
           withCredentials: true,
         }
       );
-  
+
       AlertDialog({
         mode: "alert",
         title: "수정 성공",
@@ -170,12 +179,14 @@ function PreferenceEdit() {
         text: error.response?.data?.message || "알 수 없는 오류가 발생했습니다.",
         confirmText: "확인",
       });
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
   
-
   return (
     <Wrap>
+      {isLoading && <Loading label="로딩 중입니다..." />}
       <Section>
         <Title>어떤 시설에 관심이 많으신가요?</Title>
         <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>

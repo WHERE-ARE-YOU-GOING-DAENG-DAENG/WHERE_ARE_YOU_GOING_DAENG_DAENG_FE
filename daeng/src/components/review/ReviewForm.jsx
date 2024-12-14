@@ -24,8 +24,7 @@ const HeaderContainer = styled.div`
 
 const TitleSection = styled.div`
   display: flex;
-  align-items: center;
-
+  
   @media (max-width: 554px) {
     font-size:10px;
     height: auto;
@@ -35,10 +34,16 @@ const TitleSection = styled.div`
 const PlaceTitle = styled.h2`
   font-size: 23px;
   font-weight: bold;
-  margin-right: 10px;
+  text-align: left;
+    
+  @media (max-width: 554px) {
+    font-size:20px;
+  }
 `;
 
 const ReviewDate = styled.span`
+  flex-shrink: 0;
+  width: 160px;
   font-size: 14px;
   color: #818181;
 `;
@@ -64,31 +69,29 @@ const UserImg = styled.img`
 
 const PetInfoContainer = styled.div`
   flex-grow: 1;
-  margin-left: 20px; 
 `;
 
 const PetName = styled.h3`
   font-size: 16px;
   font-weight: bold;
-  margin-bottom: 10px;
-  margin-right: 30%;
+  margin: 0px;
   display: flex;
   text-align: left;
 
   @media (max-width: 554px) {
-    font-size: 11px;
+    font-size: 15px;
     margin-right: 0%;
     text-align: left;
-    margin-left:-23px;
   }
 `;
 
 const StarSection = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 10px;
 
-  @media (max-width: 554px) {
-    margin-left: -23px;
+  @media(max-width: 554px){
+    margin-top : 5px;
   }
 `;
 
@@ -100,9 +103,9 @@ const StyledStar = styled.img`
 
 
   @media (max-width: 554px) {
-    width: 10px;
-    height: 10px;
-    margin-right: 0px;
+    width: 12px;
+    height: 12px;
+    margin-right: 1px;
   }
 `;
 
@@ -127,7 +130,6 @@ const StyledArrow = styled.img`
 
   @media (max-width: 554px) {
     display: flex;
-    margin-left: 4px;
   }
 `;
 
@@ -169,6 +171,25 @@ const Video = styled.video`
   object-fit: cover;
 `;
 
+const InfoFlex = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+
+  p{
+    margin: 0px;
+    font-size: 14px;
+    font-weight: ${({ reviewType }) => (reviewType === '실시간리뷰' ? 'bold' : 'semi-bold')};
+    color: ${({ reviewType }) => (reviewType === '실시간리뷰' ? '#FF69A9' : '#B3B3B3')};
+
+    @media(max-width: 554px){
+      font-size: 12px;
+    }
+  }
+`
+
 function ReviewForm({ review }) {
   const navigate = useNavigate();
 
@@ -201,7 +222,10 @@ function ReviewForm({ review }) {
             ))}
           </StarSection>
         </PetInfoContainer>
-        <DeleteReview reviewId={review.reviewId} />
+        <InfoFlex reviewType={review.reviewType}>
+          <DeleteReview reviewId={review.reviewId} reviewType={review.reviewType} />
+          <p>{review.reviewType}</p>
+        </InfoFlex>
       </PetContainer>
       <VisitDate>방문 날짜 | {review.visitedAt}</VisitDate>
       <KeywordsContainer>

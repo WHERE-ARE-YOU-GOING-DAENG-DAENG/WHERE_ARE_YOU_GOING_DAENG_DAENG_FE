@@ -18,7 +18,7 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 15px;
   &:hover {
-    opacity: 0.8;
+    background-color: ${({ mode }) => (mode === "review" ? "#FFE1EE" : "#FF96C3")};
   }
   img{
    width: 20px;

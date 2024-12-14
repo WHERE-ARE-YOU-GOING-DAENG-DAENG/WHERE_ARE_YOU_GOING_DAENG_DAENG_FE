@@ -11,6 +11,7 @@ import usePetStore from "../../stores/usePetStore";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Select from "react-select";
+import Loading from "../../components/commons/Loading"; 
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 
 
@@ -266,7 +267,7 @@ const QuestionBox = styled.span`
 
 const CountText = styled.span`
   font-size: 15px;
-  color: #FF0000;
+  color: black;
   margin-top:3px;
   margin-right:10px;
 `
@@ -364,8 +365,28 @@ const getCurrentDate = () => {
 
 function WriteReview({ review = {} }) {
   const { placeId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const [nickname, setNickname] = useState("");
   const [placeName, setPlaceName] = useState("장소 이름 없음");
+  const navigate = useNavigate();
+  const { pets, fetchPetList } = usePetStore();
+  const [selectPet, setSelectPet] = useState([]);
+  const [ratings, setRatings] = useState([false, false, false, false, false]);
+  const [previews, setPreviews] = useState([]);
+  const [placeImgs, setPlaceImgs] = useState([]);
+  const [selectKeywords, setSelectKeywords] = useState([]);
+  const [text, setText] = useState("");
+  const [visitedAt, setVisitedAt] = useState("");
+  const [selectedPetImage, setSelectedPetImage] = useState("");
+  const location = useLocation();
+  const {type} = location.state || {};
+
+  console.log("Received type:", type);
+  
+
+  useEffect(() => {
+    fetchPetList(); 
+  }, [fetchPetList]);
 
   useEffect(() => {
     const fetchUserNickname = async () => {
@@ -405,26 +426,6 @@ function WriteReview({ review = {} }) {
   if (!placeIdValue) {
     return <div>장소 정보를 가져올 수 없습니다.</div>;
   }
-
-  const navigate = useNavigate();
-  const { pets, fetchPetList } = usePetStore();
-  const [selectPet, setSelectPet] = useState([]);
-  const [ratings, setRatings] = useState([false, false, false, false, false]);
-  const [previews, setPreviews] = useState([]);
-  const [placeImgs, setPlaceImgs] = useState([]);
-  const [selectKeywords, setSelectKeywords] = useState([]);
-  const [text, setText] = useState("");
-  const [visitedAt, setVisitedAt] = useState("");
-  const [selectedPetImage, setSelectedPetImage] = useState("");
-  const location = useLocation();
-  const {type} = location.state || {};
-
-  console.log("Received type:", type);
-  
-
-  useEffect(() => {
-    fetchPetList(); 
-  }, [fetchPetList]);
 
   const petOptions = pets.map((pet) => ({
     value: pet.petId,
@@ -498,6 +499,7 @@ const handleFocus = (e) => {
   };
   const handleRemoveImage = (index) => {
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+    setPlaceImgs((prevPlaceImgs) => prevPlaceImgs.filter((_, i) => i !== index));
   };
 
   const handleChange = (e) => {
@@ -616,6 +618,8 @@ const handleFocus = (e) => {
     
     event.preventDefault();
     if (!validateForm()) return;
+
+    setIsLoading(true);
     
     let media = [];
     if (placeImgs.length > 0) {
@@ -631,7 +635,8 @@ const handleFocus = (e) => {
       media, 
       keywords: selectKeywords, 
       pets,
-      visitedAt, 
+      visitedAt,
+      reviewType: type === "realtime" ? "REVIEW_TYP_02" : "REVIEW_TYP_01"
     };
 
     try {
@@ -649,6 +654,7 @@ const handleFocus = (e) => {
         confirmText: "닫기",
         icon: "success",
         onConfirm: () => {
+          setIsLoading(false); 
           navigate(`/total-review/${placeId}`);
           setTimeout(() => {
             window.location.reload(); 
@@ -663,8 +669,14 @@ const handleFocus = (e) => {
         confirmText: "닫기" 
       });
       console.error("리뷰 등록 실패:", error);
+    }finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <Loading label="리뷰를 등록 중입니다..." />;
+  }
 
   return (
     <TotalReviewContainer>
