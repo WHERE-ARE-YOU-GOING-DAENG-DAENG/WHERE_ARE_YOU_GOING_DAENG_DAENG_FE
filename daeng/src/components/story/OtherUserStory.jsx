@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import x from "../../assets/icons/x.svg";
 import crown from "../../assets/icons/crown.svg";
@@ -12,12 +12,14 @@ import {
   ImageContainer,
   ShowStoryBottomBar,
   Location,
+  ProgressBar,
+  ProgressItem,
 } from "./StoryCommonStyle";
 
 function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   const [stories, setStories] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [viewedStories, setViewedStories] = useRef(new Set()); 
+  const [viewedStories, setViewedStories] = useState(new Set());
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -57,34 +59,32 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
     fetchStories();
   }, [nickname, city, cityDetail]);
 
-  useEffect(() => {
-    const markStoryAsViewed = async () => {
-      if (stories.length === 0 || currentIndex >= stories.length) return;
-
-      const currentStoryId = stories[currentIndex]?.storyId;
-
-      if (currentStoryId && !viewedStories.has(currentStoryId)) {
-        try {
-          await axios.put(
-            `https://dev.daengdaeng-where.link/api/v2/story/${currentStoryId}/viewed`,
-            {},
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              withCredentials: true,
-            }
-          );
-          console.log(`스토리 ${currentStoryId}가 확인 처리되었습니다.`);
-          setViewedStories((prev) => new Set(prev).add(currentStoryId));
-        } catch (error) {
-          console.error(`스토리 ${currentStoryId} 확인 처리에 실패했습니다:`, error);
-        }
+  const markStoryAsViewed = useCallback(async (storyId) => {
+    if (!viewedStories.has(storyId)) {
+      try {
+        await axios.put(
+          `https://dev.daengdaeng-where.link/api/v2/story/${storyId}/viewed`,
+          {},
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+        setViewedStories(prev => new Set(prev).add(storyId));
+        console.log(`스토리 ${storyId}가 확인 처리되었습니다.`);
+      } catch (error) {
+        console.error(`스토리 ${storyId} 확인 처리에 실패했습니다:`, error);
       }
-    };
+    }
+  }, [viewedStories]);
 
-    markStoryAsViewed();
-  }, [currentIndex, stories]);
+  useEffect(() => {
+    if (stories.length > 0 && currentIndex < stories.length) {
+      const currentStoryId = stories[currentIndex].storyId;
+      const timer = setTimeout(() => markStoryAsViewed(currentStoryId), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, stories, markStoryAsViewed]);
 
   const handleNext = () => {
     if (currentIndex < stories.length - 1) {
@@ -111,6 +111,15 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
 
   return (
     <VideoContainer>
+      <ProgressBar>
+        {stories.map((_, index) => (
+          <ProgressItem
+            key={index}
+            isActive={index === currentIndex} 
+            isCompleted={index <= currentIndex} // 현재까지 스토리 색상 주기 
+          />
+        ))}
+      </ProgressBar>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
       <CloseButton
         src={x}

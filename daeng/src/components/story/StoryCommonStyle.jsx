@@ -129,7 +129,7 @@ export const ProgressBar = styled.div`
 
 export const ProgressItem = styled.div`
   flex: 1;
-  height: 2px;
+  height: 3px;
   background-color: ${({ isCompleted }) =>
     isCompleted ? " #ff69b4" : "#e0e0e0"}; 
   border-radius: 5px;
