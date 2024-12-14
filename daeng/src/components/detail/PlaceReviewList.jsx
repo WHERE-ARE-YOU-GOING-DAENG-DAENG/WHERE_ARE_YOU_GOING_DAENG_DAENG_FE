@@ -7,6 +7,7 @@ import ReviewKeywords from "../commons/ReviewKeywords";
 import AlertDialog from "../commons/SweetAlert";
 import ReviewSlideshow from '../review/ReviewSlideshow';
 import useUserStore from "../../stores/userStore";
+import DivisionLine from "../user/DivisionLine";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
@@ -165,7 +166,7 @@ const CommentContainer = styled.div`
 const UserId = styled.span`
   font-size:20px;
   font-weight: bold;
-  margin-right: 10px;
+  margin-right: 5px;
   margin-top: 5px;
 
   @media (max-width: 554px) {
@@ -175,7 +176,7 @@ const UserId = styled.span`
 `
 const PetType = styled.span`
   font-size: 15px;
-  margin-left: 5px;
+  margin-left: 3px;
   color:#B3B3B3;
   margin-top:8px;
 
@@ -328,7 +329,7 @@ const PlaceReviewList = ({ data }) => {
                   <CommentContainer>
                     <div>
                       <UserId>{review.nickname}</UserId>
-                      <PetType>{review.pets?.join(", ") || "등록된 반려동물이 없습니다."}</PetType>
+                      <PetType>({review.pets?.join(", ") || "등록된 반려동물이 없습니다."})</PetType>
                     </div>
                     <PostDate>
                       {new Date(review.createdAt).toLocaleDateString()}
