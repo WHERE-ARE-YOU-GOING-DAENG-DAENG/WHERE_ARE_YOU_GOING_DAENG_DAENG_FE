@@ -105,8 +105,7 @@ const KeywordsContainer = styled.div`
     @media (max-width: 554px){
     gap: 5px;
   }
-  }
-  
+  } 
 `
 const TotalUserInfoContainer = styled.div`
   display: flex;

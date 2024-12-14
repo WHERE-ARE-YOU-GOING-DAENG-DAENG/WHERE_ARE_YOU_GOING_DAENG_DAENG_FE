@@ -5,6 +5,7 @@ import ConfirmBtn from "../commons/ConfirmBtn";
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
+import Loading from '../../components/commons/Loading';
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { 
   Container, 
@@ -22,23 +23,9 @@ import {
   NextRegisterBtn 
 } from './CommonStyle';
 
-
-
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-    
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file); 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result); 
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+  const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null); 
   const [imageFile, setImageFile] = useState(null); 
   const [petName, setPetName] = useState(""); 
@@ -71,6 +58,18 @@ function RegisterInputForm() {
 
   const handleFocus = (e) => {
     e.target.showPicker();
+  };
+      
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file); 
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result); 
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const getTodayDate = () => {
@@ -149,6 +148,7 @@ function RegisterInputForm() {
   event.preventDefault();
   
   if (!validateForm()) return;
+  setIsLoading(true); 
 
   let imageUrl = ''; 
 
@@ -185,10 +185,12 @@ function RegisterInputForm() {
         imageUrl = presignedUrl.split("?")[0];
       } else {
         console.error("이미지 업로드 실패:", imageUploadResponse);
+        setIsLoading(false);
         return;
       }
     } catch (error) {
       console.error("이미지 업로드 중 오류 발생:", error);
+      setIsLoading(false);
       return; 
     }
   }
@@ -243,7 +245,14 @@ function RegisterInputForm() {
       confirmText: "닫기"
     });
   }
+  finally {
+    setIsLoading(false); 
+  }
 };
+
+if (isLoading) {
+    return <Loading label="등록 중입니다..." />; 
+  }
 
   const handleNextRegisterClick = () => {
     navigate("/"); 

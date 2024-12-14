@@ -35,6 +35,10 @@ const PlaceTitle = styled.h2`
   font-size: 23px;
   font-weight: bold;
   text-align: left;
+    
+  @media (max-width: 554px) {
+    font-size:20px;
+  }
 `;
 
 const ReviewDate = styled.span`
@@ -65,7 +69,6 @@ const UserImg = styled.img`
 
 const PetInfoContainer = styled.div`
   flex-grow: 1;
- 
 `;
 
 const PetName = styled.h3`
