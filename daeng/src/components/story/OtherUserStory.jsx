@@ -12,6 +12,8 @@ import {
   ImageContainer,
   ShowStoryBottomBar,
   Location,
+  ProgressBar,
+  ProgressItem,
 } from "./StoryCommonStyle";
 
 function OtherUserStory({ onClose, nickname, city, cityDetail }) {
@@ -109,6 +111,15 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
 
   return (
     <VideoContainer>
+      <ProgressBar>
+        {stories.map((_, index) => (
+          <ProgressItem
+            key={index}
+            isActive={index === currentIndex} 
+            isCompleted={index <= currentIndex} // 현재까지 스토리 색상 주기 
+          />
+        ))}
+      </ProgressBar>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
       <CloseButton
         src={x}
