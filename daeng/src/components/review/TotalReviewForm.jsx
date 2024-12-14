@@ -33,7 +33,7 @@ const ReviewPlaceTitle = styled.span`
 
   @media (max-width: 554px) {
     font-size:23px;
-    margin-left:13px;
+    margin-left:4px;
   }
 `
 const PreferenceContainer = styled.div`
@@ -42,11 +42,12 @@ const PreferenceContainer = styled.div`
   flex-direction: row;
   margin-bottom:3%;
   gap:3px;
-  margin-left: 5px;
+  margin-left:-5px;
+  flex-wrap: wrap; 
 
   @media (max-width: 554px) {
-
     gap:5px;
+    margin-left:3px;
   }
 `
 
