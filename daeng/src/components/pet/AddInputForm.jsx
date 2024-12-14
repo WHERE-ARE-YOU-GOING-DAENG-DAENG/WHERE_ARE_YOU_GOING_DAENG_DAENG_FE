@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SelectLabel from "../../components/commons/SelectLabel";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
@@ -6,6 +6,7 @@ import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
+import Loading from '../../components/commons/Loading';
 import { 
   Container, 
   FirstInputContainer, 
@@ -24,20 +25,7 @@ import {
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  
+  const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [imageFile, setImageFile] = useState(null); 
   const [petName, setPetName] = useState("");
@@ -72,8 +60,19 @@ function RegisterInputForm() {
     e.target.showPicker();
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
 
-  //오늘 이후로는 날짜 선택 못하게
   const getTodayDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -149,14 +148,14 @@ function RegisterInputForm() {
     event.preventDefault();
     
     if (!validateForm()) return;
+    setIsLoading(true); 
   
-    let imageUrl = ''; // 이미지 URL을 저장할 변수
+    let imageUrl = ''; 
   
     if (imageFile) {
       try {
-        // Presigned URL 요청
         const presignResponse = await axios.post(
-          'https://https://dev.daengdaeng-where.link/api/v1/S3',
+          'https://dev.daengdaeng-where.link/api/v1/S3',
           {
             prefix: 'PET',
             fileNames: [imageFile.name]
@@ -186,10 +185,12 @@ function RegisterInputForm() {
           imageUrl = presignedUrl.split("?")[0]; 
         } else {
           console.error("이미지 업로드 실패:", imageUploadResponse);
+          setIsLoading(false);
           return;
         }
       } catch (error) {
         console.error("이미지 업로드 중 오류 발생:", error);
+        setIsLoading(false);
         return;
       }
     }
@@ -215,6 +216,8 @@ function RegisterInputForm() {
       }
     );
       if (response.status === 200) {
+        setIsLoading(false);
+        navigate("/my-page"); 
         AlertDialog({
           mode: "alert", 
           title: "성공",
@@ -232,9 +235,21 @@ function RegisterInputForm() {
         })
       }
     } catch (error) {
-      alert("서버와 통신 중 오류가 발생했습니다.");
+      AlertDialog({
+        mode: "alert", 
+        title: "실패",
+        text: "등록 중 오류가 발생했습니다. 다시 시도해주세요",
+        confirmText: "닫기"
+      });
+    }
+    finally {
+      setIsLoading(false); 
     }
   };
+
+  if (isLoading) {
+    return <Loading label="등록 중입니다..." />; 
+  }
 
   return (
     <Container>

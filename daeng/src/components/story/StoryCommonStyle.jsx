@@ -34,8 +34,8 @@ export const VideoContainer = styled.div`
 
 export const CloseButton = styled.img`
   position: absolute;
-  top: 20px;
-  right: 17px;
+  top: 30px;
+  right: 15px;
   width: 16px;
   height: 16px;
   cursor: pointer;
@@ -65,7 +65,7 @@ export const ShowStoryBottomBar = styled.div`
   color: #ff69b4;
   display: flex;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 20px 20px;
   padding-bottom: 50px;
   border-radius: 10px;
   align-items: center;
