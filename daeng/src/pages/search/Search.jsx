@@ -15,6 +15,7 @@ import axiosInstance from "../../services/axiosInstance"
 
 const Search = () => {
     const location = useLocation();
+    const [isRecommend, setIsRecommend] = useState(false);
     const [query, setQuery] = useState("");
     const [places, setPlaces] = useState([]);
     const [sortIndex, setSortIndex] = useState(0);
@@ -41,7 +42,7 @@ const Search = () => {
       }else if (isMapLoaded && userLocation) {
         fetchNearestPlaces();
       }
-    },[userLocation, isMapLoaded,location.state?.placeType]);
+    },[userLocation, isMapLoaded, location.state?.placeType]);
   
     const fetchNearestPlaces = async () => {
       if (!userLocation) return;
@@ -55,7 +56,8 @@ const Search = () => {
           withCredentials: true,
         });
         setPlaces(response.data.data);
-        setNearPlaces(response.data.data)
+        setNearPlaces(response.data.data);
+        setIsRecommend(true);
       }catch (error){
         if (error.response) {
           AlertDialog({
@@ -95,7 +97,8 @@ const Search = () => {
       if (query && userLocation) {
         setIsFetchingNearPlaces(false);
         setIsLoading(true); 
-        setPlaces([]); 
+        setPlaces([]);
+        setIsRecommend(false);
         const payload = {
           keyword: query,
           latitude: userLocation.lat,
@@ -169,7 +172,7 @@ const Search = () => {
         <>
           <Header label="장소검색"/>
           <SearchBar query={query} onSearch={handleSearch} />
-          <Map data={places} removeUi={false} isLoading={isLoading} onMapLoaded={setIsMapLoaded}/>
+          <Map data={places} removeUi={false} isLoading={isLoading} onMapLoaded={setIsMapLoaded} isRecommend={isRecommend}/>
           <FilterBtnList keywords={keywords} setKeywords={setKeywords} setFilter={setFilter}/>
           <Sorting 
             mode="list" 

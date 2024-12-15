@@ -20,7 +20,7 @@ const MapContainer = styled.div`
   }
 `;
 
-const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded}) => {
+const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecommend}) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const { isLoaded } = useGoogleMapsStore();
@@ -30,6 +30,7 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded}) => {
   const userLocation = useLocationStore((state)=> state.userLocation);
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
   const navigate = useNavigate();
+  const [userInitiatedMove, setUserInitiatedMove] = useState(false);
 
   useEffect(() => {
     if (isLoaded && !map) {
@@ -40,6 +41,7 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded}) => {
         mapTypeControl: !removeUi,
         fullscreenControl: !removeUi,
         zoomControl: true,
+        gestureHandling: "greedy"
       });
       setMap(googleMap);
       onMapLoaded(true);
@@ -130,9 +132,10 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded}) => {
  useEffect(() => {
   if (isLoaded && map) {
     markers.forEach((marker) => marker.onRemove && marker.onRemove());
+    
     setMarkers([]);
-
     if (data && data.length > 0) {
+      setUserInitiatedMove(false);
       const newMarkers = data.map((location) => (
         <CustomOverlay
           key={location.placeId}
@@ -148,7 +151,7 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded}) => {
 }, [isLoaded, map, data]);
 
 useEffect(() => {
-  if (map && markers.length > 0 && data && data.length > 0) {
+  if (map && markers.length > 0 && !isRecommend && data && data.length > 0 && !userInitiatedMove) {
     const firstLocation = data[0];
     if (firstLocation.latitude && firstLocation.longitude) {
       const firstMarkerPosition = {
@@ -161,7 +164,13 @@ useEffect(() => {
       console.warn("Invalid location data:", firstLocation);
     }
   }
-}, [map, markers, data]);
+}, [map, markers, data, userInitiatedMove, isRecommend]);
+
+useEffect(() => {
+  if (map) {
+    map.addListener("dragstart", () => setUserInitiatedMove(true));
+  }
+}, [map]);
 
   return (
     <MapContainer ref={mapRef} $data={data} $removeUi={removeUi}>
