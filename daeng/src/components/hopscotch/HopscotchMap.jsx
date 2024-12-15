@@ -43,7 +43,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
 
   const handleMarkerClick = (marker, region, subRegion, center) => {
     const regionOwner = ownerList.visitInfo?.[region]?.[subRegion] || null;
-
+    
     const ownerInfo = regionOwner
       ? {
           nickname: regionOwner.nickname,
@@ -105,6 +105,10 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
         center,
         zoom: 11,
         disableDefaultUI: removeUi,
+        mapTypeControl: !removeUi,
+        fullscreenControl: !removeUi,
+        zoomControl: true,
+        gestureHandling: "greedy"
       });
       setMap(googleMap);
     }

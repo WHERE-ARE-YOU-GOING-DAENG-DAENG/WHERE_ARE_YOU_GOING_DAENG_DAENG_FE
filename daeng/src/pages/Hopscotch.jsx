@@ -148,7 +148,7 @@ const Hopscotch = () => {
     <Container>
       {showConfetti && <Confetti />}
       <Header label="땅따먹기" />
-      <HopscotchMap removeUi={false} setSelectedArea={setSelectedArea} changeCenter={myLand}/>
+      <HopscotchMap removeUi={true} setSelectedArea={setSelectedArea} changeCenter={myLand}/>
       <LandContainer>
         {selectedArea[0]? (
           <>
