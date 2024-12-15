@@ -137,6 +137,11 @@ const Hopscotch = () => {
     );
   };
 
+  const handleMyLandClick = (region, subRegion) => {
+    setMyLand({ region, subRegion });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
     if (isOwned()) {
       setShowConfetti(true);
@@ -156,7 +161,7 @@ const Hopscotch = () => {
               <Pink>{selectedArea[0]} {selectedArea[1]}</Pink>
               {isOwned() ? "를(을) 점령하셨습니다!" : " 점령까지 남은 방문횟수"}
             </Label>
-            <ProgressBar current={getCurrentVisitCount()} total={isOwned() ? selectedArea[2] : selectedArea[2]+1 || 1} />
+            <ProgressBar key={`${selectedArea[0]}-${selectedArea[1]}`} current={getCurrentVisitCount()} total={isOwned() ? selectedArea[2] : selectedArea[2]+1 || 1} />
           </>
         ):<Label>점령하고 싶은 땅을 선택해보세요</Label>}
         <Label>
@@ -172,7 +177,7 @@ const Hopscotch = () => {
             {myLandlist.lands.map((land) =>
               land.cityDetails.map((detail) => (
                 <MyLandWrapper key={`${land.city}-${detail.cityDetail}`}>
-                  <MyLandLabel region={land.city} subRegion={detail.cityDetail} onClick={()=>setMyLand({region:land.city, subRegion:detail.cityDetail})}/>
+                  <MyLandLabel region={land.city} subRegion={detail.cityDetail} onClick={() => handleMyLandClick(land.city, detail.cityDetail)}/>
                 </MyLandWrapper>
               ))
             )}
