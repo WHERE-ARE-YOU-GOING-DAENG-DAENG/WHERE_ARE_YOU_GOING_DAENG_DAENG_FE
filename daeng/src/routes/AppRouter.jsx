@@ -25,6 +25,7 @@ import { setupAxiosInterceptors } from '../services/axiosInstance';
 import Hopscotch from '../pages/Hopscotch';
 import EventPage from '../pages/user/EventPage';
 import HowToGuidePage from '../pages/HowToGuidePage';
+import AdminPage from '../pages/AdminPage';
 
 const trackPageView = () => {
   if (window.wcs) {
@@ -75,6 +76,7 @@ const AppRoutes = () => {
         <Route path="/visit-list/:id" element={<PlaceVisitList />} />
         <Route path="/hopscotch" element={<Hopscotch />} />
         <Route path="/how-to-guide" element={<HowToGuidePage />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="/error" element={<Error />} />
         <Route path="*" element={<Error />} />
       </Routes>
