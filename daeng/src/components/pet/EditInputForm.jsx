@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import usePetStore from "../../stores/usePetStore";
 import upload from '../../assets/icons/upload.svg';
 import Loading from '../../components/commons/Loading';
+import { getTodayDate } from '../../utils/dateUtils'; 
 import { 
   Container, 
   FirstInputContainer, 
@@ -62,14 +63,6 @@ function EditInputForm() {
       setPetPicture(petInfo.image || "");
     }
   }, [petInfo]);
-
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0"); 
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }; 
 
   const handleFocus = (e) => {
     e.target.showPicker();
