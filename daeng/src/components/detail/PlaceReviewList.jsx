@@ -7,7 +7,6 @@ import ReviewKeywords from "../commons/ReviewKeywords";
 import AlertDialog from "../commons/SweetAlert";
 import ReviewSlideshow from '../review/ReviewSlideshow';
 import useUserStore from "../../stores/userStore";
-import DivisionLine from "../user/DivisionLine";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
