@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import flag from "../../assets/icons/flag.svg";
 import styled, { keyframes } from "styled-components";
 
-// 애니메이션 정의
 const fillAnimation = (progress) => keyframes`
   0% {
     width: 0%;

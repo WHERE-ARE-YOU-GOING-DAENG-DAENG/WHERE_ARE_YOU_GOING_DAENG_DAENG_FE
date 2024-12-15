@@ -115,7 +115,7 @@ const PlaceTitle = ({ data, setData }) => {
       }
     }
 
-    const handleReviewClick = async() => {
+    const handleReviewClick = async(placeId) => {
       if (userId) {
         if(userLocation.lat !== 0 || userLocation.lng !== 0){
           try{
@@ -166,7 +166,7 @@ const PlaceTitle = ({ data, setData }) => {
         <Container>
             <TitleSection>
                 <h1>{data.name}</h1>
-                <SquareBtn mode="visit" onClick={handleVisitListClick}/>
+                <SquareBtn mode="visit" onClick={()=>handleVisitListClick(data.placeId)}/>
                 {/* <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={() => handleVisitListClick(data.placeId)}/> */}
             </TitleSection>
             <SubTitleSection>
@@ -183,7 +183,7 @@ const PlaceTitle = ({ data, setData }) => {
                       onClick={()=>toggleBookmark(data.placeId, data.isFavorite)}
                   />
                 </Info>
-                <SquareBtn mode="review" onClick={handleReviewClick}/>
+                <SquareBtn mode="review" onClick={()=>handleReviewClick(data.placeId)}/>
             </SubTitleSection>
         </Container>
     )
