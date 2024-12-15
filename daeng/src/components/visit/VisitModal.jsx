@@ -39,7 +39,7 @@ const Modal = styled.div`
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
     animation: ${({ isClosing }) => (isClosing ? slideDown : slideUp)} 0.4s ease-out;
-    z-index: 999;
+    z-index: 99;
     overflow-y: auto; 
     -webkit-overflow-scrolling: touch;
     @media (max-width: 554px) {
@@ -54,7 +54,7 @@ const Overlay = styled.div`
     width: 554px;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 998;
+    z-index: 98;
     @media (max-width: 554px) {
         width: 100%;
     }
