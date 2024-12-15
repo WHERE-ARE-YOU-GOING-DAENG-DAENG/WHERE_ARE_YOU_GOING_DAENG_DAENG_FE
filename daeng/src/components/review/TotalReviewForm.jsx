@@ -281,7 +281,7 @@ const TotalReviewForm = () => {
   const [sortedType, setSortedType] = useState("LATEST");
   const [placeName, setPlaceName] = useState("");
   const [isExpanded, setIsExpanded] = useState({});
-  const observerRef = useRef(null); //무한스크롤
+  const observerRef = useRef(null); 
 
   useEffect(() => {
     if (!placeId) return;
