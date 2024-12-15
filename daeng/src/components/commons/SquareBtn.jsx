@@ -27,6 +27,7 @@ const Button = styled.button`
     max-width: 150px;
     font-size: 11px;
     padding: 8px 10px;
+    border: ${({ mode }) => (mode === "review" ? "1px solid #FF69A9" : "none")};
     img{
         width: 16px;
     }  
