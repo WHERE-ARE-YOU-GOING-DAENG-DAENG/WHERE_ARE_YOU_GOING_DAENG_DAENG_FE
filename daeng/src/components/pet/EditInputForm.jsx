@@ -11,9 +11,10 @@ import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/Common
 import { useNavigate } from "react-router-dom";
 import usePetStore from "../../stores/usePetStore";
 import upload from '../../assets/icons/upload.svg';
-import useImageUpload  from "../../hooks/usePetImageUpload";
+import usePetImageUpload  from "../../hooks/usePetImageUpload";
 import Loading from '../../components/commons/Loading';
 import { getTodayDate } from '../../utils/dateUtils'; 
+import { validatePetForm } from '../../utils/petValidation';
 import { 
   Container, 
   FirstInputContainer, 
@@ -33,7 +34,7 @@ import {
 
 function EditInputForm() {
   const { petId } = useParams();
-  const { uploadImageToS3, isUploading } = useImageUpload();
+  const { uploadImageToS3, isUploading } = usePetImageUpload();
   const { petInfo, fetchPetData, isLoading, error } = usePetStore(); 
   const [petName, setPetName] = useState(""); 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -103,73 +104,19 @@ function EditInputForm() {
     setSelectedSize(sizeCode); 
   }; 
 
-  const validateForm = () => {
-    const nameRegex = /^[가-힣a-zA-Z\s]+$/;
-  
-    if (!petName || !nameRegex.test(petName)) {
-      AlertDialog({
-        mode: "alert", 
-        title: "입력 오류",
-        text: "댕댕이 이름은 한글 또는 영문만 입력 가능합니다.",
-        confirmText: "확인"
-      });
-      return false;
-    }
-    if (!selectedPetType) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 견종을 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-
-    if(!setPetBirth) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 생일을 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-
-    if (!selectedGender) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 성별을 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-    if (!selectedNeutering) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 중성화 여부를 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-    if (!selectedSize || !petSizeOptions.some(option => option.code === selectedSize)) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 크기를 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-    return true;
-  }; 
-
-
   const handlePetDataUpdate = async (event) => {
     event.preventDefault();
-    if (!validateForm()) return;
 
+    const isValid = validatePetForm({
+      petName,
+      selectedPetType,
+      petBirth,
+      selectedGender,
+      selectedNeutering,
+      selectedSize,
+    });
+
+    if (!isValid) return;
     setIsSubmitting(true);
 
     let imageUrl = petPicture;
