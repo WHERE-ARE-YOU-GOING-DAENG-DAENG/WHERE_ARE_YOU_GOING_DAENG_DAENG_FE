@@ -7,6 +7,7 @@ import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
 import Loading from '../../components/commons/Loading';
 import upload from '../../assets/icons/upload.svg';
+import { getTodayDate } from '../../utils/dateUtils'; 
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { 
   Container, 
@@ -73,14 +74,6 @@ function RegisterInputForm() {
       reader.readAsDataURL(file);
     }
   };
-
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0"); 
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }; 
   
   //유효성 검사
   const validateForm = () => {
