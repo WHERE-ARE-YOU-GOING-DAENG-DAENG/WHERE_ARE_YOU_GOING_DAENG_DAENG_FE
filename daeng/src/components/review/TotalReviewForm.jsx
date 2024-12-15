@@ -5,7 +5,6 @@ import star from '../../assets/icons/star.svg';
 import notfillstar from "../../assets/icons/notfillstar.svg";
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import ReviewSorting from './ReviewSorting';
-import useTotalReviewStore from '../../stores/UseTotalReviewStore';
 import AiReviewSummary from './AIReview';
 import axios from 'axios';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
