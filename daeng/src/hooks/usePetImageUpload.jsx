@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const useImageUpload = () => {
+const usePetImageUpload = () => {
   const [isUploading, setIsUploading] = useState(false);
 
   const uploadImageToS3 = async (file) => {
@@ -48,4 +48,4 @@ const useImageUpload = () => {
   return { uploadImageToS3, isUploading };
 };
 
-export default useImageUpload;
+export default usePetImageUpload;
