@@ -5,6 +5,7 @@ import ConfirmBtn from "../commons/ConfirmBtn";
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
+import useImageUpload  from "../../hooks/usePetImageUpload";
 import Loading from '../../components/commons/Loading';
 import upload from '../../assets/icons/upload.svg';
 import { getTodayDate } from '../../utils/dateUtils'; 
@@ -28,6 +29,7 @@ import {
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
+  const { uploadImageToS3, isUploading } = useImageUpload();
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null); 
   const [imageFile, setImageFile] = useState(null); 
@@ -140,55 +142,28 @@ function RegisterInputForm() {
 
 
   const handleSubmit = async (event) => {
-  event.preventDefault();
-  
-  if (!validateForm()) return;
-  setIsLoading(true); 
-
-  let imageUrl = ''; 
-
-  if (imageFile) {
-    try {
-      const presignResponse = await axios.post(
-        'https://dev.daengdaeng-where.link/api/v1/S3',
-        {
-          prefix: 'PET',
-          fileNames: [imageFile.name]
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true
-        }
-      );
-  
+    event.preventDefault();
     
-      const presignedUrl = presignResponse.data?.data?.[imageFile.name];
-      if (!presignedUrl) {
-        throw new Error('Presigned URL이 없습니다.');
-      }
-
-      const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
-        headers: {
-          'Content-Type': imageFile.type,
-        },
-        withCredentials: true,
-      });
+    if (!validateForm()) return;
+    setIsLoading(true); 
   
-      if (imageUploadResponse.status === 200) {
-        imageUrl = presignedUrl.split("?")[0];
-      } else {
-        console.error("이미지 업로드 실패:", imageUploadResponse);
+    let imageUrl = ''; 
+  
+    if (imageFile) {
+      try {
+        imageUrl = await uploadImageToS3(imageFile); 
+      } catch (error) {
+        AlertDialog({
+          mode: "alert",
+          title: "이미지 업로드 실패",
+          text: "이미지를 업로드하는 중 문제가 발생했습니다. 다시 시도해주세요.",
+          confirmText: "확인",
+        });
         setIsLoading(false);
         return;
       }
-    } catch (error) {
-      console.error("이미지 업로드 중 오류 발생:", error);
-      setIsLoading(false);
-      return; 
     }
-  }
+    
   
   const petData = {
     name: petName, 
