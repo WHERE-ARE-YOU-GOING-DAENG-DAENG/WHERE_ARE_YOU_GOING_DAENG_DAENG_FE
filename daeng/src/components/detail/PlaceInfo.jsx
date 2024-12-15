@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import dogIcon from "../../assets/icons/detailDog.svg"
-import addressIcon from "../../assets/icons/place.svg"
-import hourIcon from "../../assets/icons/operatingHour.svg"
-import callnumberIcon from "../../assets/icons/callnumber.svg"
-import websiteIcon from "../../assets/icons/website.svg"
-import inandout from "../../assets/icons/indoorandoutdoor.svg"
-import inIcon from "../../assets/icons/indoor.svg"
-import outIcon from "../../assets/icons/outdoor.svg"
+import dogIcon from "../../assets/icons/detailmark.svg";
+import addressIcon from "../../assets/icons/place.svg";
+import hourIcon from "../../assets/icons/operatingHour.svg";
+import callnumberIcon from "../../assets/icons/callnumber.svg";
+import websiteIcon from "../../assets/icons/website.svg";
+import inandout from "../../assets/icons/indoorandoutdoor.svg";
+import inIcon from "../../assets/icons/indoor.svg";
+import outIcon from "../../assets/icons/outdoor.svg";
 import PlaceOption from "../../components/commons/PlaceOption";
 
 const InfoCard = styled.div`
@@ -66,11 +66,11 @@ const InfoCard = styled.div`
     .dog-icon {
     position: absolute;
     bottom: 20px;
-    right: -10px;
+    right: 0px;
 
     @media (max-width: 554px){
       bottom: 20px;
-      width: 30%;
+      width: 35%;
     }
 
   }
