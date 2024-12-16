@@ -20,7 +20,7 @@ const SortingOption = styled.span`
   color: ${({ isActive }) => (isActive ? '#FF69A9' : '#B3B3B3')};
 
   &:last-child {
-    margin-right: 33px; 
+    margin-right: 33px;
   }
 
   &:hover {
@@ -31,11 +31,10 @@ const SortingOption = styled.span`
     font-size: 10px;
 
     &:last-child {
-      margin-right: 40px; 
+      margin-right: 40px;
     }
   }
 `;
-
 
 const ReviewSorting = ({ sortingOptions, activeIndex, onSortChange }) => {
   return (
