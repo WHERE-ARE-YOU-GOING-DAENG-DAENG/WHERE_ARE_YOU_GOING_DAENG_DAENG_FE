@@ -3,7 +3,6 @@ import HomeSlider from "../components/Home/HomeSlider";
 import HomeStory from "../components/Home/HomeStory";
 import HomeDogPlaces from "../components/Home/HomeDogPlaces";
 import HomeTrendingPlaces from "../components/Home/HomeTrendingPlaces";
-import HomeSanta from "../components/Home/HomeSanta";
 import HomeLogout from "../components/Home/HomeLogout";
 import HomeRecommendPlaces from "../components/Home/HomeRecommendPlaces";
 import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
@@ -36,7 +35,7 @@ function Home() {
   useEffect(() => {
     const loginStatus = checkLoginStatusInCookie();
     setIsLoggedIn(loginStatus);
-    console.log("현재위치", userLocation) //로그 삭제
+    console.log("현재위치", userLocation)
     
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -90,7 +89,6 @@ function Home() {
       <HomeStory />
       {isLoggedIn ? <HomeDogPlaces /> : <HomeLogout />}
       <HomeTrendingPlaces />
-      <HomeSanta />
       <HomeRecommendPlaces />
       <HomeKeywordPlaces />
       <Footer />
