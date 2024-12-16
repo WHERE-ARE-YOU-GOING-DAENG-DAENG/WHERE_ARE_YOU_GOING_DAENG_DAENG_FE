@@ -1,34 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import SelectLabel from "../commons/SelectLabel";
+import useGoogleMapsStore from "../../stores/useGoogleMapsStore";
 
 const GoogleAddressSearch = ({ onAddressSelect }) => {
   const inputRef = useRef(null);
-  const [address, setAddress] = useState("");//주소
-  const [postalCode, setPostalCode] = useState("");//우편번호
-  const [latitude, setLatitude] = useState("");//위도 
+  const [address, setAddress] = useState(""); //주소
+  const [postalCode, setPostalCode] = useState(""); //우편번호
+  const [latitude, setLatitude] = useState(""); //위도
   const [longitude, setLongitude] = useState(""); //경도
 
-  useEffect(() => {
-    const loadGoogleMapsScript = () => {
-      if (!window.google) {
-        return new Promise((resolve, reject) => {
-          const script = document.createElement("script");
-          script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY}&libraries=places`;
-          script.async = true;
-          script.onload = resolve;
-          script.onerror = reject;
-          document.body.appendChild(script);
-        });
-      } else {
-        return Promise.resolve();
-      }
-    };
+  const { isLoaded, loadGoogleMaps } = useGoogleMapsStore(); 
 
-    loadGoogleMapsScript()
-      .then(() => initializeAutocomplete())
-      .catch((error) => console.error("Google Maps API 로드 실패:", error));
-  }, [onAddressSelect]);
+  useEffect(() => {
+    loadGoogleMaps(); 
+  }, [loadGoogleMaps]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      initializeAutocomplete(); // Google Maps API가 로드되면 autocomplete 초기화
+    }
+  }, [isLoaded]);
 
   const initializeAutocomplete = () => {
     if (!window.google || !window.google.maps) {
@@ -113,7 +105,6 @@ const GoogleAddressSearch = ({ onAddressSelect }) => {
 
 export default GoogleAddressSearch;
 
-// 스타일링
 const FormWrapper = styled.div`
   background-color: #fff0f6;
   border-radius: 10px;
