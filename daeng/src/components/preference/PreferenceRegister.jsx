@@ -118,15 +118,18 @@ function PreferenceRegister() {
           withCredentials: true,
         }
       );
-
       AlertDialog({
-        mode: "alert",
+        mode: "confirm", 
         title: "등록 성공",
-        text: "선호 정보가 성공적으로 등록되었습니다!",
-        confirmText: "확인",
+        text: "펫을 등록하시겠습니까?",
+        confirmText: "예",
+        cancelText: "아니요",
         icon: "success",
         onConfirm: () => {
-          navigate("/pet-register");
+          navigate("/pet-register"); 
+        },
+        onCancel: () => {
+          navigate("/"); 
         },
       });
     } catch (error) {
