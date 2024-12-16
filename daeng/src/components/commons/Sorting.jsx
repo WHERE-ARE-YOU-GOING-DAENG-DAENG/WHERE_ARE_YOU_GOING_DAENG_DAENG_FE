@@ -1,7 +1,41 @@
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import starIcon from '../../assets/icons/star.svg'
 import { useState } from 'react';
+
+const Sorting = ({ mode, label, sortingOptions, activeIndex, onSortChange, rating, totalReviews }) => {
+  const [activeTab, setActiveTab] = useState(activeIndex);
+
+  const handleChangeTab = (index) => {
+    setActiveTab(index);
+    onSortChange(index);
+  }
+  
+  return (
+    <Container>
+      <Label>
+        {mode === 'list' && label}
+        {mode === 'review' && (
+          <div className="rating">
+            <img className="star" src={starIcon} alt="별" />
+            <span className="score">{rating} / 5</span>
+            <span className="total">총 {totalReviews}개</span>
+          </div>
+        )}
+      </Label>
+      <SortingOptions>
+        {sortingOptions.map((option, index) => (
+          <span
+            key={index}
+            className={index === activeTab ? 'active' : ''}
+            onClick={() => handleChangeTab(index)}
+          >
+            {option}
+          </span>
+        ))}
+      </SortingOptions>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   display: flex;
@@ -74,58 +108,5 @@ const SortingOptions = styled.div`
     }
   }
 `;
-
-const Sorting = ({ mode, label, sortingOptions, activeIndex, onSortChange, rating, totalReviews }) => {
-  const [activeTab, setActiveTab] = useState(activeIndex);
-
-  const handleChangeTab = (index) => {
-    setActiveTab(index);
-    onSortChange(index);
-  }
-  
-  return (
-    <Container>
-      <Label>
-        {mode === 'list' && label}
-        {mode === 'review' && (
-          <div className="rating">
-            <img className="star" src={starIcon} alt="별" />
-            <span className="score">{rating} / 5</span>
-            <span className="total">총 {totalReviews}개</span>
-          </div>
-        )}
-      </Label>
-      <SortingOptions>
-        {sortingOptions.map((option, index) => (
-          <span
-            key={index}
-            className={index === activeTab ? 'active' : ''}
-            onClick={() => handleChangeTab(index)}
-          >
-            {option}
-          </span>
-        ))}
-      </SortingOptions>
-    </Container>
-  );
-};
-
-Sorting.propTypes = {
-  mode: PropTypes.oneOf(['list', 'review']).isRequired,
-  label: PropTypes.string,
-  sortingOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
-  activeIndex: PropTypes.number,
-  onSortChange: PropTypes.func,
-  rating: PropTypes.number,
-  totalReviews: PropTypes.number,
-};
-
-Sorting.defaultProps = {
-  label: '',
-  activeIndex: 0,
-  onSortChange: () => {},
-  rating: 0,
-  totalReviews: 0,
-};
 
 export default Sorting;
