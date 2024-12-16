@@ -163,7 +163,7 @@ function UserEdit() {
         });
       }
     } finally {
-      setIsLoading(false); // 로딩 종료
+      setIsLoading(false);
     }
   };
 
@@ -236,7 +236,7 @@ function UserEdit() {
         });
       }
     } finally {
-      setIsLoading(false); // 로딩 종료
+      setIsLoading(false);
     }
   };
 
