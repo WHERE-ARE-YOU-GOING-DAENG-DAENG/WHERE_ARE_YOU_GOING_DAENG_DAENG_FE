@@ -1,14 +1,6 @@
 import styled from "styled-components";
 import VisitTimePets from "./VisitTimePets";
 
-const DateTitle = styled.h2`
-  font-size: 20px;
-  background-color: #FDF2F8;
-  padding: 10px;
-  border-radius: 10px;
-  color: #333;
-`;
-
 const VisitDateSection = ({ visitDate, petsAtVisitTimes, onVisitClick }) => {
   return (
     <div>
@@ -30,5 +22,13 @@ const VisitDateSection = ({ visitDate, petsAtVisitTimes, onVisitClick }) => {
     </div>
   );
 };
+
+const DateTitle = styled.h2`
+  font-size: 20px;
+  background-color: #FDF2F8;
+  padding: 10px;
+  border-radius: 10px;
+  color: #333;
+`;
 
 export default VisitDateSection;

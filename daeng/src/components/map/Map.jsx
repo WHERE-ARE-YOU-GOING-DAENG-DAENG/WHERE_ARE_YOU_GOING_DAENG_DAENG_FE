@@ -1,24 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import markerIcon from "../../assets/icons/marker.svg";
 import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
 import BookMarker from "../commons/BookMarker";
 import useGoogleMapsStore from "../../stores/useGoogleMapsStore";
 import CustomOverlay from "./CustomOverlay";
-import AlertDialog from "../../components/commons/SweetAlert";
 import useLocationStore from "../../stores/useLocationStore";
 import Loading from "../commons/Loading";
 import { useNavigate } from "react-router-dom";
-
-const MapContainer = styled.div`
-  width: 100%;
-  height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 160px)" : "485px")};
-  display: flex;
-  @media (max-width: 554px) {
-    height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 150px)" : "385px")};
-  }
-`;
 
 const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecommend}) => {
   const mapRef = useRef(null);
@@ -129,7 +118,7 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecomme
     };
   }, [map, isLoaded, setUserLocation]);
   
- useEffect(() => {
+  useEffect(() => {
   if (isLoaded && map) {
     markers.forEach((marker) => marker.onRemove && marker.onRemove());
     
@@ -185,19 +174,13 @@ useEffect(() => {
   );
 };
 
-Map.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      favoriteId: PropTypes.number.isRequired,
-      placeId: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      streetAddresses: PropTypes.string.isRequired,
-      latitude: PropTypes.number.isRequired,
-      longitude: PropTypes.number.isRequired,
-      openHours: PropTypes.string.isRequired,
-    })
-  ),
-  removeUi: PropTypes.bool,
-};
+const MapContainer = styled.div`
+  width: 100%;
+  height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 160px)" : "485px")};
+  display: flex;
+  @media (max-width: 554px) {
+    height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 150px)" : "385px")};
+  }
+`;
 
 export default Map;

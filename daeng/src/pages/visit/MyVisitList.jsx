@@ -11,27 +11,6 @@ import useUserStore from "../../stores/userStore";
 
 dayjs.extend(isBetween);
 
-const Division = styled.div`
-    height: 1px;
-    background-color: #E5E5E5;
-    width: 100%;
-    margin: 20px 0px;
-`;
-
-const Text = styled.div`
-    display: flex;
-    font-weight: bold;
-    font-size: 20px;
-    margin-left: 40px;
-    margin-bottom: 20px;
-    span{
-    color: #FF4B98;
-}
-    @media(max-width:554px){
-    margin-left: 8%;
-    }
-`
-
 const MyVisitList = () => {
   const fetchVisits = useVisitStore((state)=>state.fetchVisits);
   const nickname = useUserStore((state)=> state.nickname);
@@ -55,5 +34,26 @@ const MyVisitList = () => {
     </>
   );
 };
+
+const Division = styled.div`
+    height: 1px;
+    background-color: #E5E5E5;
+    width: 100%;
+    margin: 20px 0px;
+`;
+
+const Text = styled.div`
+    display: flex;
+    font-weight: bold;
+    font-size: 20px;
+    margin-left: 40px;
+    margin-bottom: 20px;
+    span{
+    color: #FF4B98;
+}
+    @media(max-width:554px){
+    margin-left: 8%;
+    }
+`
 
 export default MyVisitList;

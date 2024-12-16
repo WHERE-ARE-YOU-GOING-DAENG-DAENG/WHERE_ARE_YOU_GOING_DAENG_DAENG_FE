@@ -6,82 +6,6 @@ import joinIcon from "../../assets/icons/join.svg";
 import ReviewKeywords from "../../components/commons/ReviewKeywords";
 import noImage from "../../assets/icons/reviewDefaultImg.svg"
 
-const TimeContainer = styled.div`
-  margin-bottom: 16px;
-  text-align: left;
-`;
-
-const TimeTitle = styled.h3`
-  font-size: 18px;
-  color: #555;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const PetsCount = styled.span`
-  font-size: 14px;
-  color: #888;
-  margin-left: 8px;
-`;
-
-const PetsWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-`;
-
-const ArrowButton = styled.button`
-  background: none;
-  border: none;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  z-index: 1;
-  font-size: 20px;
-  color: #888;
-  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
-  &:disabled {
-    color: #ccc;
-    cursor: not-allowed;
-  }
-`;
-
-const LeftArrow = styled(ArrowButton)`
-  left: -30px;
-`;
-
-const RightArrow = styled(ArrowButton)`
-  right: -30px;
-`;
-
-const PetsContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  overflow: hidden;
-  scroll-behavior: smooth;
-`;
-
-const PetCard = styled.div`
-  text-align: center;
-  flex-shrink: 0;
-  min-width: 60px;
-`;
-
-const PetImage = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-`;
-
-const PetName = styled.p`
-  margin-top: 5px;
-  font-size: 14px;
-  color: #333;
-`;
-
 const VisitTimePets = ({ visitAt, pets, onVisitClick }) => {
   const sliderRef = useRef(null);
   const [isLeftVisible, setIsLeftVisible] = useState(false);
@@ -160,5 +84,81 @@ const VisitTimePets = ({ visitAt, pets, onVisitClick }) => {
     </TimeContainer>
   );
 };
+
+const TimeContainer = styled.div`
+  margin-bottom: 16px;
+  text-align: left;
+`;
+
+const TimeTitle = styled.h3`
+  font-size: 18px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const PetsCount = styled.span`
+  font-size: 14px;
+  color: #888;
+  margin-left: 8px;
+`;
+
+const PetsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+`;
+
+const ArrowButton = styled.button`
+  background: none;
+  border: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1;
+  font-size: 20px;
+  color: #888;
+  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+  &:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+const LeftArrow = styled(ArrowButton)`
+  left: -30px;
+`;
+
+const RightArrow = styled(ArrowButton)`
+  right: -30px;
+`;
+
+const PetsContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+  scroll-behavior: smooth;
+`;
+
+const PetCard = styled.div`
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 60px;
+`;
+
+const PetImage = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+`;
+
+const PetName = styled.p`
+  margin-top: 5px;
+  font-size: 14px;
+  color: #333;
+`;
 
 export default VisitTimePets;

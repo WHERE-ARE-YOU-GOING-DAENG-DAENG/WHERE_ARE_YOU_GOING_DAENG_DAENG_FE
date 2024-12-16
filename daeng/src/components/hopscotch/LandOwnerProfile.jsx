@@ -3,6 +3,56 @@ import styled from "styled-components";
 import crown from "../../assets/icons/crown.svg";
 import defaultImg from "../../assets/icons/reviewDefaultImg.svg"; 
 
+const LandOwnerProfile = ({ area, nickname, pets, hops }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsPerPage = 3;
+  const itemWidth = 65;
+  const maxIndex = Math.ceil(pets.length / itemsPerPage) - 1;
+
+  const isCentered = pets.length <= itemsPerPage;
+
+  useEffect(() => {
+    if (!isCentered) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0));
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [isCentered, maxIndex]);
+
+  if(!nickname){
+    return <Bubble>땅 주인이 없습니다.</Bubble>
+  }
+
+  return (
+    <Bubble>
+      <Title>
+        <Pink>{area}</Pink> 땅주인
+      </Title>
+      <Title>
+        <img src={crown} alt="왕관" />
+        <p>{nickname}</p>님
+        <Pink> {hops}회 방문</Pink>
+      </Title>
+      <PetsWrapper>
+        <PetsContainer isCentered={isCentered}>
+          <PetList
+            isCentered={isCentered}
+            translateX={-currentIndex * itemsPerPage * itemWidth}
+          >
+            {pets.map((pet) => (
+              <PetCard key={pet.petId}>
+                <PetImage src={pet.petImg? pet.petImg : defaultImg} alt={`${pet.petName || "기본 이미지"} 사진`} />
+                <div>{pet.petName}</div>
+              </PetCard>
+            ))}
+          </PetList>
+        </PetsContainer>
+      </PetsWrapper>
+    </Bubble>
+  );
+};
+
 const Bubble = styled.div`
   font-size: 15px;
   position: relative;
@@ -95,55 +145,5 @@ const PetImage = styled.img`
   height: 50px;
   border-radius: 50%;
 `;
-
-const LandOwnerProfile = ({ area, nickname, pets, hops }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 3;
-  const itemWidth = 65;
-  const maxIndex = Math.ceil(pets.length / itemsPerPage) - 1;
-
-  const isCentered = pets.length <= itemsPerPage;
-
-  useEffect(() => {
-    if (!isCentered) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0));
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [isCentered, maxIndex]);
-
-  if(!nickname){
-    return <Bubble>땅 주인이 없습니다.</Bubble>
-  }
-
-  return (
-    <Bubble>
-      <Title>
-        <Pink>{area}</Pink> 땅주인
-      </Title>
-      <Title>
-        <img src={crown} alt="왕관" />
-        <p>{nickname}</p>님
-        <Pink> {hops}회 방문</Pink>
-      </Title>
-      <PetsWrapper>
-        <PetsContainer isCentered={isCentered}>
-          <PetList
-            isCentered={isCentered}
-            translateX={-currentIndex * itemsPerPage * itemWidth}
-          >
-            {pets.map((pet) => (
-              <PetCard key={pet.petId}>
-                <PetImage src={pet.petImg? pet.petImg : defaultImg} alt={`${pet.petName || "기본 이미지"} 사진`} />
-                <div>{pet.petName}</div>
-              </PetCard>
-            ))}
-          </PetList>
-        </PetsContainer>
-      </PetsWrapper>
-    </Bubble>
-  );
-};
 
 export default LandOwnerProfile;

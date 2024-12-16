@@ -9,12 +9,6 @@ import CustomOverlay from "../../components/map/CustomOverlay";
 import markerIcon from "../../assets/icons/marker.svg";
 import Loading from "../commons/Loading";
 
-const MapContainer = styled.div`
-  width: 100%;
-  height: 60vh;
-  display: flex;
-`;
-
 const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
@@ -246,5 +240,11 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
     </MapContainer>
   );
 };
+
+const MapContainer = styled.div`
+  width: 100%;
+  height: 60vh;
+  display: flex;
+`;
 
 export default HopscotchMap;
