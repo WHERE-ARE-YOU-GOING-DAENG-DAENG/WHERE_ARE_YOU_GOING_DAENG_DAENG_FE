@@ -5,6 +5,7 @@ import arrow from "../../assets/icons/arrow.svg";
 import HomeStoryAdd from "../../assets/icons/home_storyadd.svg";
 import HomeStoryAddBtn from "../../assets/icons/home_storyaddBtn.svg";
 import DefaultImg from "../../assets/icons/UploadStoryBtn_DefaultImg.svg";
+import Crown from "../../assets/icons/UploadStoryBtn_crown.svg";
 import UploadStoryBtn from "../../components/commons/UploadStoryBtn";
 import Detail from "../story/Detail";
 import ShowMyStory from "../story/ShowMyStory";
@@ -53,14 +54,14 @@ const HomeStory = () => {
   const ITEMS_PER_VIEW = 3;
 
   const handleNext = () => {
-    if (currentIndex < stories.length - ITEMS_PER_VIEW + 1) {
-      setCurrentIndex(currentIndex + 1);
+    if (currentIndex < stories.length - ITEMS_PER_VIEW + 3) {
+      setCurrentIndex(currentIndex + 3);
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+      setCurrentIndex(currentIndex - 3);
     }
   };
 
@@ -99,6 +100,7 @@ const HomeStory = () => {
             <FixedStoryAdd>
               <PersonIconWrapper>
                 <PersonIcon src={HomeStoryAdd} alt="내 스토리 확인" onClick={openMyStoryPopup} />
+                <CrownIcon src={Crown} alt="왕관 아이콘" />
                 <PlusIcon src={HomeStoryAddBtn} alt="스토리 추가 아이콘" onClick={openDetailPopup} />
               </PersonIconWrapper>
               <AddText>내 스토리</AddText>
@@ -311,6 +313,18 @@ const Overlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
+`;
+
+const CrownIcon = styled.img`
+  position: absolute;
+  top: -12px;
+  right: 14.5px;
+  width: 25px;
+  height: auto;
+
+  @media (max-width: 554px) {
+    width: 20px;
+  }
 `;
 
 export default HomeStory;
