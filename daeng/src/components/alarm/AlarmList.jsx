@@ -94,7 +94,7 @@ function AlarmList({ activeTab }) {
         notifications.map((notification) => (
           <PushAlerts
             key={notification.notificationId}
-            eventType={getEventTypeName(notification.eventType)} // 변환된 eventType 표시
+            eventType={getEventTypeName(notification.eventType)} 
             message={notification.content}
             dateTime={`${notification.createdDate} ${notification.createdTime}`}
             notificationId={notification.notificationId}
