@@ -146,7 +146,7 @@ function ShowMyStory({ onClose }) {
           <ProgressItem
             key={index}
             isActive={index === currentIndex} 
-            isCompleted={index <= currentIndex} // 현재까지 스토리 색상 주기 
+            isCompleted={index <= currentIndex} 
           />
         ))}
       </ProgressBar>
