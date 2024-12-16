@@ -59,7 +59,7 @@ const AlarmBox = () => {
 
     fetchNotificationConsent();
 
-    if ('serviceWorker' in navigator) {
+    /*if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register("/firebase-messaging-sw.js")
         .then((registration) => {
@@ -70,7 +70,7 @@ const AlarmBox = () => {
         });
     } else {
       console.warn("이 브라우저는 Service Worker를 지원하지 않습니다.");
-    }
+    }*/
   }, []);
 
   const handleNotificationRequest = async () => {

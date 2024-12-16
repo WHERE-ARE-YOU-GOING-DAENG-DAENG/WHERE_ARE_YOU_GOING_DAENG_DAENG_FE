@@ -5,7 +5,7 @@ import ConfirmBtn from "../commons/ConfirmBtn";
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
-import usePetImageUpload  from "../../hooks/usePetImageUpload";
+import useImageUpload  from "../../hooks/useImageUpload";
 import Loading from '../../components/commons/Loading';
 import upload from '../../assets/icons/upload.svg';
 import { getTodayDate } from '../../utils/dateUtils'; 
@@ -30,7 +30,7 @@ import { validatePetForm } from '../../utils/petValidation';
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-  const { uploadImageToS3, isUploading } = usePetImageUpload();
+  const { uploadImageToS3, isUploading } = useImageUpload();
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null); 
   const [imageFile, setImageFile] = useState(null); 

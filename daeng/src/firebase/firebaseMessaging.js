@@ -24,6 +24,7 @@ export const requestNotificationPermission = async () => {
 export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
     if (!document.hidden) {
+      // 포그라운드 상태에서만 커스텀 알림 표시
       const notificationTitle = payload.notification.title;
       const notificationOptions = {
         body: payload.notification.body,
@@ -31,16 +32,11 @@ export const setupOnMessageHandler = () => {
         icon: payload.notification.icon || '/alarm-logo.png',
       };
 
-      const notification = new Notification(notificationTitle, notificationOptions);
-
-      notification.onclick = function (event) {
-        event.preventDefault();
-        notification.close();
-      };
-    } else {
-      console.log("페이지가 백그라운드 상태입니다. 포그라운드 상태에서만 알림을 표시합니다.");
+      if ("Notification" in window) {
+        new Notification(notificationTitle, notificationOptions);
+      } else {
+        console.log("알림:", notificationTitle, notificationOptions.body);
+      }
     }
   });
 };
-
-setupOnMessageHandler();
