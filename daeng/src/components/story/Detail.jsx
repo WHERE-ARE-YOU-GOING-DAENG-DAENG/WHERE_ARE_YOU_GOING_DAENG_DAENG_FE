@@ -119,10 +119,28 @@ function Detail({ onClose, onNext }) {
           setLands(data.lands);
         }
       } catch (error) {
-        console.error("데이터를 가져오는 데 실패했습니다.", error);
-      }
-    };
-
+        if (error.response) {
+          if (error.response.status === 401) {
+            AlertDialog({
+              mode: "confirm",
+              title: "로그인 필요",
+              text: "로그인이 필요한 기능입니다.<br/>로그인페이지로 이동하시겠습니까?",
+              confirmText: "네",
+              cancelText: "아니오",
+              onConfirm: onClose,
+            });
+          } else if (error.response.status === 404) {
+              AlertDialog({
+                mode: "alert",
+                title: "알림",
+                text: "땅주인만 스토리를 올릴 수 있습니다.<br/>원하는 지역의 땅따먹기 1등을 해보세요!",
+                confirmText: "확인",
+                icon: "warning",
+                onConfirm: onClose,
+            });
+          }
+      };
+    }}
     fetchRegionData();
   }, []);
 
