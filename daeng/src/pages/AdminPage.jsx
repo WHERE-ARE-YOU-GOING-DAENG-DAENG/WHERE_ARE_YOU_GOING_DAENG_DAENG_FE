@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import LocationSelect from "../components/admin/LocationSelect";
 import AdminHeader from "../components/admin/AdminHeader";
 import FormField from "../components/admin/FormField";
@@ -14,6 +15,7 @@ import IndoorAllow from '../components/admin/IndoorAllow';
 import OutdoorAllow from '../components/admin/OutdoorAllow';
 import ImageUpload from '../components/admin/AdminImgUpload';
 import StoreOpenTime from "../components/admin/StoreOpenTime";
+import AlertDialog from "../components/commons/SweetAlert";
 function AdminPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -40,6 +42,7 @@ function AdminPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (field, value) => {
     setFormData(prevData => ({
@@ -71,9 +74,6 @@ function AdminPage() {
       const placeData = {
         ...formData,
       };
-
-      console.log("서버에 전송할 데이터:", placeData);
-
       const response = await axios.post(
         "https://dev.daengdaeng-where.link/api/v2/admin/place",
         placeData,
@@ -85,19 +85,29 @@ function AdminPage() {
         }
       );
 
-      console.log("서버 응답 데이터:", response.data);
-
       if (response.status === 200) {
-        alert("장소 등록이 성공적으로 완료되었습니다.");
+        AlertDialog({
+          mode: "alert",
+          title: "성공",
+          text: "정상적으로 등록되었습니다.",
+          confirmText: "확인",
+          icon: "success", 
+          onConfirm: () => {
+            navigate("/"); 
+          }
+        });
       } else {
         throw new Error("장소 등록 실패");
       }
     } catch (error) {
-      console.error("장소 등록 에러 - 메시지:", error.message);
       console.error("장소 등록 에러 - 응답:", error.response?.data || "응답 없음");
-      alert("장소 등록에 실패했습니다. 다시 시도해주세요.");
+      AlertDialog({
+        mode: "alert",
+        title: "실패",
+        text: "등록에 실패했습니다",
+        confirmText: "확인",
+      });
     } finally {
-      console.log("폼 제출 종료");
       setIsSubmitting(false);
     }
   };
