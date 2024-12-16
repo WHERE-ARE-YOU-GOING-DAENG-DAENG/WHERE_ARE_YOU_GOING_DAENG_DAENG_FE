@@ -7,42 +7,6 @@ import styled from "styled-components";
 import pinIcon from "../assets/icons/pin.svg";
 import useFavoriteStore from "../stores/useFavoriteStore";
 
-
-const OpenModalButton = styled.button`
-	color: black;
-    position: fixed;
-	left: 50%;
-    bottom: 76px;
-	transform: translateX(-50%);
-    width: 555px;
-    height: 80px;
-    background-color: white;
-    border: none;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    cursor: pointer;
-	position: relative;
-
-
-	img{
-		position: absolute;
-        top: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-	}
-
-	p{	
-		font-weight: bold;
-		font-size: 20px;
-		margin: 20px 0 0; 
-	}
-
-    @media (max-width: 554px) {
-        width: 100%;
-        bottom: 64px;
-    }
-
-`;
 const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
 	const [center, setCenter] = useState(false);
@@ -80,7 +44,7 @@ const Bookmark = () => {
     return(
         <>  
             <Header label="즐겨찾기"/>
-            <Map data={favorites} removeUi={true} externalCenter={center} onMapLoaded={setIsMapLoaded}/>
+            <Map data={favorites} removeUi={true} externalCenter={center} onMapLoaded={setIsMapLoaded} isRecommend={false}/>
             <Footer/>
 			<OpenModalButton onClick={toggleModal}>
 				<img src={pinIcon} alt="즐겨찾기" />
@@ -97,5 +61,41 @@ const Bookmark = () => {
         </>
     )
 };
+
+const OpenModalButton = styled.button`
+	color: black;
+    position: fixed;
+	left: 50%;
+    bottom: 76px;
+	transform: translateX(-50%);
+    width: 555px;
+    height: 80px;
+    background-color: white;
+    border: none;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    cursor: pointer;
+	position: relative;
+
+
+	img{
+		position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+	}
+
+	p{	
+		font-weight: bold;
+		font-size: 20px;
+		margin: 20px 0 0; 
+	}
+
+    @media (max-width: 554px) {
+        width: 100%;
+        bottom: 64px;
+    }
+
+`;
 
 export default Bookmark;
