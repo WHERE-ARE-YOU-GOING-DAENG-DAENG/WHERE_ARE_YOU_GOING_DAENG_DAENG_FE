@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-// import survey_banner from "../../assets/icons/survey_banner.jpg";
 import festival_banner from "../../assets/icons/festival_banner.jpg";
 import banner1 from '../../assets/icons/banner1.jpg';
 import banner2 from "../../assets/icons/banner2.jpg";
@@ -30,13 +29,27 @@ function HomeSlider() {
     }
   };
 
+  const handleNext = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentSlide((prevSlide) => (prevSlide - 1 + slides.length) % slides.length);
+  };
+
   return (
     <SliderWrapper>
       <SlidesContainer currentSlide={currentSlide}>
         {slides.map((slide, index) => (
-          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} onClick={() => handleSlideClick(index)}  />
+          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} onClick={() => handleSlideClick(index)} />
         ))}
       </SlidesContainer>
+      <ArrowButton direction="left" onClick={handlePrev}>
+        &#8592;
+      </ArrowButton>
+      <ArrowButton direction="right" onClick={handleNext}>
+        &#8594;
+      </ArrowButton>
       <DotsWrapper>
         {slides.map((_, index) => (
           <Dot
@@ -75,8 +88,6 @@ const Slide = styled.img`
   object-fit: contain;
   flex-shrink: 0;
   cursor: pointer;
-
-
 `;
 
 const DotsWrapper = styled.div`
@@ -107,6 +118,34 @@ const Dot = styled.div`
   @media (max-width: 554px) {
     width: 6px;
     height: 6px;
+  }
+`;
+
+const ArrowButton = styled.button`
+  position: absolute;
+  top: 40%;
+  ${({ direction }) => (direction === "left" ? "left: 10px;" : "right: 10px;")}
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  @media (max-width: 554px) {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
   }
 `;
 
