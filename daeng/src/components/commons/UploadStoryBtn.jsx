@@ -13,7 +13,7 @@ const UploadStoryBtn = ({ location, nickname, isPinkBorder, imageSrc, onClick })
         <CrownIcon src={UploadStoryBtnCrown} alt="왕관 아이콘" />
       </ImageContainer>
       <TextContainer>
-        <LocationText>{location}</LocationText>
+        <LocationText textLength={location.length}>{location}</LocationText>
         <NicknameText>{nickname}</NicknameText>
       </TextContainer>
     </ButtonContainer>
@@ -118,13 +118,13 @@ const TextContainer = styled.div`
 `;
 
 const LocationText = styled.p`
-  font-size: 13px;
+  font-size: ${({ textLength }) => (textLength > 8 ? "9px" : "13px")};
   font-weight: bold;
   margin: 0;
   color: black;
 
   @media (max-width: 554px) {
-    font-size: 11px;
+    font-size: ${({ textLength }) => (textLength > 8 ? "8px" : "11px")};
   }
 `;
 

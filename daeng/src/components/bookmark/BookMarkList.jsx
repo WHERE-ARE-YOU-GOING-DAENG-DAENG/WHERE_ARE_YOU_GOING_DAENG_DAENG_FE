@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import PropTypes from "prop-types";
 import pinIcon from "../../assets/icons/pin.svg";
 import FavoriteList from "../commons/FavoriteList";
 import houseIcon from "../../assets/icons/house.svg"
@@ -10,78 +9,6 @@ import AlertDialog from "../commons/SweetAlert";
 import Loading from "../commons/Loading";
 import SearchNoImage from "../../assets/icons/search_noimage.svg";
 
-const slideUp = keyframes`
-    from {
-        transform: translateY(80%);
-    }
-    to {
-        transform: translateY(0);
-    }
-`;
-
-const slideDown = keyframes`
-    from {
-        transform: translateY(0);
-    }
-    to {
-        transform: translateY(78%);
-    }
-`;
-const Overlay = styled.div`
-    position: fixed;
-    top: 0;
-    width: 554px;
-    height: 100%;
-    z-index: 98;
-    @media (max-width: 554px) {
-        width: 100%;
-    }
-`;
-const Modal = styled.div`
-    position: fixed;
-    bottom: 76px;
-    width: 554px;
-    height: 60%;
-    background-color: white;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    animation: ${({ isClosing }) => (isClosing ? slideDown : slideUp)} 0.4s ease-out;
-    z-index: 99;
-    overflow: visible;
-    -webkit-overflow-scrolling: touch;
-
-    @media (max-width: 554px) {
-        width: 100%;
-        bottom: 64px;
-    }
-`;
-const ModalTitle = styled.div`
-	font-weight: bold;
-	font-size: 20px;
-	margin: 39px 0 0; 
-`
-
-const ModalIcon = styled.img`
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-`
-
-const ModalContent = styled.div`
-    margin: 30px 0px;
-	display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    height: calc(100% - 120px);
-
-    p{
-        font-weight: bold;
-    }
-`
 const BookMarkList = ({ isOpen, onClose , data, onPlaceClick, fetchNextPage, page}) => {
     const [isClosing, setIsClosing] = useState(false);
     const navigate = useNavigate();
@@ -186,23 +113,76 @@ const BookMarkList = ({ isOpen, onClose , data, onPlaceClick, fetchNextPage, pag
     )
 };
 
-BookMarkList.propTypes = {
-    isOpen: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    data: PropTypes.arrayOf(
-        PropTypes.shape({
-          favoriteId: PropTypes.number.isRequired,
-          placeId: PropTypes.number.isRequired,
-          name: PropTypes.string.isRequired,
-          streetAddresses: PropTypes.string.isRequired,
-          latitude: PropTypes.number.isRequired,
-          longitude: PropTypes.number.isRequired,
-          startTime: PropTypes.string.isRequired,
-          endTime: PropTypes.string.isRequired,
-        })
-    ),
-    onPlaceClick: PropTypes.func.isRequired,
-    fetchNextPage: PropTypes.func.isRequired,
-};
+const slideUp = keyframes`
+    from {
+        transform: translateY(80%);
+    }
+    to {
+        transform: translateY(0);
+    }
+`;
 
+const slideDown = keyframes`
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(78%);
+    }
+`;
+const Overlay = styled.div`
+    position: fixed;
+    top: 0;
+    width: 554px;
+    height: 100%;
+    z-index: 98;
+    @media (max-width: 554px) {
+        width: 100%;
+    }
+`;
+const Modal = styled.div`
+    position: fixed;
+    bottom: 76px;
+    width: 554px;
+    height: 60%;
+    background-color: white;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    animation: ${({ isClosing }) => (isClosing ? slideDown : slideUp)} 0.4s ease-out;
+    z-index: 99;
+    overflow: visible;
+    -webkit-overflow-scrolling: touch;
+
+    @media (max-width: 554px) {
+        width: 100%;
+        bottom: 64px;
+    }
+`;
+const ModalTitle = styled.div`
+	font-weight: bold;
+	font-size: 20px;
+	margin: 39px 0 0; 
+`
+
+const ModalIcon = styled.img`
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+`
+
+const ModalContent = styled.div`
+    margin: 30px 0px;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    height: calc(100% - 120px);
+
+    p{
+        font-weight: bold;
+    }
+`
 export default BookMarkList;

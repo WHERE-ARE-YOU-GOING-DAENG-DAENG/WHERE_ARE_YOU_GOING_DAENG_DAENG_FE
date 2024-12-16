@@ -1,5 +1,14 @@
 import styled from "styled-components";
 
+const PlaceDescription = ({data}) => {
+    return(
+        <Container>
+            <p>시설 소개</p>
+            <div className="description">{data.description}</div>
+        </Container>
+    )
+};
+
 const Container = styled.div`
   padding: 0px 44px;
   display: flex;
@@ -24,13 +33,4 @@ const Container = styled.div`
     margin-bottom: 20px;
   }
 `
-const PlaceDescription = ({data}) => {
-    return(
-        <Container>
-            <p>시설 소개</p>
-            <div className="description">{data.description}</div>
-        </Container>
-    )
-};
-
 export default PlaceDescription;

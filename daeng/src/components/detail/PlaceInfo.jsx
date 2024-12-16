@@ -10,6 +10,63 @@ import inIcon from "../../assets/icons/indoor.svg";
 import outIcon from "../../assets/icons/outdoor.svg";
 import PlaceOption from "../../components/commons/PlaceOption";
 
+const PlaceInfo = ({data}) => {
+    const parkingStatus = data.parking ? "주차가능" : "주차불가";
+
+    const spaceStatus = () => {
+      if (data.indoor && data.outdoor) return "실내 · 실외공간";
+      if (data.indoor) return "실내공간";
+      if (data.outdoor) return "실외공간";
+      return "공간정보 없음";
+    };
+
+    const iconStatus = () => {
+      if (data.indoor && data.outdoor) return inandout;
+      if (data.indoor) return inIcon;
+      if (data.outdoor) return outIcon;
+      return null;
+    };
+
+    const weightLimit = "제한없음";
+
+    const formatTime = (time) => {
+      if (!time) return "정보없음";
+      return time.length === 8 ? time.slice(0, 5) : time;
+    };
+    
+    return(
+        <Container>
+        <InfoCard>
+                  <div className="info-title"><span>댕댕어디가</span>가 설명드려요 !</div>
+                  <div className="info-item">
+                    <img src={addressIcon} alt="주소" />
+                    <span> {data.streetAddresses}</span>
+                  </div>
+                  <div className="info-item">
+                    <img src={hourIcon} alt="운영시간" />
+                    {data.placeType === "숙소"? (
+                      <span>체크인 - {formatTime(data.startTime)} | 체크아웃 - {formatTime(data.endTime)}</span>
+                    ):(<span>{formatTime(data.startTime)} - {formatTime(data.endTime)}</span>)}
+                    
+                  </div>
+                  <div className="info-item">
+                    <img src={callnumberIcon} alt="전화번호" />
+                    <span>{data.telNumber}</span>
+                  </div>
+                  {data.url !== "정보없음" ? (<div className="info-item">
+                    <img src={websiteIcon} alt="웹사이트" />
+                    <a href={data.url} target="_blank" rel="noopener noreferrer">{data.url}</a>
+                  </div>):
+                  (<></>)}
+                  <img src={dogIcon} alt="강아지아이콘" className="dog-icon"/>
+                </InfoCard>
+                <OptionCard>
+                  <PlaceOption parking={parkingStatus} space={spaceStatus()} weightLimit={weightLimit} icon={iconStatus()}/>
+                </OptionCard>
+        </Container>
+    )
+};
+
 const InfoCard = styled.div`
   background: #F7F7F7;
   border-radius: 10px;
@@ -86,63 +143,5 @@ const Container = styled.div`
     padding: 0px 8%;
   }
 `
-
-const PlaceInfo = ({data}) => {
-    const parkingStatus = data.parking ? "주차가능" : "주차불가";
-
-    const spaceStatus = () => {
-      if (data.indoor && data.outdoor) return "실내 · 실외공간";
-      if (data.indoor) return "실내공간";
-      if (data.outdoor) return "실외공간";
-      return "공간정보 없음";
-    };
-
-    const iconStatus = () => {
-      if (data.indoor && data.outdoor) return inandout;
-      if (data.indoor) return inIcon;
-      if (data.outdoor) return outIcon;
-      return null;
-    };
-
-    const weightLimit = "제한없음";
-
-    const formatTime = (time) => {
-      if (!time) return "정보없음";
-      return time.length === 8 ? time.slice(0, 5) : time;
-    };
-    
-    return(
-        <Container>
-        <InfoCard>
-                  <div className="info-title"><span>댕댕어디가</span>가 설명드려요 !</div>
-                  <div className="info-item">
-                    <img src={addressIcon} alt="주소" />
-                    <span> {data.streetAddresses}</span>
-                  </div>
-                  <div className="info-item">
-                    <img src={hourIcon} alt="운영시간" />
-                    {data.placeType === "숙소"? (
-                      <span>체크인 - {formatTime(data.startTime)} | 체크아웃 - {formatTime(data.endTime)}</span>
-                    ):(<span>{formatTime(data.startTime)} - {formatTime(data.endTime)}</span>)}
-                    
-                  </div>
-                  <div className="info-item">
-                    <img src={callnumberIcon} alt="전화번호" />
-                    <span>{data.telNumber}</span>
-                  </div>
-                  {data.url !== "정보없음" ? (<div className="info-item">
-                    <img src={websiteIcon} alt="웹사이트" />
-                    <a href={data.url} target="_blank" rel="noopener noreferrer">{data.url}</a>
-                  </div>):
-                  (<></>)}
-                  <img src={dogIcon} alt="강아지아이콘" className="dog-icon"/>
-                </InfoCard>
-                <OptionCard>
-                  <PlaceOption parking={parkingStatus} space={spaceStatus()} weightLimit={weightLimit} icon={iconStatus()}/>
-                </OptionCard>
-        </Container>
-    )
-};
-
 
 export default PlaceInfo;
