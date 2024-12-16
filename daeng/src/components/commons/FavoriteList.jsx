@@ -2,6 +2,24 @@ import React from "react";
 import styled from "styled-components";
 import DeleteBtn from "./DeleteBtn";
 
+function FavoriteList({ title, icon, place, time, imgUrl, onTitleClick, onPlaceClick, onDelete }) {
+  return (
+    <FavoriteListContainer>
+      <FavoriteInfoContainer>
+        <FavoritePlaceTitle onClick={onTitleClick}>
+          {title}
+          <img src={icon} alt="아이콘" />
+        </FavoritePlaceTitle>
+        <FavoritePlace onClick={onPlaceClick}>{place}</FavoritePlace>
+        <FavoritePlaceTime>{time}</FavoritePlaceTime> 
+      </FavoriteInfoContainer>
+      <FavoriteListPicture imgUrl={imgUrl} />
+      <DeleteButtonWrapper>
+        <DeleteBtn label="삭제" onClick={onDelete} />
+      </DeleteButtonWrapper>
+    </FavoriteListContainer>
+  );
+}
 const FavoriteListContainer = styled.div`
   width: 80%;
   height: 151px;
@@ -107,7 +125,7 @@ const FavoritePlaceTime = styled.p`
 `;
 
 const DeleteButtonWrapper = styled.div`
-  position: absolute; /* 부모 요소를 기준으로 위치 조정 */
+  position: absolute;
   padding-right: 40px;
   bottom: 25px; 
   right: 95px;
@@ -119,24 +137,5 @@ const DeleteButtonWrapper = styled.div`
     bottom: 20px;
     right: 68px;
 `;
-
-function FavoriteList({ title, icon, place, time, imgUrl, onTitleClick, onPlaceClick, onDelete }) {
-  return (
-    <FavoriteListContainer>
-      <FavoriteInfoContainer>
-        <FavoritePlaceTitle onClick={onTitleClick}>
-          {title}
-          <img src={icon} alt="아이콘" />
-        </FavoritePlaceTitle>
-        <FavoritePlace onClick={onPlaceClick}>{place}</FavoritePlace>
-        <FavoritePlaceTime>{time}</FavoritePlaceTime> 
-      </FavoriteInfoContainer>
-      <FavoriteListPicture imgUrl={imgUrl} />
-      <DeleteButtonWrapper>
-        <DeleteBtn label="삭제" onClick={onDelete} /> {/* 삭제 버튼 배치 */}
-      </DeleteButtonWrapper>
-    </FavoriteListContainer>
-  );
-}
 
 export default FavoriteList;
