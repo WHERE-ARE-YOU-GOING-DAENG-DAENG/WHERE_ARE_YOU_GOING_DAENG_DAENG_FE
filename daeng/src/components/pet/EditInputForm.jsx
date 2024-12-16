@@ -10,7 +10,11 @@ import DeletePetData from "./DeletePetData";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
 import usePetStore from "../../stores/usePetStore";
+import upload from '../../assets/icons/upload.svg';
+import usePetImageUpload  from "../../hooks/usePetImageUpload";
 import Loading from '../../components/commons/Loading';
+import { getTodayDate } from '../../utils/dateUtils'; 
+import { validatePetForm } from '../../utils/petValidation';
 import { 
   Container, 
   FirstInputContainer, 
@@ -24,12 +28,13 @@ import {
   BirthContainer, 
   SelectContainer, 
   SelectWeight, 
+  CancelPetImg,
 } from './CommonStyle';
-
 
 
 function EditInputForm() {
   const { petId } = useParams();
+  const { uploadImageToS3, isUploading } = usePetImageUpload();
   const { petInfo, fetchPetData, isLoading, error } = usePetStore(); 
   const [petName, setPetName] = useState(""); 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,14 +66,6 @@ function EditInputForm() {
       setPetPicture(petInfo.image || "");
     }
   }, [petInfo]);
-
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0"); 
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }; 
 
   const handleFocus = (e) => {
     e.target.showPicker();
@@ -107,116 +104,37 @@ function EditInputForm() {
     setSelectedSize(sizeCode); 
   }; 
 
-  const validateForm = () => {
-    const nameRegex = /^[가-힣a-zA-Z\s]+$/;
-  
-    if (!petName || !nameRegex.test(petName)) {
-      AlertDialog({
-        mode: "alert", 
-        title: "입력 오류",
-        text: "댕댕이 이름은 한글 또는 영문만 입력 가능합니다.",
-        confirmText: "확인"
-      });
-      return false;
-    }
-    if (!selectedPetType) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 견종을 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-
-    if(!setPetBirth) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 생일을 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-
-    if (!selectedGender) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 성별을 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-    if (!selectedNeutering) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 중성화 여부를 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-    if (!selectedSize || !petSizeOptions.some(option => option.code === selectedSize)) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 크기를 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-    return true;
-  }; 
-
   const handlePetDataUpdate = async (event) => {
     event.preventDefault();
-  
-    if (!validateForm()) return;
+
+    const isValid = validatePetForm({
+      petName,
+      selectedPetType,
+      petBirth,
+      selectedGender,
+      selectedNeutering,
+      selectedSize,
+    });
+
+    if (!isValid) return;
     setIsSubmitting(true);
-  
+
     let imageUrl = petPicture;
-  
+
     if (imageFile) {
       try {
-        const presignResponse = await axios.post(
-          'https://dev.daengdaeng-where.link/api/v1/S3',
-          {
-            prefix: 'PET',
-            fileNames: [imageFile.name]
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            withCredentials: true
-          }
-        );
-      
-        const presignedUrl = presignResponse.data?.data?.[imageFile.name];
-        if (!presignedUrl) {
-          console.error('Presigned URL이 없습니다. 응답 데이터를 확인하세요.');
-          throw new Error('Presigned URL이 없습니다.');
-        }
-
-      const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
-        headers: {
-          'Content-Type': imageFile.type, 
-        },
-        withCredentials: true,
-      });
-
-      if (imageUploadResponse.status === 200) {
-        imageUrl = presignedUrl.split('?')[0];
-      } else {
-        alert('이미지 업로드에 실패했습니다.');
+        imageUrl = await uploadImageToS3(imageFile); 
+      } catch (error) {
+        AlertDialog({
+          mode: "alert",
+          title: "이미지 업로드 실패",
+          text: "이미지를 업로드하는 중 문제가 발생했습니다. 다시 시도해주세요.",
+          confirmText: "확인",
+        });
+        setIsSubmitting(false);
         return;
       }
-    } catch (error) {
-      console.error('Presigned URL 조회 또는 이미지 업로드 실패:', error);
-      return;
     }
-  }
   const petData = {
     name: petName,
     image: imageUrl, 
@@ -268,17 +186,29 @@ function EditInputForm() {
   if (error) return <p>{error}</p>;
 
   return (
-    <Container>
-      <FirstInputContainer>
-        <label htmlFor="file-input">
-        <PetImg src={preview || petPicture || reviewDefaultImg} />
-        </label>
-        <HiddenInput
-          id="file-input"
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-        />
+  <Container>
+    <FirstInputContainer> 
+    <label htmlFor="file-input">
+      <PetImg src={preview || petPicture || reviewDefaultImg}>
+      {(preview || petPicture) && (
+          <CancelPetImg
+            onClick={(e) => {
+              e.stopPropagation(); 
+              setPreview(null);
+              setImageFile(null); 
+              setPetPicture(""); 
+            }}>
+            <img src={upload} alt="업로드 버튼" />
+        </CancelPetImg>
+        )}
+      </PetImg>
+    </label>
+      <HiddenInput
+        id="file-input"
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+      />
       </FirstInputContainer>
       <PetTypeContainer>
           <SelectLabel label="댕댕이 이름" />
