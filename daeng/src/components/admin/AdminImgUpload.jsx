@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { Wrapper } from "../../components/admin/AdminCommonStyle";
 import SelectLabel from "../commons/SelectLabel";
+import AlertDialog from "../../components/commons/SweetAlert";
 
 const ImageUpload = ({ label, onUpload }) => {
   const [file, setFile] = useState(null);
@@ -22,7 +23,12 @@ const ImageUpload = ({ label, onUpload }) => {
 
   const handleUpload = async () => {
     if (!file) {
-      alert("이미지를 선택해주세요.");
+      AlertDialog({
+        mode: "alert",
+        title: "경고",
+        text: "이미지를 선택해주세요",
+        confirmText: "닫기",
+      });
       console.log("이미지가 선택되지 않음");
       return;
     }
@@ -43,17 +49,24 @@ const ImageUpload = ({ label, onUpload }) => {
         }
       );
 
-      console.log("서버 응답 데이터:", response.data);
-
       const { thumbImgPath, imgPath } = response.data.data;
-      console.log("업로드 성공 - 썸네일 경로:", thumbImgPath);
-      console.log("업로드 성공 - 이미지 경로:", imgPath);
 
-      onUpload({ thumbImgPath, imgPath }); // 부모 컴포넌트로 데이터 전달
-      alert("이미지가 성공적으로 업로드되었습니다.");
+      onUpload({ thumbImgPath, imgPath }); 
+      AlertDialog({
+        mode: "alert",
+        title: "성공",
+        text: "이미지를 성공적으로 등록했습니다.",
+        confirmText: "닫기",
+        icon:"success",
+      });
     } catch (error) {
       console.error("이미지 업로드 실패 - 에러 메시지:", error.response?.data || error.message);
-      alert("이미지 업로드에 실패했습니다.");
+      AlertDialog({
+        mode: "alert",
+        title: "실패",
+        text: "이미지 등록에 실패했습니다.",
+        confirmText: "닫기",
+      });
     } finally {
       setIsUploading(false);
       console.log("업로드 종료");
