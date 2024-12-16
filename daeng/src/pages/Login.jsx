@@ -61,7 +61,7 @@ const Login = () => {
 };
 
 const Container = styled.div`
-    width: 90%;
+    width: 100%;
     max-width: 554px;
     display: flex;
     flex-direction: column;
@@ -73,7 +73,7 @@ const Container = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     height: 100vh;
-    padding: 50px 20px 20px 20px;
+    padding: 50px 0px 20px 0px;
     box-sizing: border-box;
     overflow-y: auto;
 `;
@@ -101,10 +101,10 @@ const FloatingCloud = styled.img`
     pointer-events: none; 
 
     @media (max-width: 554px) {
-        width: 400px; 
+        width: 365px; 
         height: 400px; 
         top: 30px; 
-        left: 10px; 
+        left: 20px; 
     }
 `;
 
@@ -147,7 +147,7 @@ const Subtitle = styled.p`
     margin-bottom: 30px;
 
     @media (max-width: 554px) {
-        font-size: 5.9vw;
+        font-size: 5.6vw;
         margin-bottom: 20px;
     }
 `;
