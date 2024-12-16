@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import AreaField from "../../data/AreaField";
+
 const LocationSelect = ({ city, cityDetail, onCityChange, onCityDetailChange }) => {
   return (
     <SelectionContainer>
@@ -23,7 +24,7 @@ const LocationSelect = ({ city, cityDetail, onCityChange, onCityDetailChange }) 
         <option value="" disabled>
           시/군/구 선택
         </option>
-        {(AreaField[city] || []).map((district) => (
+        {(AreaField[city] || []).slice(1).map((district) => (
           <option key={district} value={district}>
             {district}
           </option>
