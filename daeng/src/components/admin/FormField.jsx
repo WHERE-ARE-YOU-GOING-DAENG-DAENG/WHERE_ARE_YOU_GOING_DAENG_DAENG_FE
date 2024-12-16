@@ -1,20 +1,12 @@
 import React from 'react';
 import SelectLabel from "../../components/commons/SelectLabel";
-import styled from 'styled-components';
-
-const Input = styled.input`
-  width: 100%;
-  height: 40px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 5px 10px;
-`;
+import { StyledInput } from './AdminCommonStyle';
 
 function FormField({ label, type, placeholder, value, onChange }) {
   return (
     <div>
       <SelectLabel label={label} />
-      <Input
+      <StyledInput
         type={type}
         placeholder={placeholder}
         value={value}
