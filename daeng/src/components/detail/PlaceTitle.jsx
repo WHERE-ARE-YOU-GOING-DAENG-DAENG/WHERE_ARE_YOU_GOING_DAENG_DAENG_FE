@@ -72,7 +72,6 @@ const Info = styled.div`
 
 const PlaceTitle = ({ data, setData }) => {
     const navigate = useNavigate();
-    const { id: placeId } = useParams();
     const { userId } = useUserStore.getState();
     const userLocation = useLocationStore((state)=>state.userLocation);
     
