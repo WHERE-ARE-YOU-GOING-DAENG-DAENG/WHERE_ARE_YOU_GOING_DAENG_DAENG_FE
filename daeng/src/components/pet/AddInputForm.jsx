@@ -4,10 +4,13 @@ import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
+import usePetImageUpload  from "../../hooks/usePetImageUpload";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
 import upload from '../../assets/icons/upload.svg';
 import Loading from '../../components/commons/Loading';
+import { getTodayDate } from '../../utils/dateUtils'; 
+import { validatePetForm } from '../../utils/petValidation';
 import { 
   Container, 
   FirstInputContainer, 
@@ -27,6 +30,7 @@ import {
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
+  const { uploadImageToS3, isUploading } = usePetImageUpload();
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [imageFile, setImageFile] = useState(null); 
@@ -56,7 +60,7 @@ function RegisterInputForm() {
 
   const handleSizeClick = (sizeCode) => {
     setSelectedSize(sizeCode); 
-  }; //사이즈 
+  };
 
   const handleFocus = (e) => {
     e.target.showPicker();
@@ -74,141 +78,52 @@ function RegisterInputForm() {
     }
   };
   
-
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0"); 
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }; 
-
-  //유효성 검사
-  const validateForm = () => {
-    const nameRegex = /^[가-힣a-zA-Z\s]+$/;
-  
-    if (!petName || !nameRegex.test(petName)) {
-      AlertDialog({
-        mode: "alert", 
-        title: "입력 오류",
-        text: "댕댕이 이름은 한글 또는 영문만 입력 가능합니다.",
-        confirmText: "확인"
-      });
-      return false;
-    }
-    if (!selectedPetType) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 견종을 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-
-    if(!selectedPetBirth) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 생일을 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-
-    if (!selectedGender) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 성별을 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-    if (!selectedNeutering) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 중성화 여부를 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-    if (!selectedSize || !petSizeOptions.some(option => option.code === selectedSize)) {
-      AlertDialog({
-        mode: "alert", 
-        title: "선택 오류",
-        text: "댕댕이 크기를 선택해주세요",
-        confirmText: "확인"
-      })
-      return false;
-    }
-    return true;
-  }; 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    if (!validateForm()) return;
-    setIsLoading(true); 
-  
+
+    const isValid = validatePetForm({
+      petName,
+      selectedPetType,
+      petBirth: selectedPetBirth,
+      selectedGender,
+      selectedNeutering,
+      selectedSize,
+    });
+
+    if (!isValid) return;
+    setIsLoading(true);
+
     let imageUrl = ''; 
   
     if (imageFile) {
       try {
-        const presignResponse = await axios.post(
-          'https://dev.daengdaeng-where.link/api/v1/S3',
-          {
-            prefix: 'PET',
-            fileNames: [imageFile.name]
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            withCredentials: true
-          }
-        );
-    
-      
-        const presignedUrl = presignResponse.data?.data?.[imageFile.name];
-        if (!presignedUrl) {
-          throw new Error('Presigned URL이 없습니다.');
-        }
-  
-        const imageUploadResponse = await axios.put(presignedUrl, imageFile, {
-          headers: {
-            'Content-Type': imageFile.type,
-          },
-          withCredentials: true,
-        });
-
-        if (imageUploadResponse.status === 200) {
-          imageUrl = presignedUrl.split("?")[0]; 
-        } else {
-          console.error("이미지 업로드 실패:", imageUploadResponse);
-          setIsLoading(false);
-          return;
-        }
+        imageUrl = await uploadImageToS3(imageFile); 
       } catch (error) {
-        console.error("이미지 업로드 중 오류 발생:", error);
+        AlertDialog({
+          mode: "alert",
+          title: "이미지 업로드 실패",
+          text: "이미지를 업로드하는 중 문제가 발생했습니다. 다시 시도해주세요.",
+          confirmText: "확인",
+        });
         setIsLoading(false);
         return;
       }
     }
     
+  
   const petData = {
     name: petName, 
     image: imageUrl,  
-    gender: selectedGender, 
-    birthday: selectedPetBirth, 
+    gender: selectedGender,
+    birthday: selectedPetBirth,
     species: selectedPetType, 
     size: selectedSize, 
-    neutering: selectedNeutering === "했어요",
+    neutering: selectedNeutering === "했어요", 
   };
 
   try {
-      const response = await axios.post("https://dev.daengdaeng-where.link/api/v1/pets", 
+    const response = await axios.post(
+      "https://dev.daengdaeng-where.link/api/v1/pets", 
       petData, 
       {
         headers: {
@@ -217,26 +132,20 @@ function RegisterInputForm() {
         withCredentials: true,
       }
     );
-      if (response.status === 200) {
-        setIsLoading(false);
-        navigate("/my-page"); 
-        AlertDialog({
-          mode: "alert", 
-          title: "성공",
-          text: "성공적으로 추가되었습니다",
-          confirmText: "닫기",
-          icon: "success", 
-        });
-        navigate("/my-page");
-      } else {
-        AlertDialog({
-          mode: "alert", 
-          title: "오류",
-          text: "등록중 오류가 발생했습니다.",
-          confirmText: "확인"
-        })
-      }
-    } catch (error) {
+
+    if (response.status === 200) {
+      AlertDialog({
+        mode: "alert", 
+        title: "성공",
+        text: "댕댕어디가 회원이 되신걸 축하드려요",
+        confirmText: "닫기",
+        icon: "success",
+        onConfirm: () => {
+          navigate("/"); 
+        }
+      });
+
+    } else {
       AlertDialog({
         mode: "alert", 
         title: "실패",
@@ -244,12 +153,20 @@ function RegisterInputForm() {
         confirmText: "닫기"
       });
     }
-    finally {
-      setIsLoading(false); 
-    }
-  };
+  } catch (error) {
+    AlertDialog({
+      mode: "alert", 
+      title: "실패",
+      text: "등록 중 오류가 발생했습니다. 다시 시도해주세요",
+      confirmText: "닫기"
+    });
+  }
+  finally {
+    setIsLoading(false); 
+  }
+};
 
-  if (isLoading) {
+if (isLoading) {
     return <Loading label="등록 중입니다..." />; 
   }
 
