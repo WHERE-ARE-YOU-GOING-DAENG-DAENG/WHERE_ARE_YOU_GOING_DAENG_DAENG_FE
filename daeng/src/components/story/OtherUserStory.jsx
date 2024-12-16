@@ -124,10 +124,7 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
       <CloseButton
         src={x}
         alt="팝업 닫기"
-        onClick={() => {
-          onClose();
-          window.location.reload();
-        }}
+        onClick={onClose}
       />
       <ImageContainer>
         <StyledImage src={currentStory.path} alt={`스토리 ${currentStory.storyId}`} />
