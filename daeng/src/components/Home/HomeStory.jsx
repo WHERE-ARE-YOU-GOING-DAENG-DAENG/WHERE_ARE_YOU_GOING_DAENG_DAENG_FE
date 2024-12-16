@@ -4,6 +4,7 @@ import reversearrow from "../../assets/icons/reversearrow.svg";
 import arrow from "../../assets/icons/arrow.svg";
 import HomeStoryAdd from "../../assets/icons/home_storyadd.svg";
 import HomeStoryAddBtn from "../../assets/icons/home_storyaddBtn.svg";
+import DefaultImg from "../../assets/icons/UploadStoryBtn_DefaultImg.svg";
 import UploadStoryBtn from "../../components/commons/UploadStoryBtn";
 import Detail from "../story/Detail";
 import ShowMyStory from "../story/ShowMyStory";
@@ -109,7 +110,7 @@ const HomeStory = () => {
                 location={`${story.city} ${story.cityDetail}`}
                 nickname={story.nickname}
                 isPinkBorder={story.storyType === "unviewed"}
-                imageSrc={story.petImage || "https://via.placeholder.com/80"}
+                imageSrc={story.petImage || DefaultImg}
                 onClick={() => openOtherUserStoryPopup(story)} 
                 onClose={closePopup} 
               />
