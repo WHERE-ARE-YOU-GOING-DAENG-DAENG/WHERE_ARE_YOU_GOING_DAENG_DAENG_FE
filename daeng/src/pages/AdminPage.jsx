@@ -1,37 +1,225 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import AreaField from '../data/AreaField';
-import AdminHeader from '../components/admin/AdminHeader';
-import FormField from '../components/admin/FormField';
-import SelectLabel from '../components/commons/SelectLabel';
-import ConfirmBtn from '../components/commons/ConfirmBtn';
-import SelectBtn from '../components/commons/SelectBtn';
+import React, { useState } from "react";
+import styled from "styled-components";
+import axios from "axios";
+import LocationSelect from "../components/admin/LocationSelect";
+import AdminHeader from "../components/admin/AdminHeader";
+import FormField from "../components/admin/FormField";
+import SelectLabel from "../components/commons/SelectLabel";
+import ConfirmBtn from "../components/commons/ConfirmBtn";
+import GeoLocationField from "../components/admin/GeoLocationField";
+import PhoneNumberField from '../components/admin/PhoneNumberField';
+import ParkingAllow from "../components/admin/PakingAllow";
+import PlaceTypeSelector from "../components/admin/PlaceTypeSelector";
+import IndoorAllow from '../components/admin/IndoorAllow';
+import OutdoorAllow from '../components/admin/OutdoorAllow';
+import ImageUpload from '../components/admin/AdminImgUpload';
+import StoreOpenTime from "../components/admin/StoreOpenTime";
+function AdminPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    city: "",
+    cityDetail: "",
+    postCode: "",
+    streetAddresses: "",
+    townShip: "",
+    latitude: "",
+    longitude: "",
+    telNumber: "",
+    url: "",
+    placeType: "",
+    description: "",
+    weightLimit: "",
+    parking: true,
+    indoor: true,
+    outdoor: true,
+    openTime: "",
+    closeTime: "",
+    thumbImgPath: null,
+    imgPath: null,
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleChange = (field, value) => {
+    setFormData(prevData => ({
+      ...prevData,
+      [field]: value
+    }));
+  };
+
+  const handleCityChange = (city) => {
+    setFormData((prev) => ({
+      ...prev,
+      city,
+      cityDetail: "",
+    }));
+  };
+
+  const handleCityDetailChange = (cityDetail) => {
+    setFormData((prev) => ({
+      ...prev,
+      cityDetail,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const placeData = {
+        ...formData,
+      };
+
+      console.log("서버에 전송할 데이터:", placeData);
+
+      const response = await axios.post(
+        "https://dev.daengdaeng-where.link/api/v2/admin/place",
+        placeData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log("서버 응답 데이터:", response.data);
+
+      if (response.status === 200) {
+        alert("장소 등록이 성공적으로 완료되었습니다.");
+      } else {
+        throw new Error("장소 등록 실패");
+      }
+    } catch (error) {
+      console.error("장소 등록 에러 - 메시지:", error.message);
+      console.error("장소 등록 에러 - 응답:", error.response?.data || "응답 없음");
+      alert("장소 등록에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      console.log("폼 제출 종료");
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <TotalWrapper>
+      <AdminHeader />
+      <Form onSubmit={handleSubmit}>
+        <FormField
+          label="장소명"
+          type="text"
+          placeholder="장소명을 입력하세요"
+          value={formData.name}
+          onChange={(e) => handleChange("name", e.target.value)}
+        />
+        <GeoLocationField
+          onAddressSelect={({ address, latitude, longitude, postalCode }) =>
+            setFormData((prev) => ({
+              ...prev,
+              streetAddresses: address,
+              latitude,
+              longitude,
+              postCode: postalCode,
+            }))
+          }
+        />
+        <SelectLabel label="도/시/군/구 선택" />
+        <LocationSelect
+          city={formData.city}
+          cityDetail={formData.cityDetail}
+          onCityChange={handleCityChange}
+          onCityDetailChange={handleCityDetailChange}
+        />
+        <FormField
+          label="읍/면/동"
+          type="text"
+          placeholder="읍/면/동을 입력하세요"
+          value={formData.townShip}
+          onChange={(e) => handleChange("townShip", e.target.value)}
+        />
+        <PhoneNumberField
+          label="전화번호"
+          placeholder="전화번호를 입력하세요"
+          value={formData.telNumber}
+          onChange={(value) => handleChange("telNumber", value)}
+          format 
+        />
+        <FormField
+          label="웹사이트"
+          type="text"
+          placeholder="웹사이트url을 넣어주세요"
+          value={formData.url}
+          onChange={(e) => handleChange("url", e.target.value)}
+        />
+        <FormField
+          label="몸무게 제한(댕댕이들)"
+          type="text"
+          placeholder="몸무게 제한이 있나요? 없다면 모두가능이라고 입력해주세요"
+          value={formData.weightLimit}
+          onChange={(e) => handleChange("weightLimit", e.target.value)}
+        />
+        <PlaceTypeSelector
+          value={formData.placeType}
+          onChange={(value) => handleChange("placeType", value)}
+        />
+
+        <ParkingAllow
+          label="주차 가능 여부"
+          value={formData.parking} 
+          onChange={(value) => handleChange("parking", value)} 
+        />
+        <IndoorAllow
+          label="실내 공간"
+          value={formData.indoor} 
+          onChange={(value) => handleChange("indoor", value)} 
+        />
+        <OutdoorAllow
+          label="실외 공간"
+          value={formData.outdoor}
+          onChange={(value) => handleChange("outdoor", value)}
+        />
+        <StoreOpenTime
+          openTime={formData.openTime}
+          closeTime={formData.closeTime}
+          onOpenTimeChange={(value) => handleChange("openTime", value)}
+          onCloseTimeChange={(value) => handleChange("closeTime", value)}
+        />
+        <FormField
+          label="장소 설명"
+          type="text"
+          value={formData.description} 
+          onChange={(e) => handleChange("description", e.target.value)} 
+        />
+        <ImageUpload
+          label="썸네일 이미지 업로드"
+          onUpload={({ thumbImgPath }) => handleChange("thumbImgPath", thumbImgPath)}
+        />
+        <ImageUpload
+          label="장소 이미지 업로드"
+          onUpload={({ imgPath }) => handleChange("imgPath", imgPath)}
+        />
+        <ConfirmBtn
+          label={isSubmitting || isUploading ? "등록 중..." : "등록"}
+          disabled={isSubmitting || isUploading}
+        />
+      </Form>
+    </TotalWrapper>
+  );
+}
+
+export default AdminPage;
 
 const TotalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; 
-  min-height: 100vh; 
-  overflow-y: auto; 
+  justify-content: flex-start;
+  min-height: 100vh;
+  overflow-y: auto;
 `;
 
-const SelectionContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  width: 100%;
-`;
-
-const SelectBox = styled.select`
-  flex: 1;
-  height: 40px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 5px 10px;
-  font-size: 14px;
-`;
-
-const Form = styled.div`
+const Form = styled.form`
   background-color: #fff0f6;
   width: 90%;
   max-width: 500px;
@@ -41,146 +229,3 @@ const Form = styled.div`
   flex-direction: column;
   gap: 15px;
 `;
-
-const TimeInputContainer = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 10px; 
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 40px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 5px 10px;
-`;
-
-function AdminPage() {
-  const [formData, setFormData] = useState({
-    placeName: '',
-    phone: '',
-    openTime: '',
-    closeTime: '',
-    placeType: '',
-    homepage: '',
-    petRestriction: '',
-    photo: '',
-    parkingAvailable: '',
-    indoorOutdoor: '',
-  });
-
-  const [selectedCity, setSelectedCity] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-
-  const handleChange = (field, value) => {
-    setFormData({ ...formData, [field]: value });
-  };
-
-  const handleFocus = (e) => {
-    e.target.showPicker();
-  };
-
-  return (
-    <TotalWrapper>
-      <AdminHeader />
-      <Form>
-        <FormField
-          label="장소명"
-          type="text"
-          placeholder="장소명을 입력하세요"
-          value={formData.placeName}
-          onChange={(e) => handleChange('placeName', e.target.value)}
-        />
-        <FormField
-          label="번호"
-          type="text"
-          placeholder="전화번호를 입력하세요"
-          value={formData.phone}
-          onChange={(e) => handleChange('phone', e.target.value)}
-        />
-        <FormField
-          label="장소 타입"
-          type="text"
-          placeholder="장소 타입을 입력하세요"
-          value={formData.placeType}
-          onChange={(e) => handleChange('placeType', e.target.value)}
-        />
-        <FormField
-          label="홈페이지 주소"
-          type="text"
-          placeholder="홈페이지 주소를 입력하세요"
-          value={formData.homepage}
-          onChange={(e) => handleChange('homepage', e.target.value)}
-        />
-        <FormField
-          label="반려견 제한"
-          type="text"
-          placeholder="반려견 제한 사항을 입력하세요"
-          value={formData.petRestriction}
-          onChange={(e) => handleChange('petRestriction', e.target.value)}
-        />
-        <FormField
-          label="등록 사진"
-          type="file"
-          onChange={(e) => handleChange('photo', e.target.files[0])}
-        />
-        <FormField
-          label="주차 가능 여부"
-          type="text"
-          placeholder="주차 가능 여부를 입력하세요"
-          value={formData.parkingAvailable}
-          onChange={(e) => handleChange('parkingAvailable', e.target.value)}
-        />
-        <FormField
-          label="실내/실외 여부"
-          type="text"
-          placeholder="실내 또는 실외를 입력하세요"
-          value={formData.indoorOutdoor}
-          onChange={(e) => handleChange('indoorOutdoor', e.target.value)}
-        />
-        <div>
-          <SelectLabel label="도로명주소" />
-          <SelectionContainer>
-            <SelectBox value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
-              <option value="" disabled>도 선택</option>
-              {Object.keys(AreaField).map((city) => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </SelectBox>
-            <SelectBox
-              value={selectedDistrict}
-              onChange={(e) => setSelectedDistrict(e.target.value)}
-              disabled={!selectedCity}
-            >
-              <option value="" disabled>시/군/구 선택</option>
-              {(AreaField[selectedCity] || []).map((district) => (
-                <option key={district} value={district}>{district}</option>
-              ))}
-            </SelectBox>
-          </SelectionContainer>
-        </div>
-        <div>
-          <SelectLabel label="오픈-마감 시간" />
-          <TimeInputContainer>
-            <Input
-              type="time"
-              value={formData.openTime}
-              onChange={(e) => handleChange('openTime', e.target.value)}
-              onFocus={handleFocus}  
-            />
-            <Input
-              type="time"
-              value={formData.closeTime}
-              onChange={(e) => handleChange('closeTime', e.target.value)}
-              onFocus={handleFocus}  
-            />
-          </TimeInputContainer>
-        </div>
-        <ConfirmBtn label="등록" />
-      </Form>
-    </TotalWrapper>
-  );
-}
-
-export default AdminPage;
