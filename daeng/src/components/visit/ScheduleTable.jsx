@@ -6,54 +6,6 @@ import useVisitStore from "../../stores/useVisitStore";
 import AlertDialog from "../commons/SweetAlert";
 import { useNavigate } from "react-router-dom";
 
-const TableWrapper = styled.div`
-  margin: 0px 40px;
-  overflow: auto;
-  padding-bottom: 115px;
-  @media (max-width: 554px) {
-    margin: 0px 7%;
-    padding-bottom: 64px;
-  }
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid #ddd;
-`;
-
-const Thead = styled.thead`
-  background: #ff4b98;
-  color: white;
-`;
-
-const Th = styled.th`
-  padding: 10px;
-  border: 1px solid #ddd;
-`;
-
-const Td = styled.td`
-  padding: 10px;
-  border: 1px solid #ddd;
-`;
-
-const ColSpanTd = styled(Td)`
-  text-align: center;
-  font-weight: bold;
-  padding-top: 3vh;
-`;
-
-const Button = styled.button`
-  border: none;
-  background-color: white;
-  cursor: pointer;
-  img {
-    width: 18px;
-  }
-`;
-
 const ScheduleTable = () => {
   const myVisits = useVisitStore((state) => state.myVisits);
   const removeVisit = useVisitStore((state) => state.removeVisit);
@@ -71,8 +23,8 @@ const ScheduleTable = () => {
       mode: "confirm",
       title: "방문예정취소",
       text: "방문예정을 취소하시겠습니까?",
-      confirmText: "취소",
-      cancelText: "닫기",
+      confirmText: "네",
+      cancelText: "아니오",
       onConfirm: async () => {
         await removeVisit(id);
       },
@@ -134,5 +86,51 @@ const ScheduleTable = () => {
     </TableWrapper>
   );
 };
+const TableWrapper = styled.div`
+  margin: 0px 40px;
+  overflow: auto;
+  padding-bottom: 115px;
+  @media (max-width: 554px) {
+    margin: 0px 7%;
+    padding-bottom: 64px;
+  }
+`;
 
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+`;
+
+const Thead = styled.thead`
+  background: #ff4b98;
+  color: white;
+`;
+
+const Th = styled.th`
+  padding: 10px;
+  border: 1px solid #ddd;
+`;
+
+const Td = styled.td`
+  padding: 10px;
+  border: 1px solid #ddd;
+`;
+
+const ColSpanTd = styled(Td)`
+  text-align: center;
+  font-weight: bold;
+  padding-top: 3vh;
+`;
+
+const Button = styled.button`
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  img {
+    width: 18px;
+  }
+`;
 export default ScheduleTable;

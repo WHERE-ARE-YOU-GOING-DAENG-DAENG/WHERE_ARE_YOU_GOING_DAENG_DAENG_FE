@@ -159,7 +159,7 @@ function UserRegister() {
         confirmText: "확인",
       });
     } finally {
-      setIsLoading(false); // 로딩 종료
+      setIsLoading(false);
     }
   };
 
@@ -223,7 +223,7 @@ function UserRegister() {
         });
       }
     } finally {
-      setIsLoading(false); // 로딩 종료
+      setIsLoading(false);
     }
   };
 

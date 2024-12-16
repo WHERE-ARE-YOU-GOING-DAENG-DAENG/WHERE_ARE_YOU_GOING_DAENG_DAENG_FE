@@ -2,6 +2,34 @@ import React, { useState, useEffect } from "react";
 import flag from "../../assets/icons/flag.svg";
 import styled, { keyframes } from "styled-components";
 
+const ProgressBar = ({ current, total }) => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const targetProgress = (current / total) * 100;
+    setProgress(targetProgress);
+  }, [current, total]);
+
+  return (
+    <GaugeContainer>
+      <BarContainer>
+        <BarBackground>
+          <Bar progress={progress} />
+          {current !== total && (
+            <CurrentText progress={progress}>{current}</CurrentText>
+          )}
+        </BarBackground>
+        <FlagIcon src={flag} alt="깃발" />
+      </BarContainer>
+
+      <NumberContainer>
+        <NumberText style={{ left: "0%" }}>0</NumberText>
+        <NumberText style={{ right: "0%", position: "absolute" }}>{total}</NumberText>
+      </NumberContainer>
+    </GaugeContainer>
+  );
+};
+
 const fillAnimation = (progress) => keyframes`
   0% {
     width: 0%;
@@ -72,33 +100,5 @@ const FlagIcon = styled.img`
   right: -23px;
   width: 40px;
 `;
-
-const ProgressBar = ({ current, total }) => {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const targetProgress = (current / total) * 100;
-    setProgress(targetProgress);
-  }, [current, total]);
-
-  return (
-    <GaugeContainer>
-      <BarContainer>
-        <BarBackground>
-          <Bar progress={progress} />
-          {current !== total && (
-            <CurrentText progress={progress}>{current}</CurrentText>
-          )}
-        </BarBackground>
-        <FlagIcon src={flag} alt="깃발" />
-      </BarContainer>
-
-      <NumberContainer>
-        <NumberText style={{ left: "0%" }}>0</NumberText>
-        <NumberText style={{ right: "0%", position: "absolute" }}>{total}</NumberText>
-      </NumberContainer>
-    </GaugeContainer>
-  );
-};
 
 export default ProgressBar;

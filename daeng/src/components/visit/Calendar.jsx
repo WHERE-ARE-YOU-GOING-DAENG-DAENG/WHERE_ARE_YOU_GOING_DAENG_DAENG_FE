@@ -7,6 +7,88 @@ import reversearrowIcon from "../../assets/icons/reversearrow.svg"
 import useVisitStore from "../../stores/useVisitStore";
 dayjs.extend(isBetween);
 
+const Calendar = ({ onDateClick, selectedDate, dot }) => {
+  const [currentDate, setCurrentDate] = useState(dayjs());
+  const startOfMonth = currentDate.startOf("month");
+  const endOfMonth = currentDate.endOf("month");
+  const today = dayjs().format("YYYY-MM-DD");
+  const myVisits = useVisitStore((state)=>state.myVisits);
+
+  const startDate = dayjs().format("YYYY-MM-DD");
+  const endDate = dayjs().add(6, "day").format("YYYY-MM-DD");
+
+  const handlePrevMonth = () => {
+    setCurrentDate((prev) => prev.subtract(1, "month"));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate((prev) => prev.add(1, "month"));
+  };
+
+  const renderWeekdays = () => {
+    const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+    return weekdays.map((day, index) => <Weekday key={index}>{day}</Weekday>);
+  };
+
+  const renderDays = () => {
+    const daysInMonth = endOfMonth.date();
+    const firstDayOfWeek = startOfMonth.day();
+
+    const blanks = Array.from({ length: firstDayOfWeek }, (_, i) => (
+      <Day key={`blank-${i}`} />
+    ));
+
+    const days = Array.from({ length: daysInMonth }, (_, i) => {
+      const date = startOfMonth.add(i, "day").format("YYYY-MM-DD");
+
+      const isWeekly = dayjs(date).isBetween(startDate, endDate, "day", "[]");
+      const isPast = dayjs(date).isBefore(today, "day");
+      const isToday = date === today;
+
+      const hasEvent = myVisits?.some(
+        (schedule) => dayjs(schedule.visitAt).format("YYYY-MM-DD") === date
+      );
+
+      const isSelected = date === selectedDate;
+
+      return (
+        <Day
+          key={date}
+          isWeekly={isWeekly}
+          isPast={isPast}
+          isToday={isToday}
+          hasEvent={hasEvent}
+          isSelected={isSelected}
+          dot={dot}
+          onClick={() => {
+            onDateClick(date);
+          }}
+        >
+          {i + 1}
+        </Day>
+      );
+    });
+
+    return [...blanks, ...days];
+  };
+
+  return (
+    <CalendarWrapper>
+      <CalendarHeader>
+        <MonthNavigation onClick={handlePrevMonth}>
+            <img src={reversearrowIcon} alt="이전 달" />
+        </MonthNavigation>
+        <CurrentMonth>{currentDate.format("YYYY.MM")}</CurrentMonth>
+        <MonthNavigation onClick={handleNextMonth}>
+        <img src={arrowIcon} alt="다음 달" />
+        </MonthNavigation>
+      </CalendarHeader>
+      <CalendarGrid>{renderWeekdays()}</CalendarGrid>
+      <CalendarGrid>{renderDays()}</CalendarGrid>
+    </CalendarWrapper>
+  );
+};
+
 const CalendarWrapper = styled.div`
   margin: 0px 20px;
   display: flex;
@@ -120,87 +202,4 @@ const Day = styled.div`
     font-size: 12px;
   }
 `;
-
-const Calendar = ({ onDateClick, selectedDate, dot }) => {
-  const [currentDate, setCurrentDate] = useState(dayjs());
-  const startOfMonth = currentDate.startOf("month");
-  const endOfMonth = currentDate.endOf("month");
-  const today = dayjs().format("YYYY-MM-DD");
-  const myVisits = useVisitStore((state)=>state.myVisits);
-
-  const startDate = dayjs().format("YYYY-MM-DD");
-  const endDate = dayjs().add(6, "day").format("YYYY-MM-DD");
-
-  const handlePrevMonth = () => {
-    setCurrentDate((prev) => prev.subtract(1, "month"));
-  };
-
-  const handleNextMonth = () => {
-    setCurrentDate((prev) => prev.add(1, "month"));
-  };
-
-  const renderWeekdays = () => {
-    const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
-    return weekdays.map((day, index) => <Weekday key={index}>{day}</Weekday>);
-  };
-
-  const renderDays = () => {
-    const daysInMonth = endOfMonth.date();
-    const firstDayOfWeek = startOfMonth.day();
-
-    const blanks = Array.from({ length: firstDayOfWeek }, (_, i) => (
-      <Day key={`blank-${i}`} />
-    ));
-
-    const days = Array.from({ length: daysInMonth }, (_, i) => {
-      const date = startOfMonth.add(i, "day").format("YYYY-MM-DD");
-
-      const isWeekly = dayjs(date).isBetween(startDate, endDate, "day", "[]");
-      const isPast = dayjs(date).isBefore(today, "day");
-      const isToday = date === today;
-
-      const hasEvent = myVisits?.some(
-        (schedule) => dayjs(schedule.visitAt).format("YYYY-MM-DD") === date
-      );
-
-      const isSelected = date === selectedDate;
-
-      return (
-        <Day
-          key={date}
-          isWeekly={isWeekly}
-          isPast={isPast}
-          isToday={isToday}
-          hasEvent={hasEvent}
-          isSelected={isSelected}
-          dot={dot}
-          onClick={() => {
-            onDateClick(date);
-          }}
-        >
-          {i + 1}
-        </Day>
-      );
-    });
-
-    return [...blanks, ...days];
-  };
-
-  return (
-    <CalendarWrapper>
-      <CalendarHeader>
-        <MonthNavigation onClick={handlePrevMonth}>
-            <img src={reversearrowIcon} alt="이전 달" />
-        </MonthNavigation>
-        <CurrentMonth>{currentDate.format("YYYY.MM")}</CurrentMonth>
-        <MonthNavigation onClick={handleNextMonth}>
-        <img src={arrowIcon} alt="다음 달" />
-        </MonthNavigation>
-      </CalendarHeader>
-      <CalendarGrid>{renderWeekdays()}</CalendarGrid>
-      <CalendarGrid>{renderDays()}</CalendarGrid>
-    </CalendarWrapper>
-  );
-};
-
 export default Calendar;
