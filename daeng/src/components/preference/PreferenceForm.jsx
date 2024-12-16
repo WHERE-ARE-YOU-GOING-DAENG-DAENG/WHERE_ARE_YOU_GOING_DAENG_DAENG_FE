@@ -1,0 +1,182 @@
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import ConfirmBtn from "../commons/ConfirmBtn";
+import PreferencePlaceOption from "../commons/PreferencePlaceOption";
+import PreferenceFavoriteOption from "../commons/PreferenceFavoriteOption";
+import Loading from "../commons/Loading";
+import AlertDialog from "../commons/SweetAlert";
+import { placeFeatures, placeTypes } from "../../data/CommonCode";
+
+function PreferenceForm({
+  selectedPlaceOptions,
+  setSelectedPlaceOptions,
+  selectedFavoriteOptions,
+  setSelectedFavoriteOptions,
+  isLoading,
+  onConfirm,
+  confirmButtonLabel = "확인",
+  placeIcons,
+  featureIcons,
+}) {
+  const handleOptionClick = (selectedOptions, setSelectedOptions, code) => {
+    if (selectedOptions.length >= 3 && !selectedOptions.includes(code)) {
+      AlertDialog({
+        mode: "alert",
+        title: "선택 초과",
+        text: "최대 3개만 선택 가능합니다.",
+        confirmText: "확인",
+      });
+      return;
+    }
+
+    setSelectedOptions((prev) =>
+      prev.includes(code) ? prev.filter((option) => option !== code) : [...prev, code]
+    );
+  };
+
+  return (
+    <Wrap>
+      {isLoading && <Loading label="로딩 중입니다..." />}
+      <Section>
+        <Title>어떤 시설에 관심이 많으신가요?</Title>
+        <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
+        <OptionContainer>
+          {placeTypes.map(({ codeId, name }) => (
+            <PreferencePlaceOption
+              key={codeId}
+              label={name}
+              icon={placeIcons[codeId]}
+              isSelected={selectedPlaceOptions.includes(codeId)}
+              onClick={() =>
+                handleOptionClick(selectedPlaceOptions, setSelectedPlaceOptions, codeId)
+              }
+            />
+          ))}
+        </OptionContainer>
+      </Section>
+
+      <Section>
+        <Title>어떤 부분이 중요하신가요?</Title>
+        <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
+        <OptionContainer>
+          {placeFeatures.map(({ codeId, name }) => (
+            <PreferenceFavoriteOption
+              key={codeId}
+              label={name}
+              icon={featureIcons[codeId]}
+              isSelected={selectedFavoriteOptions.includes(codeId)}
+              onClick={() =>
+                handleOptionClick(selectedFavoriteOptions, setSelectedFavoriteOptions, codeId)
+              }
+            />
+          ))}
+        </OptionContainer>
+      </Section>
+
+      <StyledParagraph2>
+        보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.
+      </StyledParagraph2>
+
+      <Footer>
+        <ConfirmBtn label={confirmButtonLabel} onClick={onConfirm} />
+      </Footer>
+    </Wrap>
+  );
+}
+
+PreferenceForm.propTypes = {
+  selectedPlaceOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setSelectedPlaceOptions: PropTypes.func.isRequired,
+  selectedFavoriteOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setSelectedFavoriteOptions: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
+  onConfirm: PropTypes.func.isRequired,
+  confirmButtonLabel: PropTypes.string,
+  placeIcons: PropTypes.object.isRequired,
+  featureIcons: PropTypes.object.isRequired,
+};
+
+PreferenceForm.defaultProps = {
+  isLoading: false,
+  confirmButtonLabel: "확인",
+};
+
+const Wrap = styled.div`
+  padding: 20px;
+  @media (max-width: 554px) {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 0px;
+  }
+`;
+
+const Section = styled.div`
+  margin-bottom: 40px;
+`;
+
+const Title = styled.h3`
+  text-align: left;
+  margin-left: 10px;
+  font-size: 17px;
+  margin-bottom: 10px;
+
+  @media (max-width: 554px) {
+    font-size: 14px;
+    margin-left: 20px;
+  }
+`;
+
+const StyledParagraph = styled.p`
+  font-size: 12px;
+  color: #ff69a9;
+  font-weight: bold;
+  margin-top: 9px;
+  margin-left: 10px;
+  display: flex;
+
+  @media (max-width: 554px) {
+    font-size: 10px;
+    margin-left: 20px;
+  }
+`;
+
+const OptionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  gap: 5px;
+  margin-left: 5px;
+
+  @media (max-width: 554px) {
+    gap: 3px;
+  }
+`;
+
+const StyledParagraph2 = styled.p`
+  font-size: 14px;
+  color: red;
+  font-weight: bold;
+  margin-top: 80px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 554px) {
+    font-size: 10px;
+    margin-left: 10px;
+    text-align: center;
+    margin-top: 60px;
+  }
+`;
+
+const Footer = styled.div`
+  margin-left: 15px;
+  padding-bottom: 10px;
+
+  @media (max-width: 554px) {
+    margin-left: 20px;
+  }
+`;
+
+export default PreferenceForm;
