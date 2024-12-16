@@ -1,3 +1,8 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import useLocationStore from "../stores/useLocationStore";
+import useUserStore from "../stores/userStore";
+import Wrapper from "../components/Home/HomeWrapper";
 import HomeHeader from "../components/Home/HomeHeader";
 import HomeSlider from "../components/Home/HomeSlider";
 import HomeStory from "../components/Home/HomeStory";
@@ -6,19 +11,16 @@ import HomeTrendingPlaces from "../components/Home/HomeTrendingPlaces";
 import HomeLogout from "../components/Home/HomeLogout";
 import HomeRecommendPlaces from "../components/Home/HomeRecommendPlaces";
 import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
-import Wrapper from "../components/Home/HomeWrapper";
 import Footer from "../components/commons/Footer";
-import useLocationStore from "../stores/useLocationStore";
 import AlertDialog from "../components/commons/SweetAlert";
-import { useEffect, useState } from "react";
-import useUserStore from "../stores/userStore";
-import axios from "axios";
+import Loading from "../components/commons/Loading";
 
 function Home() {
   const userLocation = useLocationStore((state) => state.userLocation);
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
   const setLoginData = useUserStore((state) => state.setLoginData);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const checkLoginStatusInCookie = () => {
     const cookies = document.cookie.split("; ");
@@ -35,8 +37,7 @@ function Home() {
   useEffect(() => {
     const loginStatus = checkLoginStatusInCookie();
     setIsLoggedIn(loginStatus);
-    console.log("현재위치", userLocation)
-    
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -54,18 +55,24 @@ function Home() {
             setUserLocation(newLocation);
           }
         },
+        () => {
+          console.error("위치 권한이 거부되었습니다.");
+        }
       );
     }
-  }, [userLocation]);
+  }, [userLocation, setUserLocation]);
 
   useEffect(() => {
     if (isLoggedIn) {
       fetchUserData();
+    } else {
+      simulateLoadingDelay();
     }
   }, [isLoggedIn]);
 
   const fetchUserData = async () => {
     try {
+      await simulateLoadingDelay();
       const response = await axios.get("https://dev.daengdaeng-where.link/api/v1/user/adjust", {
         withCredentials: true,
       });
@@ -79,8 +86,19 @@ function Home() {
         text: "사용자 정보를 불러오는 데 문제가 발생했습니다.",
         confirmText: "확인",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const simulateLoadingDelay = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setIsLoading(false);
+  };
+
+  if (isLoading) {
+    return <Loading label="홈 화면을 불러오는 중입니다..." />;
+  }
 
   return (
     <Wrapper>
