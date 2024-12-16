@@ -160,7 +160,7 @@ function Detail({ onClose, onNext }) {
       <InputField type="text" placeholder="닉네임" value={nickname} readOnly />
       <DropdownContainer>
         <Dropdown value={city} onChange={handleCityChange}>
-          <option value="">city</option>
+          <option value="">도</option>
           {lands.map((land, index) => (
             <option key={index} value={land.city}>
               {land.city}
@@ -168,7 +168,7 @@ function Detail({ onClose, onNext }) {
           ))}
         </Dropdown>
         <Dropdown value={cityDetail} onChange={(e) => setCityDetail(e.target.value)}>
-          <option value="">cityDetail</option>
+          <option value="">시/군/구</option>
           {cityDetails.map((detail, index) => (
             <option key={index} value={detail.cityDetail}>
               {detail.cityDetail}
