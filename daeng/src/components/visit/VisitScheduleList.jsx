@@ -5,22 +5,6 @@ import VisitModal from "./VisitModal";
 import { useEffect, useState } from "react";
 import usePetStore from "../../stores/usePetStore";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 44px;
-  padding-bottom: 47px;
-`;
-
-const NoVisit = styled.div`
-  padding: 15vh 0;
-  font-weight: bold;
-`
-const FixedButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
 const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState({});
@@ -69,5 +53,22 @@ const VisitScheduleList = ({ data, placeId, setReloadTrigger }) => {
     </>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 44px;
+  padding-bottom: 47px;
+`;
+
+const NoVisit = styled.div`
+  padding: 15vh 0;
+  font-weight: bold;
+`
+const FixedButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 export default VisitScheduleList;
