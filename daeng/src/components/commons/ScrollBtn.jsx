@@ -10,7 +10,7 @@ const ScrollTop = styled.button`
   bottom: 90px;
   right: 50%;
   transform: translateX(500%);
-  z-index: 1000;
+  z-index: 900;
   border: none;
   border-radius: 50%;
   width: 50px;
