@@ -1,6 +1,25 @@
 import badge from "../../assets/icons/badge.svg"
 import styled from "styled-components";
 
+const MyLandLabel = ({ region, subRegion, onClick }) => {
+  const [firstPart, ...remainingParts] = subRegion.split(" ");
+  const remainingPart = remainingParts.join(" ");
+
+  return (
+    <LabelContainer onClick={onClick}>
+      <Icon>
+        <img src={badge} alt="뱃지" />
+      </Icon>
+      <TextContainer>
+        {region}
+        {remainingPart ? ` ${firstPart}` : null}
+        <br />
+        {remainingPart || firstPart}
+      </TextContainer>
+    </LabelContainer>
+  );
+};
+
 const LabelContainer = styled.div`
   display: flex;
   align-items: center;
@@ -29,24 +48,5 @@ const TextContainer = styled.div`
   font-size: 16px;
   font-weight: bold;
 `;
-
-const MyLandLabel = ({ region, subRegion, onClick }) => {
-  const [firstPart, ...remainingParts] = subRegion.split(" ");
-  const remainingPart = remainingParts.join(" ");
-
-  return (
-    <LabelContainer onClick={onClick}>
-      <Icon>
-        <img src={badge} alt="뱃지" />
-      </Icon>
-      <TextContainer>
-        {region}
-        {remainingPart ? ` ${firstPart}` : null}
-        <br />
-        {remainingPart || firstPart}
-      </TextContainer>
-    </LabelContainer>
-  );
-};
 
 export default MyLandLabel;
