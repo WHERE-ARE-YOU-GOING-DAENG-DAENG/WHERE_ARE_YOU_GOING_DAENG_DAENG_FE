@@ -82,20 +82,24 @@ const PlaceTitle = ({ data, setData }) => {
         if (isFavorite) {
           const favoriteId = favoriteStore.getFavoriteId(placeId);
           if (favoriteId) {
-            await favoriteStore.removeFavorite(favoriteId);
+            const response = await favoriteStore.removeFavorite(favoriteId);
+            if (response?.status === 200) {
             setData((prevData) => ({
               ...prevData,
               isFavorite: false,
             }));
+          }
           } else {
             console.warn(`장소ID로 즐겨찾기 ID찾을 수 없음음: ${placeId}`);
           }
         } else {
-          await favoriteStore.addFavorite(placeId);
-          setData((prevData) => ({
+          const response = await favoriteStore.addFavorite(placeId);
+          if (response?.status === 200)
+            {setData((prevData) => ({
             ...prevData,
             isFavorite: true,
           }));
+        }
         }
       } catch (error) {
         console.error("즐겨찾기 상태 바꾸는 중 에러러:", error);
