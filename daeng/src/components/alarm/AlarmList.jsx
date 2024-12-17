@@ -4,8 +4,12 @@ import axios from "axios";
 import PushAlerts from "../../components/commons/PushAlerts";
 
 const ListContainer = styled.div`
-  padding-left: 30px;
-
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding-bottom: 100%;
+  margin-left:20px;
+  
   @media (max-width: 554px) {
     margin: 10px;
     padding: 10px;

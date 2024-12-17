@@ -26,29 +26,43 @@ export const requestNotificationPermission = async () => {
 export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
     console.log("알림 수신:", payload);
-    if (!document.hidden) {
-      const notificationTitle = payload.notification.title;
-      const notificationOptions = {
-        body: payload.notification.body,
-        image: payload.notification.image,
-        icon: payload.notification.icon || '/alarm-logo.png',
-      };
 
-      const notification = new Notification(notificationTitle, notificationOptions);
-
-      notification.onclick = function (event) {
-        event.preventDefault();
-        const url = payload.data?.url;
-        if (url) {
-          window.location.href = url;
-        } else {
-          console.error("URL 데이터가 없습니다.");
-        }
-        notification.close();
-      };
-    } else {
-      console.log("페이지가 백그라운드 상태입니다. 포그라운드 상태에서만 알림을 표시합니다.");
+    // 페이지가 백그라운드 상태인지 확인
+    if (document.visibilityState === "hidden") {
+      console.log("백그라운드 상태에서는 알림을 표시하지 않습니다.");
+      return;
     }
+
+    // 알림 데이터 추출
+    let notificationTitle = "알림";
+    let notificationOptions = {
+      body: "내용이 없습니다.",
+      icon: "/alarm-logo.png",
+      data: { url: "/" }, // 기본 URL 설정
+    };
+
+    if (payload.data) {
+      // payload.data 사용
+      notificationTitle = payload.data.title || notificationTitle;
+      notificationOptions.body = payload.data.body || notificationOptions.body;
+      notificationOptions.icon = payload.data.icon || notificationOptions.icon;
+      notificationOptions.data.url = payload.data.url || notificationOptions.data.url;
+    } else if (payload.notification) {
+      // payload.notification Fallback 사용
+      notificationTitle = payload.notification.title || notificationTitle;
+      notificationOptions.body = payload.notification.body || notificationOptions.body;
+      notificationOptions.icon = payload.notification.icon || notificationOptions.icon;
+    }
+
+    // 알림 생성 및 클릭 이벤트
+    const notification = new Notification(notificationTitle, notificationOptions);
+
+    notification.onclick = (event) => {
+      event.preventDefault();
+      const url = notificationOptions.data?.url || "/";
+      window.location.href = url;
+      notification.close();
+    };
   });
 };
 
