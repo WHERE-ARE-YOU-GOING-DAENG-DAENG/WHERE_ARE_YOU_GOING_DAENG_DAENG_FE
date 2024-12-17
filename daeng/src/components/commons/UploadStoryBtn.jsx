@@ -40,7 +40,7 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 40%;
+  width: 88px;
   height: 170px;
   cursor: pointer;
   margin-top: ${({ textLength }) => (textLength > 8 ? '20px' : '10px')};
