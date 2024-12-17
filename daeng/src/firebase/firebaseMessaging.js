@@ -23,20 +23,40 @@ export const requestNotificationPermission = async () => {
 
 export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
+    console.log("알림 수신:", payload);
 
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-      image: payload.notification.image,
-      icon: payload.notification.icon || '/alarm-logo.png',
-    };
+      if (document.visibilityState === "hidden") {
+        console.log("백그라운드 상태에서는 알림을 표시하지 않습니다.");
+        return;
+        }
+  
+    if (payload && payload.data) {
+      const { title, body, image, icon} = payload.data;
 
-    const notification = new Notification(notificationTitle, notificationOptions);
+      console.log("수신된 URL:", url); 
+      const notificationTitle = title || "알림";
+      const notificationOptions = {
+        body: body || "내용이 없습니다.",
+        image: image || null,
+        icon: icon || "/alarm-logo.png",
+      };
 
-    notification.onclick = function (event) {
-      event.preventDefault(); 
-      notification.close(); 
-    };
+      const notification = new Notification(notificationTitle, notificationOptions);
+
+      notification.onclick = function (event) {
+        const url = payload.data.url; 
+        event.preventDefault();
+        if (url) {
+          console.log("이동할 URL:", url);
+          window.location.href = url; 
+        } else {
+          console.error("URL 데이터가 없습니다.");
+        }
+        notification.close();
+      };
+    } else {
+      console.log("페이지가 백그라운드 상태입니다. 포그라운드 상태에서만 알림을 표시합니다.");
+    }
   });
 };
 

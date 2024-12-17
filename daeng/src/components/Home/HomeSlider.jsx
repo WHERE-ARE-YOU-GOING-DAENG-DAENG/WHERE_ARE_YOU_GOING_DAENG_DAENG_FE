@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import survey_banner from "../../assets/icons/survey_banner.jpg";
-// import festival_banner from "../../assets/icons/festival_banner.jpg";
+import festival_banner from "../../assets/icons/festival_banner.jpg";
 import banner1 from '../../assets/icons/banner1.jpg';
 import banner2 from "../../assets/icons/banner2.jpg";
-import AlertDialog from "../commons/SweetAlert";
+import banner3 from "../../assets/icons/banner3.jpg";
 import { useNavigate } from "react-router-dom";
 
 function HomeSlider() {
   const navigate = useNavigate();
-  const slides = [survey_banner, banner1, banner2]; 
+  const slides = [festival_banner, banner1, banner2, banner3]; 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -24,20 +23,39 @@ function HomeSlider() {
   };
 
   const handleSlideClick = (index) => {
-    if (slides[index] === banner1 || slides[index] === banner2) {
+    if (
+      slides[index] === banner1 || 
+      slides[index] === banner2 || 
+      slides[index] === banner3
+    ) {
       navigate("/how-to-guide"); 
     } else {
-      window.location.href = "https://forms.gle/TPUnhGBEzGzaosPt8"
+      navigate("/event"); 
     }
+  };
+  
+
+  const handleNext = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentSlide((prevSlide) => (prevSlide - 1 + slides.length) % slides.length);
   };
 
   return (
     <SliderWrapper>
       <SlidesContainer currentSlide={currentSlide}>
         {slides.map((slide, index) => (
-          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} onClick={() => handleSlideClick(index)}  />
+          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} onClick={() => handleSlideClick(index)} />
         ))}
       </SlidesContainer>
+      <ArrowButton direction="left" onClick={handlePrev}>
+        &#8592;
+      </ArrowButton>
+      <ArrowButton direction="right" onClick={handleNext}>
+        &#8594;
+      </ArrowButton>
       <DotsWrapper>
         {slides.map((_, index) => (
           <Dot
@@ -56,11 +74,13 @@ const SliderWrapper = styled.div`
   height: auto;
   position: relative;
   overflow: hidden;
+  margin-top: 80px;
 
   aspect-ratio: 554 / 189;
 
   @media (max-width: 554px) {
     aspect-ratio: 414 / 140;
+    margin-top: 63px;
   }
 `;
 
@@ -106,6 +126,34 @@ const Dot = styled.div`
   @media (max-width: 554px) {
     width: 6px;
     height: 6px;
+  }
+`;
+
+const ArrowButton = styled.button`
+  position: absolute;
+  top: 40%;
+  ${({ direction }) => (direction === "left" ? "left: 10px;" : "right: 10px;")}
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  @media (max-width: 554px) {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
   }
 `;
 

@@ -1,91 +1,14 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import dogIcon from "../../assets/icons/detailDog.svg"
-import addressIcon from "../../assets/icons/place.svg"
-import hourIcon from "../../assets/icons/operatingHour.svg"
-import callnumberIcon from "../../assets/icons/callnumber.svg"
-import websiteIcon from "../../assets/icons/website.svg"
-import inandout from "../../assets/icons/indoorandoutdoor.svg"
-import inIcon from "../../assets/icons/indoor.svg"
-import outIcon from "../../assets/icons/outdoor.svg"
+import dogIcon from "../../assets/icons/detailmark.svg";
+import addressIcon from "../../assets/icons/place.svg";
+import hourIcon from "../../assets/icons/operatingHour.svg";
+import callnumberIcon from "../../assets/icons/callnumber.svg";
+import websiteIcon from "../../assets/icons/website.svg";
+import inandout from "../../assets/icons/indoorandoutdoor.svg";
+import inIcon from "../../assets/icons/indoor.svg";
+import outIcon from "../../assets/icons/outdoor.svg";
 import PlaceOption from "../../components/commons/PlaceOption";
-
-const InfoCard = styled.div`
-  background: #F7F7F7;
-  border-radius: 10px;
-  padding: 20px 30px;
-  margin-top: 20px;
-  position: relative;
-
-  @media (max-width: 554px){
-    padding: 20px 5%;
-  }
-
-  .info-title{
-    display: flex;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 20px;
-    span{
-    color: #FF4B98;
-    }
-  }
-
-  .info-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-
-    img {
-      width: 20px;
-      margin-right: 10px;
-    }
-
-    span {
-      font-size: 14px;
-      padding: 10px;
-      width: 60%;
-      text-align:left;
-      word-wrap: break-word;
-      @media(max-width:554px){
-        font-size: 12px;
-      }
-    }
-    a {
-      font-size: 14px;
-      padding: 10px;
-      width: 60%;
-      text-align: left;
-      word-wrap: break-word;
-
-      @media(max-width:554px){
-        font-size: 12px;
-      }
-    }
-  }
-    .dog-icon {
-    position: absolute;
-    bottom: 20px;
-    right: -10px;
-
-    @media (max-width: 554px){
-      bottom: 20px;
-      width: 30%;
-    }
-
-  }
-`;
-
-const OptionCard = styled.div`
-  margin: 20px 0px;
-  position: relative;
-`
-const Container = styled.div`
-  padding: 0px 44px;
-  @media(max-width: 554px){
-    padding: 0px 8%;
-  }
-`
 
 const PlaceInfo = ({data}) => {
     const parkingStatus = data.parking ? "주차가능" : "주차불가";
@@ -144,5 +67,81 @@ const PlaceInfo = ({data}) => {
     )
 };
 
+const InfoCard = styled.div`
+  background: #F7F7F7;
+  border-radius: 10px;
+  padding: 20px 30px;
+  margin-top: 20px;
+  position: relative;
+
+  @media (max-width: 554px){
+    padding: 20px 5%;
+  }
+
+  .info-title{
+    display: flex;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 20px;
+    span{
+    color: #FF4B98;
+    }
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    img {
+      width: 20px;
+      margin-right: 10px;
+    }
+
+    span {
+      font-size: 14px;
+      padding: 10px;
+      width: 60%;
+      text-align:left;
+      word-wrap: break-word;
+      @media(max-width:554px){
+        font-size: 12px;
+      }
+    }
+    a {
+      font-size: 14px;
+      padding: 10px;
+      width: 60%;
+      text-align: left;
+      word-wrap: break-word;
+
+      @media(max-width:554px){
+        font-size: 12px;
+      }
+    }
+  }
+    .dog-icon {
+    position: absolute;
+    bottom: 20px;
+    right: 0px;
+
+    @media (max-width: 554px){
+      bottom: 20px;
+      width: 35%;
+    }
+
+  }
+`;
+
+const OptionCard = styled.div`
+  margin: 20px 0px;
+  position: relative;
+`
+const Container = styled.div`
+  padding: 0px 44px;
+  @media(max-width: 554px){
+    padding: 0px 8%;
+  }
+`
 
 export default PlaceInfo;

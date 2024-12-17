@@ -1,24 +1,26 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import useLocationStore from "../stores/useLocationStore";
+import useUserStore from "../stores/userStore";
+import Wrapper from "../components/Home/HomeWrapper";
 import HomeHeader from "../components/Home/HomeHeader";
 import HomeSlider from "../components/Home/HomeSlider";
+import HomeStory from "../components/Home/HomeStory";
 import HomeDogPlaces from "../components/Home/HomeDogPlaces";
 import HomeTrendingPlaces from "../components/Home/HomeTrendingPlaces";
-import HomeSanta from "../components/Home/HomeSanta";
 import HomeLogout from "../components/Home/HomeLogout";
 import HomeRecommendPlaces from "../components/Home/HomeRecommendPlaces";
 import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
-import Wrapper from "../components/Home/HomeWrapper";
 import Footer from "../components/commons/Footer";
-import useLocationStore from "../stores/useLocationStore";
 import AlertDialog from "../components/commons/SweetAlert";
-import { useEffect, useState } from "react";
-import useUserStore from "../stores/userStore";
-import axios from "axios";
+import Loading from "../components/commons/Loading";
 
 function Home() {
   const userLocation = useLocationStore((state) => state.userLocation);
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
   const setLoginData = useUserStore((state) => state.setLoginData);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const checkLoginStatusInCookie = () => {
     const cookies = document.cookie.split("; ");
@@ -42,50 +44,69 @@ function Home() {
           const newLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
+            accuracy: position.coords.accuracy,
           };
 
+          const { lat, lng, accuracy } = userLocation;
           if (
-            userLocation.lat !== newLocation.lat ||
-            userLocation.lng !== newLocation.lng
+            newLocation.accuracy < accuracy &&
+            (lat !== newLocation.lat || lng !== newLocation.lng)
           ) {
             setUserLocation(newLocation);
           }
         },
+        () => {
+          console.error("위치 권한이 거부되었습니다.");
+        }
       );
     }
-  }, [userLocation]);
+  }, [userLocation, setUserLocation]);
 
   useEffect(() => {
     if (isLoggedIn) {
       fetchUserData();
+    } else {
+      simulateLoadingDelay();
     }
   }, [isLoggedIn]);
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get("https://www.daengdaeng-where.link/api/v1/user/adjust", {
+      await simulateLoadingDelay();
+      const response = await axios.get("https://api.daengdaeng-where.link/api/v1/user/adjust", {
         withCredentials: true,
       });
       const { user } = response.data.data;
 
       setLoginData(user);
-    } catch (error) {
+    } catch {
       AlertDialog({
         mode: "alert",
         title: "데이터 불러오기 실패",
         text: "사용자 정보를 불러오는 데 문제가 발생했습니다.",
         confirmText: "확인",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const simulateLoadingDelay = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    setIsLoading(false);
+  };
+
+  if (isLoading) {
+    return <Loading label="홈 화면을 불러오는 중입니다..." />;
+  }
 
   return (
     <Wrapper>
       <HomeHeader />
       <HomeSlider />
+      <HomeStory />
       {isLoggedIn ? <HomeDogPlaces /> : <HomeLogout />}
       <HomeTrendingPlaces />
-      <HomeSanta />
       <HomeRecommendPlaces />
       <HomeKeywordPlaces />
       <Footer />

@@ -21,10 +21,11 @@ const FooterContainer = styled.div`
     width: 100%;
     max-width: 554px;
     height: 77px;
-    z-index: 1000;
+    z-index: 100;
     background-color: #ffffff;
     position: fixed;
     bottom: 0;
+    border-top: 1px solid #d9d9d9;
 
     @media (max-width: 554px) {
         height: 64px;
@@ -105,7 +106,7 @@ const Footer = () => {
 
     return (
         <>
-            <ScrollBtn />
+            {location.pathname !== "/hopscotch" && <ScrollBtn />}
             <FooterContainer>
                 {items.map((item, index) => (
                     <FooterItem

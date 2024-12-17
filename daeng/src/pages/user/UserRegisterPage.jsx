@@ -1,6 +1,6 @@
 import Header from '../../components/commons/Header'
 import styled from "styled-components";
-import preferenceDog from "../../assets/icons/preferenceDog.svg";
+import preferenceDog from "../../assets/icons/user_logo.svg";
 import UserRegister from '../../components/user/UserRegister';
 
 function UserRegisterPage() {
@@ -21,11 +21,11 @@ const UserContainer = styled.div`
 `;
 
 const ImgLogo = styled.img`
-  width: 300px;
-  margin: 30px auto 10px auto;
+  width: 400px;
+  margin: 20px auto 0px auto;
 
     @media (max-width: 554px) {
-    width: 60%; 
+    width: 70%; 
   }
 `;
 

@@ -1,14 +1,95 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import xIcon from "../../assets/icons/x.svg";
+import pinkxIcon from "../../assets/icons/pinkX.svg";
 import useVisitStore from "../../stores/useVisitStore";
 import AlertDialog from "../commons/SweetAlert";
 import { useNavigate } from "react-router-dom";
 
+const ScheduleTable = () => {
+  const myVisits = useVisitStore((state) => state.myVisits);
+  const removeVisit = useVisitStore((state) => state.removeVisit);
+  const navigate = useNavigate();
+
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const handleVisitClick = (placeId) => {
+    navigate(`/visit-list/${placeId}`);
+  };
+
+  const handleDelete = (e, id) => {
+    e.stopPropagation();
+    AlertDialog({
+      mode: "confirm",
+      title: "방문예정취소",
+      text: "방문예정을 취소하시겠습니까?",
+      confirmText: "네",
+      cancelText: "아니오",
+      onConfirm: async () => {
+        await removeVisit(id);
+      },
+    });
+  };
+
+  return (
+    <TableWrapper>
+      <Table>
+        <Thead>
+          <tr>
+            <Th>날짜</Th>
+            <Th>시간</Th>
+            <Th>장소</Th>
+            <Th>반려동물</Th>
+            <Th>취소</Th>
+          </tr>
+        </Thead>
+        <tbody>
+          {myVisits.length > 0 ? (
+            myVisits.map((schedule, index) => (
+              <tr
+                key={index}
+                onClick={() => handleVisitClick(schedule.placeId)}
+                style={{ cursor: "pointer" }}
+              >
+                <Td>{schedule.visitAt.split("T")[0].slice(5).replace("-", "/")}</Td>
+                <Td>{schedule.visitAt.split("T")[1].slice(0, 5)}</Td>
+                <Td>{schedule.placeName}</Td>
+                <Td>
+                  {schedule.pets.map((pet, idx) => (
+                    <span key={pet.petId}>
+                      {pet.petName}
+                      {idx < schedule.pets.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+                </Td>
+                <Td>
+                  <Button
+                    onClick={(e) => handleDelete(e, schedule.visitId)}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
+                    <img
+                      src={hoveredIndex === index ? pinkxIcon : xIcon}
+                      alt="삭제"
+                    />
+                  </Button>
+                </Td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <ColSpanTd colSpan="5">일정이 없습니다.</ColSpanTd>
+            </tr>
+          )}
+        </tbody>
+      </Table>
+    </TableWrapper>
+  );
+};
 const TableWrapper = styled.div`
   margin: 0px 40px;
   overflow: auto;
-  padding-bottom: 77px;
+  padding-bottom: 115px;
   @media (max-width: 554px) {
     margin: 0px 7%;
     padding-bottom: 64px;
@@ -24,7 +105,7 @@ const Table = styled.table`
 `;
 
 const Thead = styled.thead`
-  background: #FF4B98;
+  background: #ff4b98;
   color: white;
 `;
 
@@ -52,77 +133,4 @@ const Button = styled.button`
     width: 18px;
   }
 `;
-
-const ScheduleTable = () => {
-  const myVisits = useVisitStore((state)=>state.myVisits);
-  const removeVisit  = useVisitStore((state) => state.removeVisit);
-  const navigate = useNavigate();
-
-  const handleVisitClick = (placeId) => {
-    navigate(`/visit-list/${placeId}`);
-  };
-
-  const handleDelete = (e, id) => {
-    e.stopPropagation();
-    AlertDialog({
-      mode: "confirm",
-      title: "방문예정취소",
-      text: "방문예정을 취소하시겠습니까?",
-      confirmText: "취소",
-      cancelText: "닫기",
-      onConfirm: async () => {
-        await removeVisit(id);
-      }
-  })
-  };
-
-  return (
-    <TableWrapper>
-      <Table>
-        <Thead>
-          <tr>
-            <Th>날짜</Th>
-            <Th>시간</Th>
-            <Th>장소</Th>
-            <Th>반려동물</Th>
-            <Th>취소</Th>
-          </tr>
-        </Thead>
-        <tbody>
-          {myVisits.length > 0 ? (
-            myVisits.map((schedule, index) => (
-              <tr
-                key={index}
-                onClick={() => handleVisitClick(schedule.placeId)}
-                style={{ cursor: "pointer" }}
-              >
-                <Td>{schedule.visitAt.split("T")[0].slice(5).replace("-","/")}</Td>
-                <Td>{schedule.visitAt.split("T")[1].slice(0, 5)}</Td>
-                <Td>{schedule.placeName}</Td>
-                <Td>
-                  {schedule.pets.map((pet, idx) => (
-                    <span key={pet.petId}>
-                      {pet.petName}
-                      {idx < schedule.pets.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
-                </Td>
-                <Td>
-                  <Button onClick={(e) => handleDelete(e, schedule.visitId)}>
-                    <img src={xIcon} alt="삭제" />
-                  </Button>
-                </Td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <ColSpanTd colSpan="5">일정이 없습니다.</ColSpanTd>
-            </tr>
-          )}
-        </tbody>
-      </Table>
-    </TableWrapper>
-  );
-};
-
 export default ScheduleTable;

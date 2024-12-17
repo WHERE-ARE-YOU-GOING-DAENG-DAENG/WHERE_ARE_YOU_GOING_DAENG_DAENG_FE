@@ -7,49 +7,42 @@ const useFavoriteStore = create((set, get) => ({
   favorites: [],
   hasMore: true,
   isLoading: false,
+  lastUpdatedAt: null, 
+  lastFavoriteId: null,
 
-  fetchFavorites: async (page) => {
-    const state = get();
-    if (state.isLoading) return;
+  resetFavorites: () => {
+    set({
+      favorites: [],
+      hasMore: true,
+      isLoading: false,
+      lastUpdatedAt: null,
+      lastFavoriteId: null,
+    });
+  },
+  
+  fetchFavorites: async () => {
+    const { isLoading, lastUpdatedAt, lastFavoriteId, hasMore } = get();
+    if (isLoading || !hasMore) return;
+    
     try {
       set({ isLoading: true });
-      const response = await axiosInstance.get(
-        `https://www.daengdaeng-where.link/api/v1/favorites?page=${page}&size=10`,
-        {
-          withCredentials: true,
-        }
-      );
-
-      const newFavorites = response.data.data.content;
-      const totalPages = response.data.data.totalPages;
-
-      const existingIds = new Set(state.favorites.map((fav) => fav.favoriteId));
-        const filteredFavorites = newFavorites.filter(
-            (fav) => !existingIds.has(fav.favoriteId)
-        );
-
-      set((state) => ({
-        favorites: [...state.favorites, ...filteredFavorites],
-        hasMore: page + 1 < totalPages,
-      }));
-    } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401) {
-          AlertDialog({
-            mode: "alert",
-            title: "로그인 필요",
-            text: "로그인이 필요한 기능입니다.",
-            confirmText: "확인",
-          });
-        } else {
-          AlertDialog({
-            mode: "alert",
-            title: "즐겨찾기 조회",
-            text: "즐겨찾기 조회가 실패하였습니다.",
-            confirmText: "확인",
-          });
-        }
+      const url = `https://api.daengdaeng-where.link/api/v1/favorites?lastUpdatedAt=${lastUpdatedAt || ""}&lastFavoriteId=${lastFavoriteId || ""}`
+      const response = await axiosInstance.get(url, { withCredentials: true });
+      const newFavorites = response.data.data;
+  
+      if (newFavorites.length > 0) {
+        const lastItem = newFavorites[newFavorites.length - 1];
+        set((state) => ({
+          favorites: [...state.favorites, ...newFavorites],
+          lastUpdatedAt: lastItem.updatedAt,
+          lastFavoriteId: lastItem.favoriteId,
+          hasMore: newFavorites.length === 10,
+        }));
+      } else {
+        set({ hasMore: false });
       }
+    } catch (error) {
+      console.error("즐겨찾기 목록 조회 중 오류발생",error)
       set({ hasMore: false });
     } finally {
       set({ isLoading: false });
@@ -66,32 +59,32 @@ const useFavoriteStore = create((set, get) => ({
       set((state) => ({
         favorites: [...state.favorites, newFavorite],
       }));
+        // AlertDialog({
+        //   mode: "alert",
+        //   title: "즐겨찾기 추가",
+        //   text: "즐겨찾기 목록에 추가되었습니다.",
+        //   icon: "success",
+        //   confirmText: "확인",
+        // });
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response?.status === 401) {
+          AlertDialog({
+              mode: "alert",
+              title: "로그인 필요",
+              text: `즐겨찾기는 로그인이 필요한 기능입니다.`,
+              confirmText: "확인",
+            });
+        }else{
         AlertDialog({
           mode: "alert",
-          title: "즐겨찾기 추가",
-          text: "즐겨찾기 목록에 추가되었습니다.",
-          icon: "success",
+          title: "즐겨찾기 등록",
+          text: "즐겨찾기 등록이 실패하였습니다.",
           confirmText: "확인",
         });
       }
-    } catch (error) {
-      if(error.response){
-        if (error.response.status === 401) {
-          AlertDialog({
-            mode: "alert",
-            title: "로그인 필요",
-            text: "로그인이 필요한 기능입니다.",
-            confirmText: "확인",
-          });
-        } else {
-          AlertDialog({
-            mode: "alert",
-            title: "즐겨찾기 등록",
-            text: "즐겨찾기 등록이 실패하였습니다.",
-            confirmText: "확인",
-          });
-        }
-  }
+      }
     }
   },
   removeFavorite: async (favoriteId) => {
@@ -102,25 +95,24 @@ const useFavoriteStore = create((set, get) => ({
       set((state) => ({
         favorites: state.favorites.filter((fav) => fav.favoriteId !== favoriteId),
       }));
-
-      if(response.status === 200){
+    } catch (error) {
+      if (error.response) {
+        if (error.response?.status === 401) {
+          AlertDialog({
+              mode: "alert",
+              title: "로그인 필요",
+              text: `즐겨찾기는 로그인이 필요한 기능입니다.`,
+              confirmText: "확인",
+            });
+        }else{
         AlertDialog({
           mode: "alert",
           title: "즐겨찾기 삭제",
-          text: "즐겨찾기 목록에서 삭제되었습니다.",
-          icon: "success",
+          text: "즐겨찾기 삭제를 실패하였습니다.",
           confirmText: "확인",
         });
       }
-    } catch (error) {
-      if(error.response){
-        AlertDialog({
-        mode: "alert",
-        title: "즐겨찾기 삭제",
-        text: "즐겨찾기 삭제가 실패하였습니다.",
-        confirmText: "확인",
-    });
-  }
+      }
     }
   },
   getFavoriteId: (placeId) => {

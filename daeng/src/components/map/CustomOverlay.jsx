@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 
-const CustomOverlay = ({ position, map, children }) => {
+const CustomOverlay = ({ position, map, children, offset = { x: 0, y: 0 } }) => {
   const overlayRef = useRef(null);
   const containerRef = useRef(document.createElement("div"));
   const rootRef = useRef(null);
@@ -35,8 +35,8 @@ const CustomOverlay = ({ position, map, children }) => {
       if (point) {
         const container = containerRef.current;
         container.style.position = "absolute";
-        container.style.left = `${point.x}px`;
-        container.style.top = `${point.y}px`;
+        container.style.left = `${point.x + offset.x}px`;
+        container.style.top = `${point.y + offset.y}px`;
         container.style.transform = "translate(-50%, -50%)";
         container.style.display = "block";
       }

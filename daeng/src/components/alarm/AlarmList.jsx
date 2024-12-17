@@ -4,11 +4,16 @@ import axios from "axios";
 import PushAlerts from "../../components/commons/PushAlerts";
 
 const ListContainer = styled.div`
-  padding-left: 30px;
-
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding-bottom: 100%;
+  margin-left:20px;
+  
   @media (max-width: 554px) {
     margin: 10px;
     padding: 10px;
+    padding-bottom: 100%;
   }
 `;
 
@@ -47,7 +52,7 @@ function AlarmList({ activeTab }) {
         setLoading(true);
         try {
           const response = await axios.get(
-            "https://www.daengdaeng-where.link/api/v1/notifications",
+            "https://api.daengdaeng-where.link/api/v1/notifications",
             {
               withCredentials: true,
             }

@@ -5,13 +5,13 @@ import star from '../../assets/icons/star.svg';
 import notfillstar from "../../assets/icons/notfillstar.svg";
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import ReviewSorting from './ReviewSorting';
-import useTotalReviewStore from '../../stores/UseTotalReviewStore';
 import AiReviewSummary from './AIReview';
 import axios from 'axios';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import ReviewSlideshow from './ReviewSlideshow';
 import { useNavigate } from 'react-router-dom';
 import arrow from '../../assets/icons/arrow.svg'
+import Loading from '../../components/commons/Loading'; 
 
 const TotalReviewContainer = styled.div`
   display: block;
@@ -32,7 +32,7 @@ const ReviewPlaceTitle = styled.span`
 
   @media (max-width: 554px) {
     font-size:23px;
-    margin-left:13px;
+    margin-left:4px;
   }
 `
 const PreferenceContainer = styled.div`
@@ -40,11 +40,13 @@ const PreferenceContainer = styled.div`
   margin-top: 3%;
   flex-direction: row;
   margin-bottom:3%;
-  gap:2px;
+  gap:3px;
+  margin-left:-5px;
+  flex-wrap: wrap; 
 
   @media (max-width: 554px) {
-    flex-direction: column;
     gap:5px;
+    margin-left:3px;
   }
 `
 
@@ -167,7 +169,7 @@ const UserId = styled.span`
 `
 const PetType = styled.span`
   font-size: 15px;
-  margin-left: 5px;
+  margin-left: -5px;
   color:#B3B3B3;
   margin-top:8px;
 
@@ -269,39 +271,57 @@ const LastReview = styled.span`
 const TotalReviewForm = () => {
   const { placeId } = useParams();
   const navigate = useNavigate();
-  const {
-    reviews,
-    total,
-    bestKeywords,
-    score,
-    fetchReviews,
-    setSortedType,
-    isLoading,
-    isLast,
-    sortedType,
-  } = useTotalReviewStore();
-
+  const [reviews, setReviews] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [bestKeywords, setBestKeywords] = useState([]);
+  const [score, setScore] = useState(0);
+  const [page, setPage] = useState(0);
+  const [isLast, setIsLast] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [sortedType, setSortedType] = useState("LATEST");
   const [placeName, setPlaceName] = useState("");
   const [isExpanded, setIsExpanded] = useState({});
-  const observerRef = useRef(null);
-
+  const observerRef = useRef(null); 
 
   useEffect(() => {
-    if (placeId) {
-      axios
-        .get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`)
-        .then((response) => {
-          const name = response.data?.data?.name;
-          setPlaceName(name || "장소 정보가 없습니다.");
-        })
-        .catch((error) => {
-          console.error("Failed to fetch placeName:", error);
-          setPlaceName("장소 정보가 없습니다.");
-        });
-    }
+    if (!placeId) return;
+    axios
+      .get(`https://api.daengdaeng-where.link/api/v1/places/${placeId}`)
+      .then((res) => setPlaceName(res.data?.data?.name || "장소 정보가 없습니다."))
+      .catch(() => setPlaceName("장소 정보가 없습니다."));
   }, [placeId]);
 
-  
+  const fetchReviews = async (currentPage) => {
+    if (isLoading || isLast) return;
+
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `https://api.daengdaeng-where.link/api/v1/reviews/place/${placeId}/${sortedType}`,
+        { params: { page: currentPage, size: 15 } }
+      );
+
+      const data = response.data.data;
+
+      setReviews((prev) => (currentPage === 0 ? data.reviews : [...prev, ...data.reviews]));
+      setTotal(data.total);
+      setBestKeywords(data.bestKeywords);
+      setScore(data.score);
+      setIsLast(data.isLast);
+    } catch (error) {
+      console.error("Failed to fetch reviews:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setPage(0);
+    setReviews([]);
+    setIsLast(false);
+    fetchReviews(0);
+  }, [placeId, sortedType]);
+
 
   useEffect(() => {
     if (placeId) {
@@ -310,11 +330,12 @@ const TotalReviewForm = () => {
   }, [placeId, fetchReviews]);
 
   const handleSortChange = (index) => {
-    const sortTypes = ['LATEST', 'HIGH_SCORE', 'LOW_SCORE'];
-    setSortedType(sortTypes[index]);
-    if (placeId) {
-      fetchReviews(placeId); 
-    }
+    const newSortedType = ['LATEST', 'HIGH_SCORE', 'LOW_SCORE'][index];
+    setSortedType(newSortedType);
+    setPage(0);
+    setReviews([]);
+    setIsLast(false);
+    fetchReviews(0);
   };
 
   const toggleText = (reviewId) => {
@@ -338,24 +359,25 @@ const TotalReviewForm = () => {
       if (observerRef.current) observerRef.current.disconnect();
 
       observerRef.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && placeId) {
-          fetchReviews(placeId);
+        if (entries[0].isIntersecting) {
+          setPage((prev) => prev + 1);
         }
       });
 
       if (node) observerRef.current.observe(node);
     },
-    [isLoading, isLast, fetchReviews, placeId]
+    [isLoading, isLast]
   );
 
+  useEffect(() => {
+    if (page > 0) fetchReviews(page);
+  }, [page]);
+
+
   if (isLoading && reviews.length === 0) {
-    return (
-      <div>
-        <img src="/assets/spinner.gif" alt="로딩 중..." />
-        <p>로딩 중...</p>
-      </div>
-    );
+    return <Loading label="리뷰를 불러오는 중입니다..." />;
   }
+
   if (!placeId) return <div>장소 정보를 가져올 수 없습니다.</div>;
 
   return (
@@ -380,10 +402,10 @@ const TotalReviewForm = () => {
         </TotalStarPoint>
         <TotalReviewCount>총 {total}개</TotalReviewCount>
         <ReviewSorting
-          sortingOptions={['최신순', '평점 높은순', '평점 낮은순']}
-          activeIndex={['LATEST', 'HIGH_SCORE', 'LOW_SCORE'].indexOf(sortedType)}
-          onSortChange={handleSortChange}
-        />
+        sortingOptions={['최신순', '평점 높은순', '평점 낮은순']}
+        activeIndex={['LATEST', 'HIGH_SCORE', 'LOW_SCORE'].indexOf(sortedType)}
+        onSortChange={handleSortChange}
+      />
       </ReviewSummaryContainer>
       <DivisionLine />
   
@@ -407,12 +429,12 @@ const TotalReviewForm = () => {
                 />
                 <TotalUserInfoContainer>
                 <CommentContainer>
-  <div>
-    <UserId>{review.nickname}</UserId>
-    <PetType>{review.pets?.join(", ")}</PetType>
-  </div>
-  <PostDate>{new Date(review.createdAt).toLocaleDateString()}</PostDate>
-</CommentContainer>
+                  <div>
+                    <UserId>{review.nickname}</UserId>
+                    <PetType>({review.pets?.join(", ")})</PetType>
+                  </div>
+                  <PostDate>{new Date(review.createdAt).toLocaleDateString()}</PostDate>
+                </CommentContainer>
                   <UserSecondInfoContainer>
                     {Array.from({ length: 5 }).map((_, idx) => (
                       <UserStarImg
@@ -442,15 +464,15 @@ const TotalReviewForm = () => {
             </div>
           );
         })
-      ) : !isLoading ? (
+      ) :!isLoading ? (
         <NoReview>리뷰가 없습니다.</NoReview>
       ) : null}
   
-      {isLoading && <div>로딩 중...</div>}
+      {isLoading && reviews.length > 0 && <Loading label="리뷰를 추가로 불러오는 중입니다..." />}
       {!isLoading && isLast && reviews.length > 0 && <LastReview>더이상 리뷰가 없습니다.</LastReview>}
     </TotalReviewContainer>
   );
-  };
-  
+};
+
   export default TotalReviewForm;
   

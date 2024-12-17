@@ -5,6 +5,7 @@ import AlertDialog from "../commons/SweetAlert";
 import axios from "axios";
 import { pushAgree } from "../../data/CommonCode";
 import AlarmList from "./AlarmList";
+import Loading from "../../components/commons/Loading"; 
 
 const AlarmContainer = styled.div`
   width: 100%;
@@ -37,13 +38,15 @@ const ToggleButton = styled.button`
 
 const AlarmBox = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
   const [selectedPushType] = useState(pushAgree[0].code);
-  
+
   useEffect(() => {
     const fetchNotificationConsent = async () => {
       try {
+        setIsLoading(true); 
         const response = await axios.get(
-          "https://www.daengdaeng-where.link/api/v1/notifications/consent",
+          "https://api.daengdaeng-where.link/api/v1/notifications/consent",
           { withCredentials: true }
         );
 
@@ -54,18 +57,34 @@ const AlarmBox = () => {
         }
       } catch (error) {
         console.error("알림 활성화 상태 요청 중 오류:", error);
+      } finally {
+        setIsLoading(false); 
       }
     };
 
     fetchNotificationConsent();
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js")
+        .then((registration) => {
+          console.log("Service Worker 등록 성공:", registration.scope);
+        })
+        .catch((error) => {
+          console.error("Service Worker 등록 실패:", error);
+        });
+    } else {
+      console.warn("이 브라우저는 Service Worker를 지원하지 않습니다.");
+    }
   }, []);
 
   const handleNotificationRequest = async () => {
+    setIsLoading(true); 
     try {
       const token = await requestNotificationPermission();
       if (token) {
         const response = await axios.post(
-          "https://www.daengdaeng-where.link/api/v1/notifications/pushToken",
+          "https://api.daengdaeng-where.link/api/v1/notifications/pushToken",
           {
             token,
             pushType: selectedPushType,
@@ -96,13 +115,16 @@ const AlarmBox = () => {
         confirmText: "닫기",
         icon: "error",
       });
+    } finally {
+      setIsLoading(false); 
     }
   };
 
   const handleCancelNotification = async () => {
+    setIsLoading(true); 
     try {
       const response = await axios.delete(
-        "https://www.daengdaeng-where.link/api/v1/notifications",
+        "https://api.daengdaeng-where.link/api/v1/notifications",
         {
           withCredentials: true,
         }
@@ -128,22 +150,30 @@ const AlarmBox = () => {
         confirmText: "닫기",
         icon: "error",
       });
+    } finally {
+      setIsLoading(false); 
     }
   };
 
   return (
     <>
-    <AlarmContainer>
-      <ToggleButton
-        isSubscribed={isSubscribed}
-        onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest}
-      >
-        {isSubscribed ? "알림 그만 받기" : "알림 받기"}
-      </ToggleButton>
-      <p>{isSubscribed ? "현재 알림이 활성화된 상태입니다." : "현재 알림이 비활성화된 상태입니다."}</p>
-    </AlarmContainer>
-          {isSubscribed && <AlarmList activeTab="subscribe" />}
-          </>
+      {isLoading && <Loading label="처리 중입니다..." />}
+      <AlarmContainer>
+        <ToggleButton
+          isSubscribed={isSubscribed}
+          onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest}
+          disabled={isLoading} 
+        >
+          {isSubscribed ? "알림 그만 받기" : "알림 받기"}
+        </ToggleButton>
+        <p>
+          {isSubscribed
+            ? "현재 알림이 활성화된 상태입니다."
+            : "현재 알림이 비활성화된 상태입니다."}
+        </p>
+      </AlarmContainer>
+      {isSubscribed && <AlarmList activeTab="subscribe" />}
+    </>
   );
 };
 

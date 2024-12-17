@@ -8,9 +8,10 @@ import axios from "axios";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Select from "react-select";
+import Loading from "../../components/commons/Loading"; 
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 
 
@@ -266,7 +267,7 @@ const QuestionBox = styled.span`
 
 const CountText = styled.span`
   font-size: 15px;
-  color: #FF0000;
+  color: black;
   margin-top:3px;
   margin-right:10px;
 `
@@ -364,13 +365,33 @@ const getCurrentDate = () => {
 
 function WriteReview({ review = {} }) {
   const { placeId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const [nickname, setNickname] = useState("");
   const [placeName, setPlaceName] = useState("장소 이름 없음");
+  const navigate = useNavigate();
+  const { pets, fetchPetList } = usePetStore();
+  const [selectPet, setSelectPet] = useState([]);
+  const [ratings, setRatings] = useState([false, false, false, false, false]);
+  const [previews, setPreviews] = useState([]);
+  const [placeImgs, setPlaceImgs] = useState([]);
+  const [selectKeywords, setSelectKeywords] = useState([]);
+  const [text, setText] = useState("");
+  const [visitedAt, setVisitedAt] = useState("");
+  const [selectedPetImage, setSelectedPetImage] = useState("");
+  const location = useLocation();
+  const {type} = location.state || {};
+
+  console.log("Received type:", type);
+  
+
+  useEffect(() => {
+    fetchPetList(); 
+  }, [fetchPetList]);
 
   useEffect(() => {
     const fetchUserNickname = async () => {
       try {
-        const response = await axios.get("https://www.daengdaeng-where.link/api/v1/user/adjust", {
+        const response = await axios.get("https://api.daengdaeng-where.link/api/v1/user/adjust", {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true,
         });
@@ -388,7 +409,7 @@ function WriteReview({ review = {} }) {
   useEffect(() => {
     if (placeId) {
       axios
-        .get(`https://www.daengdaeng-where.link/api/v1/places/${placeId}`)
+        .get(`https://api.daengdaeng-where.link/api/v1/places/${placeId}`)
         .then((response) => {
           const name = response.data?.data?.name; 
           setPlaceName(name || "장소 이름 없음"); 
@@ -405,22 +426,6 @@ function WriteReview({ review = {} }) {
   if (!placeIdValue) {
     return <div>장소 정보를 가져올 수 없습니다.</div>;
   }
-
-  const navigate = useNavigate();
-  const { pets, fetchPetList } = usePetStore();
-  const [selectPet, setSelectPet] = useState([]);
-  const [ratings, setRatings] = useState([false, false, false, false, false]);
-  const [previews, setPreviews] = useState([]);
-  const [placeImgs, setPlaceImgs] = useState([]);
-  const [selectKeywords, setSelectKeywords] = useState([]); 
-  const [text, setText] = useState("");
-  const [visitedAt, setVisitedAt] = useState("");
-  const [selectedPetImage, setSelectedPetImage] = useState("");
-
-  
-  useEffect(() => {
-    fetchPetList(); 
-  }, [fetchPetList]);
 
   const petOptions = pets.map((pet) => ({
     value: pet.petId,
@@ -494,6 +499,7 @@ const handleFocus = (e) => {
   };
   const handleRemoveImage = (index) => {
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+    setPlaceImgs((prevPlaceImgs) => prevPlaceImgs.filter((_, i) => i !== index));
   };
 
   const handleChange = (e) => {
@@ -572,7 +578,7 @@ const handleFocus = (e) => {
   for (const file of files) {
     try {
       const presignResponse = await axios.post(
-        'https://www.daengdaeng-where.link/api/v1/S3',
+        'https://api.daengdaeng-where.link/api/v1/S3',
         {
           prefix: 'REVIEW',
           fileNames: [file.name]
@@ -612,6 +618,8 @@ const handleFocus = (e) => {
     
     event.preventDefault();
     if (!validateForm()) return;
+
+    setIsLoading(true);
     
     let media = [];
     if (placeImgs.length > 0) {
@@ -627,11 +635,12 @@ const handleFocus = (e) => {
       media, 
       keywords: selectKeywords, 
       pets,
-      visitedAt, 
+      visitedAt,
+      reviewType: type === "realtime" ? "REVIEW_TYP_02" : "REVIEW_TYP_01"
     };
 
     try {
-      const response = await axios.post("https://www.daengdaeng-where.link/api/v1/review", reviewData, {
+      const response = await axios.post("https://api.daengdaeng-where.link/api/v1/review", reviewData, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -645,6 +654,7 @@ const handleFocus = (e) => {
         confirmText: "닫기",
         icon: "success",
         onConfirm: () => {
+          setIsLoading(false); 
           navigate(`/total-review/${placeId}`);
           setTimeout(() => {
             window.location.reload(); 
@@ -655,12 +665,18 @@ const handleFocus = (e) => {
       AlertDialog({
         mode: "alert",
         title: "실패",
-        text: `리뷰 등록에 실패했습니다.`,
+        text: `리뷰는 하루에 하나만 작성 가능해요!.`,
         confirmText: "닫기" 
       });
       console.error("리뷰 등록 실패:", error);
+    }finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <Loading label="리뷰를 등록 중입니다..." />;
+  }
 
   return (
     <TotalReviewContainer>

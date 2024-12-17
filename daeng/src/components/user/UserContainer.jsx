@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import arrow from '../../assets/icons/arrow.svg';
+import userDetailBtn from '../../assets/icons/userDetailBtn.svg';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 function UserContainer() {
@@ -12,7 +12,7 @@ function UserContainer() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('https://www.daengdaeng-where.link/api/v1/user/adjust', {
+        const response = await axios.get('https://api.daengdaeng-where.link/api/v1/user/adjust', {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true,
         });
@@ -40,10 +40,11 @@ function UserContainer() {
       <Username>{loading ? '닉네임을 가져오는 중...' : nickname || '닉네임 없음'}</Username>
       <UserEmail>{loading ? '이메일을 가져오는 중...' : email || '이메일 없음'}</UserEmail>
       </UserInfo>
-      <ArrowImg src={arrow} alt="유저 정보 자세히 보기 화살표" onClick={handleToEditUser} />
+      <UserEditBtn src={userDetailBtn} alt="유저 수정 아이콘" onClick={handleToEditUser} />
     </Container>
   );
 }
+
 
 const Container = styled.div`
   display: flex;
@@ -72,8 +73,8 @@ const UserEmail = styled.div`
   margin-top: 10px;
 `;
 
-const ArrowImg = styled.img`
-  margin-right: 5%;
+const UserEditBtn = styled.img`
+  margin-right: 6%;
   cursor: pointer;
 `;
 

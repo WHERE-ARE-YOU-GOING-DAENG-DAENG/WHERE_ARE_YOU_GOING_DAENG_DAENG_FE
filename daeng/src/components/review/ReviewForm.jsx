@@ -1,12 +1,12 @@
-import React from 'react';
+import { useEffect, useRef } from "react";
 import styled from 'styled-components';
 import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import arrow from '../../assets/icons/arrow.svg'
+import Loading from "../commons/Loading";
 import { useNavigate } from 'react-router-dom'; 
-
 
 const ReviewWrapper = styled.div`
   margin: 20px;
@@ -24,8 +24,7 @@ const HeaderContainer = styled.div`
 
 const TitleSection = styled.div`
   display: flex;
-  align-items: center;
-
+  
   @media (max-width: 554px) {
     font-size:10px;
     height: auto;
@@ -35,10 +34,16 @@ const TitleSection = styled.div`
 const PlaceTitle = styled.h2`
   font-size: 23px;
   font-weight: bold;
-  margin-right: 10px;
+  text-align: left;
+    
+  @media (max-width: 554px) {
+    font-size:20px;
+  }
 `;
 
 const ReviewDate = styled.span`
+  flex-shrink: 0;
+  width: 160px;
   font-size: 14px;
   color: #818181;
 `;
@@ -64,31 +69,29 @@ const UserImg = styled.img`
 
 const PetInfoContainer = styled.div`
   flex-grow: 1;
-  margin-left: 20px; 
 `;
 
 const PetName = styled.h3`
   font-size: 16px;
   font-weight: bold;
-  margin-bottom: 10px;
-  margin-right: 30%;
+  margin: 0px;
   display: flex;
   text-align: left;
 
   @media (max-width: 554px) {
-    font-size: 11px;
+    font-size: 15px;
     margin-right: 0%;
     text-align: left;
-    margin-left:-23px;
   }
 `;
 
 const StarSection = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 10px;
 
-  @media (max-width: 554px) {
-    margin-left: -23px;
+  @media(max-width: 554px){
+    margin-top : 5px;
   }
 `;
 
@@ -98,11 +101,10 @@ const StyledStar = styled.img`
   margin-right: 2px;
   cursor: pointer;
 
-
   @media (max-width: 554px) {
-    width: 10px;
-    height: 10px;
-    margin-right: 0px;
+    width: 12px;
+    height: 12px;
+    margin-right: 1px;
   }
 `;
 
@@ -127,7 +129,6 @@ const StyledArrow = styled.img`
 
   @media (max-width: 554px) {
     display: flex;
-    margin-left: 4px;
   }
 `;
 
@@ -169,12 +170,52 @@ const Video = styled.video`
   object-fit: cover;
 `;
 
-function ReviewForm({ review }) {
+const InfoFlex = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+
+  p{
+    margin: 0px;
+    font-size: 14px;
+    font-weight: ${({ reviewType }) => (reviewType === '실시간리뷰' ? 'bold' : 'semi-bold')};
+    color: ${({ reviewType }) => (reviewType === '실시간리뷰' ? '#FF69A9' : '#B3B3B3')};
+
+    @media(max-width: 554px){
+      font-size: 12px;
+    }
+  }
+`
+
+function ReviewForm({ review, isLoading, fetchNextPage, page, isLast }) {
   const navigate = useNavigate();
+  const observerRef = useRef(null);
 
   const navigateToPlace = () => {
     navigate(`/search/${review.placeId}`);
   };
+
+  // IntersectionObserver: 마지막 항목을 감지하여 fetchNextPage 호출
+  useEffect(() => {
+    if (!observerRef.current) return;
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            if (entries[0].isIntersecting && !isLoading && !isLast) {
+                fetchNextPage(); // 마지막 항목이 보이면 추가 데이터 불러오기
+            }
+        },
+        { threshold: 1.0 }
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => {
+        if (observerRef.current) observer.unobserve(observerRef.current);
+    };
+  }, [isLoading, fetchNextPage, isLast]);
 
   return (
     <ReviewWrapper>
@@ -185,7 +226,6 @@ function ReviewForm({ review }) {
         </TitleSection>
         <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>
       </HeaderContainer>
-
       <PetContainer>
         <UserImg
           src={review.petImg || reviewDefaultImg}
@@ -201,7 +241,10 @@ function ReviewForm({ review }) {
             ))}
           </StarSection>
         </PetInfoContainer>
-        <DeleteReview reviewId={review.reviewId} />
+        <InfoFlex reviewType={review.reviewType}>
+          <DeleteReview reviewId={review.reviewId} reviewType={review.reviewType} />
+          <p>{review.reviewType}</p>
+        </InfoFlex>
       </PetContainer>
       <VisitDate>방문 날짜 | {review.visitedAt}</VisitDate>
       <KeywordsContainer>
@@ -230,6 +273,10 @@ function ReviewForm({ review }) {
           }
         })}
       </PictureContainer>
+      
+      <div ref={observerRef}>
+        {isLoading && page > 0 && <Loading />}
+      </div>
     </ReviewWrapper>
   );
 }

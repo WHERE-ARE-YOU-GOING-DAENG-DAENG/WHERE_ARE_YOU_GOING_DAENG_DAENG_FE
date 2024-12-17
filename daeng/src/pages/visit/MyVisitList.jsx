@@ -8,8 +8,50 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import useVisitStore from "../../stores/useVisitStore";
 import useUserStore from "../../stores/userStore";
+import AlertDialog from "../../components/commons/SweetAlert";
+import { useNavigate } from "react-router-dom";
 
 dayjs.extend(isBetween);
+
+const MyVisitList = () => {
+  const fetchVisits = useVisitStore((state)=>state.fetchVisits);
+  const setMyVisits = useVisitStore((state) => state.setMyVisits);
+  const nickname = useUserStore((state)=> state.nickname);
+  const { userId } = useUserStore.getState();
+  const [name, setName] = useState(nickname || '');
+  const navigate = useNavigate();
+  
+  useEffect(()=>{
+    if(!userId){
+      setMyVisits([]);
+      AlertDialog({
+        mode: "confirm",
+        title: "로그인 필요",
+        text: `방문일정은 로그인이 필요한 기능입니다.<br/>로그인페이지로 이동하시겠습니까?`,
+        confirmText: "네",
+        cancelText: "아니오",
+        onConfirm: ()=> navigate("/login")
+    });
+    }else{
+      fetchmyVisits();
+    }
+  },[])
+
+  const fetchmyVisits = async () => {
+    await fetchVisits();
+};
+
+  return (
+    <>
+      <Header label="방문일정" />
+      <Calendar dot={true}/>
+      <Division />
+      {name? (<Text><span>{name}</span>님 방문일정 알려드려요!</Text> ): (<Text>로그인 후 방문일정을 확인해보세요!</Text>)}
+      <ScheduleTable />
+      <Footer />
+    </>
+  );
+};
 
 const Division = styled.div`
     height: 1px;
@@ -31,29 +73,5 @@ const Text = styled.div`
     margin-left: 8%;
     }
 `
-
-const MyVisitList = () => {
-  const fetchVisits = useVisitStore((state)=>state.fetchVisits);
-  const nickname = useUserStore((state)=> state.nickname);
-  const [name, setName] = useState(nickname || '')
-  useEffect(()=>{
-    const fetchmyVisits = async () => {
-        await fetchVisits();
-    };
-    
-    fetchmyVisits();
-  },[])
-
-  return (
-    <>
-      <Header label="방문일정" />
-      <Calendar dot={true}/>
-      <Division />
-      {name? (<Text><span>{name}</span>님 방문일정 알려드려요!</Text> ): (<Text>로그인 후 방문일정을 확인해보세요!</Text>)}
-      <ScheduleTable />
-      <Footer />
-    </>
-  );
-};
 
 export default MyVisitList;

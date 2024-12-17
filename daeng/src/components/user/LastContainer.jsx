@@ -57,13 +57,14 @@ function LastContainer() {
 
   const handleDeleteUser = async () => {
     AlertDialog({
-      mode: 'alert',
+      mode: 'confirm',
       title: '회원탈퇴 확인',
-      text: '정말 회원탈퇴 하시겠습니까?',
+      text: '탈퇴일 기준 30일간 재가입할 수 없습니다.<br/>정말 회원탈퇴 하시겠습니까? ',
       confirmText: '확인',
+      cancelText: '취소',
       onConfirm: async () => {
         try {
-          await axios.delete('https://www.daengdaeng-where.link/api/v1/user/delete', {
+          await axios.delete('https://api.daengdaeng-where.link/api/v1/user/delete', {
             withCredentials: true,
           });
           clearStorage();
@@ -90,29 +91,38 @@ function LastContainer() {
   };
 
   const handleLogout = async () => {
-    try {
-      await axios.post('https://www.daengdaeng-where.link/api/v1/logout', null, {
-        withCredentials: true,
-      });
-      clearStorage();
-      AlertDialog({
-        mode: 'alert',
-        title: '로그아웃 성공',
-        text: '로그아웃이 완료되었습니다.',
-        confirmText: '확인',
-        icon: "success", 
-        onConfirm: () => {
-          navigate('/');
-        },
-      });
-    } catch {
-      AlertDialog({
-        mode: 'alert',
-        title: '로그아웃 실패',
-        text: '로그아웃에 실패했습니다.',
-        confirmText: '확인',
-      });
-    }
+    AlertDialog({
+      mode: 'confirm',
+      title: '로그아웃 확인',
+      text: '정말 로그아웃 하시겠습니까?',
+      confirmText: '확인',
+      cancelText: '취소',
+      onConfirm: async () => {
+        try {
+          await axios.post('https://api.daengdaeng-where.link/api/v1/logout', null, {
+            withCredentials: true,
+          });
+          clearStorage();
+          AlertDialog({
+            mode: 'alert',
+            title: '로그아웃 성공',
+            text: '로그아웃이 완료되었습니다.',
+            confirmText: '확인',
+            icon: "success",
+            onConfirm: () => {
+              navigate('/');
+            },
+          });
+        } catch {
+          AlertDialog({
+            mode: 'alert',
+            title: '로그아웃 실패',
+            text: '로그아웃에 실패했습니다.',
+            confirmText: '확인',
+          });
+        }
+      },
+    });
   };
 
   return (
