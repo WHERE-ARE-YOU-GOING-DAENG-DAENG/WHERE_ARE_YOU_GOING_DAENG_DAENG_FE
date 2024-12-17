@@ -73,7 +73,7 @@ function Home() {
   const fetchUserData = async () => {
     try {
       await simulateLoadingDelay();
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v1/user/adjust", {
+      const response = await axios.get("https://api.daengdaeng-where.link/api/v1/user/adjust", {
         withCredentials: true,
       });
       const { user } = response.data.data;

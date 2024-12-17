@@ -16,7 +16,7 @@ const PlaceVisitList = () => {
     useEffect(()=>{
         const fetchPlaceVisit = async() => {
             try{
-                const response = await axiosInstance.get(`https://dev.daengdaeng-where.link/api/v1/visit/place/${id}`,{
+                const response = await axiosInstance.get(`https://api.daengdaeng-where.link/api/v1/visit/place/${id}`,{
                     withCredentials: true
                 })
                 setList(response.data.data);

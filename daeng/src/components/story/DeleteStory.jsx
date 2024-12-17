@@ -38,7 +38,7 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories, cur
       try {
         console.log("삭제 요청 storyId:", storyId);
         const response = await axios.delete(
-          `https://dev.daengdaeng-where.link/api/v2/story/${storyId}`,
+          `https://api.daengdaeng-where.link/api/v2/story/${storyId}`,
           {
             headers: {
               "Content-Type": "application/json",

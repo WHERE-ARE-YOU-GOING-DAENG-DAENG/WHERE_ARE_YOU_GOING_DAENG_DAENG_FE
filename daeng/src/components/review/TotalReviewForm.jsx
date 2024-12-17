@@ -286,7 +286,7 @@ const TotalReviewForm = () => {
   useEffect(() => {
     if (!placeId) return;
     axios
-      .get(`https://dev.daengdaeng-where.link/api/v1/places/${placeId}`)
+      .get(`https://api.daengdaeng-where.link/api/v1/places/${placeId}`)
       .then((res) => setPlaceName(res.data?.data?.name || "장소 정보가 없습니다."))
       .catch(() => setPlaceName("장소 정보가 없습니다."));
   }, [placeId]);
@@ -297,7 +297,7 @@ const TotalReviewForm = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `https://dev.daengdaeng-where.link/api/v1/reviews/place/${placeId}/${sortedType}`,
+        `https://api.daengdaeng-where.link/api/v1/reviews/place/${placeId}/${sortedType}`,
         { params: { page: currentPage, size: 15 } }
       );
 

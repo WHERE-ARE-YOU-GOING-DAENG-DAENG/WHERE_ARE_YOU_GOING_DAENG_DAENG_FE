@@ -117,7 +117,7 @@ function UserForm({
     setIsLoading(true);
     try {
       const { data } = await axios.get(
-        `https://dev.daengdaeng-where.link/api/v1/user/duplicateNickname`,
+        `https://api.daengdaeng-where.link/api/v1/user/duplicateNickname`,
         {
           params: { nickname: userData.nickname },
           withCredentials: true,

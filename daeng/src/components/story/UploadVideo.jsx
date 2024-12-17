@@ -74,7 +74,7 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
 
     try {
       const postResponse = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/S3",
+        "https://api.daengdaeng-where.link/api/v1/S3",
         {
           prefix: "STORY",
           fileNames: [selectedFile.name],
@@ -108,7 +108,7 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
       };
 
       const storyResponse = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v2/story",
+        "https://api.daengdaeng-where.link/api/v2/story",
         storyData,
         {
           headers: { "Content-Type": "application/json" },

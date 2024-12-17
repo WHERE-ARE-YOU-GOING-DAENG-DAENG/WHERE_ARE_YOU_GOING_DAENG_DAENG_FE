@@ -16,7 +16,7 @@ const useReviewStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await axios.get(
-        `https://dev.daengdaeng-where.link/api/v1/reviews/user?page=${page}&size=${size}`,
+        `https://api.daengdaeng-where.link/api/v1/reviews/user?page=${page}&size=${size}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -46,7 +46,7 @@ const useReviewStore = create((set, get) => ({
   removeReview: async (reviewId) => {
     try {
       const response = await axios.delete(
-        `https://dev.daengdaeng-where.link/api/v1/review/${reviewId}`,
+        `https://api.daengdaeng-where.link/api/v1/review/${reviewId}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,

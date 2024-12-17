@@ -60,7 +60,7 @@ function ShowMyStory({ onClose }) {
     const fetchStories = async () => {
       try {
         const response = await axios.get(
-          "https://dev.daengdaeng-where.link/api/v2/story/mystory",
+          "https://api.daengdaeng-where.link/api/v2/story/mystory",
           {
             headers: {
               "Content-Type": "application/json",

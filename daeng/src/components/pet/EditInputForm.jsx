@@ -147,7 +147,7 @@ function EditInputForm() {
 
   try {
     const response = await axios.put(
-      `https://dev.daengdaeng-where.link/api/v1/pets/${petId}`,
+      `https://api.daengdaeng-where.link/api/v1/pets/${petId}`,
       petData,
       {
         headers: {

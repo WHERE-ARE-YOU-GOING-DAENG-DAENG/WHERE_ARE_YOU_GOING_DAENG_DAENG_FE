@@ -17,7 +17,7 @@ function PreferenceEdit() {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "https://dev.daengdaeng-where.link/api/v1/preferences",
+          "https://api.daengdaeng-where.link/api/v1/preferences",
           { withCredentials: true }
         );
         const data = response.data.data || [];
@@ -77,7 +77,7 @@ function PreferenceEdit() {
     setIsLoading(true);
     try {
       await axios.put(
-        "https://dev.daengdaeng-where.link/api/v1/preferences",
+        "https://api.daengdaeng-where.link/api/v1/preferences",
         placePayload,
         {
           headers: { "Content-Type": "application/json" },
@@ -86,7 +86,7 @@ function PreferenceEdit() {
       );
 
       await axios.put(
-        "https://dev.daengdaeng-where.link/api/v1/preferences",
+        "https://api.daengdaeng-where.link/api/v1/preferences",
         favoritePayload,
         {
           headers: { "Content-Type": "application/json" },

@@ -13,7 +13,7 @@ function HomeTrendingPlaces() {
     const fetchTrendingPlaces = async () => {
       try {
         const response = await axios.get(
-          "https://dev.daengdaeng-where.link/api/v1/places/topfavorites",
+          "https://api.daengdaeng-where.link/api/v1/places/topfavorites",
           {
             withCredentials: true,
           }

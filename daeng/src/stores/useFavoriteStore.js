@@ -26,7 +26,7 @@ const useFavoriteStore = create((set, get) => ({
     
     try {
       set({ isLoading: true });
-      const url = `https://dev.daengdaeng-where.link/api/v1/favorites?lastUpdatedAt=${lastUpdatedAt || ""}&lastFavoriteId=${lastFavoriteId || ""}`
+      const url = `https://api.daengdaeng-where.link/api/v1/favorites?lastUpdatedAt=${lastUpdatedAt || ""}&lastFavoriteId=${lastFavoriteId || ""}`
       const response = await axiosInstance.get(url, { withCredentials: true });
       const newFavorites = response.data.data;
   

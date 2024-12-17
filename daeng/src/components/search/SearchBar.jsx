@@ -18,7 +18,7 @@ const SearchBar = ({ placeholder, onSearch }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://dev.daengdaeng-where.link/api/v1/places/autocomplete?keyword=${keyword}`
+        `https://api.daengdaeng-where.link/api/v1/places/autocomplete?keyword=${keyword}`
       );
       const data = await response.json();
       setSuggestions(data.data || []);

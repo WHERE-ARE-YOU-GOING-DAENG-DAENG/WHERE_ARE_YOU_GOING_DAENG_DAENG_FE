@@ -123,7 +123,7 @@ function RegisterInputForm() {
 
   try {
     const response = await axios.post(
-      "https://dev.daengdaeng-where.link/api/v1/pets", 
+      "https://api.daengdaeng-where.link/api/v1/pets", 
       petData, 
       {
         headers: {

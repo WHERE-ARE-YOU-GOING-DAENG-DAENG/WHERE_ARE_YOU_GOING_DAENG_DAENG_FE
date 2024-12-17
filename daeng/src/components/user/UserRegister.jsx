@@ -46,7 +46,7 @@ function UserRegister() {
     setIsLoading(true);
     try {
       const { status } = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/signup",
+        "https://api.daengdaeng-where.link/api/v1/signup",
         payload,
         {
           withCredentials: true,

@@ -36,7 +36,7 @@ function PreferenceRegister() {
 
     try {
       await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/preferences",
+        "https://api.daengdaeng-where.link/api/v1/preferences",
         placePayload,
         {
           headers: { "Content-Type": "application/json" },
@@ -45,7 +45,7 @@ function PreferenceRegister() {
       );
 
       await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/preferences",
+        "https://api.daengdaeng-where.link/api/v1/preferences",
         favoritePayload,
         {
           headers: { "Content-Type": "application/json" },

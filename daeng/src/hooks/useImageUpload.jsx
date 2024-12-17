@@ -8,7 +8,7 @@ const useImageUpload = () => {
     setIsUploading(true);
     try {
       const presignResponse = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/S3",
+        "https://api.daengdaeng-where.link/api/v1/S3",
         {
           prefix: "PET",
           fileNames: [file.name],

@@ -24,7 +24,7 @@ function HomeRecommendPlaces() {
           : defaultLocation;
 
         const response = await axios.post(
-          "https://dev.daengdaeng-where.link/api/v1/places/topscore",
+          "https://api.daengdaeng-where.link/api/v1/places/topscore",
           {
             latitude: locationToUse.lat,
             longitude: locationToUse.lng,
