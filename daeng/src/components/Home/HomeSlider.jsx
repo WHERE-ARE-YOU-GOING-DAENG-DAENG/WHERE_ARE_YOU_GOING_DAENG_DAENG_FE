@@ -80,6 +80,7 @@ const SliderWrapper = styled.div`
 
   @media (max-width: 554px) {
     aspect-ratio: 414 / 140;
+    margin-top: 63px;
   }
 `;
 

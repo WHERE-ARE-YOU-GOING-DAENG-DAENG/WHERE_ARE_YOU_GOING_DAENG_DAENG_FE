@@ -665,7 +665,7 @@ const handleFocus = (e) => {
       AlertDialog({
         mode: "alert",
         title: "실패",
-        text: `리뷰 등록에 실패했습니다.`,
+        text: `리뷰는 하루에 하나만 작성 가능해요!.`,
         confirmText: "닫기" 
       });
       console.error("리뷰 등록 실패:", error);
