@@ -11,13 +11,23 @@ const useVisitStore = create((set) => ({
     });
       set({ myVisits: response.data.data });
     } catch (error) {
-      AlertDialog({
-        mode: "alert",
-        title: "방문일정목록 조회",
-        text: "방문일정목록 조회에 실패하였습니다.",
-        confirmText: "확인",
-        onCancel: () => console.error(error)
-    });
+      if (error.response) {
+        if (error.response?.status === 401) {
+          AlertDialog({
+              mode: "alert",
+              title: "로그인 필요",
+              text: `방문일정은 로그인이 필요한 기능입니다.`,
+              confirmText: "확인",
+            });
+        }else{
+        AlertDialog({
+          mode: "alert",
+          title: "방문일정 조회",
+          text: "방문일정 조회가 실패하였습니다.",
+          confirmText: "확인",
+        });
+      }
+      }
     }
   },
   removeVisit: async (visitId) => {

@@ -7,39 +7,47 @@ const useFavoriteStore = create((set, get) => ({
   favorites: [],
   hasMore: true,
   isLoading: false,
+  lastUpdatedAt: null, 
+  lastFavoriteId: null,
 
-  fetchFavorites: async (page) => {
-    const state = get();
-    if (state.isLoading) return;
+  fetchFavorites: async () => {
+    const { isLoading, lastUpdatedAt, lastFavoriteId, hasMore } = get();
+    if (isLoading || !hasMore) return;
+    
     try {
       set({ isLoading: true });
-      const response = await axiosInstance.get(
-        `https://dev.daengdaeng-where.link/api/v1/favorites?page=${page}&size=10`,
-        {
-          withCredentials: true,
-        }
-      );
-
-      const newFavorites = response.data.data.content;
-      const totalPages = response.data.data.totalPages;
-
-      const existingIds = new Set(state.favorites.map((fav) => fav.favoriteId));
-        const filteredFavorites = newFavorites.filter(
-            (fav) => !existingIds.has(fav.favoriteId)
-        );
-
-      set((state) => ({
-        favorites: [...state.favorites, ...filteredFavorites],
-        hasMore: page + 1 < totalPages,
-      }));
+      const url = `https://dev.daengdaeng-where.link/api/v1/favorites?lastUpdatedAt=${lastUpdatedAt || ""}&lastFavoriteId=${lastFavoriteId || ""}`
+      const response = await axiosInstance.get(url, { withCredentials: true });
+      const newFavorites = response.data.data;
+  
+      if (newFavorites.length > 0) {
+        const lastItem = newFavorites[newFavorites.length - 1];
+        set((state) => ({
+          favorites: [...state.favorites, ...newFavorites],
+          lastUpdatedAt: lastItem.updatedAt,
+          lastFavoriteId: lastItem.favoriteId,
+          hasMore: newFavorites.length === 10,
+        }));
+      } else {
+        set({ hasMore: false });
+      }
     } catch (error) {
       if (error.response) {
+        if (error.response?.status === 401) {
+          AlertDialog({
+              mode: "alert",
+              title: "로그인 필요",
+              text: `즐겨찾기는 로그인이 필요한 기능입니다.`,
+              confirmText: "확인",
+            });
+        }else{
         AlertDialog({
           mode: "alert",
           title: "즐겨찾기 조회",
           text: "즐겨찾기 조회가 실패하였습니다.",
           confirmText: "확인",
         });
+      }
       }
       set({ hasMore: false });
     } finally {
