@@ -12,67 +12,60 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// 푸시 알림 클릭 처리
-self.addEventListener('notificationclick', (event) => {
-    event.notification.close(); // 알림 닫기
+// 백그라운드에서 푸시 알림 받기
+messaging.onBackgroundMessage(function (payload) {
+  console.log("백그라운드에서 푸시 알림 받음:", payload);
 
-    // 백엔드에서 넘겨준 "url" 데이터가 event.notification.data에 포함됨
-    const landing_url = event.notification.data ? event.notification.data.url : null;
-    const newPath = landing_url ? landing_url : '/'; 
+  // payload.data에서 title, body, icon, url 가져오기
+  const { title, body, icon, url } = payload.data;
 
-    const urlToOpen = new URL(newPath); // 최종 URL 생성
+  const notificationTitle = title || "새 알림";
+  const notificationOptions = {
+    body: body || "내용이 없습니다.",
+    icon: icon || "/alarm_logo.png",
+    data: { url: url }, // 데이터로 URL 전달
+  };
 
-    // 비동기 작업을 수행하기 위한 메서드로 아래 Promise가 완료될 때까지 이벤트 수명을 연장
-    event.waitUntil(
-        self.clients.matchAll({
-            type: 'window',
-            includeUncontrolled: true, // 제어하고 있지 않은 클라이언트까지 포함
-        }).then((windowClients) => {
-            let foundWindowClient = null;
-            // 이미 열려 있는 창에서 서비스와 관련된 URL을 찾기 위한 로직
-            for (let i = 0; i < windowClients.length; i++) {
-                const client = windowClients[i];
-
-                if (
-                    (new URL(client.url).hostname.includes("docent")) &&
-                    "focus" in client
-                ) {
-                    foundWindowClient = client;
-                    break;
-                }
-            }
-
-            // 만약 백그라운드에 해당 서비스가 있다면
-            if (foundWindowClient) {
-                // 해당 탭을 focus하여 이동시킴
-                return foundWindowClient.focus().then((focusedClient) => {
-                    if ("navigate" in focusedClient) {
-                        // 원하는 주소로 이동
-                        focusedClient.postMessage(urlToOpen.href);
-                    }
-                });
-
-            // 그게 아니라면 새창을 열어서 원하는 URL로 이동시킴
-            } else if (self.clients.openWindow) {
-                return self.clients.openWindow(urlToOpen.href);
-            }
-        })
-    );
+  // 알림 표시
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// 백그라운드에서 푸시 알림 받기
-messaging.onBackgroundMessage(function(payload) {
-    console.log('백그라운드에서 푸시 알림 받음:', payload);
+// 푸시 알림 클릭 처리
+self.addEventListener("notificationclick", (event) => {
+  console.log("알림 클릭 이벤트 발생:", event);
+  event.notification.close(); // 알림 닫기
 
-    const { title, body } = payload.notification;
-    const icon = payload.notification.icon || '/alarm_logo.png';
+  // data.url을 통해 URL 가져오기
+  const landing_url = event.notification.data ? event.notification.data.url : null;
+  const newPath = landing_url ? landing_url : "/";
 
-    // payload.notification.data.url을 통해 "url" 데이터를 받아서 저장
-    const notificationOptions = {
-        body: body,
-        icon: icon,
-        data: { url: payload.notification.url }, // 데이터로 URL 전달
-    };
+  const urlToOpen = new URL(newPath, self.location.origin);
 
-    self.registration.showNotification(title, notificationOptions);
+  event.waitUntil(
+    self.clients.matchAll({
+      type: "window",
+      includeUncontrolled: true,
+    }).then((windowClients) => {
+      let foundWindowClient = null;
+
+      // 이미 열려있는 창을 확인
+      for (let i = 0; i < windowClients.length; i++) {
+        const client = windowClients[i];
+        if (client.url === urlToOpen.href && "focus" in client) {
+          foundWindowClient = client;
+          break;
+        }
+      }
+
+      // 창이 이미 열려 있으면 focus
+      if (foundWindowClient) {
+        return foundWindowClient.focus();
+      }
+
+      // 열려있지 않으면 새 창 열기
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(urlToOpen.href);
+      }
+    })
+  );
 });
