@@ -5,6 +5,7 @@ import howToGuide from '../assets/icons/howToGuide.svg';
 import FirstBanner from '../components/guide/FirstBanner';
 import SecondBanner from '../components/guide/SecondBanner';
 import Footer from '../components/commons/Footer';
+import LastBanner from '../components/guide/LastBanner';
 
 const PageWrapper = styled.div`
   display: flex;
@@ -60,6 +61,7 @@ function HowToGuidePage() {
       <Container>
         <FirstBanner />
         <SecondBanner />
+        <LastBanner />
       </Container>
       <Footer />
     </PageWrapper>
