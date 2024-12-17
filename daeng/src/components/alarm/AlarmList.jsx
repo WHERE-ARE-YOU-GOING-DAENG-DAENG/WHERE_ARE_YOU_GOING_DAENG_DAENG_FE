@@ -8,6 +8,11 @@ const ListContainer = styled.div`
   box-sizing: border-box;
   overflow-y: auto;
   padding-bottom: 100%;
+  
+  @media (max-width: 554px) {
+    margin: 10px;
+    padding: 10px;
+  }
 `;
 
 const NoAlarm = styled.span`
