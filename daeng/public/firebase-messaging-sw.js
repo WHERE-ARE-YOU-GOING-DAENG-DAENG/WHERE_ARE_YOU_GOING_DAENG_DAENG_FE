@@ -3,10 +3,10 @@ importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js')
 
 // Firebase 설정
 const firebaseConfig = {
-    apiKey: "AIzaSyC2msjHQWn7iopQAoOIx9Vy86X7QMK-8HQ",
-    projectId: "daengdaeng-98c99",
-    messagingSenderId: "495128991810",
-    appId: "1:495128991810:web:9f1b33ff219866069935db"
+  apiKey: "AIzaSyC2msjHQWn7iopQAoOIx9Vy86X7QMK-8HQ",
+  projectId: "daengdaeng-98c99",
+  messagingSenderId: "495128991810",
+  appId: "1:495128991810:web:9f1b33ff219866069935db"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -60,19 +60,17 @@ self.addEventListener('notificationclick', (event) => {
     );
 });
 
-// 백그라운드에서 푸시 알림 받기
-messaging.onBackgroundMessage(function (payload) {
-    console.log('백그라운드에서 푸시 알림 받음:', payload);
 
-    // payload.data에서 값 가져오기
-    const { title, body, icon, url } = payload.data || {};
+messaging.onBackgroundMessage((payload) => {
+    console.log("백그라운드에서 푸시 알림 수신:", payload);
 
-    const notificationTitle = title || "알림";
-    const notificationOptions = {
-        body: body || "내용이 없습니다.",
-        icon: icon || '/alarm_logo.png',
-      data: { url: url || '/' }, // URL을 data 필드에 저장
-    };
+    if (payload.data) {
+        const { title, body, icon, url } = payload.data;
 
-    self.registration.showNotification(notificationTitle, notificationOptions);
-});
+        self.registration.showNotification(title || "제목 없음", {
+            body: body || "내용이 없습니다.",
+            icon: icon || '/alarm_logo.png',
+            data: { url: url || '/' }, 
+        });
+        }
+    });
