@@ -68,6 +68,7 @@ const SliderWrapper = styled.div`
   height: auto;
   position: relative;
   overflow: hidden;
+  margin-top: 80px;
 
   aspect-ratio: 554 / 189;
 
@@ -132,7 +133,7 @@ const ArrowButton = styled.button`
   width: 40px;
   height: 40px;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 800;
   display: flex;
   align-items: center;
   justify-content: center;
