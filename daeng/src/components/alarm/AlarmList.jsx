@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import PushAlerts from "../../components/commons/PushAlerts";
-import { pushTypes } from "../../data/CommonCode";
 
 const ListContainer = styled.div`
   padding-left: 30px;
@@ -35,11 +34,6 @@ function AlarmList({ activeTab }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const getEventTypeName = (eventType) => {
-    const match = pushTypes.find((type) => type.code === eventType);
-    return match ? match.name : "알 수 없는 이벤트"; 
-  };
 
   const handleNotificationClose = (notificationId) => {
     setNotifications((prev) =>
@@ -75,7 +69,7 @@ function AlarmList({ activeTab }) {
   }, [activeTab]);
 
   if (activeTab !== "subscribe") {
-    return null;
+    return null; 
   }
 
   if (loading) {
@@ -94,7 +88,6 @@ function AlarmList({ activeTab }) {
         notifications.map((notification) => (
           <PushAlerts
             key={notification.notificationId}
-            eventType={getEventTypeName(notification.eventType)} 
             message={notification.content}
             dateTime={`${notification.createdDate} ${notification.createdTime}`}
             notificationId={notification.notificationId}
