@@ -41,7 +41,7 @@ const ImageUpload = ({ label, onUpload }) => {
 
     try {
       const response = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v2/admin/placeImage",
+        "https://api.daengdaeng-where.link/api/v2/admin/placeImage",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

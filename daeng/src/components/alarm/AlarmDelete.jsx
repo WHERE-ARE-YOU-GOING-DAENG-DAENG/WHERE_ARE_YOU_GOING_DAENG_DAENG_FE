@@ -20,7 +20,7 @@ function AlarmDelete() {
     setLoading(true);
     try {
       const response = await axios.delete(
-        "https://dev.daengdaeng-where.link/api/v1/notifications",
+        "https://api.daengdaeng-where.link/api/v1/notifications",
         {
           withCredentials: true,
         }

@@ -48,7 +48,7 @@ function UserEdit() {
     setIsLoading(true);
     try {
       await axios.put(
-        "https://dev.daengdaeng-where.link/api/v1/user/adjust",
+        "https://api.daengdaeng-where.link/api/v1/user/adjust",
         payload,
         {
           headers: {

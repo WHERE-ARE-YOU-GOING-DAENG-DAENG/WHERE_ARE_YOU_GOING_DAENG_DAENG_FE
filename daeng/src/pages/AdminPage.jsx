@@ -75,7 +75,7 @@ function AdminPage() {
         ...formData,
       };
       const response = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v2/admin/place",
+        "https://api.daengdaeng-where.link/api/v2/admin/place",
         placeData,
         {
           headers: {

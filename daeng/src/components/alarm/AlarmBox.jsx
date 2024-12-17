@@ -46,7 +46,7 @@ const AlarmBox = () => {
       try {
         setIsLoading(true); 
         const response = await axios.get(
-          "https://dev.daengdaeng-where.link/api/v1/notifications/consent",
+          "https://api.daengdaeng-where.link/api/v1/notifications/consent",
           { withCredentials: true }
         );
 
@@ -84,7 +84,7 @@ const AlarmBox = () => {
       const token = await requestNotificationPermission();
       if (token) {
         const response = await axios.post(
-          "https://dev.daengdaeng-where.link/api/v1/notifications/pushToken",
+          "https://api.daengdaeng-where.link/api/v1/notifications/pushToken",
           {
             token,
             pushType: selectedPushType,
@@ -124,7 +124,7 @@ const AlarmBox = () => {
     setIsLoading(true); 
     try {
       const response = await axios.delete(
-        "https://dev.daengdaeng-where.link/api/v1/notifications",
+        "https://api.daengdaeng-where.link/api/v1/notifications",
         {
           withCredentials: true,
         }

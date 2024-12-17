@@ -41,7 +41,7 @@ function DeletePetData({ petId }) {
         setIsDeleting(true);
         try {
           const response = await axios.delete(
-            `https://dev.daengdaeng-where.link/api/v1/pets/${petId}`,
+            `https://api.daengdaeng-where.link/api/v1/pets/${petId}`,
             {
               headers: {
                 'Content-Type': 'application/json'

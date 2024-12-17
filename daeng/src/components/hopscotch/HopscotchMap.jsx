@@ -41,7 +41,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
 
   const fetchOwnerData = async () => {
     try {
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region/owners", {
+      const response = await axios.get("https://api.daengdaeng-where.link/api/v2/region/owners", {
         withCredentials: true,
       });
       setOwnerList(response.data.data);

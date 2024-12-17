@@ -110,7 +110,7 @@ function Detail({ onClose, onNext }) {
   useEffect(() => {
     const fetchRegionData = async () => {
       try {
-        const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region", {
+        const response = await axios.get("https://api.daengdaeng-where.link/api/v2/region", {
           withCredentials: true,
         });
         if (response.data.message === "success") {

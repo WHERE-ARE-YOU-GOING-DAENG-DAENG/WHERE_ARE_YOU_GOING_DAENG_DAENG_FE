@@ -41,7 +41,7 @@ const HomeStory = () => {
   const fetchStories = async () => {
     try {
       const response = await axios.get(
-        "https://dev.daengdaeng-where.link/api/v2/story",
+        "https://api.daengdaeng-where.link/api/v2/story",
         {
           headers: {
             "Content-Type": "application/json",

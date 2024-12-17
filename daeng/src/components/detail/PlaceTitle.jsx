@@ -130,7 +130,7 @@ const PlaceTitle = ({ data, setData }) => {
               latitude: userLocation.lat,
               longitude: userLocation.lng
             }
-            const response = await axios.post("https://dev.daengdaeng-where.link/api/v2/review/realtime",payload,{
+            const response = await axios.post("https://api.daengdaeng-where.link/api/v2/review/realtime",payload,{
               withCredentials: true
             });
             if(response.data.message === "success"){

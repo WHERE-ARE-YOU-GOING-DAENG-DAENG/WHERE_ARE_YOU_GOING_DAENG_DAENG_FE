@@ -39,7 +39,7 @@ const Hopscotch = () => {
 
   const fetchMyLand = async () => {
     try {
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region", {
+      const response = await axios.get("https://api.daengdaeng-where.link/api/v2/region", {
         withCredentials: true,
       });
       setMyLandList(response.data.data);
@@ -55,7 +55,7 @@ const Hopscotch = () => {
 
   const fetchMyVisit = async () => {
     try {
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region/visitCount", {
+      const response = await axios.get("https://api.daengdaeng-where.link/api/v2/region/visitCount", {
         withCredentials: true,
       });
       setVisitCount(response.data.data.visitInfo);

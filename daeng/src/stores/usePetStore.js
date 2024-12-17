@@ -11,7 +11,7 @@ const usePetStore = create((set) => ({
   fetchPetList: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v1/pets", {
+      const response = await axios.get("https://api.daengdaeng-where.link/api/v1/pets", {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
@@ -26,7 +26,7 @@ const usePetStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await axios.get(
-        `https://dev.daengdaeng-where.link/api/v1/pets/${petId}`,
+        `https://api.daengdaeng-where.link/api/v1/pets/${petId}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
