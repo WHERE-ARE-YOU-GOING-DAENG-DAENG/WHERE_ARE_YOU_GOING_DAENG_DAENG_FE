@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from "styled-components";
 import axios from "axios";
-import geojson from "../../data/sig.json";
 import useGoogleMapsStore from '../../stores/useGoogleMapsStore';
 import useLocationStore from '../../stores/useLocationStore';
 import LandOwnerProfile from "./LandOwnerProfile";
@@ -18,10 +17,22 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   const [ownerList, setOwnerList] = useState({ visitInfo: {} });
   const [isOwnerListLoaded, setIsOwnerListLoaded] = useState(false);
   const [markers, setMarkers] = useState([]);
+  const [geojson, setGeojson] = useState(null);
 
   useEffect(() => {
+    fetchGeoJson();
     fetchOwnerData();
   }, []);
+
+  const fetchGeoJson = async () => {
+    try {
+      const response = await fetch("/data/sig.json.gz");
+      const json = await response.json();
+      setGeojson(json);
+    } catch (error) {
+      console.error("GeoJSON 데이터를 로드할 수 없습니다:", error);
+    }
+  };
 
   const fetchOwnerData = async () => {
     try {
@@ -109,7 +120,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   }, [isLoaded, map, removeUi]);
 
   useEffect(() => {
-    if (isLoaded && map && isOwnerListLoaded) {
+    if (isLoaded && map && isOwnerListLoaded && geojson) {
       const polygons = [];
       const infoWindow = new window.google.maps.InfoWindow({
         pixelOffset: new window.google.maps.Size(0, -10),
@@ -223,7 +234,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
         polygons.forEach((polygon) => polygon.setMap(null));
       };
     }
-  }, [map, isLoaded, isOwnerListLoaded]);
+  }, [map, isLoaded, isOwnerListLoaded, geojson]);
 
   return (
     <MapContainer ref={mapRef} $removeUi={removeUi}>
