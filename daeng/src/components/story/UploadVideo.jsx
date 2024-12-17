@@ -3,6 +3,7 @@ import axios from "axios";
 import x from "../../assets/icons/x.svg";
 import crown from "../../assets/icons/crown.svg";
 import AlertDialog from "../../components/commons/SweetAlert";
+import UploadStoryIcon from '../../assets/icons/UploadStoryIcon.svg';
 import Loading from "../../components/commons/Loading"; 
 import {
   VideoContainer,
@@ -35,6 +36,9 @@ const UploadStoryBtn = styled.button`
   }
 `;
 
+const UploadIcon = styled.img`
+  margin-right: 10px;
+`
 function UploadStory({ onClose, nickname, city, cityDetail }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -137,16 +141,14 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
     }
   };
 
-  if (isLoading) {
-    return <Loading label="스토리를 업로드 중입니다..." />;
-  }
-
   return (
     <VideoContainer>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
       <CloseButton src={x} alt="팝업 닫기" onClick={onClose} />
       <ImageContainer>
-        {preview ? (
+        {isLoading ? (
+          <Loading label="스토리를 업로드 중입니다..." />
+        ) : preview ? (
           preview.type === "video" ? (
             <video
               src={preview.src}
@@ -162,8 +164,9 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
           )
         ) : (
           <UploadImg>
+            <UploadIcon src={UploadStoryIcon} alt="스토리 업로드 아이콘"/>
             <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
-              이미지/동영상 업로드
+              이미지/동영상을 올려주세요
               <input
                 type="file"
                 id="file-upload"
@@ -182,7 +185,7 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
         </Location>
         <span>{nickname}님</span>
       </UploadStoryBottomBar>
-      <UploadStoryBtn onClick={uploadStory}>업로드</UploadStoryBtn>
+      {!isLoading && <UploadStoryBtn onClick={uploadStory}>업로드</UploadStoryBtn>}
     </VideoContainer>
   );
 }

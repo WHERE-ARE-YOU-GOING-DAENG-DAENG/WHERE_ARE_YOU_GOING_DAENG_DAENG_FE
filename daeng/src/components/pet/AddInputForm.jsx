@@ -141,7 +141,7 @@ function RegisterInputForm() {
         confirmText: "닫기",
         icon: "success",
         onConfirm: () => {
-          navigate("/"); 
+          navigate("/my-page"); 
         }
       });
 
