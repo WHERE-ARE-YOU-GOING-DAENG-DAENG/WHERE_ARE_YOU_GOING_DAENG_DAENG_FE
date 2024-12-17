@@ -137,7 +137,7 @@ function RegisterInputForm() {
       AlertDialog({
         mode: "alert", 
         title: "성공",
-        text: "댕댕어디가 회원이 되신걸 축하드려요",
+        text: "성공적으로 등록되었습니다.",
         confirmText: "닫기",
         icon: "success",
         onConfirm: () => {
