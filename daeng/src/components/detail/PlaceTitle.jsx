@@ -13,63 +13,6 @@ import SquareBtn from "../commons/SquareBtn";
 import useLocationStore from "../../stores/useLocationStore";
 import axios from "axios";
 
-const Container = styled.div`
-  padding: 0px 44px;
-  @media(max-width: 554px){
-    padding: 0px 8%;
-  }
-`
-
-const TitleSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  text-align: left;
-
-  h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 3px;
-    text-align:left;
-
-    @media(max-width: 554px){
-    font-size: 20px;
-  }
-
-`;
-
-const SubTitleSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Info = styled.div`
-  display: flex;
-  font-weight: bold;
-  font-size: 15px;
-  aling-items: center;
-
-  .detail-category{
-    color: #FF69A9;
-    margin-right: 5px;
-  }
-
-  img{
-    margin: 0 5px;
-    width: 15px;
-    cursor:pointer;
-  }
-
-  .detail-reviewcnt{
-    margin-left: 2px;
-    color: #808080;
-    font-weight: normal;
-    cursor:pointer;
-  }
-`
-
 const PlaceTitle = ({ data, setData }) => {
     const navigate = useNavigate();
     const { userId } = useUserStore.getState();
@@ -83,6 +26,7 @@ const PlaceTitle = ({ data, setData }) => {
           const favoriteId = favoriteStore.getFavoriteId(placeId);
           if (favoriteId) {
             const response = await favoriteStore.removeFavorite(favoriteId);
+            console.log(response.status)
             if (response?.status === 200) {
             setData((prevData) => ({
               ...prevData,
@@ -90,7 +34,7 @@ const PlaceTitle = ({ data, setData }) => {
             }));
           }
           } else {
-            console.warn(`장소ID로 즐겨찾기 ID찾을 수 없음음: ${placeId}`);
+            console.warn(`장소ID로 즐겨찾기 ID찾을 수 없음: ${placeId}`);
           }
         } else {
           const response = await favoriteStore.addFavorite(placeId);
@@ -102,7 +46,7 @@ const PlaceTitle = ({ data, setData }) => {
         }
         }
       } catch (error) {
-        console.error("즐겨찾기 상태 바꾸는 중 에러러:", error);
+        console.error("즐겨찾기 상태 바꾸는 중 에러:", error);
       }
     };
 
@@ -193,5 +137,61 @@ const PlaceTitle = ({ data, setData }) => {
         </Container>
     )
 }
+
+const Container = styled.div`
+  padding: 0px 44px;
+  @media(max-width: 554px){
+    padding: 0px 8%;
+  }
+`
+const TitleSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  text-align: left;
+
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 3px;
+    text-align:left;
+
+    @media(max-width: 554px){
+    font-size: 20px;
+  }
+
+`;
+
+const SubTitleSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Info = styled.div`
+  display: flex;
+  font-weight: bold;
+  font-size: 15px;
+  aling-items: center;
+
+  .detail-category{
+    color: #FF69A9;
+    margin-right: 5px;
+  }
+
+  img{
+    margin: 0 5px;
+    width: 15px;
+    cursor:pointer;
+  }
+
+  .detail-reviewcnt{
+    margin-left: 2px;
+    color: #808080;
+    font-weight: normal;
+    cursor:pointer;
+  }
+`
 
 export default PlaceTitle;
