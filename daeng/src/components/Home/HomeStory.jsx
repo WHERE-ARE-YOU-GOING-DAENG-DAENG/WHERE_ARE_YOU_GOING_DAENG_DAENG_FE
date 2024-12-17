@@ -65,17 +65,21 @@ const HomeStory = () => {
     }
   };
 
-  const ITEMS_PER_VIEW = 3;
+  const ITEMS_PER_VIEW = 3; 
 
   const handleNext = () => {
-    if (currentIndex < stories.length - ITEMS_PER_VIEW + 3) {
-      setCurrentIndex(currentIndex + 3);
+    if (stories.length > ITEMS_PER_VIEW) {
+      if (currentIndex + ITEMS_PER_VIEW < stories.length) {
+        setCurrentIndex(currentIndex + ITEMS_PER_VIEW);
+      }
     }
   };
-
+  
   const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 3);
+    if (stories.length > ITEMS_PER_VIEW) {
+      if (currentIndex - ITEMS_PER_VIEW >= 0) {
+        setCurrentIndex(currentIndex - ITEMS_PER_VIEW);
+      }
     }
   };
 
