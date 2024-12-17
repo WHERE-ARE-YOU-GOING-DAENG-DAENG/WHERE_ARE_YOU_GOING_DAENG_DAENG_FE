@@ -8,12 +8,6 @@ import { useEffect, useState } from "react";
 import banner from "../../assets/icons/visitbanner.jpg"
 import axiosInstance from "../../services/axiosInstance";
 
-const VisitBanner = styled.img`
-    width: 100%;
-    height: 50%;
-    object-fit: cover;
-`;
-
 const PlaceVisitList = () => {
     const { id } = useParams();
     const [list, setList] = useState([]);
@@ -49,5 +43,11 @@ const PlaceVisitList = () => {
         </>
     )
 };
+
+const VisitBanner = styled.img`
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+`;
 
 export default PlaceVisitList;

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import star from '../../assets/icons/star.svg';
 import notfillstar from "../../assets/icons/notfillstar.svg";
 import writeIcon from "../../assets/icons/pen.svg";
@@ -11,6 +10,121 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import defaultImage from "../../assets/icons/reviewDefaultImg.svg"
+
+const PlaceReviewList = ({ data }) => {
+  const navigate = useNavigate();
+  const { id: placeId } = useParams();
+  const [isExpanded, setIsExpanded] = useState({});
+  const { userId } = useUserStore.getState();
+  
+  const toggleText = (reviewId) => {
+    setIsExpanded((prev) => ({
+      ...prev,
+      [reviewId]: !prev[reviewId],
+    }));
+  };
+
+  const handleWriteReviewClick = () => {
+    if (userId) {
+      navigate(`/write-review/${placeId}`, { state: { type: "normal" } });
+    } else {
+      AlertDialog({
+        mode: "alert",
+        title: "로그인 필요",
+        text: "리뷰를 작성하려면 로그인이 필요합니다.",
+        confirmText: "확인",
+      });
+    }
+  };
+
+  
+  return (
+    <>
+      <Container>
+        <ReviewHeader>
+          <h2>보호자님들의 리뷰</h2>
+          <div className="actions">
+            <button className="action" onClick={handleWriteReviewClick}>
+              리뷰 작성
+              <img src={writeIcon} alt="리뷰 작성" />
+            </button>
+            <button className="action"  onClick={() => navigate(`/total-review/${placeId}`)}>전체보기 &gt;</button>
+          </div>
+        </ReviewHeader>
+
+        <KeywordsContainer>
+          <div className="title">가장 많이 선택된 키워드 &gt;</div>
+          <div className="keywords">
+            {Array.isArray(data?.bestKeywords) &&
+            data.bestKeywords.slice(0,3).map((keyword, index) => (
+              <ReviewKeywords key={index} label={keyword} />
+            ))}
+          </div>
+        </KeywordsContainer>
+      </Container>
+      <ReviewsSection>
+      {Array.isArray(data.reviews) && data.reviews.length > 0 ? (
+        data.reviews.map((review, index) => {
+          const maxLength = 200;
+          const isExpandedForReview = isExpanded[review.reviewId] || false;
+          const displayedText = isExpandedForReview
+            ? review.content
+            : review.content.slice(0, maxLength);
+
+          return (
+            <div key={review.reviewId} >
+              <ReviewUserContainer>
+                <UserPhoto
+                  src={review.petImg? review.petImg : defaultImage}
+                  alt="반려동물 이미지"
+                />
+                <TotalUserInfoContainer>
+                  <CommentContainer>
+                    <div>
+                      <UserId>{review.nickname}</UserId>
+                      <PetType>({review.pets?.join(", ") || "등록된 반려동물이 없습니다."})</PetType>
+                    </div>
+                    <PostDate>
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </PostDate>
+                  </CommentContainer>
+                  <UserSecondInfoContainer>
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <UserStarImg
+                        key={idx}
+                        src={idx < review.score ? star : notfillstar}
+                        alt={idx < review.score ? `별점 ${idx + 1}` : "빈 별"}
+                      />
+                    ))}
+                  </UserSecondInfoContainer>
+                </TotalUserInfoContainer>
+              </ReviewUserContainer>
+              <VisitDate>
+                방문날짜 {new Date(review.visitedAt).toLocaleDateString()}
+              </VisitDate>
+              <ReviewContent>
+                {displayedText}
+                {review.content.length > maxLength && (
+                  <ReadMoreButton onClick={() => toggleText(review.reviewId)}>
+                    {isExpandedForReview ? "접기" : "더보기"}
+                  </ReadMoreButton>
+                )}
+              </ReviewContent>
+              <ReviewPictureContainer>
+                {review.media && review.media.length > 0 && (
+                  <ReviewSlideshow images={review.media} />
+                )}
+              </ReviewPictureContainer>
+            </div>
+          );
+        })
+      ) : (
+        <p style={{fontWeight: "bold"}}>리뷰가 없습니다.</p>
+      )}
+      </ReviewsSection>
+    </>
+  );
+};
 
 const Container = styled.div`
   margin: 10px 0px;
@@ -135,7 +249,6 @@ const ReviewUserContainer = styled.div`
 const UserPhoto = styled.img`
   width: 60px;
   height: 60px;
-  background-color: #FF69A9;
   border-radius: 50%;
   margin-left: 2%;
   margin-top: 20px;
@@ -256,136 +369,5 @@ const ReadMoreButton = styled.button`
     font-size: 12px; 
   }
 `;
-
-const PlaceReviewList = ({ data }) => {
-  const navigate = useNavigate();
-  const { id: placeId } = useParams();
-  const [isExpanded, setIsExpanded] = useState({});
-  const { userId } = useUserStore.getState();
-  
-  const toggleText = (reviewId) => {
-    setIsExpanded((prev) => ({
-      ...prev,
-      [reviewId]: !prev[reviewId],
-    }));
-  };
-
-  const handleWriteReviewClick = () => {
-    if (userId) {
-      navigate(`/write-review/${placeId}`, { state: { type: "normal" } });
-    } else {
-      AlertDialog({
-        mode: "alert",
-        title: "로그인 필요",
-        text: "리뷰를 작성하려면 로그인이 필요합니다.",
-        confirmText: "확인",
-      });
-    }
-  };
-
-  
-  return (
-    <>
-      <Container>
-        <ReviewHeader>
-          <h2>보호자님들의 리뷰</h2>
-          <div className="actions">
-            <button className="action" onClick={handleWriteReviewClick}>
-              리뷰 작성
-              <img src={writeIcon} alt="리뷰 작성" />
-            </button>
-            <button className="action"  onClick={() => navigate(`/total-review/${placeId}`)}>전체보기 &gt;</button>
-          </div>
-        </ReviewHeader>
-
-        <KeywordsContainer>
-          <div className="title">가장 많이 선택된 키워드 &gt;</div>
-          <div className="keywords">
-            {Array.isArray(data?.bestKeywords) &&
-            data.bestKeywords.slice(0,3).map((keyword, index) => (
-              <ReviewKeywords key={index} label={keyword} />
-            ))}
-          </div>
-        </KeywordsContainer>
-      </Container>
-      <ReviewsSection>
-      {Array.isArray(data.reviews) && data.reviews.length > 0 ? (
-        data.reviews.map((review, index) => {
-          const maxLength = 200;
-          const isExpandedForReview = isExpanded[review.reviewId] || false;
-          const displayedText = isExpandedForReview
-            ? review.content
-            : review.content.slice(0, maxLength);
-
-          return (
-            <div key={review.reviewId} >
-              <ReviewUserContainer>
-                <UserPhoto
-                  src={review.petImg? review.petImg : defaultImage}
-                  alt="반려동물 이미지"
-                />
-                <TotalUserInfoContainer>
-                  <CommentContainer>
-                    <div>
-                      <UserId>{review.nickname}</UserId>
-                      <PetType>({review.pets?.join(", ") || "등록된 반려동물이 없습니다."})</PetType>
-                    </div>
-                    <PostDate>
-                      {new Date(review.createdAt).toLocaleDateString()}
-                    </PostDate>
-                  </CommentContainer>
-                  <UserSecondInfoContainer>
-                    {Array.from({ length: 5 }).map((_, idx) => (
-                      <UserStarImg
-                        key={idx}
-                        src={idx < review.score ? star : notfillstar}
-                        alt={idx < review.score ? `별점 ${idx + 1}` : "빈 별"}
-                      />
-                    ))}
-                  </UserSecondInfoContainer>
-                </TotalUserInfoContainer>
-              </ReviewUserContainer>
-              <VisitDate>
-                방문날짜 {new Date(review.visitedAt).toLocaleDateString()}
-              </VisitDate>
-              <ReviewContent>
-                {displayedText}
-                {review.content.length > maxLength && (
-                  <ReadMoreButton onClick={() => toggleText(review.reviewId)}>
-                    {isExpandedForReview ? "접기" : "더보기"}
-                  </ReadMoreButton>
-                )}
-              </ReviewContent>
-              <ReviewPictureContainer>
-                {review.media && review.media.length > 0 && (
-                  <ReviewSlideshow images={review.media} />
-                )}
-              </ReviewPictureContainer>
-            </div>
-          );
-        })
-      ) : (
-        <p style={{fontWeight: "bold"}}>리뷰가 없습니다.</p>
-      )}
-      </ReviewsSection>
-    </>
-  );
-};
-
-PlaceReviewList.propTypes = {
-  reviews: PropTypes.arrayOf(
-    PropTypes.shape({
-      userId: PropTypes.number.isRequired,
-      userImg: PropTypes.string,
-      nickname: PropTypes.string.isRequired,
-      createdAt: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
-      images: PropTypes.arrayOf(PropTypes.string),
-      videos: PropTypes.arrayOf(PropTypes.string),
-      keywords: PropTypes.arrayOf(PropTypes.string),
-      placeName: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
 
 export default PlaceReviewList;

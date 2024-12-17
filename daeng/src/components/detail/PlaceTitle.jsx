@@ -72,7 +72,6 @@ const Info = styled.div`
 
 const PlaceTitle = ({ data, setData }) => {
     const navigate = useNavigate();
-    const { id: placeId } = useParams();
     const { userId } = useUserStore.getState();
     const userLocation = useLocationStore((state)=>state.userLocation);
     
@@ -167,7 +166,6 @@ const PlaceTitle = ({ data, setData }) => {
             <TitleSection>
                 <h1>{data.name}</h1>
                 <SquareBtn mode="visit" onClick={()=>handleVisitListClick(data.placeId)}/>
-                {/* <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={() => handleVisitListClick(data.placeId)}/> */}
             </TitleSection>
             <SubTitleSection>
                 <Info>

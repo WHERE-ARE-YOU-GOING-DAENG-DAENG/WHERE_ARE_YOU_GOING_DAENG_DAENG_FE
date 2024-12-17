@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import logo from "../../assets/icons/logo.svg";
 import alarmIcon from "../../assets/icons/home_alarm.svg";
+import loginIcon from "../../assets/icons/home_login.svg";
 import { useNavigate } from "react-router-dom";
 import AlertDialog from "../../components/commons/SweetAlert"; 
-import userStore from '../../stores/userStore';
+import userStore from "../../stores/userStore";
 
 function HomeHeader() {
   const navigate = useNavigate();
-  const { userId } = userStore(); 
+  const { userId } = userStore();
 
   const handleAlarm = () => {
     if (userId) {
@@ -24,6 +25,14 @@ function HomeHeader() {
     }
   };
 
+  const handleLogin = () => {
+    if (userId) {
+      navigate("/my-page");
+    } else {
+      navigate("/login");
+    }
+  };
+
   const handleLogoClick = () => {
     window.location.reload();
   };
@@ -31,7 +40,10 @@ function HomeHeader() {
   return (
     <HeaderWrapper>
       <Logo src={logo} alt="로고" onClick={handleLogoClick} />
-      <AlarmIcon src={alarmIcon} alt="알림" onClick={handleAlarm} />
+      <IconWrapper>
+        <LoginIcon src={loginIcon} alt="로그인" onClick={handleLogin} />
+        <AlarmIcon src={alarmIcon} alt="알림" onClick={handleAlarm} />
+      </IconWrapper>
     </HeaderWrapper>
   );
 }
@@ -55,6 +67,24 @@ const Logo = styled.img`
   @media (max-width: 554px) {
     width: 120px;
     height: 30px;
+  }
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const LoginIcon = styled.img`
+  width: 28px;
+  height: 28px;
+  margin-right: 15px;
+  cursor: pointer;
+
+  @media (max-width: 554px) {
+    width: 18px;
+    height: 21px;
+    margin-right: 10px;
   }
 `;
 

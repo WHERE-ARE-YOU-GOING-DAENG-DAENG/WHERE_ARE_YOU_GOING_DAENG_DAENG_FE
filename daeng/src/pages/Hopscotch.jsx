@@ -10,6 +10,143 @@ import styled from "styled-components";
 import axios from "axios";
 import Confetti from "../components/commons/Confetti";
 
+const Hopscotch = () => {
+  const [myLandlist, setMyLandList] = useState({ nickname: "", lands: [] });
+  const landListRef = useRef(null);
+  const [selectedArea, setSelectedArea] = useState([]);
+  const [visitCount, setVisitCount] = useState({});
+  const [myLand, setMyLand] = useState({ region: "", subRegion: "" });
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
+
+  useEffect(() => {
+    fetchMyLand();
+    fetchMyVisit();
+  }, []);
+
+  const scroll = (direction) => {
+    if (landListRef.current) {
+      const scrollAmount = 300;
+      if (direction === "left") {
+        landListRef.current.scrollLeft -= scrollAmount;
+      } else {
+        landListRef.current.scrollLeft += scrollAmount;
+      }
+    }
+  };
+
+  const totalLands = myLandlist.lands.reduce((acc, land) => acc + land.cityDetails.length, 0);
+
+  const fetchMyLand = async () => {
+    try {
+      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region", {
+        withCredentials: true,
+      });
+      setMyLandList(response.data.data);
+      setFetchError(false);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setFetchError(true);
+      } else {
+        console.error("땅 목록을 불러오는 데 에러 발생", error);
+      }
+    }
+  };
+
+  const fetchMyVisit = async () => {
+    try {
+      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region/visitCount", {
+        withCredentials: true,
+      });
+      setVisitCount(response.data.data.visitInfo);
+    } catch (error) {
+      console.error("방문 횟수를 불러오는 데 에러 발생", error);
+    }
+  };
+
+  const getCurrentVisitCount = () => {
+    const [region, subRegion] = selectedArea;
+    if (region && subRegion && visitCount[region]?.[subRegion] !== undefined) {
+      return visitCount[region][subRegion];
+    }
+    return 0;
+  };
+
+  const isOwned = () => {
+    const [region, subRegion] = selectedArea;
+
+    if (!region || !subRegion) return false;
+
+    return myLandlist.lands.some(
+      (land) =>
+        land.city === region &&
+        land.cityDetails.some((detail) => detail.cityDetail === subRegion)
+    );
+  };
+
+  const handleMyLandClick = (region, subRegion) => {
+    setMyLand({ region, subRegion });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (isOwned()) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 2000);
+    }
+  }, [selectedArea]);
+
+  return (
+    <Container>
+      {showConfetti && <Confetti />}
+      <Header label="땅따먹기" />
+      <HopscotchMap removeUi={true} setSelectedArea={setSelectedArea} changeCenter={myLand} />
+      <LandContainer>
+        {selectedArea[0] ? (
+          <>
+            <Label>
+              <Pink>{selectedArea[0]} {selectedArea[1]}</Pink>
+              {isOwned() ? "를(을) 점령하셨습니다!" : " 점령까지 남은 방문횟수"}
+            </Label>
+            <ProgressBar key={`${selectedArea[0]}-${selectedArea[1]}`} current={getCurrentVisitCount()} total={isOwned() ? selectedArea[2] : selectedArea[2] + 1 || 1} />
+          </>
+        ) : <Label>점령하고 싶은 땅을 선택해보세요</Label>}
+        {fetchError ? (
+          <Label>유저의 땅이 존재하지 않습니다.</Label>
+        ) : (
+          <>
+            <Label>
+              <Pink>{myLandlist.nickname}</Pink>님의 땅 목록
+            </Label>
+            <ScrollContainer>
+              {totalLands > 2 && (
+                <ArrowButton direction="left" onClick={() => scroll("left")}>
+                  <img src={leftarrow} alt="왼쪽 화살표" />
+                </ArrowButton>
+              )}
+              <LandList ref={landListRef}>
+                {myLandlist.lands.map((land) =>
+                  land.cityDetails.map((detail) => (
+                    <MyLandWrapper key={`${land.city}-${detail.cityDetail}`}>
+                      <MyLandLabel region={land.city} subRegion={detail.cityDetail} onClick={() => handleMyLandClick(land.city, detail.cityDetail)} />
+                    </MyLandWrapper>
+                  ))
+                )}
+              </LandList>
+              {totalLands > 2 && (
+                <ArrowButton direction="right" onClick={() => scroll("right")}>
+                  <img src={rightarrow} alt="오른쪽 화살표" />
+                </ArrowButton>
+              )}
+            </ScrollContainer>
+          </>
+        )}
+      </LandContainer>
+      <Footer />
+    </Container>
+  );
+};
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -68,130 +205,5 @@ const LandList = styled.div`
 const MyLandWrapper = styled.div`
   flex: 0 0 auto;
 `;
-
-const Hopscotch = () => {
-  const [myLandlist, setMyLandList] = useState({ nickname: "", lands: [] })
-  const landListRef = useRef(null);
-  const [selectedArea, setSelectedArea] = useState([]);
-  const [visitCount, setVisitCount] = useState({});
-  const [myLand, setMyLand] = useState({region: "", subRegion: ""});
-  const [showConfetti, setShowConfetti] = useState(false);
-
-  useEffect(()=>{
-    fetchMyLand();
-    fetchMyVisit();
-  },[])
-
-  const scroll = (direction) => {
-    if (landListRef.current) {
-      const scrollAmount = 300;
-      if (direction === "left") {
-        landListRef.current.scrollLeft -= scrollAmount;
-      } else {
-        landListRef.current.scrollLeft += scrollAmount;
-      }
-    }
-  };
-
-  const totalLands = myLandlist.lands.reduce((acc, land) => acc + land.cityDetails.length, 0);
-  
-  const fetchMyLand = async() => {
-    try{
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region",{
-        withCredentials: true
-      });
-      setMyLandList(response.data.data);
-    }catch(error){
-      console.error("땅 목록을 불러오는 데 에러 발생",error)
-    }
-  }
-
-  const fetchMyVisit = async() => {
-    try{
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region/visitCount",{
-        withCredentials: true
-      });
-      setVisitCount(response.data.data.visitInfo);
-    }catch(error){
-      console.error("방문 횟수를 불러오는 데 에러 발생",error)
-    }
-  };
-
-  const getCurrentVisitCount = () => {
-    const [region, subRegion] = selectedArea;
-    if (region && subRegion && visitCount[region]?.[subRegion] !== undefined) {
-      return visitCount[region][subRegion];
-    }
-    return 0;
-  };
-
-  const isOwned = () => {
-    const [region, subRegion] = selectedArea;
-
-    if (!region || !subRegion) return false;
-
-    return myLandlist.lands.some(
-      (land) =>
-        land.city === region &&
-        land.cityDetails.some((detail) => detail.cityDetail === subRegion)
-    );
-  };
-
-  const handleMyLandClick = (region, subRegion) => {
-    setMyLand({ region, subRegion });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    if (isOwned()) {
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 2000);
-    }
-  }, [selectedArea]);
-
-  return (
-    <Container>
-      {showConfetti && <Confetti />}
-      <Header label="땅따먹기" />
-      <HopscotchMap removeUi={true} setSelectedArea={setSelectedArea} changeCenter={myLand}/>
-      <LandContainer>
-        {selectedArea[0]? (
-          <>
-            <Label>
-              <Pink>{selectedArea[0]} {selectedArea[1]}</Pink>
-              {isOwned() ? "를(을) 점령하셨습니다!" : " 점령까지 남은 방문횟수"}
-            </Label>
-            <ProgressBar key={`${selectedArea[0]}-${selectedArea[1]}`} current={getCurrentVisitCount()} total={isOwned() ? selectedArea[2] : selectedArea[2]+1 || 1} />
-          </>
-        ):<Label>점령하고 싶은 땅을 선택해보세요</Label>}
-        <Label>
-          <Pink>{myLandlist.nickname}</Pink>님의 땅 목록
-        </Label>
-        <ScrollContainer>
-          {totalLands > 2 && (
-            <ArrowButton direction="left" onClick={() => scroll("left")}>
-              <img src={leftarrow} alt="왼쪽 화살표" />
-            </ArrowButton>
-          )}
-          <LandList ref={landListRef}>
-            {myLandlist.lands.map((land) =>
-              land.cityDetails.map((detail) => (
-                <MyLandWrapper key={`${land.city}-${detail.cityDetail}`}>
-                  <MyLandLabel region={land.city} subRegion={detail.cityDetail} onClick={() => handleMyLandClick(land.city, detail.cityDetail)}/>
-                </MyLandWrapper>
-              ))
-            )}
-          </LandList>
-          {totalLands > 2 && (
-            <ArrowButton direction="right" onClick={() => scroll("right")}>
-              <img src={rightarrow} alt="오른쪽 화살표" />
-            </ArrowButton>
-          )}
-        </ScrollContainer>
-      </LandContainer>
-      <Footer />
-    </Container>
-  );
-};
 
 export default Hopscotch;
