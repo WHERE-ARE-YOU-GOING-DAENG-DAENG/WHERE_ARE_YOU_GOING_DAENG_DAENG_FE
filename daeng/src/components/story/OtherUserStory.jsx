@@ -15,11 +15,14 @@ import {
   ProgressBar,
   ProgressItem,
 } from "./StoryCommonStyle";
+import useUserStore from "../../stores/userStore";
 
 function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   const [stories, setStories] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [viewedStories, setViewedStories] = useState(new Set());
+
+  const { userId } = useUserStore.getState();
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -60,6 +63,9 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   }, [nickname, city, cityDetail]);
 
   const markStoryAsViewed = useCallback(async (storyId) => {
+
+    if (!userId) return;
+    
     if (!viewedStories.has(storyId)) {
       try {
         await axios.put(

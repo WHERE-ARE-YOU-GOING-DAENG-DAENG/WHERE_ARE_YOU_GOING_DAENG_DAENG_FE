@@ -79,7 +79,7 @@ function Home() {
       const { user } = response.data.data;
 
       setLoginData(user);
-    } catch (error) {
+    } catch {
       AlertDialog({
         mode: "alert",
         title: "데이터 불러오기 실패",
