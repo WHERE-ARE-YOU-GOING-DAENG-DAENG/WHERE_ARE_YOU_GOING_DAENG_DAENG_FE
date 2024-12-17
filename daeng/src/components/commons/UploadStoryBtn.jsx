@@ -6,7 +6,7 @@ import UploadStoryBtnCrown from "../../assets/icons/UploadStoryBtn_crown.svg";
 const UploadStoryBtn = ({ location, nickname, isPinkBorder, imageSrc, onClick }) => {
   const textLength = location.length;
   return (
-    <ButtonContainer onClick={onClick}>
+    <ButtonContainer onClick={onClick} textLength={textLength}>
       <ImageContainer isPinkBorder={isPinkBorder}>
         <ProfileImageWrapper>
           <ProfileImage src={imageSrc || UploadStoryBtn_DefaultImg} alt="프로필 이미지" />
@@ -43,11 +43,11 @@ const ButtonContainer = styled.div`
   width: 40%;
   height: 170px;
   cursor: pointer;
-  margin-top: ${({ textLength }) => (textLength > 8 ? '10px' : '0')};
+  margin-top: ${({ textLength }) => (textLength > 8 ? '20px' : '10px')};
 
   @media (max-width: 554px) {
     height: 120px;
-    margin-top: ${({ textLength }) => (textLength > 8 ? '10px' : '12px')};
+    margin-top: ${({ textLength }) => (textLength > 8 ? '10px' : '0')};
   }
 `;
 
