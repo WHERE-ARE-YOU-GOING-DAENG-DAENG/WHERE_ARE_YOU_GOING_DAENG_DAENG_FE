@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import star from '../../assets/icons/star.svg';
 import notfillstar from "../../assets/icons/notfillstar.svg";
@@ -12,262 +11,33 @@ import ReviewSlideshow from './ReviewSlideshow';
 import { useNavigate } from 'react-router-dom';
 import arrow from '../../assets/icons/arrow.svg'
 import Loading from '../../components/commons/Loading'; 
+import { 
+  TotalReviewContainer, 
+  ReviewPlaceTitle, 
+  PreferenceContainer, 
+  ReviewSummaryContainer, 
+  TotalStarPoint, 
+  TotalReviewCount, 
+  StarImg, 
+  DivisionLine, 
+  TotalUserInfoContainer, 
+  UserStarImg, 
+  ReviewUserContainer, 
+  UserPhoto, 
+  CommentContainer, 
+  UserId, 
+  PetType, 
+  PostDate, 
+  StyledArrow, 
+  ReviewContent, 
+  UserSecondInfoContainer, 
+  DescriptionContainer, 
+  VisitDate, 
+  NoReview, 
+  ReadMoreButton, 
+  LastReview
+} from "./total/TotalReviewStyle";
 
-const TotalReviewContainer = styled.div`
-  display: block;
-  padding:3%;
-  margin-left:4%;
-
-  @media (max-width: 554px) {
-    padding:4%;
-    margin-left:1%;
-  }
-`
-
-const ReviewPlaceTitle = styled.span`
-  font-size:25px;
-  font-weight:bold;
-  display: block;
-  text-align: left;
-
-  @media (max-width: 554px) {
-    font-size:23px;
-    margin-left:4px;
-  }
-`
-const PreferenceContainer = styled.div`
-  display: flex;
-  margin-top: 3%;
-  flex-direction: row;
-  margin-bottom:3%;
-  gap:3px;
-  margin-left:-5px;
-  flex-wrap: wrap; 
-
-  @media (max-width: 554px) {
-    gap:5px;
-    margin-left:3px;
-  }
-`
-
-const ReviewSummaryContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 6%; 
-`;
-
-const TotalStarPoint = styled.span`
-  font-size:18px;
-  font-weight: bold;
-  display: block;
-  margin-left: 2%;
-  margin-right: 2%;
-
-  @media (max-width: 554px) {
-    font-size:13px;
-    margin-left: 2px;
-  }
-`
-
-const TotalReviewCount = styled.span`
-  color: #B3B3B3;
-  font-size:13px;
-  display: block;
-
-  @media (max-width: 554px) {
-    font-size: 12px;
-  }
-`
-
-const StarImg = styled.img`
-  width: 15px; 
-  height: 15px; 
-  border-radius:100px;
-
-  @media (max-width: 554px) {
-    margin-left: 10px;
-  }
-`
-
-const DivisionLine = styled.div`
-  height: 1px;
-  background-color: #E5E5E5;
-  margin-right:40px;
-  margin-top:5px;
-
-  @media (max-width: 554px) {
-    margin-left:15px;
-  }
-`;
-
-const TotalUserInfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-  
-`
-
-const UserStarImg = styled.img`
-  width:15px;
-  height:15px;
-  display: flex;
-  margin-top: 5px;
-  @media (max-width: 554px) {
-    width: 13px;
-    margin-top: 0px;
-  }
-`
-
-const ReviewUserContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 5px;
-
-  @media (max-width: 554px) {
-  margin-top: 5px;
-  margin-left: 10px;
-  }
-`
-
-const UserPhoto = styled.img`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  margin-left: 2%;
-  margin-top: 20px;
-  margin-right: 2%;
-
-  @media (max-width: 554px) {
-  width: 53px;
-  height: 53px;
-  margin-left: 5px;
-  margin-right: 3%;
-  }
-`
-const CommentContainer = styled.div`
-  width: 380px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 5px;
-
-  @media (max-width: 554px) {
-    width: 70vw;
-  }
-`
-const UserId = styled.span`
-  font-size:20px;
-  font-weight: bold;
-  margin-right: 10px;
-  margin-top: 5px;
-
-  @media (max-width: 554px) {
-    font-size: 15px;
-    margin-top: 10px;
-  }
-`
-const PetType = styled.span`
-  font-size: 15px;
-  margin-left: -5px;
-  color:#B3B3B3;
-  margin-top:8px;
-
-  @media (max-width: 554px) {
-    font-size: 11px;
-    margin-top:13px;
-  }
-`
-
-const PostDate = styled.span`
-  font-size: 13px;
-  color: #B3B3B3;
-  margin-top: 8px;
-  margin-bottom: 3px;
-
-  @media (max-width: 554px) {
-    font-size: 11px;
-    margin-top: 6px;
-    margin-right: 20px;
-    margin-bottom:10px;
-  }
-`;
-
-const StyledArrow  = styled.img`
-  width: 15px;
-  margin-left: 10px;
-  cursor: pointer;
-`
-
-const ReviewContent = styled.span`
-  font-size: 15px;
-  display: block; 
-  padding-left: 3%;
-  padding-right: 9%;
-  text-align: justify;  
-  line-height: 1.5;  
-  word-break: break-word;  
-  margin-top: 30px;
-  margin-bottom:10px;
-
-  @media (max-width: 554px) {
-    padding-left: 4%;
-    font-size: 11px;
-    margin-bottom:10px;
-  }
-`;
-
-const UserSecondInfoContainer = styled.div`
-  display: flex;
-  flex-direction: row;  
-`
-
-const DescriptionContainer = styled.div`
-  display:flex;
-  flex-direction: row;
-`
-
-const VisitDate = styled.span`
-  font-size: 13px;
-  color: #B3B3B3;
-  display: flex;
-  flex-direction: flex-start;
-  margin-top:3%;
-  margin-left: 3%;
-
-  @media (max-width: 554px) {
-    font-size: 11px;
-    margin-top:4%;
-    margin-bottom:5px;
-    margin-left:4%;
-  }
-`
-
-const NoReview = styled.div`
-  font-size: 13px;
-  margin-top: 10px;
-  font-weight: bold;
-`
-
-const ReadMoreButton = styled.button`
-  color: #FF69A9;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-
-  @media (max-width: 554px) {
-    font-size: 10px; 
-  }
-`;
-
-const LastReview = styled.span`
-  display: block;
-  font-size: 13px;
-  margin-top: 30px;
-  font-weight: bold;
-`
 const TotalReviewForm = () => {
   const { placeId } = useParams();
   const navigate = useNavigate();

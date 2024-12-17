@@ -90,7 +90,7 @@ const PlaceTitle = ({ data, setData }) => {
             }));
           }
           } else {
-            console.warn(`장소ID로 즐겨찾기 ID찾을 수 없음음: ${placeId}`);
+            console.warn(`장소ID로 즐겨찾기 ID찾을 수 없음: ${placeId}`);
           }
         } else {
           const response = await favoriteStore.addFavorite(placeId);
@@ -102,11 +102,12 @@ const PlaceTitle = ({ data, setData }) => {
         }
         }
       } catch (error) {
-        console.error("즐겨찾기 상태 바꾸는 중 에러러:", error);
+        console.error("즐겨찾기 상태 바꾸는 중 에러:", error);
       }
     };
 
     const handleVisitListClick = (placeId) => {
+      navigate(`/visit-list/${placeId}`);
       if (userId) {
         navigate(`/visit-list/${placeId}`);
       } else {
@@ -122,6 +123,7 @@ const PlaceTitle = ({ data, setData }) => {
     }
 
     const handleReviewClick = async(placeId) => {
+      navigate(`/write-review/${placeId}`, { state: { type: "realtime" } });
       if (userId) {
         if(userLocation.lat !== 0 || userLocation.lng !== 0){
           try{
