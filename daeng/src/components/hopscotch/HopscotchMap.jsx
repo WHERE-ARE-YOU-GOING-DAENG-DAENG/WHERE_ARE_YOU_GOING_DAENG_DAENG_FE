@@ -7,6 +7,7 @@ import LandOwnerProfile from "./LandOwnerProfile";
 import CustomOverlay from "../../components/map/CustomOverlay";
 import markerIcon from "../../assets/icons/marker.svg";
 import Loading from "../commons/Loading";
+import pako from "pako";
 
 const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   const mapRef = useRef(null);
@@ -24,10 +25,25 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
     fetchOwnerData();
   }, []);
 
+  // const fetchGeoJson = async () => {
+  //   try {
+  //     const response = await fetch("/data/sig.json.gz");
+  //     const json = await response.json();
+  //     setGeojson(json);
+  //   } catch (error) {
+  //     console.error("GeoJSON 데이터를 로드할 수 없습니다:", error);
+  //   }
+  // };
   const fetchGeoJson = async () => {
     try {
       const response = await fetch("/data/sig.json.gz");
-      const json = await response.json();
+      const compressedData = await response.arrayBuffer();
+  
+      const decompressedData = pako.inflate(compressedData, { to: "string" }); 
+  
+      const json = JSON.parse(decompressedData);
+      console.log("Decompressed GeoJSON:", json);
+      
       setGeojson(json);
     } catch (error) {
       console.error("GeoJSON 데이터를 로드할 수 없습니다:", error);

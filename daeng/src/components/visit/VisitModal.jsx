@@ -12,97 +12,6 @@ import axios from "axios";
 import axiosInstance from "../../services/axiosInstance";
 dayjs.extend(isBetween);
 dayjs.extend(customParseFormat);
-const slideUp = keyframes`
-    from {
-        transform: translateY(100%);
-    }
-    to {
-        transform: translateY(0);
-    }
-`;
-
-const slideDown = keyframes`
-    from {
-        transform: translateY(0);
-    }
-    to {
-        transform: translateY(100%);
-    }
-`;
-
-const Modal = styled.div`
-    position: fixed;
-    bottom: 76px;
-    width: 555px;
-    height: 80%;
-    background-color: white;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    animation: ${({ isClosing }) => (isClosing ? slideDown : slideUp)} 0.4s ease-out;
-    z-index: 99;
-    overflow-y: auto; 
-    -webkit-overflow-scrolling: touch;
-    @media (max-width: 554px) {
-        width: 100%;
-        bottom: 64px;
-    }
-`;
-
-const Overlay = styled.div`
-    position: fixed;
-    top: 0;
-    width: 554px;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 98;
-    @media (max-width: 554px) {
-        width: 100%;
-    }
-`;
-
-const Header = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 28px 41px;
-
-    h2 {
-        margin: 0;
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    img {
-        cursor: pointer;
-        width: 20px;
-    }
-`;
-
-const Form = styled.div`
-  padding: 0px 41px;
-  display: flex;
-  flex-direction: column;
-  gap: 35px;
-`;
-
-const SelectBox = styled.div`
-  display:flex;
-  flex-direction: column;
-  text-align: left;
-  gap: 10px;
-`;
-
-const Label = styled.label`
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const InputAlert = styled.p`
-  color: #ff69a9;
-  font-size: 12px;
-  text-align: left;
-  gap: 1px;
-`;
 
 const selectStyles = {
     control: (provided, state) => ({
@@ -233,6 +142,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         });
         } else if (dayjs(date).isBetween(startDate, endDate, "day", "[]")) {
           if(initDate){
+            console.log("선택된 날짜",initDate);
             return;
           }else {
             setSelectedDate(date);
@@ -249,6 +159,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
 
       const handleTimeChange = (selectedOption) => {
         if(initTime){
+            console.log("선택된 시간",initTime);
             return;
         }
         setSelectedTime(selectedOption.value);
@@ -395,5 +306,96 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         </>
     )
 }
+const slideUp = keyframes`
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+`;
+
+const slideDown = keyframes`
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(100%);
+    }
+`;
+
+const Modal = styled.div`
+    position: fixed;
+    bottom: 76px;
+    width: 555px;
+    height: 80%;
+    background-color: white;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    animation: ${({ isClosing }) => (isClosing ? slideDown : slideUp)} 0.4s ease-out;
+    z-index: 99;
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch;
+    @media (max-width: 554px) {
+        width: 100%;
+        bottom: 64px;
+    }
+`;
+
+const Overlay = styled.div`
+    position: fixed;
+    top: 0;
+    width: 554px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+    @media (max-width: 554px) {
+        width: 100%;
+    }
+`;
+
+const Header = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 41px;
+
+    h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    img {
+        cursor: pointer;
+        width: 20px;
+    }
+`;
+
+const Form = styled.div`
+  padding: 0px 41px;
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+`;
+
+const SelectBox = styled.div`
+  display:flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 10px;
+`;
+
+const Label = styled.label`
+  font-size: 20px;
+  font-weight: bold;
+`;
+
+const InputAlert = styled.p`
+  color: #ff69a9;
+  font-size: 12px;
+  text-align: left;
+  gap: 1px;
+`;
 
 export default VisitModal;
