@@ -3,11 +3,12 @@ import styled from "styled-components";
 import festival_banner from "../../assets/icons/festival_banner.jpg";
 import banner1 from '../../assets/icons/banner1.jpg';
 import banner2 from "../../assets/icons/banner2.jpg";
+import banner3 from "../../assets/icons/banner3.jpg";
 import { useNavigate } from "react-router-dom";
 
 function HomeSlider() {
   const navigate = useNavigate();
-  const slides = [festival_banner, banner1, banner2]; 
+  const slides = [festival_banner, banner1, banner2, banner3]; 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -22,12 +23,17 @@ function HomeSlider() {
   };
 
   const handleSlideClick = (index) => {
-    if (slides[index] === banner1 || slides[index] === banner2) {
+    if (
+      slides[index] === banner1 || 
+      slides[index] === banner2 || 
+      slides[index] === banner3
+    ) {
       navigate("/how-to-guide"); 
     } else {
       navigate("/event"); 
     }
   };
+  
 
   const handleNext = () => {
     setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);

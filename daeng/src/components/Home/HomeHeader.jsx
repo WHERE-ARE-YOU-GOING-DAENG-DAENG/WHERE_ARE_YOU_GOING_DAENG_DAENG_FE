@@ -82,9 +82,9 @@ const LoginIcon = styled.img`
   cursor: pointer;
 
   @media (max-width: 554px) {
-    width: 18px;
-    height: 21px;
-    margin-right: 10px;
+    width: 25px;
+    height: 25px;
+    margin-right: 15px;
   }
 `;
 
