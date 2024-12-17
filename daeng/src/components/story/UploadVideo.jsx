@@ -3,7 +3,7 @@ import axios from "axios";
 import x from "../../assets/icons/x.svg";
 import crown from "../../assets/icons/crown.svg";
 import AlertDialog from "../../components/commons/SweetAlert";
-import Loading from "../../components/commons/Loading"; // Loading 컴포넌트 추가
+import Loading from "../../components/commons/Loading"; 
 import {
   VideoContainer,
   CloseButton,
