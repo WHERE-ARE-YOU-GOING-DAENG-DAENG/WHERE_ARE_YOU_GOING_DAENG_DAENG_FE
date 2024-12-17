@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import mypageservice from '../../assets/icons/mypageservice.svg'
+import mypageservice from '../../../assets/icons/mypageservice.svg'
 import { useNavigate } from 'react-router-dom'; 
 
 const PetServiceContainer = styled.div`

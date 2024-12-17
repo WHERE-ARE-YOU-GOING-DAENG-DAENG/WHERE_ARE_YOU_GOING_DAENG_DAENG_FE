@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import Header from '../../components/commons/Header';
 import Footer from '../../components/commons/Footer';
-import UserContainer from '../../components/user/UserContainer';
-import DivisionLine from '../../components/user/DivisionLine';
-import PetContainer from '../../components/user/PetContainer';
-import RoutePage from '../../components/user/RoutePage';
-import PetService from '../../components/user/PetService';
-import LastContainer from '../../components/user/LastContainer';
+import UserContainer from '../../components/user/mypage/UserContainer';
+import DivisionLine from '../../components/user/mypage/DivisionLine';
+import PetContainer from '../../components/user/mypage/PetContainer';
+import RoutePage from '../../components/user/mypage/RoutePage';
+import PetService from '../../components/user/mypage/PetService';
+import LastContainer from '../../components/user/mypage/LastContainer';
 import Loading from '../../components/commons/Loading'; 
 
 const ReviewContainer = styled.div`
