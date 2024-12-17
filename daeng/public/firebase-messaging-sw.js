@@ -61,17 +61,17 @@ self.addEventListener('notificationclick', (event) => {
 });
 
 
-messaging.onBackgroundMessage(function(payload) {
-    console.log('백그라운드에서 푸시 알림 받음:', payload);
+messaging.onBackgroundMessage((payload) => {
+    console.log("백그라운드에서 푸시 알림 수신:", payload);
 
-    const { title, body, icon, url } = payload.data || {};
+    if (payload.data) {
+        const { title, body, icon, url, notificationId } = payload.data;
 
-    const notificationTitle = title || "알림";
-    const notificationOptions = {
-        body: body || "내용이 없습니다.",
-        icon: icon || '/alarm_logo.png',
-        data: { url: url || '/' }, 
-    };
-
-    self.registration.showNotification(notificationTitle, notificationOptions);
-});
+        self.registration.showNotification(title || "제목 없음", {
+            body: body || "내용 없음",
+            icon: icon || "/favicon.ico",
+            data: { url, notificationId },
+            tag: notificationId || "default-tag",
+        });
+        }
+    });
