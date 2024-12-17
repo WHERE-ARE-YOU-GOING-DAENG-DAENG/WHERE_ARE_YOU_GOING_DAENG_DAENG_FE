@@ -49,15 +49,25 @@ function HomeHeader() {
 }
 
 const HeaderWrapper = styled.header`
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  max-width: 554px;
+  width: 100%;
+  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 30px 35px;
+  padding: 40px 35px;
+  background: #ffffff;
+  border-bottom: 1px solid #d9d9d9;
 
   @media (max-width: 554px) {
     padding: 20px 25px;
+    height: 3rem; 
   }
 `;
+
 
 const Logo = styled.img`
   width: 136px;
