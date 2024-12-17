@@ -13,6 +13,7 @@ const ListContainer = styled.div`
   @media (max-width: 554px) {
     margin: 10px;
     padding: 10px;
+    padding-bottom: 100%;
   }
 `;
 
