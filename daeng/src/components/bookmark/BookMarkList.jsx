@@ -44,7 +44,16 @@ const BookMarkList = ({ isOpen, onClose, data, onPlaceClick, fetchNextPage }) =>
             confirmText: "삭제",
             cancelText: "취소",
             onConfirm: async () => {
-                await removeFavorite(id);
+                const response = await removeFavorite(id);
+                if(response.status === 200){
+                    AlertDialog({
+                    mode: "alert",
+                    title: "즐겨찾기 삭제",
+                    text: "즐겨찾기 목록에서 삭제되었습니다.",
+                    icon: "success",
+                    confirmText: "확인",
+                  });
+                }
             },
         });
     };
