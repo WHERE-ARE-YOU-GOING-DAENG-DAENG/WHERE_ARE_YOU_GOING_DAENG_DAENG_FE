@@ -65,13 +65,12 @@ messaging.onBackgroundMessage((payload) => {
     console.log("백그라운드에서 푸시 알림 수신:", payload);
 
     if (payload.data) {
-        const { title, body, icon, url, notificationId } = payload.data;
+        const { title, body, icon, url } = payload.data;
 
         self.registration.showNotification(title || "제목 없음", {
-            body: body || "내용 없음",
-            icon: icon || "/favicon.ico",
-            data: { url, notificationId },
-            tag: notificationId || "default-tag",
+            body: body || "내용이 없습니다.",
+            icon: icon || '/alarm_logo.png',
+            data: { url: url || '/' }, 
         });
         }
     });
