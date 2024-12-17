@@ -45,7 +45,7 @@ const Hopscotch = () => {
       setMyLandList(response.data.data);
       setFetchError(false);
     } catch (error) {
-      if (error.response && error.response.status === 404) {
+      if (error.response && error.response.status === 404 || error.response.status === 401) {
         setFetchError(true);
       } else {
         console.error("땅 목록을 불러오는 데 에러 발생", error);
