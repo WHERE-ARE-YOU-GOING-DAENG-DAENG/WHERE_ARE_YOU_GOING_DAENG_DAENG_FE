@@ -4,7 +4,7 @@ import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from 'axios';
-import usePetImageUpload  from "../../hooks/usePetImageUpload";
+import useImageUpload  from "../../hooks/useImageUpload";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
 import upload from '../../assets/icons/upload.svg';
@@ -30,7 +30,7 @@ import {
 
 function RegisterInputForm() {
   const navigate = useNavigate(); 
-  const { uploadImageToS3, isUploading } = usePetImageUpload();
+  const { uploadImageToS3, isUploading } = useImageUpload();
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [imageFile, setImageFile] = useState(null); 
@@ -141,7 +141,7 @@ function RegisterInputForm() {
         confirmText: "닫기",
         icon: "success",
         onConfirm: () => {
-          navigate("/"); 
+          navigate("/my-page"); 
         }
       });
 

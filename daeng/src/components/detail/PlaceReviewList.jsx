@@ -249,7 +249,6 @@ const ReviewUserContainer = styled.div`
 const UserPhoto = styled.img`
   width: 60px;
   height: 60px;
-  background-color: #FF69A9;
   border-radius: 50%;
   margin-left: 2%;
   margin-top: 20px;
