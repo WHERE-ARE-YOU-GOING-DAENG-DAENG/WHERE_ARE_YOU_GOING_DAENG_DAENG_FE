@@ -26,12 +26,21 @@ export const requestNotificationPermission = async () => {
 export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
     console.log("알림 수신:", payload);
-    if (!document.hidden) {
-      const notificationTitle = payload.notification.title;
+
+        // 페이지가 포그라운드 상태인지 확인
+      if (document.visibilityState === "hidden") {
+        console.log("백그라운드 상태에서는 알림을 표시하지 않습니다.");
+        return; // 백그라운드 상태에서는 실행 중지
+        }
+  
+    if (payload && payload.data) {
+      const { title, body, image, icon, url } = payload.data;
+
+      const notificationTitle = title || "알림";
       const notificationOptions = {
-        body: payload.notification.body,
-        image: payload.notification.image,
-        icon: payload.notification.icon || '/alarm-logo.png',
+        body: body || "내용이 없습니다.",
+        image: image || null,
+        icon: icon || "/alarm-logo.png",
       };
 
       const notification = new Notification(notificationTitle, notificationOptions);
