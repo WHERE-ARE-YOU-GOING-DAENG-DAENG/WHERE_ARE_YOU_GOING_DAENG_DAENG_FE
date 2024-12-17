@@ -44,7 +44,7 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
 
         if (user) {
           const storyResponse = await axios.get(
-            `https://dev.daengdaeng-where.link/api/v2/story/${user.landOwnerId}?city=${city}&cityDetail=${cityDetail}`,
+            `https://dev.daengdaeng-where.link/api/v2/story/detail/${user.landOwnerId}?city=${city}&cityDetail=${cityDetail}`,
             {
               headers: {
                 "Content-Type": "application/json",
