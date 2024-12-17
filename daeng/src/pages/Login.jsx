@@ -73,7 +73,7 @@ const Container = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     height: 100vh;
-    padding: 50px 0px 20px 0px;
+    padding: 50px 0px 50px 0px;
     box-sizing: border-box;
     overflow-y: auto;
 `;
@@ -158,7 +158,7 @@ const Image = styled.img`
     margin-top: 19px;
 
     @media (max-width: 554px) {
-        width: 80%;
+        width: 60%;
         height: auto;
     }
 `;
@@ -172,7 +172,7 @@ const DividerContainer = styled.div`
 
     @media (max-width: 554px) {
         margin-top: 10px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
 `;
 
@@ -232,6 +232,7 @@ const FooterText = styled.p`
 
     @media (max-width: 554px) {
         font-size: 3vw;
+        margin-top: 20px;
     }
 `;
 
