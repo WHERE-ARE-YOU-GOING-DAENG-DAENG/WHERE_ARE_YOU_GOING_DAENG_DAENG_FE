@@ -19,7 +19,6 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   const [isOwnerListLoaded, setIsOwnerListLoaded] = useState(false);
   const [markers, setMarkers] = useState([]);
   const [geojson, setGeojson] = useState(null);
-  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     fetchGeoJson();
@@ -28,20 +27,15 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
 
   const fetchGeoJson = async () => {
     try {
-      setIsLoading(true);
       const response = await fetch("/data/sig.json.gz");
       const compressedData = await response.arrayBuffer();
-  
+
       const decompressedData = pako.inflate(compressedData, { to: "string" }); 
   
       const json = JSON.parse(decompressedData);
-      console.log("Decompressed GeoJSON:", json);
-
       setGeojson(json);
-      setIsLoading(false);
     } catch (error) {
       console.error("GeoJSON 데이터를 로드할 수 없습니다:", error);
-      setIsLoading(false);
     }
   };
 
@@ -249,7 +243,6 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
 
   return (
     <MapContainer ref={mapRef} $removeUi={removeUi}>
-      {isLoading && <Loading label="땅따먹기기 데이터를 불러오는 중..." />}
       {!isLoaded && <Loading label="지도 로딩 중..." />}
       {map && overlayContent && (
         <CustomOverlay
