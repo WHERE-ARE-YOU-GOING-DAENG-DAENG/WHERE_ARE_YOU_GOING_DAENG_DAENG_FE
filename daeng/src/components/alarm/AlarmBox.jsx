@@ -5,6 +5,7 @@ import AlertDialog from "../commons/SweetAlert";
 import axios from "axios";
 import { pushAgree } from "../../data/CommonCode";
 import AlarmList from "./AlarmList";
+import Loading from "../../components/commons/Loading"; 
 
 const AlarmContainer = styled.div`
   width: 100%;
@@ -37,11 +38,13 @@ const ToggleButton = styled.button`
 
 const AlarmBox = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
   const [selectedPushType] = useState(pushAgree[0].code);
 
   useEffect(() => {
     const fetchNotificationConsent = async () => {
       try {
+        setIsLoading(true); 
         const response = await axios.get(
           "https://dev.daengdaeng-where.link/api/v1/notifications/consent",
           { withCredentials: true }
@@ -54,12 +57,14 @@ const AlarmBox = () => {
         }
       } catch (error) {
         console.error("알림 활성화 상태 요청 중 오류:", error);
+      } finally {
+        setIsLoading(false); 
       }
     };
 
     fetchNotificationConsent();
 
-    if ('serviceWorker' in navigator) {
+    if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("/firebase-messaging-sw.js")
         .then((registration) => {
@@ -74,6 +79,7 @@ const AlarmBox = () => {
   }, []);
 
   const handleNotificationRequest = async () => {
+    setIsLoading(true); 
     try {
       const token = await requestNotificationPermission();
       if (token) {
@@ -109,10 +115,13 @@ const AlarmBox = () => {
         confirmText: "닫기",
         icon: "error",
       });
+    } finally {
+      setIsLoading(false); 
     }
   };
 
   const handleCancelNotification = async () => {
+    setIsLoading(true); 
     try {
       const response = await axios.delete(
         "https://dev.daengdaeng-where.link/api/v1/notifications",
@@ -141,19 +150,27 @@ const AlarmBox = () => {
         confirmText: "닫기",
         icon: "error",
       });
+    } finally {
+      setIsLoading(false); 
     }
   };
 
   return (
     <>
+      {isLoading && <Loading label="처리 중입니다..." />}
       <AlarmContainer>
         <ToggleButton
           isSubscribed={isSubscribed}
           onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest}
+          disabled={isLoading} 
         >
           {isSubscribed ? "알림 그만 받기" : "알림 받기"}
         </ToggleButton>
-        <p>{isSubscribed ? "현재 알림이 활성화된 상태입니다." : "현재 알림이 비활성화된 상태입니다."}</p>
+        <p>
+          {isSubscribed
+            ? "현재 알림이 활성화된 상태입니다."
+            : "현재 알림이 비활성화된 상태입니다."}
+        </p>
       </AlarmContainer>
       {isSubscribed && <AlarmList activeTab="subscribe" />}
     </>
