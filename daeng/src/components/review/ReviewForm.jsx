@@ -1,12 +1,12 @@
-import React from 'react';
+import { useEffect, useRef } from "react";
 import styled from 'styled-components';
 import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import arrow from '../../assets/icons/arrow.svg'
+import Loading from "../commons/Loading";
 import { useNavigate } from 'react-router-dom'; 
-
 
 const ReviewWrapper = styled.div`
   margin: 20px;
@@ -101,7 +101,6 @@ const StyledStar = styled.img`
   margin-right: 2px;
   cursor: pointer;
 
-
   @media (max-width: 554px) {
     width: 12px;
     height: 12px;
@@ -190,12 +189,33 @@ const InfoFlex = styled.div`
   }
 `
 
-function ReviewForm({ review }) {
+function ReviewForm({ review, isLoading, fetchNextPage, page, isLast }) {
   const navigate = useNavigate();
+  const observerRef = useRef(null);
 
   const navigateToPlace = () => {
     navigate(`/search/${review.placeId}`);
   };
+
+  // IntersectionObserver: 마지막 항목을 감지하여 fetchNextPage 호출
+  useEffect(() => {
+    if (!observerRef.current) return;
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            if (entries[0].isIntersecting && !isLoading && !isLast) {
+                fetchNextPage(); // 마지막 항목이 보이면 추가 데이터 불러오기
+            }
+        },
+        { threshold: 1.0 }
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => {
+        if (observerRef.current) observer.unobserve(observerRef.current);
+    };
+  }, [isLoading, fetchNextPage, isLast]);
 
   return (
     <ReviewWrapper>
@@ -206,7 +226,6 @@ function ReviewForm({ review }) {
         </TitleSection>
         <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>
       </HeaderContainer>
-
       <PetContainer>
         <UserImg
           src={review.petImg || reviewDefaultImg}
@@ -254,6 +273,10 @@ function ReviewForm({ review }) {
           }
         })}
       </PictureContainer>
+      
+      <div ref={observerRef}>
+        {isLoading && page > 0 && <Loading />}
+      </div>
     </ReviewWrapper>
   );
 }
