@@ -10,7 +10,6 @@ import useFavoriteStore from "../stores/useFavoriteStore";
 const Bookmark = () => {
 	const [isModalOpen, setIsModalOpen] = useState(true);
 	const [center, setCenter] = useState(false);
-	const [page, setPage] = useState(0);
 	const [isMapLoaded, setIsMapLoaded] = useState(false);
 	const favorites = useFavoriteStore((state) => state.favorites);
 	const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites);
@@ -18,19 +17,20 @@ const Bookmark = () => {
 	
 	useEffect(() => {
 		const fetchData = async () => {
-		  await fetchFavorites(page);
+		  await fetchFavorites();
 		};
-	
+		
 		fetchData();
-	  }, [page]);
+	  }, []);
 
 	  const fetchNextPage = () => {
 		if (hasMore) {
-		  setPage((prevPage) => prevPage + 1);
+			fetchFavorites();
 		}
 	  };
 
 	  useEffect(() => {
+		console.log(favorites);
 	  }, [favorites]);
 
     const toggleModal = () => {
@@ -56,7 +56,6 @@ const Bookmark = () => {
 				data={favorites} 
 				onPlaceClick={handlePlaceClick}
 				fetchNextPage={fetchNextPage}
-				page={page}
 			/>
         </>
     )
