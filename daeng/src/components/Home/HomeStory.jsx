@@ -241,6 +241,7 @@ const FixedStoryAdd = styled.div`
   height: 136px;
   text-align: center;
   cursor: pointer;
+  margin-top: 10px;
 
   @media (max-width: 554px) {
     width: 88px;
