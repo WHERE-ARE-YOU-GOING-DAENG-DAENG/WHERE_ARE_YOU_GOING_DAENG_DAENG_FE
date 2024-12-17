@@ -1,6 +1,7 @@
 import { messaging } from "./firebase";
 import { getToken, onMessage } from "firebase/messaging";
 
+// 알림 권한 요청 및 토큰 가져오기
 export const requestNotificationPermission = async () => {
   try {
     const permission = await Notification.requestPermission();
@@ -21,8 +22,10 @@ export const requestNotificationPermission = async () => {
   }
 };
 
+// 메시지 핸들러 설정
 export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
+    console.log("알림 수신:", payload);
     if (!document.hidden) {
       const notificationTitle = payload.notification.title;
       const notificationOptions = {
@@ -35,6 +38,12 @@ export const setupOnMessageHandler = () => {
 
       notification.onclick = function (event) {
         event.preventDefault();
+        const url = payload.data?.url;
+        if (url) {
+          window.location.href = url;
+        } else {
+          console.error("URL 데이터가 없습니다.");
+        }
         notification.close();
       };
     } else {
@@ -43,4 +52,5 @@ export const setupOnMessageHandler = () => {
   });
 };
 
+// 메시지 핸들러 초기화 호출
 setupOnMessageHandler();
