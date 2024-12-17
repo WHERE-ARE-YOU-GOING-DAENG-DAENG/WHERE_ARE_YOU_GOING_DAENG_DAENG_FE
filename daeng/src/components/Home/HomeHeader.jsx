@@ -54,7 +54,7 @@ const HeaderWrapper = styled.header`
   z-index: 999;
   max-width: 554px;
   width: 100%;
-  height: 3rem;
+  height: 77px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -64,7 +64,7 @@ const HeaderWrapper = styled.header`
 
   @media (max-width: 554px) {
     padding: 20px 25px;
-    height: 3rem; 
+    height: 64px; 
   }
 `;
 
