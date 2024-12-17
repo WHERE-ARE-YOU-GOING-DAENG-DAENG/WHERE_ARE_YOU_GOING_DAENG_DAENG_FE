@@ -13,29 +13,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PlaceDetailNoImage from "../../assets/icons/placeDetail_noimage.svg";
 
-const AiReview = styled.div`
-  max-width: 554px;
-  margin-left: 8%;
-  margin-right: 3%;
-
-  @media(max-width: 554px){
-    margin-left: 8%;
-    margin-right: 0;
-  }
-`
-const HeaderImage = styled.img`
-  width: 100%;
-  max-width: 554px;
-  height: 375px;
-  object-fit: cover;
-`;
-
-const Division = styled.div`
-    height: 8px;
-    background-color: #E5E5E5;
-    width: 100%;
-`;
-
 const PlaceDetail = () => {
     const { id } = useParams();
     const [data, setData] = useState("");
@@ -104,7 +81,7 @@ const PlaceDetail = () => {
           <Header label="시설 상세페이지" />
           {isLoading ? <Loading lable="로딩 중입니다..." />:
             <>
-            <HeaderImage src={ data.imageurl ? data.imageurl : PlaceDetailNoImage} alt="시설이미지" />
+            <HeaderImage src={data.imageurl ? data.imageurl : PlaceDetailNoImage} alt="시설이미지" />
             <PlaceTitle data={data} setData={setData}/>
             <PlaceInfo data={data} />
             <Division />
@@ -119,5 +96,28 @@ const PlaceDetail = () => {
         </>
     )
 };
+
+const AiReview = styled.div`
+  max-width: 554px;
+  margin-left: 8%;
+  margin-right: 3%;
+
+  @media(max-width: 554px){
+    margin-left: 8%;
+    margin-right: 0;
+  }
+`
+const HeaderImage = styled.img`
+  width: 100%;
+  max-width: 554px;
+  height: 375px;
+  object-fit: cover;
+`;
+
+const Division = styled.div`
+    height: 8px;
+    background-color: #E5E5E5;
+    width: 100%;
+`;
 
 export default PlaceDetail;

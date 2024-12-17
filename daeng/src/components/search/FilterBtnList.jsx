@@ -8,6 +8,55 @@ import parkIcon from '../../assets/icons/park.svg';
 import houseIcon from '../../assets/icons/house.svg';
 import restaurantIcon from '../../assets/icons/restaurant.svg';
 
+const FilterBtnList = ({ keywords, setKeywords, setFilter }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
+    const handlePlaceTypeFilter = (placeType) => {
+        setKeywords({
+            city: "",
+            cityDetail: "",
+            placeType,
+        });
+        setFilter(true);
+    };
+
+    const buttons = [
+        { label: "카페", icon: cafeIcon, placeType: "카페" },
+        { label: "숙소", icon: houseIcon, placeType: "숙소" },
+        { label: "공원", icon: parkIcon, placeType: "공원" },
+        { label: "음식점", icon: restaurantIcon, placeType: "음식점" },
+    ];
+
+    return (
+        <>
+            <Container>
+                <FilterBtn label="필터" icon={filterIcon} onClick={toggleModal} />
+                {buttons.map(({ label, icon, placeType }) => (
+                    <FilterBtn
+                        key={label}
+                        label={label}
+                        icon={icon}
+                        size="small"
+                        onClick={() => handlePlaceTypeFilter(placeType)}
+                    />
+                ))}
+            </Container>
+
+            <FilterModal
+                isOpen={isModalOpen}
+                onClose={toggleModal}
+                keywords={keywords}
+                setKeywords={setKeywords}
+                setFilter={setFilter}
+            />
+        </>
+    );
+};
+
 const Container = styled.div`
     display: flex;
     align-items: center;
@@ -22,63 +71,5 @@ const Container = styled.div`
        gap: 10px;
     }
 `;
-
-const FilterBtnList = ({ keywords, setKeywords, setFilter }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
-    };
-
-    
-    const handlePlaceTypeFilter = (placeType) => {
-        setKeywords({
-            city:"",
-            cityDetail:"",
-            placeType,
-        });
-        setFilter(true);
-    };
-
-    return (
-        <>
-            <Container>
-                <FilterBtn label="필터" icon={filterIcon} onClick={toggleModal} />
-                <FilterBtn
-                    label="카페"
-                    icon={cafeIcon}
-                    size="small"
-                    onClick={() => handlePlaceTypeFilter('카페')}
-                />
-                <FilterBtn
-                    label="숙소"
-                    icon={houseIcon}
-                    size="small"
-                    onClick={() => handlePlaceTypeFilter('숙소')}
-                />
-                <FilterBtn
-                    label="공원"
-                    icon={parkIcon}
-                    size="small"
-                    onClick={() => handlePlaceTypeFilter('공원')}
-                />
-                <FilterBtn
-                    label="음식점"
-                    icon={restaurantIcon}
-                    size="small"
-                    onClick={() => handlePlaceTypeFilter('음식점')}
-                />
-            </Container>
-
-            <FilterModal
-                isOpen={isModalOpen}
-                onClose={toggleModal}
-                keywords={keywords}
-                setKeywords={setKeywords}
-                setFilter={setFilter}
-            />
-        </>
-    );
-};
 
 export default FilterBtnList;
