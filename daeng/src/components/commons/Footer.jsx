@@ -25,6 +25,7 @@ const FooterContainer = styled.div`
     background-color: #ffffff;
     position: fixed;
     bottom: 0;
+    border-top: 1px solid #d9d9d9;
 
     @media (max-width: 554px) {
         height: 64px;

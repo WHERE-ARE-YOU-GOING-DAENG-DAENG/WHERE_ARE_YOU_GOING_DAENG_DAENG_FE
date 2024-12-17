@@ -141,16 +141,14 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
     }
   };
 
-  if (isLoading) {
-    return <Loading label="스토리를 업로드 중입니다..." />;
-  }
-
   return (
     <VideoContainer>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
       <CloseButton src={x} alt="팝업 닫기" onClick={onClose} />
       <ImageContainer>
-        {preview ? (
+        {isLoading ? (
+          <Loading label="스토리를 업로드 중입니다..." />
+        ) : preview ? (
           preview.type === "video" ? (
             <video
               src={preview.src}
@@ -187,7 +185,7 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
         </Location>
         <span>{nickname}님</span>
       </UploadStoryBottomBar>
-      <UploadStoryBtn onClick={uploadStory}>업로드</UploadStoryBtn>
+      {!isLoading && <UploadStoryBtn onClick={uploadStory}>업로드</UploadStoryBtn>}
     </VideoContainer>
   );
 }
