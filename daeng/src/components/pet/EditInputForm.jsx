@@ -11,7 +11,7 @@ import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/Common
 import { useNavigate } from "react-router-dom";
 import usePetStore from "../../stores/usePetStore";
 import upload from '../../assets/icons/upload.svg';
-import usePetImageUpload  from "../../hooks/usePetImageUpload";
+import useImageUpload  from "../../hooks/useImageUpload";
 import Loading from '../../components/commons/Loading';
 import { getTodayDate } from '../../utils/dateUtils'; 
 import { validatePetForm } from '../../utils/petValidation';
@@ -34,7 +34,7 @@ import {
 
 function EditInputForm() {
   const { petId } = useParams();
-  const { uploadImageToS3, isUploading } = usePetImageUpload();
+  const { uploadImageToS3, isUploading } = useImageUpload();
   const { petInfo, fetchPetData, isLoading, error } = usePetStore(); 
   const [petName, setPetName] = useState(""); 
   const [isSubmitting, setIsSubmitting] = useState(false);
