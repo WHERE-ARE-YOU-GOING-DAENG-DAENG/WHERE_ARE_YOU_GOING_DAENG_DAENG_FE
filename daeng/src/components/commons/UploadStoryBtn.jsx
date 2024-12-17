@@ -4,8 +4,9 @@ import UploadStoryBtn_DefaultImg from "../../assets/icons/UploadStoryBtn_Default
 import UploadStoryBtnCrown from "../../assets/icons/UploadStoryBtn_crown.svg";
 
 const UploadStoryBtn = ({ location, nickname, isPinkBorder, imageSrc, onClick }) => {
+  const textLength = location.length;
   return (
-    <ButtonContainer onClick={onClick}>
+    <ButtonContainer onClick={onClick} textLength={textLength}>
       <ImageContainer isPinkBorder={isPinkBorder}>
         <ProfileImageWrapper>
           <ProfileImage src={imageSrc || UploadStoryBtn_DefaultImg} alt="프로필 이미지" />
@@ -13,7 +14,7 @@ const UploadStoryBtn = ({ location, nickname, isPinkBorder, imageSrc, onClick })
         <CrownIcon src={UploadStoryBtnCrown} alt="왕관 아이콘" />
       </ImageContainer>
       <TextContainer>
-        <LocationText textLength={location.length}>{location}</LocationText>
+        <LocationText textLength={textLength}>{location}</LocationText>
         <NicknameText>{nickname}</NicknameText>
       </TextContainer>
     </ButtonContainer>
@@ -40,12 +41,13 @@ const ButtonContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 40%;
-  height: 150px;
+  height: 170px;
   cursor: pointer;
+  margin-top: ${({ textLength }) => (textLength > 8 ? '20px' : '10px')};
 
   @media (max-width: 554px) {
     height: 120px;
-    margin-top: 12px;
+    margin-top: ${({ textLength }) => (textLength > 8 ? '10px' : '0')};
   }
 `;
 
@@ -98,10 +100,11 @@ const ProfileImage = styled.img`
 
 const CrownIcon = styled.img`
   position: absolute;
-  top: -12px;
+  top: 0; 
   right: 14.5px;
   width: 25px;
   height: auto;
+  transform: translateY(-50%);
 
   @media (max-width: 554px) {
     width: 20px;
@@ -118,13 +121,13 @@ const TextContainer = styled.div`
 `;
 
 const LocationText = styled.p`
-  font-size: ${({ textLength }) => (textLength > 8 ? "9px" : "13px")};
+  font-size: 13px;
   font-weight: bold;
   margin: 0;
   color: black;
 
   @media (max-width: 554px) {
-    font-size: ${({ textLength }) => (textLength > 8 ? "8px" : "11px")};
+    font-size: 11px;
   }
 `;
 

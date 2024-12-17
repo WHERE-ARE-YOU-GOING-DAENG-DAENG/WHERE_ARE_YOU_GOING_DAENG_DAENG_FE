@@ -53,13 +53,12 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories, cur
 
           setStories(updatedStories);
 
-          // 삭제 후 인덱스 업데이트
           if (updatedStories.length === 0) {
-            navigate("/"); // 스토리가 없으면 메인으로 이동
+            navigate("/"); 
           } else if (currentIndex >= updatedStories.length) {
-            setCurrentIndex(updatedStories.length - 1); // 이전 스토리로 이동
+            setCurrentIndex(updatedStories.length - 1); 
           } else {
-            setCurrentIndex((prevIndex) => Math.min(prevIndex, updatedStories.length - 1)); // 현재 또는 이전 스토리
+            setCurrentIndex((prevIndex) => Math.min(prevIndex, updatedStories.length - 1)); 
           }
 
           AlertDialog({
