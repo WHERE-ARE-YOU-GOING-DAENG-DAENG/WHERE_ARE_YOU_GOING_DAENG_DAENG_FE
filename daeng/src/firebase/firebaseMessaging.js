@@ -44,6 +44,7 @@ export const setupOnMessageHandler = () => {
       const notification = new Notification(notificationTitle, notificationOptions);
 
       notification.onclick = function (event) {
+        const url = payload.data.url; 
         event.preventDefault();
         if (url) {
           console.log("이동할 URL:", url);
