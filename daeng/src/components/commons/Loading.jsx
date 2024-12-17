@@ -1,27 +1,190 @@
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Spinner from '../../assets/icons/spinner.gif'
+import { requestNotificationPermission } from "../../firebase/firebaseMessaging";
+import AlertDialog from "../commons/SweetAlert";
+import axios from "axios";
+import { pushAgree } from "../../data/CommonCode";
+import AlarmList from "../alarm/AlarmList";
+import Loading from "../commons/Loading"; 
 
-const Background = styled.div`
-    width: 100%;
-    background: #ffffffb7;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+const AlarmContainer = styled.div`
+  width: 100%;
+  max-width: 768px;
+  margin: auto;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  text-align: center;
+  border: 1px solid #f2f2f2;
+  background: linear-gradient(to bottom, #fff, #f9f9f9);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const LoadingText = styled.div`
-    text-align: center;
+const ToggleButton = styled.button`
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  background-color: ${({ isSubscribed }) => (isSubscribed ? "#FFC1DA" : "#FF69A9")};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ isSubscribed }) =>
+      isSubscribed ? "#FFD7EB" : "#FF4580"};
+  }
 `;
 
-const Loading = ({label}) => {
+const AlarmBox = () => {
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [selectedPushType] = useState(pushAgree[0].code);
+  const [isLoading, setIsLoading] = useState(false); 
+
+  useEffect(() => {
+    const fetchNotificationConsent = async () => {
+      try {
+        setIsLoading(true); 
+        const response = await axios.get(
+          "https://dev.daengdaeng-where.link/api/v1/notifications/consent",
+          { withCredentials: true }
+        );
+
+        if (response.status === 200) {
+          setIsSubscribed(response.data.data.isNotificationConsent);
+        } else {
+          AlertDialog({
+            mode: "alert",
+            title: "알림 활성화 실패",
+            text: "알림이 활성화에 실패했습니다.",
+            confirmText: "확인",
+          });
+          AlertDialog({
+            mode: "alert",
+            title: "알림 활성화 실패",
+            text: "알림이 활성화에 실패했습니다.",
+            confirmText: "확인",
+          });
+          console.error("알림 활성화 상태 확인 실패:", response);
+        }
+      } catch (error) {
+        console.error("알림 활성화 상태 요청 중 오류:", error);
+      } finally {
+        setIsLoading(false); 
+      }
+    };
+
+    fetchNotificationConsent();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js")
+        .then((registration) => {
+          console.log("Service Worker 등록 성공:", registration.scope);
+        })
+        .catch((error) => {
+          console.error("Service Worker 등록 실패:", error);
+        });
+    } else {
+      console.warn("이 브라우저는 Service Worker를 지원하지 않습니다.");
+    }
+  }, []);
+
+  const handleNotificationRequest = async () => {
+    try {
+      setIsLoading(true); 
+      const token = await requestNotificationPermission();
+      if (token) {
+        const response = await axios.post(
+          "https://dev.daengdaeng-where.link/api/v1/notifications/pushToken",
+          {
+            token,
+            pushType: selectedPushType,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+
+        if (response.status === 200) {
+          setIsSubscribed(true);
+          AlertDialog({
+            mode: "alert",
+            title: "알림 활성화 성공",
+            text: "알림이 성공적으로 활성화되었습니다.",
+            confirmText: "확인",
+            icon: "success",
+          });
+        } else {
+          console.error("알림 활성화 실패:", response);
+        }
+      }
+    } catch (error) {
+      AlertDialog({
+        mode: "alert",
+        title: "오류",
+        text: "알림 활성화 요청 중 문제가 발생했습니다.",
+        confirmText: "닫기",
+        icon: "error",
+      });
+    } finally {
+      setIsLoading(false); 
+    }
+  };
+
+  const handleCancelNotification = async () => {
+    try {
+      setIsLoading(true); 
+        const response = await axios.delete(
+        "https://dev.daengdaeng-where.link/api/v1/notifications",
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        setIsSubscribed(false);
+        AlertDialog({
+          mode: "alert",
+          title: "알림 비활성화 성공",
+          text: "알림이 성공적으로 비활성화되었습니다.",
+          confirmText: "확인",
+          icon: "success",
+        });
+      } else {
+        console.error("알림 비활성화 실패:", response);
+      }
+    } catch (error) {
+      AlertDialog({
+        mode: "alert",
+        title: "오류",
+        text: "알림 비활성화 요청 중 문제가 발생했습니다.",
+        confirmText: "닫기",
+        icon: "error",
+      });
+    } finally {
+      setIsLoading(false); 
+    }
+  };
+
+  if (isLoading) {
+    return <Loading label="처리 중입니다..." />; 
+  }
+
   return (
-    <Background>
-      <img src={Spinner} alt="로딩중" width="25%" />
-      <LoadingText>{label}</LoadingText>
-    </Background>
+    <>
+      <AlarmContainer>
+        <ToggleButton
+          isSubscribed={isSubscribed}
+          onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest}
+        >
+          {isSubscribed ? "알림 그만 받기" : "알림 받기"}
+        </ToggleButton>
+        <p>{isSubscribed ? "현재 알림이 활성화된 상태입니다." : "현재 알림이 비활성화된 상태입니다."}</p>
+      </AlarmContainer>
+      {isSubscribed && <AlarmList activeTab="subscribe" />}
+    </>
   );
 };
 
-export default Loading;
+export default AlarmBox;
