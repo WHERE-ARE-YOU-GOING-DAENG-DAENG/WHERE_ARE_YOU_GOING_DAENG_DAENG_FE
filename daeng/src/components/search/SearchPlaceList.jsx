@@ -16,18 +16,27 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
       if (isFavorite) {
         const favoriteId = favoriteStore.getFavoriteId(placeId);
         if (favoriteId) {
-          await favoriteStore.removeFavorite(favoriteId);
+          const response = await favoriteStore.removeFavorite(favoriteId);
+          if (response?.status === 200){
+            setPlaces((prevPlaces) =>
+            prevPlaces.map((p) =>
+              p.placeId === placeId ? { ...p, isFavorite: false } : p
+            )
+          );
+        }
         } else {
           console.warn(`Favorite ID not found for placeId: ${placeId}`);
         }
       } else {
-        await favoriteStore.addFavorite(placeId);
+        const response = await favoriteStore.addFavorite(placeId);
+        if (response?.status === 200){
+          setPlaces((prevPlaces) =>
+          prevPlaces.map((p) =>
+            p.placeId === placeId ? { ...p, isFavorite: true } : p
+          )
+        );
       }
-      setPlaces((prevPlaces) =>
-        prevPlaces.map((p) =>
-          p.placeId === placeId ? { ...p, isFavorite: !isFavorite } : p
-        )
-      );
+      }
     } catch (error) {
       console.error("Error toggling favorite:", error);
     }
