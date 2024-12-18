@@ -166,10 +166,9 @@ const handlePetSelection = (selectedOptions) => {
 
   const validateForm = () => {
     const isValid = validateReview({ selectKeywords, selectPet, visitedAt, ratings, text });
-    if (!isValid) return false; 
-  
+    if (!isValid) return; 
+
     console.log("리뷰 데이터 유효성 검사 통과!");
-    return true; 
   };
 
   const uploadMedia = async (files) => {
@@ -216,12 +215,8 @@ const handlePetSelection = (selectedOptions) => {
   const handleSubmit = async (event) => {
     
     event.preventDefault();
-    if (!validateForm()) { 
-      console.log("유효성 검사 실패!"); 
-      return; 
-    }
+    if (!validateForm()) return;
 
-    console.log("유효성 검사 통과. 데이터 등록 시작!");
     setIsLoading(true);
     
     let media = [];
@@ -268,9 +263,10 @@ const handlePetSelection = (selectedOptions) => {
       AlertDialog({
         mode: "alert",
         title: "실패",
-        text: `리뷰는 하루에 하나만 작성 가능해요!.`,
+        text: `리뷰 등록에 실패했습니다.`,
         confirmText: "닫기" 
       });
+      console.error("리뷰 등록 실패:", error);
     }finally {
       setIsLoading(false);
     }
