@@ -35,13 +35,13 @@ const Confetti = () => {
   const decorateOptions = (originalOptions) => {
     return {
       ...originalOptions,
-      particleCount: 200, // 조각 개수 설정
-      spread: 360, // 퍼짐 정도 설정
-      startVelocity: 50, // 초기 속도 설정
-      ticks: 200, // 애니메이션 지속 시간 설정
-      origin: origin, // 발사 위치 설정
-      shapes: ['circle', 'circle', 'square'], // 이미지 배열을 shapes로 설정
-      gravity: 2, // 중력 설정
+      particleCount: 200, 
+      spread: 360, 
+      startVelocity: 50, 
+      ticks: 200,
+      origin: origin, 
+      shapes: ['circle', 'circle', 'square'], 
+      gravity: 2, 
     };
   };
 
@@ -49,7 +49,7 @@ const Confetti = () => {
     <Fireworks
       autorun={{ speed: 0.5, duration: 3 }}
       style={canvasStyles}
-      decorateOptions={decorateOptions} // 옵션을 적용
+      decorateOptions={decorateOptions} 
     />
   );
 };
