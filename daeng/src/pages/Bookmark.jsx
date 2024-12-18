@@ -41,10 +41,6 @@ const Bookmark = () => {
 		await fetchFavorites();
 	  };
 	  
-	  useEffect(()=>{
-		console.log(favorites);
-	  },[favorites]) //테스트코드
-	  
 	  const fetchNextPage = () => {
 		if (hasMore) {
 			fetchFavorites();
