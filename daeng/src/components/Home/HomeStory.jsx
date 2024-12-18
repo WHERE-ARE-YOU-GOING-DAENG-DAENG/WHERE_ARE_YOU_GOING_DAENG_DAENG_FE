@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import reversearrow from "../../assets/icons/reversearrow.svg";
 import arrow from "../../assets/icons/arrow.svg";
 import HomeStoryAdd from "../../assets/icons/home_storyadd.svg";
@@ -40,8 +40,8 @@ const HomeStory = () => {
 
   const fetchStories = async () => {
     try {
-      const response = await axios.get(
-        "https://dev.daengdaeng-where.link/api/v2/story",
+      const response = await axiosInstance.get(
+        "/api/v2/story",
         {
           headers: {
             "Content-Type": "application/json",
@@ -49,7 +49,6 @@ const HomeStory = () => {
           withCredentials: true,
         }
       );
-      console.log("전체 스토리 데이터:", response.data);
       
       const fetchedStories = response.data.data.map((story) => ({
         nickname: story.nickname,
@@ -58,7 +57,6 @@ const HomeStory = () => {
         petImage: story.petImage,
         storyType: story.storyType,
       }));
-      console.log("스토리 데이터:", fetchedStories);
       setStories(fetchedStories);
     } catch (error) {
       console.error("데이터를 가져오는 데 실패했습니다:", error);

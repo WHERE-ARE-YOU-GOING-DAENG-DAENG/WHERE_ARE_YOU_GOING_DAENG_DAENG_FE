@@ -5,7 +5,7 @@ import notfillstar from "../../assets/icons/notfillstar.svg";
 import ReviewKeywords from '../../components/commons/ReviewKeywords';
 import ReviewSorting from './ReviewSorting';
 import AiReviewSummary from './AIReview';
-import axios from 'axios';
+import axiosInstance from "../../services/axiosInstance";
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import ReviewSlideshow from './ReviewSlideshow';
 import { useNavigate } from 'react-router-dom';
@@ -55,8 +55,8 @@ const TotalReviewForm = () => {
 
   useEffect(() => {
     if (!placeId) return;
-    axios
-      .get(`https://dev.daengdaeng-where.link/api/v1/places/${placeId}`)
+    axiosInstance
+      .get(`/api/v1/places/${placeId}`)
       .then((res) => setPlaceName(res.data?.data?.name || "장소 정보가 없습니다."))
       .catch(() => setPlaceName("장소 정보가 없습니다."));
   }, [placeId]);
@@ -66,8 +66,8 @@ const TotalReviewForm = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        `https://dev.daengdaeng-where.link/api/v1/reviews/place/${placeId}/${sortedType}`,
+      const response = await axiosInstance.get(
+        `/api/v1/reviews/place/${placeId}/${sortedType}`,
         { params: { page: currentPage, size: 15 } }
       );
 
@@ -190,7 +190,7 @@ const TotalReviewForm = () => {
           return (
             <div
               key={review.reviewId}
-              ref={index === reviews.length - 1 ? observeLastItem : null}//observeLastItem을 통한 마지막 요소 감지
+              ref={index === reviews.length - 1 ? observeLastItem : null}
             > 
               <ReviewUserContainer>
                 <UserPhoto

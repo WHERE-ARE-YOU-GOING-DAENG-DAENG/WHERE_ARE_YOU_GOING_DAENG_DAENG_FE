@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import axiosInstance from "../services/axiosInstance";
 
 const useImageUpload = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -7,8 +8,8 @@ const useImageUpload = () => {
   const uploadImageToS3 = async (file) => {
     setIsUploading(true);
     try {
-      const presignResponse = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/S3",
+      const presignResponse = await axiosInstance.post(
+        "/api/v1/S3",
         {
           prefix: "PET",
           fileNames: [file.name],

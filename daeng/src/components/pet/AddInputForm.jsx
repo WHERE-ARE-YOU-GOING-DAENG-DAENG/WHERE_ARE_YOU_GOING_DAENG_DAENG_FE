@@ -3,7 +3,7 @@ import SelectLabel from "../../components/commons/SelectLabel";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import AlertDialog from "../../components/commons/SweetAlert";
-import axios from 'axios';
+import axiosInstance from "../../services/axiosInstance";
 import useImageUpload  from "../../hooks/useImageUpload";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
@@ -119,8 +119,8 @@ function RegisterInputForm() {
   };
 
   try {
-    const response = await axios.post(
-      "https://dev.daengdaeng-where.link/api/v1/pets", 
+    const response = await axiosInstance.post(
+      "/api/v1/pets", 
       petData, 
       {
         headers: {

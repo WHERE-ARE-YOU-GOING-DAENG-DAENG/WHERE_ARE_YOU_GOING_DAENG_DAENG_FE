@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import AlertDialog from "../commons/SweetAlert";
 import PreferenceForm from "./PreferenceForm";
 import { placeIcons, featureIcons } from "../../data/PreferenceIcons";
@@ -35,8 +35,8 @@ function PreferenceRegister() {
     setIsLoading(true);
 
     try {
-      await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/preferences",
+      await axiosInstance.post(
+        "/api/v1/preferences",
         placePayload,
         {
           headers: { "Content-Type": "application/json" },
@@ -44,8 +44,8 @@ function PreferenceRegister() {
         }
       );
 
-      await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/preferences",
+      await axiosInstance.post(
+        "/api/v1/preferences",
         favoritePayload,
         {
           headers: { "Content-Type": "application/json" },
