@@ -13,6 +13,7 @@ import usePetStore from "../../stores/usePetStore";
 import upload from '../../assets/icons/upload.svg';
 import useImageUpload  from "../../hooks/useImageUpload";
 import Loading from '../../components/commons/Loading';
+import { handleFocus } from "../../utils/inputUtils"; 
 import { getTodayDate } from '../../utils/dateUtils'; 
 import { validatePetForm } from '../../utils/petValidation';
 import { 
@@ -66,11 +67,6 @@ function EditInputForm() {
       setPetPicture(petInfo.image || "");
     }
   }, [petInfo]);
-
-  const handleFocus = (e) => {
-    e.target.showPicker();
-  };
-
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];

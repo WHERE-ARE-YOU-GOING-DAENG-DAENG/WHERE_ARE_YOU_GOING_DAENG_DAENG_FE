@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Header from "../../components/commons/Header";
 import Footer from "../../components/commons/Footer";
-import ReviewForm from "../../components/review/ReviewForm";
+import MyReviewList from "../../components/review/MyReviewList";
 import styled from "styled-components";
 import useReviewStore from "../../stores/UseReviewStore";
 
@@ -50,7 +50,7 @@ function MyReviewPage({ userId }) {
         <StyledTotalReview>등록한 리뷰 {total} 건</StyledTotalReview>
         {reviews.length > 0 ? (
           reviews.map((review) => (
-            <ReviewForm
+            <MyReviewList
               key={review.reviewId}
               review={review}
               isLoading={isLoading}

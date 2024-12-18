@@ -34,7 +34,7 @@ const MyVisitList = () => {
     });
     }else{
       fetchmyVisits();
-    }
+  }
   },[])
 
   const fetchmyVisits = async () => {
