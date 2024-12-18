@@ -5,7 +5,7 @@ import reviewDefaultImg from "../../assets/icons/reviewDefaultImg.svg";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import AlertDialog from "../../components/commons/SweetAlert";
-import axios from 'axios';
+import axiosInstance from "../../services/axiosInstance";
 import DeletePetData from "./DeletePetData";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
@@ -142,8 +142,8 @@ function EditInputForm() {
   };
 
   try {
-    const response = await axios.put(
-      `https://dev.daengdaeng-where.link/api/v1/pets/${petId}`,
+    const response = await axiosInstance.put(
+      `/api/v1/pets/${petId}`,
       petData,
       {
         headers: {

@@ -8,7 +8,7 @@ import Loading from "../commons/Loading";
 import AreaField from "../../data/AreaField";
 import kakaoBtn from "../../assets/icons/kakaoBtn.svg";
 import googleBtn from "../../assets/icons/GoogleBtn.svg";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import {
   UserContainer,
   InputEmailContainer,
@@ -116,8 +116,8 @@ function UserForm({
 
     setIsLoading(true);
     try {
-      const { data } = await axios.get(
-        `https://dev.daengdaeng-where.link/api/v1/user/duplicateNickname`,
+      const { data } = await axiosInstance.get(
+        `/api/v1/user/duplicateNickname`,
         {
           params: { nickname: userData.nickname },
           withCredentials: true,

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import reversearrow from "../../assets/icons/reversearrow.svg";
 import arrow from "../../assets/icons/arrow.svg";
 import HomeStoryAdd from "../../assets/icons/home_storyadd.svg";
@@ -40,8 +40,8 @@ const HomeStory = () => {
 
   const fetchStories = async () => {
     try {
-      const response = await axios.get(
-        "https://dev.daengdaeng-where.link/api/v2/story",
+      const response = await axiosInstance.get(
+        "/api/v2/story",
         {
           headers: {
             "Content-Type": "application/json",

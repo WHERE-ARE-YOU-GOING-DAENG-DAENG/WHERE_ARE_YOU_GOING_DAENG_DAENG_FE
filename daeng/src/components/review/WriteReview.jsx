@@ -3,6 +3,7 @@ import PreferenceFavoriteOptionList from "./PreferenceFavoriteOptionList";
 import addImg from "../../assets/icons/addImg.svg";
 import useUserStore from "../../stores/userStore";
 import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import StarRating from "./write/StarRating";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
@@ -68,8 +69,8 @@ function WriteReview({ review = {} }) {
 
   useEffect(() => {
     if (placeId) {
-      axios
-        .get(`https://dev.daengdaeng-where.link/api/v1/places/${placeId}`)
+      axiosInstance
+        .get(`/api/v1/places/${placeId}`)
         .then((response) => {
           const name = response.data?.data?.name;
           setPlaceName(name || "장소 이름 없음");
@@ -177,8 +178,8 @@ function WriteReview({ review = {} }) {
     const uploadedUrls = [];
     for (const file of files) {
       try {
-        const presignResponse = await axios.post(
-          "https://dev.daengdaeng-where.link/api/v1/S3",
+        const presignResponse = await axiosInstance.post(
+          "/api/v1/S3",
           {
             prefix: "REVIEW",
             fileNames: [file.name],
@@ -241,10 +242,7 @@ function WriteReview({ review = {} }) {
     };
 
     try {
-      const response = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/review",
-        reviewData,
-        {
+      const response = await axiosInstance.post("/api/v1/review", reviewData, {
           headers: {
             "Content-Type": "application/json",
           },

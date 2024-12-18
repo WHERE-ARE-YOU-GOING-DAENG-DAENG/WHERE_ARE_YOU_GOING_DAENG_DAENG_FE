@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import { Wrapper } from "../../components/admin/AdminCommonStyle";
 import SelectLabel from "../commons/SelectLabel";
 import AlertDialog from "../../components/commons/SweetAlert";
@@ -37,8 +37,8 @@ const ImageUpload = ({ label, onUpload }) => {
     formData.append("image", file);
 
     try {
-      const response = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v2/admin/placeImage",
+      const response = await axiosInstance.post(
+        "/api/v2/admin/placeImage",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
