@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import userDetailBtn from '../../assets/icons/userDetailBtn.svg';
+import userDetailBtn from '../../../assets/icons/userDetailBtn.svg';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 function UserContainer() {

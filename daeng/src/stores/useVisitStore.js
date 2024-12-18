@@ -39,7 +39,7 @@ const useVisitStore = create((set) => ({
         title: "방문일정취소",
         text: "방문일정 취소에 실패하였습니다.",
         confirmText: "확인",
-        onCancel: () => console.error(error)
+        onConfirm: () => console.error(error)
     });
     }
   },

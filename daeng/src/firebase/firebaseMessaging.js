@@ -44,9 +44,10 @@ export const setupOnMessageHandler = () => {
       const notification = new Notification(notificationTitle, notificationOptions);
 
       notification.onclick = function (event) {
+        const url = payload.data.url; 
         event.preventDefault();
+
         if (url) {
-          console.log("이동할 URL:", url);
           window.location.href = url; 
         } else {
           console.error("URL 데이터가 없습니다.");
