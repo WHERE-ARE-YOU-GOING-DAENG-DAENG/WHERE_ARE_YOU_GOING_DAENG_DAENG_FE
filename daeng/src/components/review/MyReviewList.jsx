@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import styled from 'styled-components';
 import star from '../../assets/icons/star.svg';
 import DeleteReview from './DeleteReview';
-import ReviewKeywords from '../../components/commons/ReviewKeywords';
+import ReviewKeywords from '../commons/ReviewKeywords';
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
 import arrow from '../../assets/icons/arrow.svg'
 import Loading from "../commons/Loading";
@@ -189,7 +189,7 @@ const InfoFlex = styled.div`
   }
 `
 
-function ReviewForm({ review, isLoading, fetchNextPage, page, isLast }) {
+function MyReviewList({ review, isLoading, fetchNextPage, page, isLast }) {
   const navigate = useNavigate();
   const observerRef = useRef(null);
 
@@ -281,4 +281,4 @@ function ReviewForm({ review, isLoading, fetchNextPage, page, isLast }) {
   );
 }
 
-export default ReviewForm;
+export default MyReviewList;

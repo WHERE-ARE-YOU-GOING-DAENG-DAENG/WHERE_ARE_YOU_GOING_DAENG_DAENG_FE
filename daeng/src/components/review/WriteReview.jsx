@@ -1,374 +1,53 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import PreferenceFavoriteOptionList from "./PreferenceFavoriteOptionList";
-import star from "../../assets/icons/star.svg";
-import notfillstar from "../../assets/icons/notfillstar.svg";
 import addImg from "../../assets/icons/addImg.svg";
+import useUserStore from "../../stores/userStore";
 import axios from "axios";
+import StarRating from "./write/StarRating";
 import ConfirmBtn from '../../components/commons/ConfirmBtn';
 import AlertDialog from '../../components/commons/SweetAlert';
 import usePetStore from "../../stores/usePetStore";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Select from "react-select";
-import Loading from "../../components/commons/Loading"; 
+import validateReview from "./write/ValidateReview";
+import Loading from "../../components/commons/Loading";
+import { handleFocus } from "../../utils/inputUtils"; 
 import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg'
-
-
-const TotalReviewContainer = styled.div`
-  padding:3%;
-`
-
-const WriteReviewContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 20px;
-  position: relative;
-`;
-
-const PlaceTitle = styled.span`
-  font-size: 25px;
-  font-weight: bold;
-  display: flex;
-  margin-bottom: 27px;
-  margin-left:3%;
-
-
-  @media (max-width: 554px) {
-    font-size: 20px;
-    margin-left:20px;
-    margin-bottom: 15px;
-  }
-`;
-
-const WriteReviewDate = styled.span`
-  position: absolute; 
-  right: 20px; 
-  top: 0; 
-  color: #b3b3b3;
-  font-size: 18px;
-
-  @media (max-width: 554px) {
-    font-size: 15px;
-    top: 5px; 
-  }
-`;
-
-
-const SelectPlaceOptionContainer = styled.div`
-  width: auto;
-  height: 90%;
-  text-align: left;
-  padding: 5%;
-  border-radius:10px;
-
-  background-color: #F7F7F7;
-
-  @media (max-width: 554px) {
-    padding:7%;
-  }
-`;
-
-const WhatPointLike = styled.span`
-  font-size: 20px;
-  color: #333;
-  font-weight: 600;
-
-  @media (max-width: 554px) {
-    margin-left: 10px;
-    font-size: 18px;
-  }
-`;
-
-const SelectWarning = styled.span`
-  color: #ff69a9;
-  font-size: 15px;
-
-  @media (max-width: 554px) {
-    width: 95%;
-    margin-left: 10px;
-    font-size: 13px;
-  }
-`;
-
-const UserInfoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 5%;
-  align-items: center;
-`;
-
-const UserImg = styled.img`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  margin-right: 10px;
-  border: none;
-
-
-  @media (max-width: 554px) {
-    margin-top: 2%;
-  }
-`;
-
-const UserNickname = styled.span`
-  font-size: 20px;
-  color: #333;
-  font-weight: bold;
-
-  @media (max-width: 554px) {
-    margin-top: 2%;
-  }
-`;
-
-const UserQuestionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 30px;
-  justify-content: space-between;
-`;
-
-const RemoveButton = styled.button`
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  font-size: 12px;
-  cursor: pointer;
-`;
-
-
-const Question = styled.span`
-  font-size: 18px;
-
-  p {
-    display: inline-block;
-    font-size: 15px;
-    color: #d9d9d9;
-    margin-left: 5px;
-  }
-
-  @media (max-width: 554px) {
-      font-size: 14px; 
-      margin-left: 0; 
-      margin-right: 4px;
-      display: block;
-      text-wrap:nowrap;
-    }
-`;
-
-const DateSelection = styled.input`
-  width: 50%;
-  height: 40px;
-  padding: 10px;
-  border: 0.5px solid #d9d9d9;
-  border-radius: 5px;
-  cursor: pointer;
-  color: black;
-  padding-right: 1%;
-  font-size: 15px;
-  cursor: pointer;
-
-  &:focus {
-    border-color: #ff69a9;
-    outline: none;
-  }
-`;
-
-const StarContainer = styled.span`
-  display: flex;
-  flex-direction: row;
-`;
-
-const StyleStar = styled.img`
-  width: 20px;
-  margin-right: 5px;
-  cursor: pointer;
-`;
-
-const AddImgContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-`;
-
-const AddImg = styled.div`
-  position: relative;
-  width: 130px;
-  height: 130px;
-  border: 0.5px solid #d9d9d9;
-  border-radius: 5px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-size: 10px;
-  color: #d9d9d9;
-  background-image: url(${(props) => props.src || "none"});
-  background-size: cover;
-  background-position: center;
-
-  input {
-    display: none;
-    cursor: pointer;
-  }
-  
-  img {
-    width: 130px;
-    height: 130px;
-    object-fit: cover;
-  }
-
-
-  label {
-    font-size: 12px;
-    cursor: pointer;
-  }
-
-
-  .add-img-button {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-  }
-`;
-
-const SecondContainer = styled.div`
-  padding:3%;
-`
-const LastContainer = styled.div`
-  margin-bottom: 15%;
-  margin-left:1%;
-  align-items: center;
-
-  @media (max-width: 554px) {
-    margin-bottom: 25%;
-    align-items: center;
-  }
-`
-const QuestionBox = styled.span`
-  font-size: 18px;
-  display: inline; 
-  color: #333;
-
-  p {
-    display: inline-block;
-    font-size: 13px;
-    color: #D9D9D9;
-    margin-left: 5px;
-  }
-`
-
-const CountText = styled.span`
-  font-size: 15px;
-  color: black;
-  margin-top:3px;
-  margin-right:10px;
-`
-
-const TextDescriptionContainer = styled.div`
-  margin-top: 20px;
-  display: flex;
-  margin-bottom: -12px;
-  justify-content: space-between;  
-  align-items: center;  
-`
-const DivisionLine = styled.div`
-  height: 1px;
-  background-color: #E5E5E5;
-  margin-top:20px;
-  margin-right:10px;
-  margin-bottom:29px;
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  height: auto;
-  min-height: 400px; 
-  border: none;
-  padding: 5px;
-  resize: none; 
-  font-size:15px;
-  line-height: 1.5; 
-
-  &:focus {
-    outline: none;    
-    border: none;  
-    box-shadow: none;
-  }
-
-  @media (max-width: 554px) {
-    min-height: 50px;
-  }
-`;
-
-const AddImgPlus = styled.span`
-  width:1px;
-`
-
-const selectStyles = {
-  control: (provided, state) => ({
-    ...provided,
-    border: state.isFocused ? "0.5px solid #ff69a9" : "0.5px solid #d9d9d9",
-    borderRadius: "5px",
-    padding: "2px",
-    cursor: "pointer",
-    fontSize: "15px",
-    boxShadow: state.isFocused ? "none" : "none",
-    "&:hover": {
-      borderColor: "#ff69a9",
-    },
-  }),
-  multiValue: (provided) => ({
-    ...provided,
-    backgroundColor: "#ffcee1",
-    borderRadius: "3px",
-    padding: "2px",
-  }),
-  multiValueRemove: (provided) => ({
-    ...provided,
-    cursor: "pointer",
-    "&:hover": {
-      backgroundColor: "#ff4b98",
-      color: "white", 
-    },
-  }),
-  menu: (provided) => ({
-    ...provided,
-    borderRadius: "5px",
-    borderColor: "#ff69a9",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  }),
-  option: (provided, state) => ({
-    ...provided,
-    backgroundColor: state.isFocused ? "#f4f4f4" : "white",
-    color: "#333",
-    cursor: "pointer",
-  }),
-};
-
-
-const getCurrentDate = () => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0"); 
-  const day = String(today.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
-
+import { 
+  TotalReviewContainer, 
+  WriteReviewContainer,
+  PlaceTitle,
+  WriteReviewDate,
+  SelectPlaceOptionContainer,
+  WhatPointLike,
+  SelectWarning,
+  UserInfoContainer,
+  UserImg,
+  UserNickname,
+  UserQuestionContainer,
+  RemoveButton,
+  AddImgContainer,
+  AddImg,
+  TextArea,
+  Question,
+  SecondContainer,
+  LastContainer,
+  DateSelection,
+  CountText,
+  TextDescriptionContainer,
+  DivisionLine,
+  AddImgPlus,
+  QuestionBox,
+  selectStyles
+} from './write/WriteStyleComponent';
+import { getTodayDate } from "../../utils/dateUtils";
 
 function WriteReview({ review = {} }) {
+  const {nickname} = useUserStore.getState();
   const { placeId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [nickname, setNickname] = useState("");
   const [placeName, setPlaceName] = useState("장소 이름 없음");
-  const navigate = useNavigate();
   const { pets, fetchPetList } = usePetStore();
   const [selectPet, setSelectPet] = useState([]);
   const [ratings, setRatings] = useState([false, false, false, false, false]);
@@ -380,31 +59,13 @@ function WriteReview({ review = {} }) {
   const [selectedPetImage, setSelectedPetImage] = useState("");
   const location = useLocation();
   const {type} = location.state || {};
+  const navigate = useNavigate();
 
   console.log("Received type:", type);
   
-
   useEffect(() => {
     fetchPetList(); 
   }, [fetchPetList]);
-
-  useEffect(() => {
-    const fetchUserNickname = async () => {
-      try {
-        const response = await axios.get("https://dev.daengdaeng-where.link/api/v1/user/adjust", {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true,
-        });
-        const userNickname = response.data?.data?.user?.nickname || "닉네임 없음";
-        setNickname(userNickname);
-      } catch (error) {
-        console.error("Failed to fetch user nickname:", error);
-        setNickname("닉네임 없음");
-      }
-    };
-
-    fetchUserNickname();
-  }, []);
 
   useEffect(() => {
     if (placeId) {
@@ -441,10 +102,6 @@ const handlePetSelection = (selectedOptions) => {
   } else {
     setSelectedPetImage(""); 
   }
-};
-
-const handleFocus = (e) => {
-  e.target.showPicker();
 };
 
   if (!placeId) {
@@ -487,19 +144,8 @@ const handleFocus = (e) => {
   };
 
   const handleStarClick = (index) => {
-    const newRatings = [...ratings];
-    for (let i = 0; i <= index; i++) {
-      newRatings[i] = true;
-    }
-
-    for (let i = index + 1; i < newRatings.length; i++) {
-      newRatings[i] = false;
-    }
+    const newRatings = ratings.map((_, i) => i <= index);
     setRatings(newRatings);
-  };
-  const handleRemoveImage = (index) => {
-    setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
-    setPlaceImgs((prevPlaceImgs) => prevPlaceImgs.filter((_, i) => i !== index));
   };
 
   const handleChange = (e) => {
@@ -519,58 +165,10 @@ const handleFocus = (e) => {
   };
 
   const validateForm = () => {
+    const isValid = validateReview({ selectKeywords, selectPet, visitedAt, ratings, text });
+    if (!isValid) return; 
 
-    if (selectKeywords.length === 0) {
-      AlertDialog({
-        mode: "alert",
-        title: "등록 실패",
-        text: "최소 하나 이상의 키워드를 선택해주세요.",
-        confirmText: "확인"
-      });
-      return false;
-    }
-
-    if (selectPet.length === 0) { 
-      AlertDialog({
-        mode: "alert",
-        title: "등록 실패",
-        text: "함께한 펫을 선택해주세요.",
-        confirmText: "확인",
-      });
-      return false;
-    }
-  
-    if (!visitedAt) {
-      AlertDialog({
-        mode: "alert",
-        title: "등록 실패",
-        text: "방문한 날짜를 선택해주세요.",
-        confirmText: "확인"
-      });
-      return false;
-    }
-  
-    if (!ratings.filter(Boolean).length) {
-      AlertDialog({
-        mode: "alert",
-        title: "등록 실패",
-        text: "별점을 선택해주세요.",
-        confirmText: "확인"
-      });
-      return false;
-    }
-  
-    if (!text.trim()) {
-      AlertDialog({
-        mode: "alert",
-        title: "등록 실패",
-        text: "리뷰 내용을 작성해주세요.",
-        confirmText: "확인"
-      });
-      return false;
-    }
-  
-    return true;
+    console.log("리뷰 데이터 유효성 검사 통과!");
   };
 
   const uploadMedia = async (files) => {
@@ -665,7 +263,7 @@ const handleFocus = (e) => {
       AlertDialog({
         mode: "alert",
         title: "실패",
-        text: `리뷰는 하루에 하나만 작성 가능해요!.`,
+        text: `리뷰 등록에 실패했습니다.`,
         confirmText: "닫기" 
       });
       console.error("리뷰 등록 실패:", error);
@@ -682,7 +280,7 @@ const handleFocus = (e) => {
     <TotalReviewContainer>
       <WriteReviewContainer>
       <PlaceTitle>{placeName}</PlaceTitle>
-        <WriteReviewDate>{getCurrentDate()}</WriteReviewDate>
+        <WriteReviewDate>{getTodayDate()}</WriteReviewDate>
       </WriteReviewContainer>
       <SelectPlaceOptionContainer>
         <WhatPointLike>어떤 점이 좋았나요?</WhatPointLike>
@@ -717,7 +315,7 @@ const handleFocus = (e) => {
           <Question>방문한 날짜를 선택해주세요</Question>
           <DateSelection
             type="date"
-            max={getCurrentDate()}
+            max={getTodayDate()}
             value={visitedAt} 
             onFocus={handleFocus}  
             onChange={(e) => setVisitedAt(e.target.value)} 
@@ -725,16 +323,7 @@ const handleFocus = (e) => {
           </UserQuestionContainer>
           <UserQuestionContainer>
             <Question>별점을 눌러 만족도를 공유해주세요</Question>
-              <StarContainer>
-                {[...Array(5)].map((_, index) => (
-                  <StyleStar
-                    key={index}
-                    src={ratings[index] ? star : notfillstar}
-                    alt="리뷰 작성하기 별점"
-                    onClick={() => handleStarClick(index)}
-                  />
-                ))}
-              </StarContainer>
+            <StarRating ratings={ratings} onStarClick={handleStarClick} />
             </UserQuestionContainer>
           <UserQuestionContainer>
             <Question>사진 / 동영상 업로드 <p>(선택)</p></Question>

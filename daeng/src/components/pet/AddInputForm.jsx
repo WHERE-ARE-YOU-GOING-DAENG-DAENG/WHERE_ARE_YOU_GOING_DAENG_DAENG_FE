@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import upload from '../../assets/icons/upload.svg';
 import Loading from '../../components/commons/Loading';
 import { getTodayDate } from '../../utils/dateUtils'; 
+import { handleFocus } from "../../utils/inputUtils"; 
 import { validatePetForm } from '../../utils/petValidation';
 import { 
   Container, 
@@ -60,10 +61,6 @@ function RegisterInputForm() {
 
   const handleSizeClick = (sizeCode) => {
     setSelectedSize(sizeCode); 
-  };
-
-  const handleFocus = (e) => {
-    e.target.showPicker();
   };
 
   const handleImageUpload = (e) => {
