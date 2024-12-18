@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import axios from "axios";
 import AlertDialog from "../components/commons/SweetAlert";
 import axiosInstance from "../services/axiosInstance"
 
@@ -26,7 +25,7 @@ const useFavoriteStore = create((set, get) => ({
     
     try {
       set({ isLoading: true });
-      const url = `https://dev.daengdaeng-where.link/api/v1/favorites?lastUpdatedAt=${lastUpdatedAt || ""}&lastFavoriteId=${lastFavoriteId || ""}`
+      const url = `/api/v1/favorites?lastUpdatedAt=${lastUpdatedAt || ""}&lastFavoriteId=${lastFavoriteId || ""}`
       const response = await axiosInstance.get(url, { withCredentials: true });
       const newFavorites = response.data.data;
   

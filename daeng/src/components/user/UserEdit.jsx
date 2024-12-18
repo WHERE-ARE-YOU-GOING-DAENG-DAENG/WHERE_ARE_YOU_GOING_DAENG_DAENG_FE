@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import AlertDialog from "../commons/SweetAlert";
 import useUserStore from "../../stores/userStore";
 import { useNavigate } from "react-router-dom";
@@ -47,8 +47,8 @@ function UserEdit() {
 
     setIsLoading(true);
     try {
-      await axios.put(
-        "https://dev.daengdaeng-where.link/api/v1/user/adjust",
+      await axiosInstance.put(
+        "/api/v1/user/adjust",
         payload,
         {
           headers: {

@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import styled from "styled-components";
 import AlertDialog from "../../components/commons/SweetAlert";
 import { useNavigate } from "react-router-dom";
@@ -36,8 +36,8 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories, cur
     confirmText: "삭제",
     onConfirm: async () => {
       try {
-        const response = await axios.delete(
-          `https://dev.daengdaeng-where.link/api/v2/story/${storyId}`,
+        const response = await axiosInstance.delete(
+          `/api/v2/story/${storyId}`,
           {
             headers: {
               "Content-Type": "application/json",
