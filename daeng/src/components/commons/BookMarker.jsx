@@ -15,7 +15,7 @@ const CustomMarker = styled.div`
     
     span {
     color: black;
-    text-shadow: //글자 테두리
+    text-shadow: 
       -1px -1px 0 white,
       1px -1px 0 white,
       -1px 1px 0 white,
