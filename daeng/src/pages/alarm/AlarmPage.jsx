@@ -86,7 +86,7 @@ function AlarmPage() {
     } else {
       console.warn("이 브라우저는 Service Worker를 지원하지 않습니다.");
     }
-  }, []); // 여기서 useEffect가 제대로 닫힘!
+  }, []); 
 
   const handleNotificationRequest = async () => {
     setIsLoading(true);
