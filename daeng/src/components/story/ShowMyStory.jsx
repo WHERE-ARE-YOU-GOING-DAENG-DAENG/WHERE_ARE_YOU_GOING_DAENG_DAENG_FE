@@ -68,7 +68,6 @@ function ShowMyStory({ onClose }) {
             withCredentials: true,
           }
         );
-        console.log("스토리 데이터:", response.data.data.content);
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
       } catch (error) {

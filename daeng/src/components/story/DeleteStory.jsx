@@ -36,7 +36,6 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories, cur
     confirmText: "삭제",
     onConfirm: async () => {
       try {
-        console.log("삭제 요청 storyId:", storyId);
         const response = await axios.delete(
           `https://dev.daengdaeng-where.link/api/v2/story/${storyId}`,
           {
@@ -49,7 +48,6 @@ const handleDelete = async (storyId, setShowDeleteMenu, stories, setStories, cur
 
         if (response.status === 200) {
           const updatedStories = stories.filter((story) => story.storyId !== storyId);
-          console.log("업데이트된 스토리 목록:", updatedStories);
 
           setStories(updatedStories);
 
