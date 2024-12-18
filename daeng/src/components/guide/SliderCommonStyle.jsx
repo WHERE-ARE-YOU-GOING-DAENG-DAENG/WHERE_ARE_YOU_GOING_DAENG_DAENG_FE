@@ -51,7 +51,7 @@ export const ArrowButton = styled.button`
   width: 40px;
   height: 40px;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
