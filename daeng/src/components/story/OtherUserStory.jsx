@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import x from "../../assets/icons/x.svg";
 import crown from "../../assets/icons/crown.svg";
 import rightArrow from "../../assets/icons/arrow.svg";
@@ -27,8 +27,8 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const userResponse = await axios.get(
-          `https://api.daengdaeng-where.link/api/v2/story`,
+        const userResponse = await axiosInstance.get(
+          `/api/v2/story`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -43,8 +43,8 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
         );
 
         if (user) {
-          const storyResponse = await axios.get(
-            `https://api.daengdaeng-where.link/api/v2/story/detail/${user.landOwnerId}?city=${city}&cityDetail=${cityDetail}`,
+          const storyResponse = await axiosInstance.get(
+            `/api/v2/story/detail/${user.landOwnerId}?city=${city}&cityDetail=${cityDetail}`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -68,8 +68,8 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
     
     if (!viewedStories.has(storyId)) {
       try {
-        await axios.put(
-          `https://api.daengdaeng-where.link/api/v2/story/${storyId}/viewed`,
+        await axiosInstance.put(
+          `/api/v2/story/${storyId}/viewed`,
           {},
           {
             headers: { "Content-Type": "application/json" },
@@ -77,7 +77,6 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
           }
         );
         setViewedStories(prev => new Set(prev).add(storyId));
-        console.log(`스토리 ${storyId}가 확인 처리되었습니다.`);
       } catch (error) {
         console.error(`스토리 ${storyId} 확인 처리에 실패했습니다:`, error);
       }
@@ -122,7 +121,7 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
           <ProgressItem
             key={index}
             isActive={index === currentIndex} 
-            isCompleted={index <= currentIndex} // 현재까지 스토리 색상 주기 
+            isCompleted={index <= currentIndex}
           />
         ))}
       </ProgressBar>

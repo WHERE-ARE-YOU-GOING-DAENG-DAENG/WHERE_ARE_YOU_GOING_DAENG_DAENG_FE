@@ -10,7 +10,7 @@ import PlaceReviewList from "../../components/detail/PlaceReviewList";
 import AlertDialog from "../../components/commons/SweetAlert";
 import Loading from "../../components/commons/Loading";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import PlaceDetailNoImage from "../../assets/icons/placeDetail_noimage.svg";
 
 const PlaceDetail = () => {
@@ -22,15 +22,15 @@ const PlaceDetail = () => {
       const fetchPlaceDetail = async () => {
         try {
           setIsLoading(true);
-          const placeResponse = await axios.get(`https://api.daengdaeng-where.link/api/v1/places/${id}`, {
+          const placeResponse = await axiosInstance.get(`/api/v1/places/${id}`, {
             withCredentials: true,
           });
           const placeData = placeResponse.data.data;
     
           let reviewData = {};
           try {
-            const reviewResponse = await axios.get(
-              `https://api.daengdaeng-where.link/api/v1/reviews/place/${id}/LATEST?page=0&size=3`,
+            const reviewResponse = await axiosInstance.get(
+              `/api/v1/reviews/place/${id}/LATEST?page=0&size=3`,
               { withCredentials: true }
             );
             reviewData = reviewResponse.data.data;

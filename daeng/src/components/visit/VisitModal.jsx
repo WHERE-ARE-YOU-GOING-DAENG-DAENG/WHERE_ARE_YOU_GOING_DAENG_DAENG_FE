@@ -8,7 +8,6 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import ConfirmBtn from "../../components/commons/ConfirmBtn";
 import ReactSelect from "react-select"
 import AlertDialog from "../commons/SweetAlert";
-import axios from "axios";
 import axiosInstance from "../../services/axiosInstance";
 dayjs.extend(isBetween);
 dayjs.extend(customParseFormat);
@@ -64,7 +63,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
 
     useEffect(()=>{
         const fetchTime = async () => {
-            try{const response = await axios.get(`https://api.daengdaeng-where.link/api/v1/places/${placeId}`,{
+            try{const response = await axiosInstance.get(`/api/v1/places/${placeId}`,{
                 withCredentials: true,
             });
             setStartTime(response.data.data.startTime);
@@ -142,7 +141,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         });
         } else if (dayjs(date).isBetween(startDate, endDate, "day", "[]")) {
           if(initDate){
-            console.log("선택된 날짜",initDate);
             return;
           }else {
             setSelectedDate(date);
@@ -159,7 +157,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
 
       const handleTimeChange = (selectedOption) => {
         if(initTime){
-            console.log("선택된 시간",initTime);
             return;
         }
         setSelectedTime(selectedOption.value);
@@ -214,7 +211,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
             visitAt: `${selectedDate}T${selectedTime}:00`,
         }
         try{
-          const response = await axiosInstance.post("https://api.daengdaeng-where.link/api/v1/visit", payload,{
+          const response = await axiosInstance.post("/api/v1/visit", payload,{
           withCredentials: true
         })
           setReloadTrigger((prev) => !prev);

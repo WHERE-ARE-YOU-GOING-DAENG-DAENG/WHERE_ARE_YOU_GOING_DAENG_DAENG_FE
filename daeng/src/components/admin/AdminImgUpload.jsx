@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import { Wrapper } from "../../components/admin/AdminCommonStyle";
 import SelectLabel from "../commons/SelectLabel";
 import AlertDialog from "../../components/commons/SweetAlert";
@@ -13,10 +13,8 @@ const ImageUpload = ({ label, onUpload }) => {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) {
-      console.log("파일 선택 취소됨");
       return;
     }
-    console.log("선택된 파일:", selectedFile);
     setFile(selectedFile);
     setPreview(URL.createObjectURL(selectedFile));
   };
@@ -29,19 +27,18 @@ const ImageUpload = ({ label, onUpload }) => {
         text: "이미지를 선택해주세요",
         confirmText: "닫기",
       });
-      console.log("이미지가 선택되지 않음");
+      console.error("이미지가 선택되지 않음");
       return;
     }
 
-    console.log("업로드 시작:", file);
     setIsUploading(true);
 
     const formData = new FormData();
     formData.append("image", file);
 
     try {
-      const response = await axios.post(
-        "https://api.daengdaeng-where.link/api/v2/admin/placeImage",
+      const response = await axiosInstance.post(
+        "/api/v2/admin/placeImage",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -69,7 +66,6 @@ const ImageUpload = ({ label, onUpload }) => {
       });
     } finally {
       setIsUploading(false);
-      console.log("업로드 종료");
     }
   };
 

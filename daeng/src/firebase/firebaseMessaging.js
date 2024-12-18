@@ -23,17 +23,14 @@ export const requestNotificationPermission = async () => {
 
 export const setupOnMessageHandler = () => {
   onMessage(messaging, (payload) => {
-    console.log("알림 수신:", payload);
 
       if (document.visibilityState === "hidden") {
-        console.log("백그라운드 상태에서는 알림을 표시하지 않습니다.");
         return;
         }
   
     if (payload && payload.data) {
       const { title, body, image, icon} = payload.data;
 
-      console.log("수신된 URL:", url); 
       const notificationTitle = title || "알림";
       const notificationOptions = {
         body: body || "내용이 없습니다.",
@@ -46,8 +43,8 @@ export const setupOnMessageHandler = () => {
       notification.onclick = function (event) {
         const url = payload.data.url; 
         event.preventDefault();
+
         if (url) {
-          console.log("이동할 URL:", url);
           window.location.href = url; 
         } else {
           console.error("URL 데이터가 없습니다.");
@@ -55,7 +52,7 @@ export const setupOnMessageHandler = () => {
         notification.close();
       };
     } else {
-      console.log("페이지가 백그라운드 상태입니다. 포그라운드 상태에서만 알림을 표시합니다.");
+      console.error("페이지가 백그라운드 상태입니다. 포그라운드 상태에서만 알림을 표시합니다.");
     }
   });
 };

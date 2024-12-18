@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import axios from "axios";
+import axiosInstance from "../services/axiosInstance";
 
 const useReviewStore = create((set, get) => ({
   reviews: [],
@@ -15,8 +15,8 @@ const useReviewStore = create((set, get) => ({
   fetchUserReviews: async (page = get().page, size = get().size) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get(
-        `https://api.daengdaeng-where.link/api/v1/reviews/user?page=${page}&size=${size}`,
+      const response = await axiosInstance.get(
+        `/api/v1/reviews/user?page=${page}&size=${size}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -45,8 +45,8 @@ const useReviewStore = create((set, get) => ({
 
   removeReview: async (reviewId) => {
     try {
-      const response = await axios.delete(
-        `https://api.daengdaeng-where.link/api/v1/review/${reviewId}`,
+      const response = await axiosInstance.delete(
+        `/api/v1/review/${reviewId}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,

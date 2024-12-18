@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import axios from "axios";
+import axiosInstance from "../services/axiosInstance";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../data/CommonCode";
 
 const usePetStore = create((set) => ({
@@ -11,7 +11,7 @@ const usePetStore = create((set) => ({
   fetchPetList: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get("https://api.daengdaeng-where.link/api/v1/pets", {
+      const response = await axiosInstance.get("/api/v1/pets", {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
@@ -25,8 +25,8 @@ const usePetStore = create((set) => ({
   fetchPetData: async (petId) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get(
-        `https://api.daengdaeng-where.link/api/v1/pets/${petId}`,
+      const response = await axiosInstance.get(
+        `/api/v1/pets/${petId}`,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,

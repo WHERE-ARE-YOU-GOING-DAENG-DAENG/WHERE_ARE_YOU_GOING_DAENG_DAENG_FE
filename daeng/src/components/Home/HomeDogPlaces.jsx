@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useLocationStore from "../../stores/useLocationStore";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import HomeDogLoveIcon from "../../assets/icons/home_doglove.svg";
 import HomeNoImage from "../../assets/icons/home_noimage.svg";
 import PlacesSection from "./PlacesSection";
@@ -23,8 +23,8 @@ function HomeDogPlaces() {
           ? userLocation
           : defaultLocation;
 
-        const response = await axios.post(
-          "https://api.daengdaeng-where.link/api/v1/places/recommend",
+        const response = await axiosInstance.post(
+          "/api/v1/places/recommend",
           {
             latitude: locationToUse.lat,
             longitude: locationToUse.lng,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useLocationStore from "../../stores/useLocationStore";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import HomeRecommendIcon from "../../assets/icons/home_recommend.svg";
 import HomeNoImage from "../../assets/icons/home_noimage.svg";
 import PlacesSection from "./PlacesSection";
@@ -23,8 +23,8 @@ function HomeRecommendPlaces() {
           ? userLocation
           : defaultLocation;
 
-        const response = await axios.post(
-          "https://api.daengdaeng-where.link/api/v1/places/topscore",
+        const response = await axiosInstance.post(
+          "/api/v1/places/topscore",
           {
             latitude: locationToUse.lat,
             longitude: locationToUse.lng,

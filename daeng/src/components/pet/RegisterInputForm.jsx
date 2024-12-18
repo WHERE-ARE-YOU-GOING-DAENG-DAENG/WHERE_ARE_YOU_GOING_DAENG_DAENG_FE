@@ -4,10 +4,11 @@ import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import { useNavigate } from "react-router-dom"; 
 import AlertDialog from "../../components/commons/SweetAlert";
-import axios from 'axios';
+import axiosInstance from "../../services/axiosInstance";
 import useImageUpload  from "../../hooks/useImageUpload";
 import Loading from '../../components/commons/Loading';
 import upload from '../../assets/icons/upload.svg';
+import { handleFocus } from "../../utils/inputUtils"; 
 import { getTodayDate } from '../../utils/dateUtils'; 
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { 
@@ -60,11 +61,6 @@ function RegisterInputForm() {
   const handleSizeClick = (sizeCode) => {
     setSelectedSize(sizeCode); 
   }; 
-
-
-  const handleFocus = (e) => {
-    e.target.showPicker();
-  };
       
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -122,8 +118,8 @@ function RegisterInputForm() {
   };
 
   try {
-    const response = await axios.post(
-      "https://api.daengdaeng-where.link/api/v1/pets", 
+    const response = await axiosInstance.post(
+      "/api/v1/pets", 
       petData, 
       {
         headers: {
