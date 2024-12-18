@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Header from '../../components/commons/Header';
-import Footer from '../../components/commons/Footer';
+import Header from "../../components/commons/Header";
+import Footer from "../../components/commons/Footer";
 import styled from "styled-components";
 import { requestNotificationPermission } from "../../firebase/firebaseMessaging";
 import AlertDialog from "../../components/commons/SweetAlert";
 import axios from "axios";
 import { pushAgree } from "../../data/CommonCode";
-import AlarmList from '../../components/alarm/AlarmList';
-import Loading from "../../components/commons/Loading"; 
+import AlarmList from "../../components/alarm/AlarmList";
+import Loading from "../../components/commons/Loading";
 
 const PageContainer = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ const PageContainer = styled.div`
 
 const Content = styled.div`
   flex: 1;
-  overflow-y: auto; 
+  overflow-y: auto;
 `;
 
 const AlarmContainer = styled.div`
@@ -76,7 +76,7 @@ function AlarmPage() {
     };
 
     fetchNotificationConsent();
-    
+
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("/firebase-messaging-sw.js")
@@ -86,7 +86,7 @@ function AlarmPage() {
     } else {
       console.warn("이 브라우저는 Service Worker를 지원하지 않습니다.");
     }
-    
+  }, []); // 여기서 useEffect가 제대로 닫힘!
 
   const handleNotificationRequest = async () => {
     setIsLoading(true);
