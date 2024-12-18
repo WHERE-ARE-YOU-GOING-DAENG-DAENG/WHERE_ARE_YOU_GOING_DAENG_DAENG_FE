@@ -264,7 +264,7 @@ function WriteReview({ review = {} }) {
           navigate(`/total-review/${placeId}`);
           setTimeout(() => {
             window.location.reload();
-          }, 10);
+          },);
         },
       });
     } catch (error) {
