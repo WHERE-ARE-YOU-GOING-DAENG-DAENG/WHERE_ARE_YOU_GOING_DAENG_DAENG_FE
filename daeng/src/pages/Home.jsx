@@ -15,6 +15,7 @@ import Footer from "../components/commons/Footer";
 import AlertDialog from "../components/commons/SweetAlert";
 import Loading from "../components/commons/Loading";
 import useFavoriteStore from "../stores/useFavoriteStore";
+import HiddenStateSync from "../components/commons/HiddenStateSync";
 
 function Home() {
   const userLocation = useLocationStore((state) => state.userLocation);
@@ -78,10 +79,6 @@ function Home() {
 		await fetchFavorites();
 	};
 
-  useEffect(()=>{
-		console.log(favorites);
-	  },[favorites]) //테스트코드
-
   const fetchUserData = async () => {
     try {
       await simulateLoadingDelay();
@@ -122,7 +119,9 @@ function Home() {
       <HomeRecommendPlaces />
       <HomeKeywordPlaces />
       <Footer />
+      <HiddenStateSync favorites={favorites} />
     </Wrapper>
+    
   );
 }
 
