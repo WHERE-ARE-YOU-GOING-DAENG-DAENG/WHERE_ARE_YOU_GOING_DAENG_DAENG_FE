@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import AlertDialog from "../commons/SweetAlert";
 import PreferenceForm from "./PreferenceForm";
 import { placeTypes, placeFeatures } from "../../data/CommonCode";
@@ -16,8 +16,8 @@ function PreferenceEdit() {
     const fetchPreferences = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          "https://dev.daengdaeng-where.link/api/v1/preferences",
+        const response = await axiosInstance.get(
+          "/api/v1/preferences",
           { withCredentials: true }
         );
         const data = response.data.data || [];
@@ -76,8 +76,8 @@ function PreferenceEdit() {
 
     setIsLoading(true);
     try {
-      await axios.put(
-        "https://dev.daengdaeng-where.link/api/v1/preferences",
+      await axiosInstance.put(
+        "/api/v1/preferences",
         placePayload,
         {
           headers: { "Content-Type": "application/json" },
@@ -85,8 +85,8 @@ function PreferenceEdit() {
         }
       );
 
-      await axios.put(
-        "https://dev.daengdaeng-where.link/api/v1/preferences",
+      await axiosInstance.put(
+        "/api/v1/preferences",
         favoritePayload,
         {
           headers: { "Content-Type": "application/json" },

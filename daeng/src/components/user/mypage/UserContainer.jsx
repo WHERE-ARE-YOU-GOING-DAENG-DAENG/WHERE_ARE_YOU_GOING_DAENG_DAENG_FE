@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import userDetailBtn from '../../../assets/icons/userDetailBtn.svg';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from "../../../services/axiosInstance";
+
 function UserContainer() {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ function UserContainer() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('https://dev.daengdaeng-where.link/api/v1/user/adjust', {
+        const response = await axiosInstance.get('/api/v1/user/adjust', {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true,
         });

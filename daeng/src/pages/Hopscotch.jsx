@@ -7,7 +7,7 @@ import MyLandLabel from "../components/hopscotch/MyLandLabel";
 import rightarrow from "../assets/icons/arrow.svg";
 import leftarrow from "../assets/icons/reversearrow.svg";
 import styled from "styled-components";
-import axios from "axios";
+import axiosInstance from "../services/axiosInstance";
 import Confetti from "../components/commons/Confetti";
 
 const Hopscotch = () => {
@@ -39,7 +39,7 @@ const Hopscotch = () => {
 
   const fetchMyLand = async () => {
     try {
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region", {
+      const response = await axiosInstance.get("/api/v2/region", {
         withCredentials: true,
       });
       setMyLandList(response.data.data);
@@ -55,7 +55,7 @@ const Hopscotch = () => {
 
   const fetchMyVisit = async () => {
     try {
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v2/region/visitCount", {
+      const response = await axiosInstance.get("/api/v2/region/visitCount", {
         withCredentials: true,
       });
       setVisitCount(response.data.data.visitInfo);

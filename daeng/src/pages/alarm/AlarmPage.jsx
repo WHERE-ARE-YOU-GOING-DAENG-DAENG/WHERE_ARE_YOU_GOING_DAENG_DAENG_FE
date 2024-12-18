@@ -4,7 +4,7 @@ import Footer from "../../components/commons/Footer";
 import styled from "styled-components";
 import { requestNotificationPermission } from "../../firebase/firebaseMessaging";
 import AlertDialog from "../../components/commons/SweetAlert";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import { pushAgree } from "../../data/CommonCode";
 import AlarmList from "../../components/alarm/AlarmList";
 import Loading from "../../components/commons/Loading";
@@ -58,8 +58,8 @@ function AlarmPage() {
     const fetchNotificationConsent = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(
-          "https://dev.daengdaeng-where.link/api/v1/notifications/consent",
+        const response = await axiosInstance.get(
+          "/api/v1/notifications/consent",
           { withCredentials: true }
         );
 
@@ -93,8 +93,8 @@ function AlarmPage() {
     try {
       const token = await requestNotificationPermission();
       if (token) {
-        const response = await axios.post(
-          "https://dev.daengdaeng-where.link/api/v1/notifications/pushToken",
+        const response = await axiosInstance.post(
+          "/api/v1/notifications/pushToken",
           {
             token,
             pushType: selectedPushType,
@@ -131,8 +131,8 @@ function AlarmPage() {
   const handleCancelNotification = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.delete(
-        "https://dev.daengdaeng-where.link/api/v1/notifications",
+      const response = await axiosInstance.delete(
+        "/api/v1/notifications",
         {
           withCredentials: true,
         }
