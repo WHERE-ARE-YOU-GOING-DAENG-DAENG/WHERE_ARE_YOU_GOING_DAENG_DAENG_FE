@@ -51,7 +51,6 @@ const PlaceTitle = ({ data, setData }) => {
     };
 
     const handleVisitListClick = (placeId) => {
-      navigate(`/visit-list/${placeId}`);
       if (userId) {
         navigate(`/visit-list/${placeId}`);
       } else {
@@ -67,7 +66,6 @@ const PlaceTitle = ({ data, setData }) => {
     }
 
     const handleReviewClick = async(placeId) => {
-      navigate(`/write-review/${placeId}`, { state: { type: "realtime" } });
       if (userId) {
         if(userLocation.lat !== 0 || userLocation.lng !== 0){
           try{
