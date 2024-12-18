@@ -77,7 +77,6 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
           }
         );
         setViewedStories(prev => new Set(prev).add(storyId));
-        console.log(`스토리 ${storyId}가 확인 처리되었습니다.`);
       } catch (error) {
         console.error(`스토리 ${storyId} 확인 처리에 실패했습니다:`, error);
       }
@@ -122,7 +121,7 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
           <ProgressItem
             key={index}
             isActive={index === currentIndex} 
-            isCompleted={index <= currentIndex} // 현재까지 스토리 색상 주기 
+            isCompleted={index <= currentIndex}
           />
         ))}
       </ProgressBar>
