@@ -5,7 +5,7 @@ import reviewDefaultImg from "../../assets/icons/reviewDefaultImg.svg";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import AlertDialog from "../../components/commons/SweetAlert";
-import axios from 'axios';
+import axiosInstance from "../../services/axiosInstance";
 import DeletePetData from "./DeletePetData";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import usePetStore from "../../stores/usePetStore";
 import upload from '../../assets/icons/upload.svg';
 import useImageUpload  from "../../hooks/useImageUpload";
 import Loading from '../../components/commons/Loading';
+import { handleFocus } from "../../utils/inputUtils"; 
 import { getTodayDate } from '../../utils/dateUtils'; 
 import { validatePetForm } from '../../utils/petValidation';
 import { 
@@ -66,11 +67,6 @@ function EditInputForm() {
       setPetPicture(petInfo.image || "");
     }
   }, [petInfo]);
-
-  const handleFocus = (e) => {
-    e.target.showPicker();
-  };
-
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -146,8 +142,8 @@ function EditInputForm() {
   };
 
   try {
-    const response = await axios.put(
-      `https://api.daengdaeng-where.link/api/v1/pets/${petId}`,
+    const response = await axiosInstance.put(
+      `/api/v1/pets/${petId}`,
       petData,
       {
         headers: {

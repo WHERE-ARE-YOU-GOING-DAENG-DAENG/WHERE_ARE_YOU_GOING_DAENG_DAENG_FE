@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import x from "../../assets/icons/x.svg";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import AlertDialog from "../../components/commons/SweetAlert";
 
 const FirstPopupContainer = styled.div`
@@ -110,7 +110,7 @@ function Detail({ onClose, onNext }) {
   useEffect(() => {
     const fetchRegionData = async () => {
       try {
-        const response = await axios.get("https://api.daengdaeng-where.link/api/v2/region", {
+        const response = await axiosInstance.get("/api/v2/region", {
           withCredentials: true,
         });
         if (response.data.message === "success") {

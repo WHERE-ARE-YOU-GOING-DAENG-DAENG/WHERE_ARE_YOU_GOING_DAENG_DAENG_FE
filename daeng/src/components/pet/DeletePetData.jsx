@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import AlertDialog from "../../components/commons/SweetAlert";
-import axios from 'axios'; 
+import axiosInstance from "../../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import Loading from '../../components/commons/Loading';
 
@@ -40,8 +40,8 @@ function DeletePetData({ petId }) {
       onConfirm: async () => {
         setIsDeleting(true);
         try {
-          const response = await axios.delete(
-            `https://api.daengdaeng-where.link/api/v1/pets/${petId}`,
+          const response = await axiosInstance.delete(
+            `/api/v1/pets/${petId}`,
             {
               headers: {
                 'Content-Type': 'application/json'

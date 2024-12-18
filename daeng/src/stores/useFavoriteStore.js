@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import axios from "axios";
 import AlertDialog from "../components/commons/SweetAlert";
 import axiosInstance from "../services/axiosInstance"
 
@@ -26,7 +25,7 @@ const useFavoriteStore = create((set, get) => ({
     
     try {
       set({ isLoading: true });
-      const url = `https://api.daengdaeng-where.link/api/v1/favorites?lastUpdatedAt=${lastUpdatedAt || ""}&lastFavoriteId=${lastFavoriteId || ""}`
+      const url = `/api/v1/favorites?lastUpdatedAt=${lastUpdatedAt || ""}&lastFavoriteId=${lastFavoriteId || ""}`
       const response = await axiosInstance.get(url, { withCredentials: true });
       const newFavorites = response.data.data;
   
@@ -59,13 +58,6 @@ const useFavoriteStore = create((set, get) => ({
       set((state) => ({
         favorites: [...state.favorites, newFavorite],
       }));
-        // AlertDialog({
-        //   mode: "alert",
-        //   title: "즐겨찾기 추가",
-        //   text: "즐겨찾기 목록에 추가되었습니다.",
-        //   icon: "success",
-        //   confirmText: "확인",
-        // });
       }
       return response;
     } catch (error) {
@@ -83,6 +75,7 @@ const useFavoriteStore = create((set, get) => ({
           title: "즐겨찾기 등록",
           text: "즐겨찾기 등록이 실패하였습니다.",
           confirmText: "확인",
+          onConfirm: ()=>console.error(error)
         });
       }
       }
@@ -114,6 +107,7 @@ const useFavoriteStore = create((set, get) => ({
           title: "즐겨찾기 삭제",
           text: "즐겨찾기 삭제를 실패하였습니다.",
           confirmText: "확인",
+          onConfirm: ()=>console.error(error)
         });
       }
       }

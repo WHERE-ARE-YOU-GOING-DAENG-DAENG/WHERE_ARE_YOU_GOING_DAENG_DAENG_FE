@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import axios from "axios";
-import alarm from "../../assets/icons/alarm.svg";
+import axiosInstance from "../../services/axiosInstance";import alarm from "../../assets/icons/alarm.svg";
 import x from "../../assets/icons/x.svg";
 
 const PushAlerts = ({ message, dateTime, notificationId, onNotificationClose }) => {
@@ -10,8 +9,8 @@ const PushAlerts = ({ message, dateTime, notificationId, onNotificationClose }) 
 
   const handleClose = async () => {
     try {
-      await axios.put(
-        `https://api.daengdaeng-where.link/api/v1/notifications/${notificationId}`, 
+      await axiosInstance.put(
+        `/api/v1/notifications/${notificationId}`, 
         {},
         { withCredentials: true }
       );

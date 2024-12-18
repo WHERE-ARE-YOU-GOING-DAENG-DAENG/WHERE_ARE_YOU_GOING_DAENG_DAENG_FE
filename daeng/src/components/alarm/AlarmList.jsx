@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import PushAlerts from "../../components/commons/PushAlerts";
 
 const ListContainer = styled.div`
@@ -51,8 +51,8 @@ function AlarmList({ activeTab }) {
       const fetchNotifications = async () => {
         setLoading(true);
         try {
-          const response = await axios.get(
-            "https://api.daengdaeng-where.link/api/v1/notifications",
+          const response = await axiosInstance.get(
+            "/api/v1/notifications",
             {
               withCredentials: true,
             }

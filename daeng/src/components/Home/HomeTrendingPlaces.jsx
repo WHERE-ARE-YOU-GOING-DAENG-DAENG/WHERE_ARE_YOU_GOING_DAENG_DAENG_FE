@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import HomeHotIcon from "../../assets/icons/home_hot.svg";
 import HomeNoImage from "../../assets/icons/home_noimage.svg";
 import PlacesSection from "./PlacesSection";
@@ -12,8 +12,8 @@ function HomeTrendingPlaces() {
   useEffect(() => {
     const fetchTrendingPlaces = async () => {
       try {
-        const response = await axios.get(
-          "https://api.daengdaeng-where.link/api/v1/places/topfavorites",
+        const response = await axiosInstance.get(
+          "/api/v1/places/topfavorites",
           {
             withCredentials: true,
           }

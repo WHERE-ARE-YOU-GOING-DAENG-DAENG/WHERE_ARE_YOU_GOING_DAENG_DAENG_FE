@@ -3,13 +3,14 @@ import SelectLabel from "../../components/commons/SelectLabel";
 import SelectBtn from "../commons/SelectBtn";
 import ConfirmBtn from "../commons/ConfirmBtn";
 import AlertDialog from "../../components/commons/SweetAlert";
-import axios from 'axios';
+import axiosInstance from "../../services/axiosInstance";
 import useImageUpload  from "../../hooks/useImageUpload";
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { useNavigate } from "react-router-dom";
 import upload from '../../assets/icons/upload.svg';
 import Loading from '../../components/commons/Loading';
 import { getTodayDate } from '../../utils/dateUtils'; 
+import { handleFocus } from "../../utils/inputUtils"; 
 import { validatePetForm } from '../../utils/petValidation';
 import { 
   Container, 
@@ -60,10 +61,6 @@ function RegisterInputForm() {
 
   const handleSizeClick = (sizeCode) => {
     setSelectedSize(sizeCode); 
-  };
-
-  const handleFocus = (e) => {
-    e.target.showPicker();
   };
 
   const handleImageUpload = (e) => {
@@ -122,8 +119,8 @@ function RegisterInputForm() {
   };
 
   try {
-    const response = await axios.post(
-      "https://api.daengdaeng-where.link/api/v1/pets", 
+    const response = await axiosInstance.post(
+      "/api/v1/pets", 
       petData, 
       {
         headers: {

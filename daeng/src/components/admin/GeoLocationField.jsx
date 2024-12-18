@@ -5,10 +5,10 @@ import useGoogleMapsStore from "../../stores/useGoogleMapsStore";
 
 const GoogleAddressSearch = ({ onAddressSelect }) => {
   const inputRef = useRef(null);
-  const [address, setAddress] = useState(""); //주소
-  const [postalCode, setPostalCode] = useState(""); //우편번호
-  const [latitude, setLatitude] = useState(""); //위도
-  const [longitude, setLongitude] = useState(""); //경도
+  const [address, setAddress] = useState(""); 
+  const [postalCode, setPostalCode] = useState(""); 
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState(""); 
 
   const { isLoaded, loadGoogleMaps } = useGoogleMapsStore(); 
 
@@ -18,7 +18,7 @@ const GoogleAddressSearch = ({ onAddressSelect }) => {
 
   useEffect(() => {
     if (isLoaded) {
-      initializeAutocomplete(); // Google Maps API가 로드되면 autocomplete 초기화
+      initializeAutocomplete(); 
     }
   }, [isLoaded]);
 

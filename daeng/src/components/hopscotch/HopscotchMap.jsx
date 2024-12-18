@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from "styled-components";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import useGoogleMapsStore from '../../stores/useGoogleMapsStore';
 import useLocationStore from '../../stores/useLocationStore';
 import LandOwnerProfile from "./LandOwnerProfile";
@@ -41,7 +41,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
 
   const fetchOwnerData = async () => {
     try {
-      const response = await axios.get("https://api.daengdaeng-where.link/api/v2/region/owners", {
+      const response = await axiosInstance.get("/api/v2/region/owners", {
         withCredentials: true,
       });
       setOwnerList(response.data.data);

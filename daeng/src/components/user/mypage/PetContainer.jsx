@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
-import arrow from '../../assets/icons/arrow.svg';
-import reversearrow from '../../assets/icons/reversearrow.svg';
-import addImg from '../../assets/icons/addImg.svg';
+import arrow from '../../../assets/icons/arrow.svg';
+import reversearrow from '../../../assets/icons/reversearrow.svg';
+import addImg from '../../../assets/icons/addImg.svg';
 import { useNavigate } from "react-router-dom";
-import reviewDefaultImg from '../../assets/icons/reviewDefaultImg.svg';
-import AlertDialog from "../../components/commons/SweetAlert";
-import genderW from '../../assets/icons/genderW.svg';
-import genderM from '../../assets/icons/genderM.svg';
-import usePetStore from "../../stores/usePetStore"; 
+import reviewDefaultImg from '../../../assets/icons/reviewDefaultImg.svg';
+import AlertDialog from "../../commons/SweetAlert";
+import genderW from '../../../assets/icons/genderW.svg';
+import genderM from '../../../assets/icons/genderM.svg';
+import usePetStore from "../../../stores/usePetStore"; 
 
 const PetTotalContainer = styled.div`
   display: flex;

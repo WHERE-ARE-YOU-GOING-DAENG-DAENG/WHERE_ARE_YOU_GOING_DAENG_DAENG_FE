@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import axios from 'axios';
-import AlertDialog from "../commons/SweetAlert";
-import useUserStore from '../../stores/userStore';
+import axiosInstance from '../../../services/axiosInstance';
+import AlertDialog from "../../commons/SweetAlert";
+import useUserStore from '../../../stores/userStore';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -64,7 +64,7 @@ function LastContainer() {
       cancelText: '취소',
       onConfirm: async () => {
         try {
-          await axios.delete('https://api.daengdaeng-where.link/api/v1/user/delete', {
+          await axiosInstance.delete('/api/v1/user/delete', {
             withCredentials: true,
           });
           clearStorage();
@@ -99,7 +99,7 @@ function LastContainer() {
       cancelText: '취소',
       onConfirm: async () => {
         try {
-          await axios.post('https://api.daengdaeng-where.link/api/v1/logout', null, {
+          await axiosInstance.post('/api/v1/logout', null, {
             withCredentials: true,
           });
           clearStorage();

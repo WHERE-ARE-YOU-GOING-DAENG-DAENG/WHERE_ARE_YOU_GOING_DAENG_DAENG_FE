@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import axiosInstance from "../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import LocationSelect from "../components/admin/LocationSelect";
 import AdminHeader from "../components/admin/AdminHeader";
@@ -74,8 +74,8 @@ function AdminPage() {
       const placeData = {
         ...formData,
       };
-      const response = await axios.post(
-        "https://api.daengdaeng-where.link/api/v2/admin/place",
+      const response = await axiosInstance.post(
+        "/api/v2/admin/place",
         placeData,
         {
           headers: {

@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
-import mypageFavorite from '../../assets/icons/mypageFavorite.svg';
-import mypageKeyword from '../../assets/icons/mypageKeyword.svg';
-import mypageReview from '../../assets/icons/mypageReview.svg';
-import mypageAlarm from '../../assets/icons/mypageAlarm.svg';
+import mypageFavorite from '../../../assets/icons/mypageFavorite.svg';
+import mypageKeyword from '../../../assets/icons/mypageKeyword.svg';
+import mypageReview from '../../../assets/icons/mypageReview.svg';
+import mypageAlarm from '../../../assets/icons/mypageAlarm.svg';
 
 const RoutePageContainer = styled.div`
   display: flex;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AlertDialog from "../commons/SweetAlert";
 import UserForm from "./UserForm";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 
 function UserRegister() {
   const navigate = useNavigate();
@@ -45,8 +45,8 @@ function UserRegister() {
 
     setIsLoading(true);
     try {
-      const { status } = await axios.post(
-        "https://api.daengdaeng-where.link/api/v1/signup",
+      const { status } = await axiosInstance.post(
+        "/api/v1/signup",
         payload,
         {
           withCredentials: true,
