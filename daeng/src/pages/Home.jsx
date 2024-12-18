@@ -14,10 +14,12 @@ import HomeKeywordPlaces from "../components/Home/HomeKeywordPlaces";
 import Footer from "../components/commons/Footer";
 import AlertDialog from "../components/commons/SweetAlert";
 import Loading from "../components/commons/Loading";
+import useFavoriteStore from "../stores/useFavoriteStore";
 
 function Home() {
   const userLocation = useLocationStore((state) => state.userLocation);
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
+  const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites);
   const setLoginData = useUserStore((state) => state.setLoginData);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,10 +67,15 @@ function Home() {
   useEffect(() => {
     if (isLoggedIn) {
       fetchUserData();
+      fetchData();
     } else {
       simulateLoadingDelay();
     }
   }, [isLoggedIn]);
+
+  const fetchData = async () => {
+		await fetchFavorites();
+	};
 
   const fetchUserData = async () => {
     try {
