@@ -44,8 +44,9 @@ import {
 import { getTodayDate } from "../../utils/dateUtils";
 
 function WriteReview({ review = {} }) {
-  const {nickname} = useUserStore.getState();
+  const { nickname } = useUserStore.getState();
   const { placeId } = useParams();
+  const [isPageReloading, setIsPageReloading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [placeName, setPlaceName] = useState("장소 이름 없음");
   const { pets, fetchPetList } = usePetStore();
@@ -58,11 +59,11 @@ function WriteReview({ review = {} }) {
   const [visitedAt, setVisitedAt] = useState("");
   const [selectedPetImage, setSelectedPetImage] = useState("");
   const location = useLocation();
-  const {type} = location.state || {};
+  const { type } = location.state || {};
   const navigate = useNavigate();
-  
+
   useEffect(() => {
-    fetchPetList(); 
+    fetchPetList();
   }, [fetchPetList]);
 
   useEffect(() => {
@@ -70,18 +71,16 @@ function WriteReview({ review = {} }) {
       axios
         .get(`https://dev.daengdaeng-where.link/api/v1/places/${placeId}`)
         .then((response) => {
-          const name = response.data?.data?.name; 
-          setPlaceName(name || "장소 이름 없음"); 
+          const name = response.data?.data?.name;
+          setPlaceName(name || "장소 이름 없음");
         })
         .catch((error) => {
-          console.error("Failed to fetch place name:", error);
           setPlaceName("장소 이름 없음");
         });
     }
   }, [placeId]);
 
   const placeIdValue = review?.placeId || placeId;
-
   if (!placeIdValue) {
     return <div>장소 정보를 가져올 수 없습니다.</div>;
   }
@@ -91,25 +90,21 @@ function WriteReview({ review = {} }) {
     label: pet.name,
     image: pet.image,
   }));
-  
-const handlePetSelection = (selectedOptions) => {
-  setSelectPet(selectedOptions);
 
-  if (selectedOptions.length > 0) {
-    setSelectedPetImage(selectedOptions[0].image); 
-  } else {
-    setSelectedPetImage(""); 
-  }
-};
+  const handlePetSelection = (selectedOptions) => {
+    setSelectPet(selectedOptions);
 
-  if (!placeId) {
-    return <div>장소 정보를 불러오는 데 실패했습니다.</div>;
-  }
+    if (selectedOptions.length > 0) {
+      setSelectedPetImage(selectedOptions[0].image);
+    } else {
+      setSelectedPetImage("");
+    }
+  };
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     const totalImages = previews.length + files.length;
-  
+
     if (totalImages > 5) {
       AlertDialog({
         mode: "alert",
@@ -119,7 +114,7 @@ const handlePetSelection = (selectedOptions) => {
       });
       return;
     }
-    
+
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -136,7 +131,7 @@ const handlePetSelection = (selectedOptions) => {
         }
       };
       reader.readAsDataURL(file);
-  
+
       setPlaceImgs((prev) => [...prev, file]);
     });
   };
@@ -146,100 +141,116 @@ const handlePetSelection = (selectedOptions) => {
     setRatings(newRatings);
   };
 
+  const handleRemoveImage = (index) => {
+    setPreviews((prev) => prev.filter((_, i) => i !== index));
+    setPlaceImgs((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleChange = (e) => {
     const maxLength = 500;
     const value = e.target.value;
-  
+
     if (value.length > maxLength) {
       AlertDialog({
         mode: "alert",
         title: "선택 제한",
         text: `최대 ${maxLength}자까지만 작성 가능합니다.`,
-        confirmText: "닫기" 
+        confirmText: "닫기",
       });
       return;
-    }   
-    setText(value); 
+    }
+    setText(value);
   };
 
   const validateForm = () => {
-    const isValid = validateReview({ selectKeywords, selectPet, visitedAt, ratings, text });
-    if (!isValid) return; 
+    const isValid = validateReview({
+      selectKeywords,
+      selectPet,
+      visitedAt,
+      ratings,
+      text,
+    });
+    return isValid;
   };
 
   const uploadMedia = async (files) => {
-  const uploadedUrls = [];
-  for (const file of files) {
-    try {
-      const presignResponse = await axios.post(
-        'https://dev.daengdaeng-where.link/api/v1/S3',
-        {
-          prefix: 'REVIEW',
-          fileNames: [file.name]
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
+    const uploadedUrls = [];
+    for (const file of files) {
+      try {
+        const presignResponse = await axios.post(
+          "https://dev.daengdaeng-where.link/api/v1/S3",
+          {
+            prefix: "REVIEW",
+            fileNames: [file.name],
           },
-          withCredentials: true
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+
+        const presignedUrl = presignResponse.data?.data?.[file.name];
+        if (!presignedUrl) {
+          throw new Error("Presigned URL을 받지 못했습니다");
         }
-      );
 
-      const presignedUrl = presignResponse.data?.data?.[file.name];
-      if (!presignedUrl) {
-        throw new Error("Presigned URL을 받지 못했습니다");
-      }
+        const uploadResponse = await axios.put(presignedUrl, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+          withCredentials: true,
+        });
 
-      const uploadResponse = await axios.put(presignedUrl, file, {
-        headers: {
-          "Content-Type": file.type,
-        },
-        withCredentials: true,
-      });
-
-      if (uploadResponse.status === 200) {
-        const uploadedUrl = presignedUrl.split("?")[0]; 
-        uploadedUrls.push(uploadedUrl); 
-      }
-    }catch(error) {
+        if (uploadResponse.status === 200) {
+          const uploadedUrl = presignedUrl.split("?")[0];
+          uploadedUrls.push(uploadedUrl);
+        }
+      } catch (error) {
         console.error(`파일 업로드 실패: ${file.name}`, error);
       }
-  }
+    }
     return uploadedUrls;
   };
 
   const handleSubmit = async (event) => {
-    
     event.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      return;
+    }
 
     setIsLoading(true);
-    
+
     let media = [];
     if (placeImgs.length > 0) {
       media = await uploadMedia(placeImgs);
     }
-  
+
     const pets = selectPet.map((pet) => pet.value);
 
     const reviewData = {
       placeId,
-      content: text.trim(), 
-      score: ratings.filter(Boolean).length, 
-      media, 
-      keywords: selectKeywords, 
+      content: text.trim(),
+      score: ratings.filter(Boolean).length,
+      media,
+      keywords: selectKeywords,
       pets,
       visitedAt,
-      reviewType: type === "realtime" ? "REVIEW_TYP_02" : "REVIEW_TYP_01"
+      reviewType: type === "realtime" ? "REVIEW_TYP_02" : "REVIEW_TYP_01",
     };
 
     try {
-      const response = await axios.post("https://dev.daengdaeng-where.link/api/v1/review", reviewData, {
+      const response = await axios.post(
+        "https://dev.daengdaeng-where.link/api/v1/review",
+        reviewData,
+        {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           withCredentials: true,
-      });
+        }
+      );
 
       AlertDialog({
         mode: "alert",
@@ -248,28 +259,29 @@ const handlePetSelection = (selectedOptions) => {
         confirmText: "닫기",
         icon: "success",
         onConfirm: () => {
-          setIsLoading(false); 
+          setIsLoading(false);
+          setIsPageReloading(true); 
           navigate(`/total-review/${placeId}`);
           setTimeout(() => {
-            window.location.reload(); 
-          }, ); 
+            window.location.reload();
+          },);
         },
       });
     } catch (error) {
+      console.error("리뷰 등록 실패", error);
       AlertDialog({
         mode: "alert",
         title: "실패",
-        text: `리뷰 등록에 실패했습니다.`,
-        confirmText: "닫기" 
+        text: `리뷰는 하루에 하나만 작성이 가능합니다.`,
+        confirmText: "닫기",
       });
-      console.error("리뷰 등록 실패:", error);
-    }finally {
+    } finally {
       setIsLoading(false);
     }
   };
 
-  if (isLoading) {
-    return <Loading label="리뷰를 등록 중입니다..." />;
+  if (isLoading || isPageReloading) {
+    return <Loading label={isPageReloading ? "리뷰를 불러오고 있습니다..." : "리뷰를 등록 중입니다..."} />;
   }
 
   return (
