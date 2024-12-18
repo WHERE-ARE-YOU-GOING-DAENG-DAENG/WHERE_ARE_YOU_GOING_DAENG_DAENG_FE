@@ -26,7 +26,6 @@ const PlaceTitle = ({ data, setData }) => {
           const favoriteId = favoriteStore.getFavoriteId(placeId);
           if (favoriteId) {
             const response = await favoriteStore.removeFavorite(favoriteId);
-            console.log(response.status)
             if (response?.status === 200) {
             setData((prevData) => ({
               ...prevData,

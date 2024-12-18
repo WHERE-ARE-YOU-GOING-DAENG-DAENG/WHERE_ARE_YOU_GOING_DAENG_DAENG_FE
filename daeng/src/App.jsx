@@ -6,7 +6,7 @@ function App() {
   const { loadGoogleMaps } = useGoogleMapsStore();
   
   useEffect(() => {
-    loadGoogleMaps(); // Google Maps API를 로드
+    loadGoogleMaps();
   }, [loadGoogleMaps]);
   
   return (
