@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
-let isScriptLoaded = false; // 스크립트 로드 상태 관리
+let isScriptLoaded = false;
 
 const useGoogleMapsStore = create((set, get) => ({
-  isLoaded: false, // Google Maps API 로드 여부
+  isLoaded: false,
   loadGoogleMaps: () => {
     if (isScriptLoaded) {
       set({ isLoaded: true });
