@@ -41,7 +41,6 @@ const Bookmark = () => {
 		await fetchFavorites();
 	  };
 	  
-
 	  const fetchNextPage = () => {
 		if (hasMore) {
 			fetchFavorites();
