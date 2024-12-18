@@ -142,7 +142,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
         });
         } else if (dayjs(date).isBetween(startDate, endDate, "day", "[]")) {
           if(initDate){
-            console.log("선택된 날짜",initDate);
             return;
           }else {
             setSelectedDate(date);
@@ -159,7 +158,6 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
 
       const handleTimeChange = (selectedOption) => {
         if(initTime){
-            console.log("선택된 시간",initTime);
             return;
         }
         setSelectedTime(selectedOption.value);
