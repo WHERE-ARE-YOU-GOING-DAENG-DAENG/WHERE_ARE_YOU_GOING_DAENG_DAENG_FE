@@ -48,10 +48,6 @@ const Bookmark = () => {
 		}
 	  };
 
-	  useEffect(() => {
-		console.log(favorites);
-	  }, [favorites]);
-
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
     };

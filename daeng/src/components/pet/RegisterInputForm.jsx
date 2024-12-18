@@ -8,6 +8,7 @@ import axios from 'axios';
 import useImageUpload  from "../../hooks/useImageUpload";
 import Loading from '../../components/commons/Loading';
 import upload from '../../assets/icons/upload.svg';
+import { handleFocus } from "../../utils/inputUtils"; 
 import { getTodayDate } from '../../utils/dateUtils'; 
 import { genderOptions, petSizeOptions, petTypeOptions } from "../../data/CommonCode";
 import { 
@@ -60,11 +61,6 @@ function RegisterInputForm() {
   const handleSizeClick = (sizeCode) => {
     setSelectedSize(sizeCode); 
   }; 
-
-
-  const handleFocus = (e) => {
-    e.target.showPicker();
-  };
       
   const handleImageUpload = (e) => {
     const file = e.target.files[0];

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
-import AlertDialog from "../commons/SweetAlert";
-import useUserStore from '../../stores/userStore';
+import AlertDialog from "../../commons/SweetAlert";
+import useUserStore from '../../../stores/userStore';
 import { useNavigate } from 'react-router-dom';
 
 
