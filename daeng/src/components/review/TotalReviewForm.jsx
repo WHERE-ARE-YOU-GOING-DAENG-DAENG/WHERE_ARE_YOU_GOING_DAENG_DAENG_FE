@@ -190,7 +190,7 @@ const TotalReviewForm = () => {
           return (
             <div
               key={review.reviewId}
-              ref={index === reviews.length - 1 ? observeLastItem : null}//observeLastItem을 통한 마지막 요소 감지
+              ref={index === reviews.length - 1 ? observeLastItem : null}
             > 
               <ReviewUserContainer>
                 <UserPhoto

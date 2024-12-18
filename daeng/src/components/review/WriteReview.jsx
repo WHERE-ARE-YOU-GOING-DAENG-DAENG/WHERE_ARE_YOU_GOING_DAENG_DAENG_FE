@@ -60,8 +60,6 @@ function WriteReview({ review = {} }) {
   const location = useLocation();
   const {type} = location.state || {};
   const navigate = useNavigate();
-
-  console.log("Received type:", type);
   
   useEffect(() => {
     fetchPetList(); 
@@ -167,8 +165,6 @@ const handlePetSelection = (selectedOptions) => {
   const validateForm = () => {
     const isValid = validateReview({ selectKeywords, selectPet, visitedAt, ratings, text });
     if (!isValid) return; 
-
-    console.log("리뷰 데이터 유효성 검사 통과!");
   };
 
   const uploadMedia = async (files) => {

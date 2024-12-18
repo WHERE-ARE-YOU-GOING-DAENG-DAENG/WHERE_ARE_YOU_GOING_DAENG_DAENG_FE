@@ -197,14 +197,13 @@ function MyReviewList({ review, isLoading, fetchNextPage, page, isLast }) {
     navigate(`/search/${review.placeId}`);
   };
 
-  // IntersectionObserver: 마지막 항목을 감지하여 fetchNextPage 호출
   useEffect(() => {
     if (!observerRef.current) return;
 
     const observer = new IntersectionObserver(
         (entries) => {
             if (entries[0].isIntersecting && !isLoading && !isLast) {
-                fetchNextPage(); // 마지막 항목이 보이면 추가 데이터 불러오기
+                fetchNextPage(); 
             }
         },
         { threshold: 1.0 }

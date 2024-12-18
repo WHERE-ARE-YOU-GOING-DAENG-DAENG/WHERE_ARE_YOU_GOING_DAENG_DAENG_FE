@@ -12,7 +12,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 self.addEventListener('notificationclick', (event) => {
-    console.log('Notification Data:', event.notification.data);
     event.notification.close();
     const landing_url = event.notification.data ? event.notification.data.url : null;
     const newPath = landing_url ? landing_url : '/'; 
@@ -53,8 +52,6 @@ self.addEventListener('notificationclick', (event) => {
 
 
 messaging.onBackgroundMessage((payload) => {
-    console.log("백그라운드에서 푸시 알림 수신:", payload);
-
     if (payload.data) {
         const { title, body, icon, url } = payload.data;
 
