@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../services/axiosInstance";
 import useLocationStore from "../stores/useLocationStore";
 import useUserStore from "../stores/userStore";
 import Wrapper from "../components/Home/HomeWrapper";
@@ -73,7 +73,7 @@ function Home() {
   const fetchUserData = async () => {
     try {
       await simulateLoadingDelay();
-      const response = await axios.get("https://dev.daengdaeng-where.link/api/v1/user/adjust", {
+      const response = await axiosInstance.get("/api/v1/user/adjust", {
         withCredentials: true,
       });
       const { user } = response.data.data;

@@ -11,7 +11,7 @@ import useUserStore from "../../stores/userStore";
 import AlertDialog from "../commons/SweetAlert";
 import SquareBtn from "../commons/SquareBtn";
 import useLocationStore from "../../stores/useLocationStore";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 
 const PlaceTitle = ({ data, setData }) => {
     const navigate = useNavigate();
@@ -73,7 +73,7 @@ const PlaceTitle = ({ data, setData }) => {
               latitude: userLocation.lat,
               longitude: userLocation.lng
             }
-            const response = await axios.post("https://dev.daengdaeng-where.link/api/v2/review/realtime",payload,{
+            const response = await axiosInstance.post("/api/v2/review/realtime",payload,{
               withCredentials: true
             });
             if(response.data.message === "success"){

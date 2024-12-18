@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import searchIcon from "../../assets/icons/footer_search.svg";
 import footerHoverSearch from "../../assets/icons/footer_hover_search.svg";
+import axiosInstance from "../../services/axiosInstance";
 
 const SearchBar = ({ placeholder, onSearch }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -17,10 +18,10 @@ const SearchBar = ({ placeholder, onSearch }) => {
     }
     try {
       setLoading(true);
-      const response = await fetch(
-        `https://dev.daengdaeng-where.link/api/v1/places/autocomplete?keyword=${keyword}`
+      const response = await axiosInstance.get(
+        `/api/v1/places/autocomplete?keyword=${keyword}`
       );
-      const data = await response.json();
+      const data = response.data;
       setSuggestions(data.data || []);
     } catch (error) {
       console.error("자동검색어 불러오는 중 오류 발생:", error);

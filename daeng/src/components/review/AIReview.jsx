@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import styled from "styled-components";
 import goodcomment from "../../assets/icons/goodcomment.svg";
 import badcomment from "../../assets/icons/badcomment.svg";
@@ -49,8 +49,8 @@ function AiReviewSummary({ placeId }) {
   useEffect(() => {
   const fetchAiSummary = async () => {
     try {
-      const getResponse = await axios.get(
-        `https://dev.daengdaeng-where.link/api/v1/places/${placeId}/reviews/summary`,
+      const getResponse = await axiosInstance.get(
+        `/api/v1/places/${placeId}/reviews/summary`,
         {
           withCredentials: true,
           headers: {

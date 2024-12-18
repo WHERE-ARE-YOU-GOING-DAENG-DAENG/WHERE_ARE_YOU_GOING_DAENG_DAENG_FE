@@ -8,7 +8,6 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import ConfirmBtn from "../../components/commons/ConfirmBtn";
 import ReactSelect from "react-select"
 import AlertDialog from "../commons/SweetAlert";
-import axios from "axios";
 import axiosInstance from "../../services/axiosInstance";
 dayjs.extend(isBetween);
 dayjs.extend(customParseFormat);
@@ -64,7 +63,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
 
     useEffect(()=>{
         const fetchTime = async () => {
-            try{const response = await axios.get(`https://dev.daengdaeng-where.link/api/v1/places/${placeId}`,{
+            try{const response = await axiosInstance.get(`/api/v1/places/${placeId}`,{
                 withCredentials: true,
             });
             setStartTime(response.data.data.startTime);
@@ -212,7 +211,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
             visitAt: `${selectedDate}T${selectedTime}:00`,
         }
         try{
-          const response = await axiosInstance.post("https://dev.daengdaeng-where.link/api/v1/visit", payload,{
+          const response = await axiosInstance.post("/api/v1/visit", payload,{
           withCredentials: true
         })
           setReloadTrigger((prev) => !prev);

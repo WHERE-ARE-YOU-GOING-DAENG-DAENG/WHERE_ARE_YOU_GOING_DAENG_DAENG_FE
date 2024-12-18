@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import x from "../../assets/icons/x.svg";
 import rightArrow from "../../assets/icons/arrow.svg";
 import leftArrow from "../../assets/icons/reversearrow.svg";
@@ -59,8 +59,8 @@ function ShowMyStory({ onClose }) {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get(
-          "https://dev.daengdaeng-where.link/api/v2/story/mystory",
+        const response = await axiosInstance.get(
+          "/api/v2/story/mystory",
           {
             headers: {
               "Content-Type": "application/json",
