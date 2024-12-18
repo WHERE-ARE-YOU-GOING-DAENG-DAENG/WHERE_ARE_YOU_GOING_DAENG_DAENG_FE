@@ -20,6 +20,7 @@ function Home() {
   const userLocation = useLocationStore((state) => state.userLocation);
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
   const fetchFavorites = useFavoriteStore((state) => state.fetchFavorites);
+  const favorites = useFavoriteStore((state)=>state.favorites);
   const setLoginData = useUserStore((state) => state.setLoginData);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -76,6 +77,10 @@ function Home() {
   const fetchData = async () => {
 		await fetchFavorites();
 	};
+
+  useEffect(()=>{
+		console.log(favorites);
+	  },[favorites]) //테스트코드
 
   const fetchUserData = async () => {
     try {
