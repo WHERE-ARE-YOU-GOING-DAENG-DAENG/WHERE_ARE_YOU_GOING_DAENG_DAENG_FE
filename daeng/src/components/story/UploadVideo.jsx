@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import axiosInstance from "../../services/axiosInstance";
 import x from "../../assets/icons/x.svg";
 import crown from "../../assets/icons/crown.svg";
 import AlertDialog from "../../components/commons/SweetAlert";
@@ -73,8 +74,8 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
     setIsLoading(true);
 
     try {
-      const postResponse = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v1/S3",
+      const postResponse = await axiosInstance.post(
+        "/api/v1/S3",
         {
           prefix: "STORY",
           fileNames: [selectedFile.name],
@@ -107,8 +108,8 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
         path: uploadedUrl,
       };
 
-      const storyResponse = await axios.post(
-        "https://dev.daengdaeng-where.link/api/v2/story",
+      const storyResponse = await axiosInstance.post(
+        "/api/v2/story",
         storyData,
         {
           headers: { "Content-Type": "application/json" },

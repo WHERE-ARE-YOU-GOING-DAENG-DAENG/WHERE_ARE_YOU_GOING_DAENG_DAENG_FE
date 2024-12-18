@@ -9,9 +9,6 @@ export const setupAxiosInterceptors = (navigate) => {
     axiosInstance.interceptors.response.use(
         (response) => response,
         (error) => {
-            if(error.response?.status === 404){
-                navigate('/error', { state: { status: error.response.status } });
-            }
             return Promise.reject(error);
         }
     );
