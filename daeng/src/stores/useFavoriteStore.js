@@ -67,6 +67,7 @@ const useFavoriteStore = create((set, get) => ({
         //   confirmText: "확인",
         // });
       }
+      return response;
     } catch (error) {
       if (error.response) {
         if (error.response?.status === 401) {
@@ -92,9 +93,12 @@ const useFavoriteStore = create((set, get) => ({
       const response = await axiosInstance.delete(`/api/v1/favorites/${favoriteId}`,{
         withCredentials: true
       });
-      set((state) => ({
-        favorites: state.favorites.filter((fav) => fav.favoriteId !== favoriteId),
-      }));
+      if (response.status === 200) {
+        set((state) => ({
+          favorites: state.favorites.filter((fav) => fav.favoriteId !== favoriteId),
+        }));
+      }
+      return response;
     } catch (error) {
       if (error.response) {
         if (error.response?.status === 401) {
