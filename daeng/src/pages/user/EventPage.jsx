@@ -16,11 +16,9 @@ function EventPage() {
 
         if (responce.data && responce.data.data) {
           setEvents(responce.data.data);
-        } else {
-          console.log('Invalid response structure:', responce.data);
         }
       } catch (error) {
-        console.log('Failed to fetch events:', error);
+        console.error('Failed to fetch events:', error);
       }
     };
 
