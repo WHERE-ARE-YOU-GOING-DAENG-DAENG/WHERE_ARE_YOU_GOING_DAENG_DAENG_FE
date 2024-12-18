@@ -77,8 +77,6 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecomme
               lng: position.coords.longitude,
               accuracy: position.coords.accuracy,
             };
-            
-            console.log("새 위치",location) //로그 삭제
 
             if (
                location.accuracy < userLocation.accuracy &&

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import AlertDialog from '../components/commons/SweetAlert';
 
 const axiosInstance = axios.create({
     baseURL: 'https://dev.daengdaeng-where.link',
