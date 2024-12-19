@@ -1,10 +1,14 @@
 import styled from "styled-components";
 
 const PlaceDescription = ({data}) => {
+  const description = data?.description || "";
     return(
         <Container>
             <p>시설 소개</p>
-            <div className="description">{data.description}</div>
+            <div
+              className="description"
+              dangerouslySetInnerHTML={{ __html: description.replace(/<br>/g, "<br />") }}
+            />
         </Container>
     )
 };
@@ -31,6 +35,8 @@ const Container = styled.div`
     text-align: left;
     border-radius:10px;
     margin-bottom: 20px;
+    line-height: 1.3;
+    white-space: pre-line;
   }
 `
 export default PlaceDescription;
