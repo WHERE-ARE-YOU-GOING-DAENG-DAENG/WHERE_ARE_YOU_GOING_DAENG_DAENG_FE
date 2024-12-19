@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 const PlaceDescription = ({data}) => {
+  const description = data?.description || "";
     return(
         <Container>
             <p>시설 소개</p>
             <div
               className="description"
-              dangerouslySetInnerHTML={{ __html: data.description.replace(/<br>/g, "<br />") }}
+              dangerouslySetInnerHTML={{ __html: description.replace(/<br>/g, "<br />") }}
             />
         </Container>
     )
