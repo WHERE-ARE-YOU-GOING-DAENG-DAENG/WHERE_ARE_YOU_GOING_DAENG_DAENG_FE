@@ -252,10 +252,16 @@ daeng/
    <tr>
     <td><img width="100" src="https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1712215318/noticon/t0boj5btqesxnyxp4nfq.png" alt="gsap"></td>
     <td><img width="100" src="https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1566913958/noticon/uoqjdixts4lwsgtsa1pd.png" alt="firebase"></td>
+    <td><img width="100" src="https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1675253316/noticon/gg2mfsvpu2aje4f8rpuc.png" alt="zustand"></td>
+    <td><img width="100" src="https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1716180510/noticon/seh9elkswcqbrpsxvmhd.png" alt="axios"></td>
+    <td><img width="100" src="https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1566952480/noticon/fyec5eye4l6hyxlpfxze.png" alt="storybook"></td>
   </tr>
   <tr>
     <th>Gsap</th>
     <th>Firebase</th>
+    <th>Zustand</th>
+    <th>Axios</th>
+    <th>Storybook</th>
   </tr>
 </table>
 
