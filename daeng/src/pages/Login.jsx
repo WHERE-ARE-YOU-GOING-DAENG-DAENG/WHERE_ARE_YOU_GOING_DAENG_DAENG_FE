@@ -26,11 +26,11 @@ const Login = () => {
     };
 
     const handleKakaoLogin = () => {
-        window.location.href = "https://dev.daengdaeng-where.link/oauth2/authorization/kakao";
+        window.location.href = "http://52.79.50.171:8080/oauth2/authorization/kakao";
     };
 
     const handleGoogleLogin = () => {
-        location.href = "https://dev.daengdaeng-where.link/oauth2/authorization/google";
+        location.href = "http://52.79.50.171:8080/oauth2/authorization/google";
     };
 
     return (

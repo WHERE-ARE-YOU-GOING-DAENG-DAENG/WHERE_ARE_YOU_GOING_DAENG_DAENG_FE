@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'https://dev.daengdaeng-where.link',
+    baseURL: 'http://52.79.50.171:8080',
     withCredentials: true,
 });
 
