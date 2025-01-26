@@ -31,11 +31,10 @@ const PlaceDetail = () => {
           try {
             const reviewResponse = await axiosInstance.get(
               `/api/v1/reviews/place/${id}/LATEST?page=0&size=3`,
-              { withCredentials: true }
             );
             reviewData = reviewResponse.data.data;
           } catch (reviewError) {
-            if (reviewError.response) {
+            if (reviewError.response && reviewError.response.status !== 404) { //404는 리뷰없을때 뜸뜸
               AlertDialog({
                 mode: "alert",
                 title: "리뷰 데이터 오류",

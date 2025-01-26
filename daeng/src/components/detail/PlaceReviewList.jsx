@@ -56,7 +56,7 @@ const PlaceReviewList = ({ data }) => {
           <div className="title">가장 많이 선택된 키워드 &gt;</div>
           <div className="keywords">
             {Array.isArray(data?.bestKeywords) &&
-            data.bestKeywords.slice(0,3).map((keyword, index) => (
+            data.bestKeywords.map((keyword, index) => (
               <ReviewKeywords key={index} label={keyword} />
             ))}
           </div>
