@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
+    baseURL: 'https://api.daengdaeng-where.link',
     withCredentials: true,
-    validateStatus: () => true
 })
 
 export const setupAxiosInterceptors = (navigate) => {
