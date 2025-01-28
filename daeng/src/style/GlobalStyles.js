@@ -33,9 +33,10 @@ const GlobalStyle = createGlobalStyle`
     margin: 0 auto;
     box-shadow: rgba(100, 100, 111, 0.5) 0px 7px 29px 0px;
     min-height: 100vh;
-  }
-
-
+    max-width: 554px;   
+    width: 100%;        
+    text-align: center; 
+}
 `;
 
 export default GlobalStyle;

@@ -25,6 +25,11 @@ dist-ssr
 
 # Storybook log
 storybook.log
+*storybook.log
 
 # Environment variables
 .env
+
+# https pem
+localhost+2-key.pem
+localhost+2.pem

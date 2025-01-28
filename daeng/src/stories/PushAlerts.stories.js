@@ -1,4 +1,4 @@
-import PushAlerts from '../components/PushAlerts';
+import PushAlerts from '../components/commons/PushAlerts';
 
 export default {
     title: 'Components/PushAlerts', // Storybook 내의 컴포넌트 경로
