@@ -6,19 +6,25 @@ import useLocationStore from '../../stores/useLocationStore';
 import LandOwnerProfile from "./LandOwnerProfile";
 import CustomOverlay from "../../components/map/CustomOverlay";
 import markerIcon from "../../assets/icons/marker.svg";
-import Loading from "../commons/Loading";
+// import Loading from "../commons/Loading";
 import pako from "pako";
 
 const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
-  const { isLoaded } = useGoogleMapsStore();
+  const { isLoaded, loadGoogleMaps } = useGoogleMapsStore();
   const userLocation = useLocationStore((state) => state.userLocation);
   const [overlayContent, setOverlayContent] = useState(null);
   const [ownerList, setOwnerList] = useState({ visitInfo: {} });
   const [isOwnerListLoaded, setIsOwnerListLoaded] = useState(false);
   const [markers, setMarkers] = useState([]);
   const [geojson, setGeojson] = useState(null);
+
+  useEffect(() => {
+    requestIdleCallback(() => {
+      loadGoogleMaps();
+    });
+  }, []);
 
   useEffect(() => {
     fetchGeoJson();
@@ -253,9 +259,16 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
     }
   }, [map, isLoaded, isOwnerListLoaded, geojson]);
 
+  const staticMap = "/staticmap.png";
+
   return (
     <MapContainer ref={mapRef} $removeUi={removeUi}>
-      {!isLoaded && <Loading label="지도 로딩 중..." />}
+      {!isLoaded && (
+        <LoadingWrapper>
+          <LoadingImage src={staticMap} alt="로딩 중 지도"/>
+          <LoadingText>지도를 불러오는 중...</LoadingText>
+        </LoadingWrapper>
+        )}
       {map && overlayContent && (
         <CustomOverlay
           map={map}
@@ -275,4 +288,25 @@ const MapContainer = styled.div`
   display: flex;
 `;
 
+const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`;
+
+const LoadingImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const LoadingText = styled.div`
+  position: absolute;
+  bottom: 20px;
+  font-size: 16px;
+  color: #333;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  border-radius: 8px;
+`;
 export default HopscotchMap;

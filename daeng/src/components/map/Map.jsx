@@ -6,7 +6,7 @@ import BookMarker from "../commons/BookMarker";
 import useGoogleMapsStore from "../../stores/useGoogleMapsStore";
 import CustomOverlay from "./CustomOverlay";
 import useLocationStore from "../../stores/useLocationStore";
-import Loading from "../commons/Loading";
+// import Loading from "../commons/Loading";
 import { useNavigate } from "react-router-dom";
 // import staticMap from "../../assets/icons/staticmap.png";
 
