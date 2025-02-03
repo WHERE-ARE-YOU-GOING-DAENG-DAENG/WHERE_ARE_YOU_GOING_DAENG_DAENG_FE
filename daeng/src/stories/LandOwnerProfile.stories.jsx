@@ -1,5 +1,5 @@
 import React from 'react';
-import LandOwnerProfile from '../components/map/LandOwnerProfile';
+import LandOwnerProfile from '../components/hopscotch/LandOwnerProfile';
 
 export default {
   title: 'Components/LandOwnerProfile', // Storybook에서 보일 컴포넌트 경로

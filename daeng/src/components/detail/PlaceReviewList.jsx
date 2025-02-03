@@ -25,16 +25,16 @@ const PlaceReviewList = ({ data }) => {
   };
 
   const handleWriteReviewClick = () => {
-    if (userId) {
+    // if (userId) {
       navigate(`/write-review/${placeId}`, { state: { type: "normal" } });
-    } else {
-      AlertDialog({
-        mode: "alert",
-        title: "로그인 필요",
-        text: "리뷰를 작성하려면 로그인이 필요합니다.",
-        confirmText: "확인",
-      });
-    }
+    // } else {
+    //   AlertDialog({
+    //     mode: "alert",
+    //     title: "로그인 필요",
+    //     text: "리뷰를 작성하려면 로그인이 필요합니다.",
+    //     confirmText: "확인",
+    //   });
+    // }
   };
 
   
@@ -56,7 +56,7 @@ const PlaceReviewList = ({ data }) => {
           <div className="title">가장 많이 선택된 키워드 &gt;</div>
           <div className="keywords">
             {Array.isArray(data?.bestKeywords) &&
-            data.bestKeywords.slice(0,3).map((keyword, index) => (
+            data.bestKeywords.map((keyword, index) => (
               <ReviewKeywords key={index} label={keyword} />
             ))}
           </div>
