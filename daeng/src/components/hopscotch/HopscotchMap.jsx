@@ -32,30 +32,30 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   }, []);
 
   // 서비스할 때 gzip 해제
-  // const fetchGeoJson = async () => {
-  //   try {
-  //     const response = await fetch("/data/sig.json.gz");
-  //     const compressedData = await response.arrayBuffer();
-
-  //     const decompressedData = pako.inflate(compressedData, { to: "string" }); 
-  
-  //     const json = JSON.parse(decompressedData);
-  //     setGeojson(json);
-  //   } catch (error) {
-  //     console.error("GeoJSON 데이터를 로드할 수 없습니다:", error);
-  //   }
-  // };
-
-  // 로컬에서는 압축해제 필요없음
   const fetchGeoJson = async () => {
     try {
       const response = await fetch("/data/sig.json.gz");
-      const json = await response.json();
-      setGeojson(json)
+      const compressedData = await response.arrayBuffer();
+
+      const decompressedData = pako.inflate(compressedData, { to: "string" }); 
+  
+      const json = JSON.parse(decompressedData);
+      setGeojson(json);
     } catch (error) {
       console.error("GeoJSON 데이터를 로드할 수 없습니다:", error);
     }
   };
+
+  // 로컬에서는 압축해제 필요없음
+  // const fetchGeoJson = async () => {
+  //   try {
+  //     const response = await fetch("/data/sig.json.gz");
+  //     const json = await response.json();
+  //     setGeojson(json)
+  //   } catch (error) {
+  //     console.error("GeoJSON 데이터를 로드할 수 없습니다:", error);
+  //   }
+  // };
 
   const fetchOwnerData = async () => {
     try {
@@ -104,7 +104,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   };
 
   useEffect(() => {
-    if (map && changeCenter) {
+    if (map && changeCenter.region && changeCenter.subRegion && markers.length > 0) {
       const { region, subRegion } = changeCenter;
       const matchingMarker = markers.find(
         (marker) => marker.region === region && marker.subRegion === subRegion
