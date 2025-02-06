@@ -56,8 +56,8 @@ const SearchPlaceList = ({ places, setPlaces, isLoading }) => {
       {isLoading ? (
         <Loading label="장소 데이터를 불러오는 중입니다.." />
       ) : places.length > 0 ? (
-        places.map((place) => (
-          <PlaceItem key={place.placeId}>
+        places.map((place, index) => (
+          <PlaceItem key={index}>
             <div onClick={() => handlePlaceClick(place.placeId)}>
               <div className="header">
                 <div className="place-name">{place.name}</div>
