@@ -46,7 +46,7 @@ const PlaceReviewList = ({ data }) => {
           <div className="actions">
             <button className="action" onClick={handleWriteReviewClick}>
               리뷰 작성
-              <img src={writeIcon} alt="리뷰 작성" />
+              <img src={writeIcon} alt="리뷰 작성하기" />
             </button>
             <button className="action"  onClick={() => navigate(`/total-review/${placeId}`)}>전체보기 &gt;</button>
           </div>

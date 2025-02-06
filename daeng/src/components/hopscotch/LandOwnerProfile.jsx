@@ -4,8 +4,6 @@ import crown from "../../assets/icons/crown.svg";
 import defaultImg from "../../assets/icons/reviewDefaultImg.svg"; 
 
 const LandOwnerProfile = ({ area, nickname, pets, hops }) => {
-  console.log("pets 값 확인:", pets); // pets의 값 콘솔 출력
-  
   const petList = Array.isArray(pets) ? pets : [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 3;
