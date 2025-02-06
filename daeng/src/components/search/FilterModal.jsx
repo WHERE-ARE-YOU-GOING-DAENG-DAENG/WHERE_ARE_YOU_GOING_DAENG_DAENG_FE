@@ -153,9 +153,9 @@ const FilterModal = ({ isOpen, onClose, keywords, setKeywords, setFilter }) => {
 FilterModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    keywords: PropTypes.array.isRequired,
+    keywords: PropTypes.object.isRequired,
     setKeywords: PropTypes.func.isRequired,
-    setFilter: PropTypes.bool.isRequired,
+    setFilter: PropTypes.func.isRequired,
 };
 
 const slideUp = keyframes`

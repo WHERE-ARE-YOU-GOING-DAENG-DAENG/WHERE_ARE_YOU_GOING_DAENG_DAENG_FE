@@ -130,9 +130,9 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecomme
     setMarkers([]);
     if (data && data.length > 0) {
       setUserInitiatedMove(false);
-      const newMarkers = data.map((location) => (
+      const newMarkers = data.map((location, index) => (
         <CustomOverlay
-          key={location.placeId}
+          key={index}
           position={{ lat: location.latitude, lng: location.longitude }}
           map={map}
         >
