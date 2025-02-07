@@ -104,7 +104,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   };
 
   useEffect(() => {
-    if (map && changeCenter) {
+    if (map && changeCenter.region && changeCenter.subRegion && markers.length > 0) {
       const { region, subRegion } = changeCenter;
       const matchingMarker = markers.find(
         (marker) => marker.region === region && marker.subRegion === subRegion
@@ -259,7 +259,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
     }
   }, [map, isLoaded, isOwnerListLoaded, geojson]);
 
-  const staticMap = "/staticmap.png";
+  const staticMap = "/hopscotchmap.png";
 
   return (
     <MapContainer ref={mapRef} $removeUi={removeUi}>
