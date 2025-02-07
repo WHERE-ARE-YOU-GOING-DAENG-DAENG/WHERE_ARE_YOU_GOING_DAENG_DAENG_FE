@@ -60,6 +60,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
     const [selectedPets, setSelectedPets] = useState([]);
     const [startTime, setStartTime] = useState("00:00");
     const [endTime, setEndTime] = useState("24:00") ;
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(()=>{
         const fetchTime = async () => {
@@ -211,11 +212,13 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
             visitAt: `${selectedDate}T${selectedTime}:00`,
         }
         try{
+          setIsLoading(true);
           const response = await axiosInstance.post("/api/v1/visit", payload,{
           withCredentials: true
         })
           setReloadTrigger((prev) => !prev);
         if(response.status === 200){
+            setIsLoading(false);
             AlertDialog({
               mode: "alert",
               title: "방문일정등록",
@@ -226,6 +229,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
           }
         }catch(error){
             if (error.response && error.response.status === 409) {
+                setIsLoading(false);
                 AlertDialog({
                 mode: "alert",
                 title: "방문예정 등록",
@@ -234,6 +238,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
             });
             } else {
                 if(error.response){
+                    setIsLoading(false);
                     AlertDialog({
                     mode: "alert",
                     title: "방문예정등록",
@@ -297,7 +302,7 @@ const VisitModal = ({ placeId, isOpen, onClose, setReloadTrigger, initDate = nul
                         <ReactSelect id="pet-select" options={petOptions} onChange={handlePetChange} placeholder="댕댕이를 선택하세요" isMulti styles={selectStyles}/>
                     <InputAlert>*여러 마리 선택이 가능합니다.</InputAlert>
                     </SelectBox>
-                    <ConfirmBtn label="추가" onClick={handleSubmit}/>
+                    <ConfirmBtn isLoading={isLoading} label="추가" onClick={handleSubmit}/>
                 </Form>
             </Modal>
         </>
