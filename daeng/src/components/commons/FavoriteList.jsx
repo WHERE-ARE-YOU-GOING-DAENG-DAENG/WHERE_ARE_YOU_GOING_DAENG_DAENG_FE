@@ -13,7 +13,7 @@ function FavoriteList({ title, icon, place, time, imgUrl, onTitleClick, onPlaceC
         <FavoritePlace onClick={onPlaceClick}>{place}</FavoritePlace>
         <FavoritePlaceTime>{time}</FavoritePlaceTime> 
       </FavoriteInfoContainer>
-      <FavoriteListPicture imgUrl={imgUrl} />
+      <FavoriteListPicture $imgUrl={imgUrl} />
       <DeleteButtonWrapper>
         <DeleteBtn label="삭제" onClick={onDelete} />
       </DeleteButtonWrapper>
@@ -55,7 +55,7 @@ const FavoriteListPicture = styled.div`
   border-radius: 10px;
   background-color: #e0e0e0;
   margin: 0px 15px;
-  background-image: url(${(props) => props.imgUrl});
+  background-image: url(${(props) => props.$imgUrl});
   background-size: cover;
   background-position: center;
 

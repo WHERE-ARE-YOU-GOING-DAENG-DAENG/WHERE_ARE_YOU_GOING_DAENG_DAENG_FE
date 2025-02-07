@@ -79,7 +79,7 @@ const BookMarkList = ({ isOpen, onClose, data, onPlaceClick, fetchNextPage }) =>
     return (
         <>
             <Overlay onClick={handleClose} />
-            <Modal isClosing={isClosing}>
+            <Modal $isClosing={isClosing}>
                 <ModalIcon className="pin" src={pinIcon} alt="즐겨찾기" />
                 <ModalTitle>즐겨찾기한 장소</ModalTitle>
                 <ModalContent>
@@ -89,9 +89,9 @@ const BookMarkList = ({ isOpen, onClose, data, onPlaceClick, fetchNextPage }) =>
                         <p>즐겨찾기한 장소가 없습니다.</p>
                     ) : (
                         <>
-                            {data.map((location) => (
+                            {data.map((location, index) => (
                                 <FavoriteList
-                                    key={location.favoriteId}
+                                    key={index}
                                     imgUrl={location.placeImage ? location.placeImage : SearchNoImage}
                                     icon={houseIcon}
                                     title={location.name}
@@ -151,7 +151,7 @@ const Modal = styled.div`
     background-color: white;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    animation: ${({ isClosing }) => (isClosing ? slideDown : slideUp)} 0.4s ease-out;
+    animation: ${({ $isClosing }) => ($isClosing ? slideDown : slideUp)} 0.4s ease-out;
     z-index: 99;
     overflow: visible;
     -webkit-overflow-scrolling: touch;

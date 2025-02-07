@@ -31,8 +31,4 @@ DeleteBtn.propTypes = {
   onClick: PropTypes.func, 
 };
 
-DeleteBtn.defaultProps = {
-    onClick: () => {}, 
-  };
-
 export default DeleteBtn;

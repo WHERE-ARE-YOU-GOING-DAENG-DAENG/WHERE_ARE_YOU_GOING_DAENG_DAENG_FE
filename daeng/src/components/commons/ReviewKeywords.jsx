@@ -23,8 +23,8 @@ const ReviewButton = styled.button`
     font-size: 11px;
   }
 
-  ${({ hasIcon }) =>
-    hasIcon &&
+  ${({ $hasIcon }) =>
+    $hasIcon &&
     `
     background-color: #FF69A9;
     cursor:pointer;
@@ -47,7 +47,7 @@ const ReviewButton = styled.button`
 `
 function ReviewKeywords({label, icon, onClick}) {
   return (
-    <ReviewButton hasIcon={!!icon} onClick={onClick}>
+    <ReviewButton $hasIcon={!!icon} onClick={onClick}>
       {icon && <img src={icon} alt="아이콘" />}
       {label}
     </ReviewButton>
