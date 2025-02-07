@@ -65,9 +65,4 @@ ConfirmBtn.propTypes = {
   isLoading: PropTypes.bool,
 };
 
-ConfirmBtn.defaultProps = {
-  onClick: () => {},
-  isLoading: false,
-};
-
 export default ConfirmBtn;

@@ -165,7 +165,7 @@ const Label = styled.p`
   font-weight: bold;
 `;
 
-const Pink = styled.p`
+const Pink = styled.span`
   color: #FF69A9;
   display: inline;
 `;

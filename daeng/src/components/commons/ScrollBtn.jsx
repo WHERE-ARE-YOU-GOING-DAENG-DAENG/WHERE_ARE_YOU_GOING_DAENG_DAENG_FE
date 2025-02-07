@@ -16,8 +16,8 @@ const ScrollTop = styled.button`
   width: 50px;
   height: 50px;
   cursor: pointer;
-  opacity: ${(props) => (props.visible ? 1 : 0)};
-  pointer-events: ${(props) => (props.visible ? 'auto' : 'none')};
+  opacity: ${(props) => (props.$visible ? 1 : 0)};
+  pointer-events: ${(props) => (props.$visible ? 'auto' : 'none')};
   transition: opacity 0.3s ease;
 
   @media (max-width: 554px) {
@@ -45,7 +45,7 @@ const BookmarkButton = styled.button`
 
   @media (max-width: 554px) {
     right: 10px;
-    bottom: ${(props) => (props.visible ? '115px !important' : '65px!important')};
+    bottom: ${(props) => (props.$visible ? '115px !important' : '65px!important')};
     transform: translateZ(0);
     img {
       width: 45px;
@@ -86,7 +86,7 @@ const ScrollBtn = () => {
   return (
     <>
       {/* 즐겨찾기 버튼 */}
-      <BookmarkButton visible={isVisible}
+      <BookmarkButton $visible={isVisible}
         style={{
           bottom: isVisible ? '150px' : '90px',
         }}
@@ -96,7 +96,7 @@ const ScrollBtn = () => {
       </BookmarkButton>
 
       {/* 맨위로 버튼 */}
-      <ScrollTop onClick={scrollToTop} visible={isVisible} hasList>
+      <ScrollTop onClick={scrollToTop} $visible={isVisible} >
         <img src={top} alt="맨위로" />
       </ScrollTop>
     </>

@@ -66,7 +66,7 @@ const VisitTimePets = ({ visitAt, pets, onVisitClick }) => {
         <ReviewKeywords label="방문하고 싶어요" icon={joinIcon} onClick={handleVisitClick}/>
       </TimeTitle>
       <PetsWrapper>
-        <LeftArrow onClick={scrollLeft} disabled={!isLeftVisible} visible={isLeftVisible}>
+        <LeftArrow onClick={scrollLeft} disabled={!isLeftVisible} $visible={isLeftVisible}>
           <img src={leftArrow} alt="왼쪽화살표" />
         </LeftArrow>
         <PetsContainer ref={sliderRef}>
@@ -77,7 +77,7 @@ const VisitTimePets = ({ visitAt, pets, onVisitClick }) => {
             </PetCard>
           ))}
         </PetsContainer>
-        <RightArrow onClick={scrollRight} disabled={!isRightVisible} visible={isRightVisible}>
+        <RightArrow onClick={scrollRight} disabled={!isRightVisible} $visible={isRightVisible}>
             <img src={rightArrow} alt="오른쪽화살표" />
         </RightArrow>
       </PetsWrapper>
@@ -120,7 +120,7 @@ const ArrowButton = styled.button`
   z-index: 1;
   font-size: 20px;
   color: #888;
-  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+  visibility: ${(props) => (props.$visible ? "visible" : "hidden")};
   &:disabled {
     color: #ccc;
     cursor: not-allowed;
