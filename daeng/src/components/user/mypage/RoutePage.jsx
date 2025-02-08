@@ -74,7 +74,7 @@ function RoutePage() {
       <RouteContainer>
         {list.map((item, index) => (
           <RouteItem key={index}>
-            <Icon src={icons[index]} />
+            <Icon src={icons[index]} alt="아이콘" />
             <StyledLink to={routes[index]}>
               <RouteText>{item}</RouteText>
             </StyledLink>
