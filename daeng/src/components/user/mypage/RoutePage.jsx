@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
 import mypageFavorite from '../../../assets/icons/mypageFavorite.svg';
@@ -63,26 +64,65 @@ const StyledLink = styled(Link)`
   align-items: center;
 `;
 
+const SkeletonRouteItem = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+`;
+
+const SkeletonCircle = styled.div`
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 50%;
+`;
+
+const SkeletonBar = styled.div`
+  margin-left: 10px;
+  height: 15px;
+  background-color: #ccc;
+  width: 100px;
+`;
+
 function RoutePage() {
+  const [loading, setLoading] = useState(true);
   const list = ['즐겨찾기', '내가 작성한 리뷰', '키워드 수정', '알림 설정'];
   const icons = [mypageFavorite, mypageKeyword, mypageReview, mypageAlarm];
   const routes = ['/bookmark', '/my-review', '/preference-edit', '/alarm'];
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   return (
     <RoutePageContainer>
       <PageTitle>보호자 활동</PageTitle>
       <RouteContainer>
-        {list.map((item, index) => (
-          <RouteItem key={index}>
-            <Icon src={icons[index]} />
-            <StyledLink to={routes[index]}>
-              <RouteText>{item}</RouteText>
-            </StyledLink>
-          </RouteItem>
-        ))}
+        {loading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <SkeletonRouteItem key={index}>
+              <SkeletonCircle />
+              <SkeletonBar />
+            </SkeletonRouteItem>
+          ))
+        ) : (
+          list.map((item, index) => (
+            <RouteItem key={index}>
+              <Icon src={icons[index]} alt="아이콘" />
+              <StyledLink to={routes[index]}>
+                <RouteText>{item}</RouteText>
+              </StyledLink>
+            </RouteItem>
+          ))
+        )}
       </RouteContainer>
     </RoutePageContainer>
-  )
+  );
 }
 
 export default RoutePage;

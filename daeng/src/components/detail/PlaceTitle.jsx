@@ -182,6 +182,7 @@ const Info = styled.div`
   img{
     margin: 0 5px;
     width: 15px;
+    height: 48px;
     cursor:pointer;
   }
 

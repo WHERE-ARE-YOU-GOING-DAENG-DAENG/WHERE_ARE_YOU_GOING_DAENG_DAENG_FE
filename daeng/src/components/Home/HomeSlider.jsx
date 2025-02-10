@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import festival_banner from "../../assets/icons/festival_banner.jpg";
-import banner1 from '../../assets/icons/banner1.jpg';
-import banner2 from "../../assets/icons/banner2.jpg";
-import banner3 from "../../assets/icons/banner3.jpg";
+import festival_banner from "../../assets/icons/festival_banner.webp";
+import banner1 from '../../assets/icons/banner1.webp';
+import banner2 from "../../assets/icons/banner2.webp";
+import banner3 from "../../assets/icons/banner3.webp";
 import { useNavigate } from "react-router-dom";
 
 function HomeSlider() {
@@ -47,7 +47,13 @@ function HomeSlider() {
     <SliderWrapper>
       <SlidesContainer currentSlide={currentSlide}>
         {slides.map((slide, index) => (
-          <Slide key={index} src={slide} alt={`Slide ${index + 1}`} onClick={() => handleSlideClick(index)} />
+          <Slide 
+            key={index} 
+            src={slide} 
+            alt={`Slide ${index + 1}`} 
+            onClick={() => handleSlideClick(index)} 
+            loading={index === 0 ? "eager" : "lazy"}
+            />
         ))}
       </SlidesContainer>
       <ArrowButton direction="left" onClick={handlePrev}>
@@ -92,10 +98,11 @@ const SlidesContainer = styled.div`
 
 const Slide = styled.img`
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: contain;
   flex-shrink: 0;
   cursor: pointer;
+  loading: lazy;
 `;
 
 const DotsWrapper = styled.div`
@@ -105,7 +112,6 @@ const DotsWrapper = styled.div`
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
-
   @media (max-width: 554px) {
     gap: 5px;
   }
@@ -118,11 +124,9 @@ const Dot = styled.div`
   background-color: ${({ isActive }) => (isActive ? "#ff69b4" : "#D0D0D8")};
   cursor: pointer;
   transition: background-color 0.3s;
-
   &:hover {
     background-color: #ff69b4;
   }
-
   @media (max-width: 554px) {
     width: 6px;
     height: 6px;
@@ -145,11 +149,9 @@ const ArrowButton = styled.button`
   align-items: center;
   justify-content: center;
   font-size: 20px;
-
   &:hover {
     background-color: rgba(0, 0, 0, 0.8);
   }
-
   @media (max-width: 554px) {
     width: 30px;
     height: 30px;
