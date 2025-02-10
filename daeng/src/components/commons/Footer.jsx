@@ -56,7 +56,7 @@ const FooterItem = styled.div`
         margin-top: 4px;
         font-size: 12px;
         font-weight: bold;
-        color: ${(props) => (props.isActive || props.isHovered ? "#ff4b98" : "#d9d9d9")};
+        color: ${(props) => (props.$isActive || props.$isHovered ? "#ff4b98" : "#d9d9d9")};
 
         @media (max-width: 554px) {
             font-size: 10px;
@@ -111,8 +111,8 @@ const Footer = () => {
                 {items.map((item, index) => (
                     <FooterItem
                         key={index}
-                        isActive={activeIndex === index}
-                        isHovered={hoveredIndex === index}
+                        $isActive={activeIndex === index}
+                        $isHovered={hoveredIndex === index}
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setHoveredIndex(null)}
                         onClick={() => handleNavigation(item.path, index)}

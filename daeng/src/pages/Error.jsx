@@ -28,7 +28,7 @@ const ErrorNum = styled.div`
     position: relative;
     display: inline-block;
     p {
-        font-family: "RixInooAriDuri", sans-serif;
+        font-family: "RixInooAriDuriR", sans-serif;
         font-size: 150px;
         color: #F9A9D4;
         font-weight: normal;
@@ -67,8 +67,8 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.button`
-    background-color: ${(props) => (props.primary ? "#FF69A9" : "#FFFFFF")};
-    color: ${(props) => (props.primary ? "#FFFFFF" : "#FF69A9")};
+    background-color: ${(props) => (props.$primary ? "#FF69A9" : "#FFFFFF")};
+    color: ${(props) => (props.$primary ? "#FFFFFF" : "#FF69A9")};
     border: 1px solid #FF69A9;
     padding: 10px 20px;
     border-radius: 5px;
@@ -76,7 +76,7 @@ const Button = styled.button`
     font-weight: bold;
     cursor: pointer;
     &:hover {
-        background-color: ${(props) => (props.primary ? "#f788bf" : "#fbe6f0")};
+        background-color: ${(props) => (props.$primary ? "#f788bf" : "#fbe6f0")};
     }
 `;
 
@@ -123,7 +123,7 @@ const Error = () => {
             <ErrorTitle>{title}</ErrorTitle>
             <ErrorContent>{content}</ErrorContent>
             <ButtonContainer>
-                <Button primary onClick={() => navigate("/")}>홈으로</Button>
+                <Button $primary onClick={() => navigate("/")}>홈으로</Button>
             </ButtonContainer>
         </Container>
     );

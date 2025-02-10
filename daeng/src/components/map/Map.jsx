@@ -6,13 +6,14 @@ import BookMarker from "../commons/BookMarker";
 import useGoogleMapsStore from "../../stores/useGoogleMapsStore";
 import CustomOverlay from "./CustomOverlay";
 import useLocationStore from "../../stores/useLocationStore";
-import Loading from "../commons/Loading";
+// import Loading from "../commons/Loading";
 import { useNavigate } from "react-router-dom";
+// import staticMap from "../../assets/icons/staticmap.png";
 
 const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecommend}) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
-  const { isLoaded } = useGoogleMapsStore();
+  const { isLoaded, loadGoogleMaps } = useGoogleMapsStore();
   const [currentLocation, setCurrentLocation] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 });
@@ -20,6 +21,12 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecomme
   const setUserLocation = useLocationStore((state) => state.setUserLocation);
   const navigate = useNavigate();
   const [userInitiatedMove, setUserInitiatedMove] = useState(false);
+  
+  useEffect(() => {
+    requestIdleCallback(() => {
+      loadGoogleMaps();
+    });
+  }, []);
 
   useEffect(() => {
     if (isLoaded && !map) {
@@ -123,9 +130,9 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecomme
     setMarkers([]);
     if (data && data.length > 0) {
       setUserInitiatedMove(false);
-      const newMarkers = data.map((location) => (
+      const newMarkers = data.map((location, index) => (
         <CustomOverlay
-          key={location.placeId}
+          key={index}
           position={{ lat: location.latitude, lng: location.longitude }}
           map={map}
         >
@@ -158,10 +165,17 @@ useEffect(() => {
     map.addListener("dragstart", () => setUserInitiatedMove(true));
   }
 }, [map]);
+  
+const staticMap = "/staticmap.png";
 
   return (
     <MapContainer ref={mapRef} $data={data} $removeUi={removeUi}>
-      {!isLoaded || isLoading ? (<Loading label={isLoaded ? "결과를 불러오는 중..." : "지도 로딩 중..."} />):(
+      {!isLoaded || isLoading ? (
+        <LoadingWrapper>
+          <LoadingImage src={staticMap} alt="로딩 중 지도"/>
+          <LoadingText>지도를 불러오는 중...</LoadingText>
+        </LoadingWrapper>  
+      ):(
         <>
           {currentLocation}
           {markers}
@@ -179,6 +193,31 @@ const MapContainer = styled.div`
   @media (max-width: 554px) {
     height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 150px)" : "385px")};
   }
+`;
+
+const LoadingWrapper = styled.div`
+  width: 100%;
+  height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 160px)" : "485px")};
+  display: flex;
+  @media (max-width: 554px) {
+    height: ${({ $removeUi }) => ($removeUi ? "calc(100vh - 150px)" : "385px")};
+  }
+`;
+
+const LoadingImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const LoadingText = styled.div`
+  position: absolute;
+  bottom: 20px;
+  font-size: 16px;
+  color: #333;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  border-radius: 8px;
 `;
 
 export default Map;

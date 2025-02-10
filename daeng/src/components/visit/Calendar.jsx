@@ -54,12 +54,12 @@ const Calendar = ({ onDateClick, selectedDate, dot }) => {
       return (
         <Day
           key={date}
-          isWeekly={isWeekly}
-          isPast={isPast}
-          isToday={isToday}
-          hasEvent={hasEvent}
-          isSelected={isSelected}
-          dot={dot}
+          $isWeekly={isWeekly}
+          $isPast={isPast}
+          $isToday={isToday}
+          $hasEvent={hasEvent}
+          $isSelected={isSelected}
+          $dot={dot}
           onClick={() => {
             onDateClick(date);
           }}
@@ -170,14 +170,14 @@ const Day = styled.div`
   aspect-ratio: 1;
   text-align: center;
   border-radius: 10px;
-  background: ${({ isWeekly, isToday }) => isWeekly && isToday
+  background: ${({ $isWeekly, $isToday }) => $isWeekly && $isToday
   ? "#FFCEE1"
-  : isWeekly 
+  : $isWeekly 
   ? "#FDF2F8"
   : "none"};
-  color: ${({ isPast }) => (isPast ? "#aaa" : "black")};
-  font-weight: ${({ isToday }) => (isToday ? "bold" : "normal")};
-  border: ${({ isSelected }) => (isSelected ? "2px solid #FF4B98" : "none")};
+  color: ${({ $isPast }) => ($isPast ? "#aaa" : "black")};
+  font-weight: ${({ $isToday }) => ($isToday ? "bold" : "normal")};
+  border: ${({ $isSelected }) => ($isSelected ? "2px solid #FF4B98" : "none")};
   cursor: pointer;
   position: relative;
 
@@ -190,8 +190,8 @@ const Day = styled.div`
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: ${({ hasEvent, dot }) =>
-      dot && hasEvent  ? "#FF4B98" : "transparent"};
+    background-color: ${({ $hasEvent, $dot }) =>
+      $dot && $hasEvent  ? "#FF4B98" : "transparent"};
   }
 
   &:hover {

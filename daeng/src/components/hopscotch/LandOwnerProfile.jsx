@@ -4,12 +4,13 @@ import crown from "../../assets/icons/crown.svg";
 import defaultImg from "../../assets/icons/reviewDefaultImg.svg"; 
 
 const LandOwnerProfile = ({ area, nickname, pets, hops }) => {
+  const petList = Array.isArray(pets) ? pets : [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 3;
   const itemWidth = 65;
-  const maxIndex = Math.ceil(pets.length / itemsPerPage) - 1;
-
-  const isCentered = pets.length <= itemsPerPage;
+  const petCount = petList.length;
+  const maxIndex = Math.ceil(petCount / itemsPerPage) - 1;
+  const isCentered = petCount <= itemsPerPage;
 
   useEffect(() => {
     if (!isCentered) {
@@ -40,7 +41,7 @@ const LandOwnerProfile = ({ area, nickname, pets, hops }) => {
             isCentered={isCentered}
             translateX={-currentIndex * itemsPerPage * itemWidth}
           >
-            {pets.map((pet) => (
+            {petList.map((pet) => (
               <PetCard key={pet.petId}>
                 <PetImage src={pet.petImg? pet.petImg : defaultImg} alt={`${pet.petName || "기본 이미지"} 사진`} />
                 <div>{pet.petName}</div>

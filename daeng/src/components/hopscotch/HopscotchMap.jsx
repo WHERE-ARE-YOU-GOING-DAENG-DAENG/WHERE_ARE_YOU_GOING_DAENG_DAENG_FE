@@ -6,13 +6,13 @@ import useLocationStore from '../../stores/useLocationStore';
 import LandOwnerProfile from "./LandOwnerProfile";
 import CustomOverlay from "../../components/map/CustomOverlay";
 import markerIcon from "../../assets/icons/marker.svg";
-import Loading from "../commons/Loading";
+// import Loading from "../commons/Loading";
 import pako from "pako";
 
 const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
-  const { isLoaded } = useGoogleMapsStore();
+  const { isLoaded, loadGoogleMaps } = useGoogleMapsStore();
   const userLocation = useLocationStore((state) => state.userLocation);
   const [overlayContent, setOverlayContent] = useState(null);
   const [ownerList, setOwnerList] = useState({ visitInfo: {} });
@@ -21,10 +21,17 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   const [geojson, setGeojson] = useState(null);
 
   useEffect(() => {
+    requestIdleCallback(() => {
+      loadGoogleMaps();
+    });
+  }, []);
+
+  useEffect(() => {
     fetchGeoJson();
     fetchOwnerData();
   }, []);
 
+  // 서비스할 때 gzip 해제
   const fetchGeoJson = async () => {
     try {
       const response = await fetch("/data/sig.json.gz");
@@ -38,6 +45,17 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
       console.error("GeoJSON 데이터를 로드할 수 없습니다:", error);
     }
   };
+
+  // 로컬에서는 압축해제 필요없음
+  // const fetchGeoJson = async () => {
+  //   try {
+  //     const response = await fetch("/data/sig.json.gz");
+  //     const json = await response.json();
+  //     setGeojson(json)
+  //   } catch (error) {
+  //     console.error("GeoJSON 데이터를 로드할 수 없습니다:", error);
+  //   }
+  // };
 
   const fetchOwnerData = async () => {
     try {
@@ -86,7 +104,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   };
 
   useEffect(() => {
-    if (map && changeCenter) {
+    if (map && changeCenter.region && changeCenter.subRegion && markers.length > 0) {
       const { region, subRegion } = changeCenter;
       const matchingMarker = markers.find(
         (marker) => marker.region === region && marker.subRegion === subRegion
@@ -241,9 +259,16 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
     }
   }, [map, isLoaded, isOwnerListLoaded, geojson]);
 
+  const staticMap = "/hopscotchmap.png";
+
   return (
     <MapContainer ref={mapRef} $removeUi={removeUi}>
-      {!isLoaded && <Loading label="지도 로딩 중..." />}
+      {!isLoaded && (
+        <LoadingWrapper>
+          <LoadingImage src={staticMap} alt="로딩 중 지도"/>
+          <LoadingText>지도를 불러오는 중...</LoadingText>
+        </LoadingWrapper>
+        )}
       {map && overlayContent && (
         <CustomOverlay
           map={map}
@@ -263,4 +288,25 @@ const MapContainer = styled.div`
   display: flex;
 `;
 
+const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`;
+
+const LoadingImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const LoadingText = styled.div`
+  position: absolute;
+  bottom: 20px;
+  font-size: 16px;
+  color: #333;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  border-radius: 8px;
+`;
 export default HopscotchMap;

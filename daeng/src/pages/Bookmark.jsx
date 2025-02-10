@@ -22,19 +22,19 @@ const Bookmark = () => {
 	const navigate = useNavigate();
 	
 	useEffect(() => {
-		if(!userId){
-			resetFavorites();
-			AlertDialog({
-				mode: "confirm",
-				title: "로그인 필요",
-				text: `즐겨찾기는 로그인이 필요한 기능입니다.<br/>로그인페이지로 이동하시겠습니까?`,
-				confirmText: "네",
-				cancelText: "아니오",
-				onConfirm: ()=> navigate("/login")
-			});
-		}else{
+		// if(!userId){
+			// resetFavorites();
+			// AlertDialog({
+			// 	mode: "confirm",
+			// 	title: "로그인 필요",
+			// 	text: `즐겨찾기는 로그인이 필요한 기능입니다.<br/>로그인페이지로 이동하시겠습니까?`,
+			// 	confirmText: "네",
+			// 	cancelText: "아니오",
+			// 	onConfirm: ()=> navigate("/login")
+			// });
+		// }else{
 			fetchData();
-		}
+		// }
 	  }, []);
 
 	  const fetchData = async () => {
