@@ -213,8 +213,8 @@ function EditInputForm() {
             onChange={handlePetNameChange} 
           />
           <InputAlert>*한글, 영문만 사용 가능합니다</InputAlert>
-        <SelectLabel label="견종" />
-        <PetTypeOption value={selectedPetType} onChange={handlePetTypeChange}>
+        <SelectLabel label="견종" htmlFor="petType" />
+        <PetTypeOption id="petType" value={selectedPetType} onChange={handlePetTypeChange}>
           <option value="" disabled>
             견종을 선택하세요
           </option>
