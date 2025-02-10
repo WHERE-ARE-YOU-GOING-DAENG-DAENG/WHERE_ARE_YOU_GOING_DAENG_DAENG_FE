@@ -7,6 +7,7 @@ const LabelContainer = styled.label`
     font-size: 14px;
     font-weight: 600;
     color: #000;
+    margin-bottom: 10px;
 
     span {
         font-size: 14px;
