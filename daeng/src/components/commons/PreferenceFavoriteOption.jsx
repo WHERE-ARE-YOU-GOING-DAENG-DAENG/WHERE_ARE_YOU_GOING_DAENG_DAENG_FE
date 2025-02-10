@@ -58,7 +58,7 @@ function PreferenceFavoriteOption({ label, icon, isSelected, onClick }) {
       className={isSelected ? "selected" : ""} 
       onClick={onClick}
     >
-      <StyledIcon src={icon} alt={label} />
+      <StyledIcon src={icon} alt="preperenceicon" />
       {label}
     </PreferenceButton>
   );
