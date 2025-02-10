@@ -80,7 +80,7 @@ const PlaceDetail = () => {
           <Header label="시설 상세페이지" />
           {isLoading ? <Loading lable="로딩 중입니다..." />:
             <>
-            <HeaderImage src={data.imageurl ? data.imageurl : PlaceDetailNoImage} alt="시설이미지" loading="lazy"/>
+            <HeaderImage src={data.imageurl ? data.imageurl : PlaceDetailNoImage} alt="시설이미지"/>
             <PlaceTitle data={data} setData={setData}/>
             <PlaceInfo data={data} />
             <Division />
