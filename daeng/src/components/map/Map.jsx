@@ -166,7 +166,7 @@ useEffect(() => {
   }
 }, [map]);
   
-const staticMap = "/staticmap.png";
+const staticMap = "/staticmap.webp";
 
   return (
     <MapContainer ref={mapRef} $data={data} $removeUi={removeUi}>

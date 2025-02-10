@@ -13,7 +13,7 @@ const CustomHeader = styled.div`
 
     img {
     width: 5%; 
-    height: auto; 
+    height: 50%; 
     margin-left: 5%;
     cursor: pointer;
     }

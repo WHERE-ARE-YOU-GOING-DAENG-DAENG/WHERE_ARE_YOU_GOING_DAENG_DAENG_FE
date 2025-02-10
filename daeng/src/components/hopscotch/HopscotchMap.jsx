@@ -259,7 +259,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
     }
   }, [map, isLoaded, isOwnerListLoaded, geojson]);
 
-  const staticMap = "/hopscotchmap.png";
+  const staticMap = "/hopscotchmap.webp";
 
   return (
     <MapContainer ref={mapRef} $removeUi={removeUi}>

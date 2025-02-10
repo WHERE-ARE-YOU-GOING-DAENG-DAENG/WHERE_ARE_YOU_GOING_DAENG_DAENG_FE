@@ -20,12 +20,18 @@ const ScrollTop = styled.button`
   pointer-events: ${(props) => (props.$visible ? 'auto' : 'none')};
   transition: opacity 0.3s ease;
 
+  img {
+    width: 50px;
+    height: 50px;
+  }
+
   @media (max-width: 554px) {
     right: 10px;
     transform: translateZ(0);
     bottom: 65px;
     img {
       width: 45px;
+      height: 45px;
     }
   }
 `;
@@ -42,6 +48,11 @@ const BookmarkButton = styled.button`
   height: 50px;
   cursor: pointer;
   transition: bottom 0.3s ease;
+  
+  img {
+    width: 50px;
+    height: 50px;
+  }
 
   @media (max-width: 554px) {
     right: 10px;
@@ -49,6 +60,7 @@ const BookmarkButton = styled.button`
     transform: translateZ(0);
     img {
       width: 45px;
+      height: 45px;
     }
   }
 `;
