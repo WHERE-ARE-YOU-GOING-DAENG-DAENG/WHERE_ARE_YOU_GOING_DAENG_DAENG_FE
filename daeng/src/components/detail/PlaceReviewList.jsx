@@ -185,6 +185,8 @@ const ReviewHeader = styled.div`
 
       img {
         margin: 0px 3px;
+        width: 10px;
+        height: 10px;
       }
     }
   }
