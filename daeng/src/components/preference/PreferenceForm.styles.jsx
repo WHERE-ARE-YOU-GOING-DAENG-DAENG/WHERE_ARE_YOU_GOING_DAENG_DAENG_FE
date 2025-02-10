@@ -13,7 +13,19 @@ export const Section = styled.div`
   margin-bottom: 40px;
 `;
 
-export const Title = styled.h3`
+export const TitleH2 = styled.h3`
+  text-align: left;
+  margin-left: 10px;
+  font-size: 17px;
+  margin-bottom: 10px;
+
+  @media (max-width: 554px) {
+    font-size: 14px;
+    margin-left: 20px;
+  }
+`;
+
+export const TitleH3 = styled.h3`
   text-align: left;
   margin-left: 10px;
   font-size: 17px;
