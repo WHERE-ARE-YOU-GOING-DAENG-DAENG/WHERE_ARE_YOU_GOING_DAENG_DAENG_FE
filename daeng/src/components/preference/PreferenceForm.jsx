@@ -44,11 +44,11 @@ function PreferenceForm({
 
   return (
     <Wrap>
-      {isLoading && <Loading label="로딩 중입니다..." />}
+      {isLoading && <Loading label="로딩 중입니다..." style={{ minHeight: "100px" }} />}
       <Section>
         <Title>어떤 시설에 관심이 많으신가요?</Title>
         <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
-        <OptionContainer>
+        <OptionContainer style={{ minHeight: "150px" }}>
           {placeTypes.map(({ codeId, name }) => (
             <PreferencePlaceOption
               key={codeId}
@@ -66,7 +66,7 @@ function PreferenceForm({
       <Section>
         <Title>어떤 부분이 중요하신가요?</Title>
         <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
-        <OptionContainer>
+        <OptionContainer style={{ minHeight: "150px" }}>
           {placeFeatures.map(({ codeId, name }) => (
             <PreferenceFavoriteOption
               key={codeId}
