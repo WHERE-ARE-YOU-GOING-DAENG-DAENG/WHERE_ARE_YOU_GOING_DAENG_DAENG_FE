@@ -41,6 +41,7 @@ const RouteItem = styled.div`
 
 const Icon = styled.img`
   width: 20px;
+  height: 20px;
   margin-right: 13px;
   margin-bottom: 40px;
 `
