@@ -249,7 +249,7 @@ function PetContainer() {
         <PetListContainer>
           {visiblePets.map((pet) => (
             <PetInfoContainer key={pet.petId}>
-              <PetImage src={pet.image || reviewDefaultImg} alt="펫 이미지" />
+              <PetImage src={pet.image || reviewDefaultImg} alt="펫 이미지" loading="lazy"/>
               <PetDetailInfoContainer>
                 <PetFirstContainer>
                   <PetName>{pet.name}</PetName>

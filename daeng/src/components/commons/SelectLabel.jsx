@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-const LabelContainer = styled.p`
+const LabelContainer = styled.label`
     display: flex;
     align-items: center;
     font-size: 14px;
     font-weight: 600;
     color: #000;
+    margin-bottom: 10px;
 
     span {
         font-size: 14px;
@@ -16,9 +17,9 @@ const LabelContainer = styled.p`
     }
 `;
 
-const SelectLabel = ({ label }) => {
+const SelectLabel = ({ label, htmlFor }) => {
     return (
-        <LabelContainer>
+        <LabelContainer htmlFor={htmlFor}>
         {label}
         <span>*</span>
         </LabelContainer>
@@ -27,6 +28,7 @@ const SelectLabel = ({ label }) => {
 
 SelectLabel.propTypes = {
     label: PropTypes.string.isRequired,
+    htmlFor: PropTypes.string.isRequired,
 };
 
 export default SelectLabel;
