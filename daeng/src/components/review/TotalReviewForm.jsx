@@ -154,7 +154,7 @@ const TotalReviewForm = () => {
     <TotalReviewContainer>
       <DescriptionContainer>
         <ReviewPlaceTitle>{placeName}</ReviewPlaceTitle>
-        <StyledArrow src={arrow} alt="장소 상세 보기"onClick={navigateToPlace} />
+        <StyledArrow src={arrow} alt="장소 상세보기"onClick={navigateToPlace} />
       </DescriptionContainer>
       <PreferenceContainer>
         {bestKeywords.map((keyword, index) => (

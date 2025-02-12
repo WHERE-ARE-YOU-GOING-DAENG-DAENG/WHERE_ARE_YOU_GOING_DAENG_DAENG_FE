@@ -182,7 +182,6 @@ export const PostDate = styled.span`
 
 export const StyledArrow  = styled.img`
   width: 15px;
-  height: 15px;
   margin-left: 10px;
   cursor: pointer;
 `
