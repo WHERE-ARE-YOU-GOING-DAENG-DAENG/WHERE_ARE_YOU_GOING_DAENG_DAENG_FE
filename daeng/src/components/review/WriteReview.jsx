@@ -314,6 +314,7 @@ function WriteReview({ review = {} }) {
           onChange={handlePetSelection}
           styles={selectStyles}
           placeholder="댕댕이를 선택해주세요"
+          aria-label="댕댕이 이름"
         />
         </UserQuestionContainer>
 
@@ -325,6 +326,7 @@ function WriteReview({ review = {} }) {
             value={visitedAt} 
             onFocus={handleFocus}  
             onChange={(e) => setVisitedAt(e.target.value)} 
+            aria-label="날짜 선택"
           />
           </UserQuestionContainer>
           <UserQuestionContainer>
