@@ -221,7 +221,7 @@ function MyReviewList({ review, isLoading, fetchNextPage, page, isLast }) {
       <HeaderContainer>
         <TitleSection>
           <PlaceTitle>{review.placeName}</PlaceTitle>
-          <StyledArrow src={arrow} onClick={navigateToPlace}/>
+          <StyledArrow src={arrow} alt="장소 상세보기로 가는 화살표" onClick={navigateToPlace}/>
         </TitleSection>
         <ReviewDate>등록 날짜 | {review.createdAt.split("T")[0]}</ReviewDate>
       </HeaderContainer>
