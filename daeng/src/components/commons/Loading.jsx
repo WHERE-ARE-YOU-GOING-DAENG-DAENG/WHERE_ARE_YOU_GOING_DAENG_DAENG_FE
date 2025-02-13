@@ -18,7 +18,7 @@ const LoadingText = styled.div`
 const Loading = ({label}) => {
   return (
     <Background>
-      <img src={Spinner} alt="로딩중" width="25%" />
+      <img src={Spinner} alt="로딩중" width="25%" height="25%" loading="eager"/>
       <LoadingText>{label}</LoadingText>
     </Background>
   );
