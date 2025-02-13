@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import PreferenceFavoriteOption from "../commons/PreferenceFavoriteOption";
 import AlertDialog from "../../components/commons/SweetAlert";
@@ -18,7 +18,7 @@ import parkingLot from "../../assets/icons/parkingLot.svg";
 function PreferenceFavoriteOptionList({ selectedOptions, onSelectOptions }) {
   const maxOptions = 3;
 
-  const featureIcons = {
+  const featureIcons = useMemo(() => ({
     PLACE_FTE_01: run,
     PLACE_FTE_02: cage,
     PLACE_FTE_03: water,
@@ -30,7 +30,7 @@ function PreferenceFavoriteOptionList({ selectedOptions, onSelectOptions }) {
     PLACE_FTE_09: dogFriend,
     PLACE_FTE_10: clean,
     PLACE_FTE_11: parkingLot,
-  };
+  }), []);
 
   const handleOptionClick = (codeId) => {
     if (selectedOptions.length >= maxOptions && !selectedOptions.includes(codeId)) {
