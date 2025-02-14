@@ -20,6 +20,7 @@ import {
   SelectionContainer,
   SelectBox,
   ConfirmContainer,
+  StyledLabel
 } from "./UserForm.styles";
 
 function UserForm({
@@ -169,9 +170,11 @@ function UserForm({
     <UserContainer>
       {isLoading && <Loading label="처리 중입니다..." />}
 
-      <SelectLabel label="이메일" />
+      <StyledLabel>
+        이메일<span>*</span>
+      </StyledLabel>
       <InputEmailContainer>
-        <Input type="email" value={userData.email} disabled />
+        <Input id="email" type="email" value={userData.email} disabled />
         {getOAuthIcon() && <Icon src={getOAuthIcon()} alt="OAuth Provider" />}
       </InputEmailContainer>
 

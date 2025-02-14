@@ -125,3 +125,18 @@ export const ConfirmContainer = styled.div`
   display: flex;
   margin-top: 40px;
 `;
+
+export const StyledLabel = styled.p`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+
+  span {
+    font-size: 14px;
+    margin-left: 4px;
+    color: #ff69a9;
+    font-weight: semibold;
+  }
+`;
