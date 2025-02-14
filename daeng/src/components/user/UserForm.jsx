@@ -20,7 +20,8 @@ import {
   SelectionContainer,
   SelectBox,
   ConfirmContainer,
-  StyledLabel
+  StyledLabel,
+  SrOnlyLabel
 } from "./UserForm.styles";
 
 function UserForm({
@@ -207,34 +208,42 @@ function UserForm({
         />
       </SelectionContainer>
 
-      <SelectLabel label="주소" />
+      <SelectLabel label="주소" htmlFor="city" />
       <SelectionContainer>
-        <SelectBox onChange={(e) => handleInputChange("city", e.target.value)} value={userData.city}>
-          <option value="" disabled>
-            도 선택
+      <SrOnlyLabel htmlFor="city">도 선택</SrOnlyLabel>
+      <SelectBox
+        id="city"
+        onChange={(e) => handleInputChange("city", e.target.value)}
+        value={userData.city}
+      >
+        <option value="" disabled>
+          도 선택
+        </option>
+        {Object.keys(AreaField).map((cityName, index) => (
+          <option key={index} value={cityName}>
+            {cityName}
           </option>
-          {Object.keys(AreaField).map((cityName, index) => (
-            <option key={index} value={cityName}>
-              {cityName}
+        ))}
+      </SelectBox>
+
+      <SrOnlyLabel htmlFor="cityDetail">시/군/구 선택</SrOnlyLabel>
+      <SelectBox
+        id="cityDetail"
+        onChange={(e) => handleInputChange("cityDetail", e.target.value)}
+        value={userData.cityDetail}
+        disabled={!AreaField[userData.city]?.length}
+      >
+        <option value="" disabled>
+          시/군/구 선택
+        </option>
+        {(AreaField[userData.city] || [])
+          .slice(1)
+          .map((districtName, index) => (
+            <option key={index} value={districtName}>
+              {districtName}
             </option>
           ))}
-        </SelectBox>
-        <SelectBox
-          onChange={(e) => handleInputChange("cityDetail", e.target.value)}
-          value={userData.cityDetail}
-          disabled={!AreaField[userData.city]?.length}
-        >
-          <option value="" disabled>
-            시/군/구 선택
-          </option>
-          {(AreaField[userData.city] || [])
-            .slice(1)
-            .map((districtName, index) => (
-              <option key={index} value={districtName}>
-                {districtName}
-              </option>
-            ))}
-        </SelectBox>
+      </SelectBox>
       </SelectionContainer>
       <InputAlert>*보호자님과 우리 댕댕이 맞춤 장소 추천을 위해 필요한 정보입니다.</InputAlert>
 
