@@ -170,11 +170,11 @@ function UserForm({
     <UserContainer>
       {isLoading && <Loading label="처리 중입니다..." />}
 
-      <StyledLabel>
+      <StyledLabel htmlFor="email">
         이메일<span>*</span>
       </StyledLabel>
       <InputEmailContainer>
-        <Input id="email" type="email" value={userData.email} disabled />
+        <Input id="email" type="email" value={userData.email} disabled aria-label="이메일 입력 필드"/>
         {getOAuthIcon() && <Icon src={getOAuthIcon()} alt="OAuth Provider" />}
       </InputEmailContainer>
 
