@@ -48,6 +48,11 @@ const ToggleButton = styled.button`
   }
 `;
 
+const AlarmState = styled.div`
+  font-size: 15px;
+  margin-top: 10px;
+`
+
 const skeletonAnimation = keyframes`
   0% { background-color: #e0e0e0; }
   50% { background-color: #f0f0f0; }
@@ -195,7 +200,7 @@ function AlarmPage() {
             <ToggleButton $isSubscribed={isSubscribed} onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest} disabled={isLoading}>
               {isSubscribed ? "알림 그만 받기" : "알림 받기"}
             </ToggleButton>
-            <p>{isSubscribed ? "현재 알림이 활성화된 상태입니다." : "현재 알림이 비활성화된 상태입니다."}</p>
+            <AlarmState>{isSubscribed ? "현재 알림이 활성화된 상태입니다." : "현재 알림이 비활성화된 상태입니다."}</AlarmState>
           </AlarmContainer>
         )}
         {isSubscribed && <AlarmList activeTab="subscribe" />}
