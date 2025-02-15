@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/commons/Header";
 import Footer from "../../components/commons/Footer";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { requestNotificationPermission } from "../../firebase/firebaseMessaging";
 import AlertDialog from "../../components/commons/SweetAlert";
 import axiosInstance from "../../services/axiosInstance";
 import { pushAgree } from "../../data/CommonCode";
 import AlarmList from "../../components/alarm/AlarmList";
-import Loading from "../../components/commons/Loading";
 
 const PageContainer = styled.div`
   display: flex;
@@ -48,6 +47,30 @@ const ToggleButton = styled.button`
       isSubscribed ? "#FFD7EB" : "#FF4580"};
   }
 `;
+
+const skeletonAnimation = keyframes`
+  0% { background-color: #e0e0e0; }
+  50% { background-color: #f0f0f0; }
+  100% { background-color: #e0e0e0; }
+`;
+
+const SkeletonBox = styled.div`
+  width: 100%;
+  height: ${({ height }) => height || "20px"};
+  margin: 10px 0;
+  border-radius: 8px;
+  animation: ${skeletonAnimation} 1.5s infinite ease-in-out;
+`;
+
+function AlarmSkeleton() {
+  return (
+    <AlarmContainer>
+      <SkeletonBox height="50px" />
+      <SkeletonBox height="20px" width="80%" />
+    </AlarmContainer>
+  );
+}
+
 
 function AlarmPage() {
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -165,21 +188,16 @@ function AlarmPage() {
     <PageContainer>
       <Header label="알림" />
       <Content>
-        {isLoading && <Loading label="처리 중입니다..." />}
-        <AlarmContainer>
-          <ToggleButton
-            isSubscribed={isSubscribed}
-            onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest}
-            disabled={isLoading}
-          >
-            {isSubscribed ? "알림 그만 받기" : "알림 받기"}
-          </ToggleButton>
-          <p>
-            {isSubscribed
-              ? "현재 알림이 활성화된 상태입니다."
-              : "현재 알림이 비활성화된 상태입니다."}
-          </p>
-        </AlarmContainer>
+        {isLoading ? (
+          <AlarmSkeleton /> 
+        ) : (
+          <AlarmContainer>
+            <ToggleButton $isSubscribed={isSubscribed} onClick={isSubscribed ? handleCancelNotification : handleNotificationRequest} disabled={isLoading}>
+              {isSubscribed ? "알림 그만 받기" : "알림 받기"}
+            </ToggleButton>
+            <p>{isSubscribed ? "현재 알림이 활성화된 상태입니다." : "현재 알림이 비활성화된 상태입니다."}</p>
+          </AlarmContainer>
+        )}
         {isSubscribed && <AlarmList activeTab="subscribe" />}
       </Content>
       <Footer />
