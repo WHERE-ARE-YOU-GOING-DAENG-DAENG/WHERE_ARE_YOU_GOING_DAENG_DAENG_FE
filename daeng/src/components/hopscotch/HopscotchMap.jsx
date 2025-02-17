@@ -21,9 +21,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   const [geojson, setGeojson] = useState(null);
 
   useEffect(() => {
-    requestIdleCallback(() => {
-      loadGoogleMaps();
-    });
+    setTimeout(() => loadGoogleMaps(), 100);
   }, []);
 
   useEffect(() => {
