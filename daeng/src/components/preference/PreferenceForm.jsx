@@ -9,7 +9,6 @@ import {
   Wrap,
   Section,
   TitleH2,
-  TitleH3,
   StyledParagraph,
   OptionContainer,
   StyledParagraph2,
@@ -65,7 +64,7 @@ function PreferenceForm({
       </Section>
 
       <Section>
-        <TitleH3>어떤 부분이 중요하신가요?</TitleH3>
+      <TitleH2>어떤 부분이 중요하신가요?</TitleH2>
         <StyledParagraph>* 최소 1개 ~ 3개 선택가능</StyledParagraph>
         <OptionContainer style={{ minHeight: "150px" }}>
           {placeFeatures.map(({ codeId, name }) => (
