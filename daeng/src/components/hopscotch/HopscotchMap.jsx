@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import styled from "styled-components";
 import axiosInstance from "../../services/axiosInstance";
 import useGoogleMapsStore from '../../stores/useGoogleMapsStore';
@@ -20,10 +20,10 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
   const [markers, setMarkers] = useState([]);
   const [geojson, setGeojson] = useState(null);
 
-  useEffect(() => {
-    requestIdleCallback(() => {
+  useLayoutEffect(() => {
+    if (!window.google || !window.google.maps) {
       loadGoogleMaps();
-    });
+    }
   }, []);
 
   useEffect(() => {
@@ -122,7 +122,7 @@ const HopscotchMap = ({ removeUi, setSelectedArea, changeCenter }) => {
     }
   }, [changeCenter, map, markers]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isLoaded && !map) {
       const center =
         userLocation.lat === 0.0 && userLocation.lng === 0.0

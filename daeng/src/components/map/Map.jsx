@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import markerIcon from "../../assets/icons/marker.svg";
 import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
@@ -8,7 +8,6 @@ import CustomOverlay from "./CustomOverlay";
 import useLocationStore from "../../stores/useLocationStore";
 // import Loading from "../commons/Loading";
 import { useNavigate } from "react-router-dom";
-// import staticMap from "../../assets/icons/staticmap.png";
 
 const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecommend}) => {
   const mapRef = useRef(null);
@@ -22,13 +21,13 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecomme
   const navigate = useNavigate();
   const [userInitiatedMove, setUserInitiatedMove] = useState(false);
   
-  useEffect(() => {
-    requestIdleCallback(() => {
+  useLayoutEffect(() => {
+    if (!window.google || !window.google.maps) {
       loadGoogleMaps();
-    });
+    }
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isLoaded && !map) {
       const googleMap = new window.google.maps.Map(mapRef.current, {
         center,
