@@ -11,7 +11,7 @@ function TopSection() {
             <span>선호하세요?</span>
           </h1>
         </TextContainer>
-        <Image src={preferenceLogo} alt="preference logo" />
+        <Image src={preferenceLogo} alt="preference logo" width={240} height={240} loading="lazy" />
       </TopContainer>
       <Description>
         <p>
@@ -67,18 +67,20 @@ const TextContainer = styled.div`
 
 const Image = styled.img`
   width: 240px;
-  height: auto;
+  height: 240px;
   margin-right: 20px;
+  object-fit: contain;
 
   @media (max-width: 554px) {
     width: 160px;
-    height: auto;
-    margin-right: 20px;
+    height: 160px;
   }
 `;
 
+
 const Description = styled.div`
   text-align: center;
+  min-height: 50px;
 
   p {
     font-size: 21px;
