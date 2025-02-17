@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import markerIcon from "../../assets/icons/marker.svg";
 import bookmarkerIcon from "../../assets/icons/bookmarker.svg"
@@ -21,11 +21,13 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecomme
   const navigate = useNavigate();
   const [userInitiatedMove, setUserInitiatedMove] = useState(false);
   
-  useEffect(() => {
-    setTimeout(() => loadGoogleMaps(), 100);
+  useLayoutEffect(() => {
+    if (!window.google || !window.google.maps) {
+      loadGoogleMaps();
+    }
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isLoaded && !map) {
       const googleMap = new window.google.maps.Map(mapRef.current, {
         center,
