@@ -8,7 +8,6 @@ import CustomOverlay from "./CustomOverlay";
 import useLocationStore from "../../stores/useLocationStore";
 // import Loading from "../commons/Loading";
 import { useNavigate } from "react-router-dom";
-// import staticMap from "../../assets/icons/staticmap.png";
 
 const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecommend}) => {
   const mapRef = useRef(null);
@@ -23,9 +22,7 @@ const Map = ({ data, removeUi, externalCenter, isLoading, onMapLoaded, isRecomme
   const [userInitiatedMove, setUserInitiatedMove] = useState(false);
   
   useEffect(() => {
-    requestIdleCallback(() => {
-      loadGoogleMaps();
-    });
+    setTimeout(() => loadGoogleMaps(), 100);
   }, []);
 
   useEffect(() => {
