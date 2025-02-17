@@ -3,7 +3,7 @@ import axios from 'axios';
 const axiosInstance = axios.create({
     baseURL: 'https://api.daengdaeng-where.link',
     withCredentials: true,
-});
+})
 
 export const setupAxiosInterceptors = (navigate) => {
     axiosInstance.interceptors.response.use(

@@ -60,10 +60,4 @@ FilterBtn.propTypes = {
   onClick: PropTypes.func,
 };
 
-FilterBtn.defaultProps = {
-  icon: null,
-  size: 'default',
-  onClick: null,
-};
-
 export default FilterBtn;

@@ -38,6 +38,7 @@ const Icon = styled.div`
   margin-right: 8px;
   img{
     width: 35px;
+    height: 46px;
   }
 `;
 

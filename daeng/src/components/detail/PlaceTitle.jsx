@@ -50,22 +50,22 @@ const PlaceTitle = ({ data, setData }) => {
     };
 
     const handleVisitListClick = (placeId) => {
-      if (userId) {
+      // if (userId) {
         navigate(`/visit-list/${placeId}`);
-      } else {
-        AlertDialog({
-          mode: "confirm",
-          title: "로그인 필요",
-          text: `방문등록을 하시려면 로그인이 필요합니다.<br/>로그인페이지로 이동하시겠습니까?`,
-          confirmText: "네",
-          cancelText: "아니오",
-          onConfirm: ()=> navigate('/login')
-        });
-      }
+      // } else {
+      //   AlertDialog({
+      //     mode: "confirm",
+      //     title: "로그인 필요",
+      //     text: `방문등록을 하시려면 로그인이 필요합니다.<br/>로그인페이지로 이동하시겠습니까?`,
+      //     confirmText: "네",
+      //     cancelText: "아니오",
+      //     onConfirm: ()=> navigate('/login')
+      //   });
+      // }
     }
 
     const handleReviewClick = async(placeId) => {
-      if (userId) {
+      // if (userId) {
         if(userLocation.lat !== 0 || userLocation.lng !== 0){
           try{
             const payload = {
@@ -99,16 +99,16 @@ const PlaceTitle = ({ data, setData }) => {
             confirmText: "확인",
           });
         }
-      } else {
-        AlertDialog({
-          mode: "confirm",
-          title: "로그인 필요",
-          text: `땅따먹기리뷰를 작성하시려면 로그인이 필요합니다.<br/>로그인페이지로 이동하시겠습니까?`,
-          confirmText: "네",
-          cancelText: "아니오",
-          onConfirm: ()=> navigate('/login')
-        });
-      }
+      // } else {
+      //   AlertDialog({
+      //     mode: "confirm",
+      //     title: "로그인 필요",
+      //     text: `땅따먹기리뷰를 작성하시려면 로그인이 필요합니다.<br/>로그인페이지로 이동하시겠습니까?`,
+      //     confirmText: "네",
+      //     cancelText: "아니오",
+      //     onConfirm: ()=> navigate('/login')
+      //   });
+      // }
     };
   
     return(
@@ -182,6 +182,7 @@ const Info = styled.div`
   img{
     margin: 0 5px;
     width: 15px;
+    height: 48px;
     cursor:pointer;
   }
 

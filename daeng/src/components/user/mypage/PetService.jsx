@@ -52,7 +52,7 @@ function PetService() {
     <PetServiceContainer>
       <PageTitle>댕댕어디가 서비스 관리</PageTitle>
       <SubContainer>
-        <PetServiceImg src={mypageservice} />
+        <PetServiceImg src={mypageservice} alt="서비스 관리 아이콘"/>
         <Page onClick={handleNavigateToGuide}>How-To Guides</Page>
       </SubContainer>
     </PetServiceContainer>

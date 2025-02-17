@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import preferenceLogo from "../../assets/icons/preference_logo.svg";
+import preferenceLogo from "../../assets/icons/preference_logo.webp";
 
 function TopSection() {
   return (
