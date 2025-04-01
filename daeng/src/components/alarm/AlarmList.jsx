@@ -8,8 +8,8 @@ const ListContainer = styled.div`
   box-sizing: border-box;
   overflow-y: auto;
   padding-bottom: 100%;
-  margin-left:20px;
-  
+  margin-left: 20px;
+
   @media (max-width: 554px) {
     margin: 10px;
     padding: 10px;
@@ -42,7 +42,9 @@ function AlarmList({ activeTab }) {
 
   const handleNotificationClose = (notificationId) => {
     setNotifications((prev) =>
-      prev.filter((notification) => notification.notificationId !== notificationId)
+      prev.filter(
+        (notification) => notification.notificationId !== notificationId
+      )
     );
   };
 
@@ -51,19 +53,18 @@ function AlarmList({ activeTab }) {
       const fetchNotifications = async () => {
         setLoading(true);
         try {
-          const response = await axiosInstance.get(
-            "/api/v1/notifications",
-            {
-              withCredentials: true,
-            }
-          );
+          const response = await axiosInstance.get("/api/v1/notifications", {
+            withCredentials: true,
+          });
           if (response.status === 200) {
             setNotifications(response.data.data);
           } else {
             throw new Error("알림 데이터를 불러오는 데 실패했습니다.");
           }
         } catch (err) {
-          setError(err.message || "알림 데이터를 가져오는 중 오류가 발생했습니다.");
+          setError(
+            err.message || "알림 데이터를 가져오는 중 오류가 발생했습니다."
+          );
         } finally {
           setLoading(false);
         }
@@ -74,7 +75,7 @@ function AlarmList({ activeTab }) {
   }, [activeTab]);
 
   if (activeTab !== "subscribe") {
-    return null; 
+    return null;
   }
 
   if (loading) {
