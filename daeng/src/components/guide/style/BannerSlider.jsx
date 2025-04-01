@@ -13,7 +13,7 @@ function BannerSlider({ banners }) {
 
   return (
     <SliderContainer>
-      <SlidesWrapper currentBanner={currentBanner}>
+      <SlidesWrapper $currentBanner={currentBanner}>
         {banners.map((banner, index) => (
           <Slide key={index} src={banner} alt={`추천 배너 ${index + 1}`} />
         ))}
