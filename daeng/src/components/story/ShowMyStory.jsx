@@ -7,7 +7,7 @@ import rightArrow from "../../assets/icons/arrow.svg";
 import leftArrow from "../../assets/icons/reversearrow.svg";
 import deleteDot from "../../assets/icons/deleteDot.svg";
 import DeleteStory from "./DeleteStory";
-import crown from '../../assets/icons/crown.svg';
+import crown from "../../assets/icons/crown.svg";
 import {
   VideoContainer,
   CloseButton,
@@ -17,7 +17,7 @@ import {
   Location,
   ProgressBar,
   ProgressItem,
-} from "./StoryCommonStyle";
+} from "./style/StoryCommonStyle";
 import AlertDialog from "../commons/SweetAlert";
 
 const DeleteDotContainer = styled.div`
@@ -59,15 +59,12 @@ function ShowMyStory({ onClose }) {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axiosInstance.get(
-          "/api/v2/story/mystory",
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axiosInstance.get("/api/v2/story/mystory", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         setStories(response.data.data.content);
         setNickname(response.data.data.nickname);
       } catch (error) {
@@ -108,7 +105,7 @@ function ShowMyStory({ onClose }) {
         }
       }
     };
-  
+
     fetchStories();
   }, [onClose]);
 
@@ -145,8 +142,8 @@ function ShowMyStory({ onClose }) {
         {stories.map((_, index) => (
           <ProgressItem
             key={index}
-            isActive={index === currentIndex} 
-            isCompleted={index <= currentIndex} 
+            isActive={index === currentIndex}
+            isCompleted={index <= currentIndex}
           />
         ))}
       </ProgressBar>
@@ -161,16 +158,17 @@ function ShowMyStory({ onClose }) {
           />
           {showDeleteMenu && (
             <DeleteStory
-            storyId={currentStory.storyId}
-            setShowDeleteMenu={setShowDeleteMenu}
-            stories={stories}
-            setStories={setStories}
-            currentIndex={currentIndex} 
-            setCurrentIndex={setCurrentIndex} 
-          />
+              storyId={currentStory.storyId}
+              setShowDeleteMenu={setShowDeleteMenu}
+              stories={stories}
+              setStories={setStories}
+              currentIndex={currentIndex}
+              setCurrentIndex={setCurrentIndex}
+            />
           )}
         </DeleteDotContainer>
-        {currentStory.path.endsWith(".mp4") || currentStory.path.endsWith(".webm") ? (
+        {currentStory.path.endsWith(".mp4") ||
+        currentStory.path.endsWith(".webm") ? (
           <video
             src={currentStory.path}
             controls
@@ -205,7 +203,8 @@ function ShowMyStory({ onClose }) {
       </ImageContainer>
       <ShowStoryBottomBar>
         <Location>
-          <img src={crown} alt="왕관" /> {currentStory.city} {currentStory.cityDetail}
+          <img src={crown} alt="왕관" /> {currentStory.city}{" "}
+          {currentStory.cityDetail}
         </Location>
         <span>{nickname}님</span>
       </ShowStoryBottomBar>
