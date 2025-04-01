@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axiosInstance from "../../services/axiosInstance";
-import { Wrapper } from "../../components/admin/AdminCommonStyle";
+import { Wrapper } from "../../components/style/admin/AdminCommonStyle";
 import SelectLabel from "../commons/SelectLabel";
 import AlertDialog from "../../components/commons/SweetAlert";
 
@@ -48,16 +48,19 @@ const ImageUpload = ({ label, onUpload }) => {
 
       const { thumbImgPath, imgPath } = response.data.data;
 
-      onUpload({ thumbImgPath, imgPath }); 
+      onUpload({ thumbImgPath, imgPath });
       AlertDialog({
         mode: "alert",
         title: "성공",
         text: "이미지를 성공적으로 등록했습니다.",
         confirmText: "닫기",
-        icon:"success",
+        icon: "success",
       });
     } catch (error) {
-      console.error("이미지 업로드 실패 - 에러 메시지:", error.response?.data || error.message);
+      console.error(
+        "이미지 업로드 실패 - 에러 메시지:",
+        error.response?.data || error.message
+      );
       AlertDialog({
         mode: "alert",
         title: "실패",

@@ -1,5 +1,5 @@
 import React from "react";
-import {Wrapper, StyledInput} from './AdminCommonStyle';
+import { Wrapper, StyledInput } from "./style/AdminCommonStyle";
 import SelectLabel from "../commons/SelectLabel";
 
 const PhoneNumberField = ({
@@ -7,18 +7,18 @@ const PhoneNumberField = ({
   placeholder,
   value,
   onChange,
-  maxLength = 13, 
+  maxLength = 13,
 }) => {
   const handleInputChange = (e) => {
-    let inputValue = e.target.value.replace(/[^0-9]/g, ""); 
+    let inputValue = e.target.value.replace(/[^0-9]/g, "");
 
     if (maxLength) {
-      inputValue = inputValue.slice(0, maxLength); 
+      inputValue = inputValue.slice(0, maxLength);
     }
 
     inputValue = applyPhoneFormat(inputValue);
 
-    onChange(inputValue); 
+    onChange(inputValue);
   };
 
   const applyPhoneFormat = (value) => {

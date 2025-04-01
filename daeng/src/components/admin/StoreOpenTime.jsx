@@ -1,9 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import SelectLabel from "../commons/SelectLabel";
-import { Wrapper } from "./AdminCommonStyle";
+import { Wrapper } from "./style/AdminCommonStyle";
 
-const StoreOpenTime = ({ openTime, closeTime, onOpenTimeChange, onCloseTimeChange }) => {
+const StoreOpenTime = ({
+  openTime,
+  closeTime,
+  onOpenTimeChange,
+  onCloseTimeChange,
+}) => {
   return (
     <Wrapper>
       <TimeContainer>
@@ -30,13 +35,12 @@ const StoreOpenTime = ({ openTime, closeTime, onOpenTimeChange, onCloseTimeChang
 
 export default StoreOpenTime;
 
-
 const TimeContainer = styled.div`
   display: flex;
   gap: 120px;
 
   @media (max-width: 554px) {
-    gap:30px;
+    gap: 30px;
   }
 `;
 
@@ -47,7 +51,7 @@ const TimeInput = styled.input`
   border-radius: 5px;
   padding: 5px 10px;
   font-size: 14px;
-  
+
   @media (max-width: 554px) {
     width: 120%;
   }
