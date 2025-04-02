@@ -4,8 +4,8 @@ import axiosInstance from "../../services/axiosInstance";
 import x from "../../assets/icons/x.svg";
 import crown from "../../assets/icons/crown.svg";
 import AlertDialog from "../../components/commons/SweetAlert";
-import UploadStoryIcon from '../../assets/icons/UploadStoryIcon.svg';
-import Loading from "../../components/commons/Loading"; 
+import UploadStoryIcon from "../../assets/icons/UploadStoryIcon.svg";
+import Loading from "../../components/commons/Loading";
 import {
   VideoContainer,
   CloseButton,
@@ -14,7 +14,7 @@ import {
   UploadStoryBottomBar,
   Location,
   UploadImg,
-} from "./StoryCommonStyle";
+} from "./style/StoryCommonStyle";
 import styled from "styled-components";
 
 const UploadStoryBtn = styled.button`
@@ -39,7 +39,7 @@ const UploadStoryBtn = styled.button`
 
 const UploadIcon = styled.img`
   margin-right: 10px;
-`
+`;
 function UploadStory({ onClose, nickname, city, cityDetail }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -165,7 +165,7 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
           )
         ) : (
           <UploadImg>
-            <UploadIcon src={UploadStoryIcon} alt="스토리 업로드 아이콘"/>
+            <UploadIcon src={UploadStoryIcon} alt="스토리 업로드 아이콘" />
             <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
               이미지/동영상을 올려주세요
               <input
@@ -186,7 +186,9 @@ function UploadStory({ onClose, nickname, city, cityDetail }) {
         </Location>
         <span>{nickname}님</span>
       </UploadStoryBottomBar>
-      {!isLoading && <UploadStoryBtn onClick={uploadStory}>업로드</UploadStoryBtn>}
+      {!isLoading && (
+        <UploadStoryBtn onClick={uploadStory}>업로드</UploadStoryBtn>
+      )}
     </VideoContainer>
   );
 }

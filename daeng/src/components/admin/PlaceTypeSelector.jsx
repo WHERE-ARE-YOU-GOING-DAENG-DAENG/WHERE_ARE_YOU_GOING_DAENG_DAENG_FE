@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { placeTypes } from "../../data/CommonCode/";
-import { Wrapper } from "./AdminCommonStyle";
+import { Wrapper } from "./style/AdminCommonStyle";
 import SelectLabel from "../commons/SelectLabel";
 
 const PlaceTypeSelector = ({ value, onChange }) => {
   const handleClick = (e, codeId) => {
-    e.preventDefault(); 
+    e.preventDefault();
     if (value !== codeId) {
-      onChange(codeId); 
+      onChange(codeId);
     }
   };
 
@@ -32,7 +32,6 @@ const PlaceTypeSelector = ({ value, onChange }) => {
 
 export default PlaceTypeSelector;
 
-
 const PlaceTypeButtonGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -43,7 +42,8 @@ const PlaceTypeButton = styled.button`
   padding: 10px;
   width: 100px;
   height: 50px;
-  border: ${(props) => (props.isActive ? "2px solid #ff69a9" : "1px solid #ccc")};
+  border: ${(props) =>
+    props.isActive ? "2px solid #ff69a9" : "1px solid #ccc"};
   border-radius: 8px;
   background-color: ${(props) => (props.isActive ? "#ffe6f0" : "#fff")};
   cursor: pointer;

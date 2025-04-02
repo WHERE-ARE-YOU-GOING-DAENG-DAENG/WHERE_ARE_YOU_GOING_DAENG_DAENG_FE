@@ -14,7 +14,7 @@ import {
   Location,
   ProgressBar,
   ProgressItem,
-} from "./StoryCommonStyle";
+} from "./style/StoryCommonStyle";
 import useUserStore from "../../stores/userStore";
 
 function OtherUserStory({ onClose, nickname, city, cityDetail }) {
@@ -27,19 +27,18 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const userResponse = await axiosInstance.get(
-          `/api/v2/story`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
+        const userResponse = await axiosInstance.get(`/api/v2/story`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
 
         const user = userResponse.data.data.find(
           (u) =>
-            u.nickname === nickname && u.city === city && u.cityDetail === cityDetail
+            u.nickname === nickname &&
+            u.city === city &&
+            u.cityDetail === cityDetail
         );
 
         if (user) {
@@ -62,26 +61,28 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
     fetchStories();
   }, [nickname, city, cityDetail]);
 
-  const markStoryAsViewed = useCallback(async (storyId) => {
+  const markStoryAsViewed = useCallback(
+    async (storyId) => {
+      if (!userId) return;
 
-    if (!userId) return;
-    
-    if (!viewedStories.has(storyId)) {
-      try {
-        await axiosInstance.put(
-          `/api/v2/story/${storyId}/viewed`,
-          {},
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
-        );
-        setViewedStories(prev => new Set(prev).add(storyId));
-      } catch (error) {
-        console.error(`스토리 ${storyId} 확인 처리에 실패했습니다:`, error);
+      if (!viewedStories.has(storyId)) {
+        try {
+          await axiosInstance.put(
+            `/api/v2/story/${storyId}/viewed`,
+            {},
+            {
+              headers: { "Content-Type": "application/json" },
+              withCredentials: true,
+            }
+          );
+          setViewedStories((prev) => new Set(prev).add(storyId));
+        } catch (error) {
+          console.error(`스토리 ${storyId} 확인 처리에 실패했습니다:`, error);
+        }
       }
-    }
-  }, [viewedStories]);
+    },
+    [viewedStories]
+  );
 
   useEffect(() => {
     if (stories.length > 0 && currentIndex < stories.length) {
@@ -120,19 +121,18 @@ function OtherUserStory({ onClose, nickname, city, cityDetail }) {
         {stories.map((_, index) => (
           <ProgressItem
             key={index}
-            isActive={index === currentIndex} 
+            isActive={index === currentIndex}
             isCompleted={index <= currentIndex}
           />
         ))}
       </ProgressBar>
       <TextContainer>스토리는 24시간 동안 업로드 됩니다.</TextContainer>
-      <CloseButton
-        src={x}
-        alt="팝업 닫기"
-        onClick={onClose}
-      />
+      <CloseButton src={x} alt="팝업 닫기" onClick={onClose} />
       <ImageContainer>
-        <StyledImage src={currentStory.path} alt={`스토리 ${currentStory.storyId}`} />
+        <StyledImage
+          src={currentStory.path}
+          alt={`스토리 ${currentStory.storyId}`}
+        />
 
         {currentIndex > 0 && (
           <NavigationButton

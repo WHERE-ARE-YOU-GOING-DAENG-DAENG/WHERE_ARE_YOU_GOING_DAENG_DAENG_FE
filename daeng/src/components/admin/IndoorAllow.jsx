@@ -1,5 +1,5 @@
 import React from "react";
-import {Wrapper, ButtonGroup} from './AdminCommonStyle';
+import { Wrapper, ButtonGroup } from "./style/AdminCommonStyle";
 import SelectLabel from "../commons/SelectLabel";
 import SelectBtn from "../commons/SelectBtn";
 const IndoorAllow = ({ label, value, onChange }) => {
@@ -28,5 +28,3 @@ const IndoorAllow = ({ label, value, onChange }) => {
 };
 
 export default IndoorAllow;
-
-
